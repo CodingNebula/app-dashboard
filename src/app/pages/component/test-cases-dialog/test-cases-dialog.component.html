@@ -1,0 +1,35 @@
+<nb-card>
+    <nb-card-header>Test Case</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="myForm"  class="custom-form">
+            <div class="form-row">
+                <div class="form-group">
+                  <label for="application">Test Case Name:</label>
+                  <input id="application" formControlName="application" class="form-control" />
+                  <div *ngIf="myForm.get('application').touched && myForm.get('application').invalid" class="error-message">
+                    <small *ngIf="myForm.get('application').hasError('required')">Test Case name is required!</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+              <div class="form-group">
+                <label for="testCases">Actions:</label>
+                <nb-select id="testCases" formControlName="testCases" placeholder="Select Actions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
+                  <nb-option *ngFor="let item of temp" [value]="item">{{item?.title}}</nb-option>
+                  </nb-select>
+                <div *ngIf="myForm.get('testCases').touched && myForm.get('testCases').invalid" class="error-message">
+                  <small *ngIf="myForm.get('testCases').hasError('testCases')">Actions required!</small>
+                </div>
+              </div>
+            </div>
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>

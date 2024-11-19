@@ -1,0 +1,38 @@
+<nb-card>
+    <nb-card-header>App Application</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="myForm"  class="custom-form">
+            <div class="form-row">
+                <div class="form-group">
+                  <label for="application">Application Name:</label>
+                  <input id="application" formControlName="application" class="form-control" />
+                  <div *ngIf="myForm.get('application').touched && myForm.get('application').invalid" class="error-message">
+                    <small *ngIf="myForm.get('application').hasError('required')">Application name is required!</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+              <div class="form-group">
+                <label for="platform">Platform Name:</label>
+                <nb-select id="platform" formControlName="platform" placeholder="Select Platform" [(selected)]="selectedItem" class="custom-select-dropdown">
+                  <nb-option value="Android">Android</nb-option>
+                  <nb-option value="IOS">IOS</nb-option>
+                  <nb-option value="Windows">Windows</nb-option>
+                  <nb-option value="MacOS">MacOS</nb-option>
+                </nb-select>
+                <div *ngIf="myForm.get('platform').touched && myForm.get('platform').invalid" class="error-message">
+                  <small *ngIf="myForm.get('platform').hasError('required')">Platform Name is required!</small>
+                </div>
+              </div>
+            </div>
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>

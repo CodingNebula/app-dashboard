@@ -1,0 +1,226 @@
+.automate-container{
+    display: flex;
+    justify-content: space-between;
+    height: 96vh;
+    overflow: auto;
+}
+
+.automate-left{
+    width: 70%;
+    height: 100%;
+    // border-right: 1px solid black;
+}
+
+.automate-right{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    // border-left: 1px solid black;
+    align-items: center;
+}
+
+.automate-right > div{
+    margin: 2%;
+    width: 50%;
+    background-color: #00A3AB;
+    border: none;
+    color: #ffffff;
+    border-radius: 25px;
+    text-align: center;
+    padding: 1%;
+}
+
+.automate-left > div{
+    margin: 2%;
+    width: 50%;
+    color: #00A3AB;
+    border: 1px solid black;
+    // background-color: #ffffff;
+    border-radius: 25px;
+    text-align: center;
+    padding: 1%;
+
+}
+
+/* General form styling */
+.custom-form {
+    // max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+  
+  /* Form row with two fields side by side */
+  .form-row {
+    display: flex;
+    gap: 20px; /* Add space between the form fields */
+    margin-bottom: 10px;
+  }
+  
+  /* Each form group inside the row */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  /* Label styling */
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Input fields and select dropdowns */
+  .form-control,
+  .custom-select-dropdown {
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border 0.3s ease;
+    max-width: 100% !important;
+  }
+  
+  /* Focused input fields and select dropdowns */
+  .form-control:focus,
+  .custom-select-dropdown:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Submit button styling */
+  .submit-button {
+    background-color: #00A3AB;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 20%;
+    transition: background-color 0.3s ease;
+  }
+
+  .reset-button{
+    background-color: #ab3000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 20%;
+    transition: background-color 0.3s ease;
+    outline: none;
+  }
+  
+  .submit-button:disabled {
+    background-color: #07f6ce;
+    color: #000000;
+    cursor: not-allowed;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    background-color: #00A3AB;
+    color: #ffffff;
+  }
+
+  .submit-button:focus {
+    border: none;
+    outline: none;
+  }
+
+  .button-row{
+    justify-content: end;
+  }
+
+  .test-case-div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3em;
+    border-bottom: 1px solid rgb(128, 128, 128);
+  }
+
+  .test-case-div > h6{
+    margin: 0;
+    font-weight: 100;
+    font-size: 1em;
+  }
+
+  .test-case-container{
+    margin-top: 2em;
+    padding: 1em;
+    overflow: auto;
+    height: 69vh;
+  }
+
+  .start-button{
+    color: #00A3AB;
+    border: 1px solid #00A3AB;
+    padding: 0.5em 1em;
+    text-align: center;
+    border-radius: 25px;
+    margin: 0.5em 0em;
+    outline: none;
+  }
+  .success-status{
+    color: green;
+  }
+
+  .failed-status{
+    color: red;
+  }
+
+  .loader {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+
+  @media screen and (min-width: 2561px) and (max-width: 3840px) {
+    nb-accordion-item-header{
+      font-size: 2em;
+    }
+
+    nb-accordion-item-body .item-body{
+      height: 53vh;
+    }
+
+    .form-control{
+      height: 3.2em;
+    }
+    .submit-button{
+      width: 15%;
+    font-size: 1.5em;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 1em;
+      font-size: 1.5em;
+      color: #333;
+    }
+
+    .test-case-div > h6{
+      font-size: 1.2em;
+    }
+
+    .test-case-container{
+      height: 84vh;
+    }
+
+    .test-case-div{
+      font-size: 1.8em;
+    }
+  }
+  
+  
+  

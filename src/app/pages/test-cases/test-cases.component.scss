@@ -1,0 +1,61 @@
+// .test-case-main{
+//     position: relative;
+// }
+
+.plus-circle-icon{
+    color: #00A3AB;
+    font-size: 3em;
+    cursor: pointer;
+
+    position: fixed; 
+    bottom: 0px; 
+    left: 60%; 
+    transform: translateX(-50%); 
+    z-index: 1000;
+}
+.no-app-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.data-table{
+    width: 100%;
+}
+
+.edit-icon{
+    color: #00A3AB;
+}
+
+td{
+    padding: 1em 0em;
+}
+
+.table-header-div{
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0em;
+}
+
+.table-header{
+    width: 40%;
+    font-weight: 600;
+}
+
+.table-data-div-container{
+    height: 72vh;
+    overflow-y: auto;
+}
+
+.table-data-div{
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0em;
+}
+.table-data{
+    width: 40%;
+}

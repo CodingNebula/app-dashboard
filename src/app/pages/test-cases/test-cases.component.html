@@ -1,0 +1,47 @@
+<div class="test-case-main">
+  <div *ngIf="applicationDataArr.length === 0" class="no-app-div">
+    <h4>No Test Cases Added Yet</h4>
+  </div>
+  
+
+  <div *ngIf="applicationDataArr.length > 0">
+    <div class="table-header-div">
+      <div class="table-header">Test Case Name</div>
+      <div class="table-header">Test Cases</div>
+      <div class="table-header-action">Action</div>
+    </div>
+    <div class="table-data-div-container">
+      <div class="table-data-div" *ngFor="let item of applicationDataArr">
+        <div class="table-data">{{item.application}}</div>
+        <div class="table-data"> {{ getTestCaseTitles(item.testCases) }}</div>
+        <div class="table-data-action">
+          <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon>
+          </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div *ngIf="applicationDataArr.length > 0">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 40%;">Test Case Name</th>
+          <th style="width: 40%;">Test Cases</th>
+          <th style="width: 20%;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of applicationDataArr">
+          <td>{{item.application}}</td>
+          <td>{{item.testCases.join(', ')}}</td>
+          <td>
+            <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div> -->
+  <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon>
+</div>

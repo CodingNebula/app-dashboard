@@ -1,0 +1,24 @@
+<div class="application-main">
+  <div *ngIf="applicationDataArr.length === 0" class="no-app-div">
+    <h4>No Application Added Yet</h4>
+  </div>
+
+
+  <div *ngIf="applicationDataArr.length > 0">
+    <div class="table-header-div">
+      <div class="table-header">Application</div>
+      <div class="table-header">Platform</div>
+      <div class="table-header-action">Test Cases</div>
+    </div>
+    <div class="table-data-div-container">
+      <div class="table-data-div" *ngFor="let item of applicationDataArr">
+        <div class="table-data">{{item.application}}</div>
+        <div class="table-data">{{item.platform}}</div>
+        <div class="table-data-action">
+          <button type="submit" (click)="navigate()" class="add-button">Add +</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon>
+</div>

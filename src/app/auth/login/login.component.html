@@ -1,0 +1,128 @@
+<div >
+    <div class="d-lg-flex d-md-flex half">
+      <i routerLink="/health" style="color: wheat" class="fa fa-heart health-icon"></i>
+      <div class="contents-mobile">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-8 mobile-align">
+              <div class="mb-2">
+                <img src="assets/new-ui/logo-icon.svg" height="65" width="65"/>
+                <h3>Sign In</h3>
+                <p class="mb-2">Track and Monitor your Transactions</p>
+              </div>
+              <!-- <div class="button text-center mb-2">
+                <button class="custom-btn" nbButton fullWidth shape="round" size="medium" >Sign in Username/Password</button>
+              </div>
+              <div class="line">
+                <h6>Or Sign in with Username</h6>
+              </div> -->
+              <!-- <form role="form" class="custom-form" >
+
+                <div class="form-group">
+                  <label for="key">Username*</label>
+                  <input type="text" class="form-control" [(ngModel)]="email" id="key" >
+                  <div class="invalid-feedback">
+                    <div >Username is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="passPhrase">Password*</label>
+                  <input type="password" class="form-control" [(ngModel)]="password" formControlName="adminKey" id="passPhrase" >
+                  <div  class="invalid-feedback">
+                    <div >Password is required</div>
+                  </div>
+                </div>
+                <div class="form-group form-check mb-3">
+                  <nb-checkbox (checkedChange)="toggle($event)" >Remember me</nb-checkbox>
+                </div>
+                <button class="submit-btn" type="submit" (click)="onLoggedin()"  shape="round" size="medium">Sign in</button>
+              </form> -->
+              <form [formGroup]="loginForm" (ngSubmit)="onLoggedin()">
+                <div class="form-group">
+                  <label for="key">Username*</label>
+                  <input type="text" formControlName="email" class="form-control" id="key" required>
+                  <div class="invalid-feedback" *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched">
+                    <div>Email is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="passPhrase">Password*</label>
+                  <input type="password" formControlName="password" class="form-control" id="passPhrase" required>
+                  <div class="invalid-feedback" *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">
+                    <div>Password is required</div>
+                  </div>
+                </div>
+                <div class="form-group form-check mb-3">
+                  <nb-checkbox (checkedChange)="toggle($event)">Remember me</nb-checkbox>
+                </div>
+                <button class="submit-btn" type="submit" [disabled]="loginForm.invalid" shape="round" size="medium">Sign in</button></form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="start">
+        <div class="name" style="background-image: url('assets/new-ui/vector-1.svg'), url('assets/new-ui/vector.svg');">
+          <!-- <ngb-carousel #carousel (slide)="onSlide($event)">
+            <ng-template ngbSlide *ngFor="let img of images; index as i">
+              <div class="carousel-caption">
+                <h3>{{i === 0 ? 'Powering Payment Transactions at the Point-of-service': 'The Next Generation of Robust mPOS & Enclosures'}}</h3>
+                <span>{{i === 0 ? 'Faster EMV Set-up with mPOS Industry Experts': 'World-class tools combine for powerful merchant offerings'}}</span>
+              </div>
+              <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer">
+                <div class="picsum-img-wrapper">
+                  <img [src]="img" alt="My image {{i + 1}} description"/>
+                </div>
+              </a>
+            </ng-template>
+          </ngb-carousel> -->
+          <div #carousel (slide)="onSlide($event)">
+            <div ngbSlide *ngFor="let img of images; index as i">
+              <div class="carousel-caption">
+                <h3>Powering Payment Transactions at the Point-of-service</h3>
+                <span>Faster EMV Set-up with mPOS Industry Experts</span>
+              </div>
+              <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer">
+                <div class="picsum-img-wrapper">
+                  <img [src]="img" alt="My image {{i + 1}} description"/>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner h-100">
+        <header class="masthead mb-auto">
+          <nav class="nav nav-masthead float-right">
+            <a class="nav-link btn rounded-pill mr-2" (click)="loginCode()">Login</a>
+            <a class="nav-link btn rounded-pill">Signup</a>
+          </nav>
+        </header>
+        <div class="cover-container h-100 p-3 mx-auto">
+          <div class="d-flex flex-column content-center justify-content-center align-items-center">
+            <div class="inner w-100">
+              <div class="left-content float-left w-50 d-flex flex-column content-center justify-content-center">
+                <div class="image">
+                  <img alt="" src="../../../assets/images/images.png" height="auto" width="450"/>
+                </div>
+              </div>
+              <div class="right-content float-right w-50 d-flex flex-column content-center justify-content-center">
+                <div class="content">
+                  <h1 class="heading-title mt-0">Powering Payment Transactions at the Point-of-service</h1>
+                  <div class="small-content">
+                    <h4 class="heading-subtitle">Faster EMV Set-up with mPOS Industry Experts</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  
+  

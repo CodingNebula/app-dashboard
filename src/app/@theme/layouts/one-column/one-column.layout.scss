@@ -1,0 +1,90 @@
+@import '../../styles/themes';
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+
+@include nb-install-component() {
+  .menu-sidebar ::ng-deep .scrollable {
+    padding-top: nb-theme(layout-padding-top);
+    background: #00A3AB;
+  }
+
+  ::ng-deep nb-layout .layout {
+    .layout-container {
+      nb-sidebar {
+        background-color: #199da5;
+
+        &.fixed,
+        .main-container-fixed {
+          top:0 !important;
+          //top:1%;
+          //top: 0 !important;
+          //pading:10%
+        }
+      }
+
+      nb-sidebar.compacted {
+        .header-container {
+          margin-top: 50px;
+          display: inline-block;
+          align-items: center;
+          width: auto;
+          margin-bottom: 20px;
+
+          .sidebar-toggle {
+            @include nb-ltr(padding-right, 0.5rem);
+            color: #FFFFFF;
+
+            nb-icon {
+              font-size: 1rem;
+            }
+          }
+
+          .logo {
+            display: none;
+          }
+        }
+
+        nb-menu .menu-item a.active::before {
+          position: absolute;
+          content: "";
+          top: 0;
+          height: 100%;
+          width: 4px;
+          background: #FFFFFF;
+        }
+      }
+    }
+  }
+
+  .sidebar-toggle {
+    @include nb-ltr(padding-right, 0.5rem);
+    color: #FFFFFF;
+
+    nb-icon {
+      font-size: 1rem;
+    }
+  }
+  nb-menu .menu-item li a.active::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: #FFFFFF;
+  }
+
+  nb-menu .menu-item li a {
+    position: absolute;
+    content: "";
+    top: 0;
+    height: 100%;
+    width: 4px;
+    color: #FFFFFF;
+  }
+
+  .header-main{
+    background-color: #00A3AB;
+  }
+}
+
+

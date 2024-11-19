@@ -1,0 +1,37 @@
+@import '../../../@theme/styles/themes';
+@import 'node_modules/bootstrap/scss/mixins/breakpoints';
+@import 'node_modules/@nebular/theme/styles/global/breakpoints';
+@include nb-install-component() {
+  nb-card {
+    border-radius: 1rem;
+    nb-card-header {
+      padding: 0.5rem 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
+    nb-card-body {
+      padding: 0.5rem 1rem 1rem 1rem;
+    }
+  }
+  .cancel {
+    margin-right: 1rem;
+  }
+  .button-center {
+    text-align:center;
+    button {
+      width:45%;
+      padding: 0.4875rem 1.125rem;
+      border: 1px solid #16a3ad;
+      color: #16a3ad;
+      text-transform: capitalize;
+      font-weight: 600;
+    }
+    .submit {
+      background-color: #16a3ad;
+      color:#FFFFFF;
+    }
+  }
+  // .signout-main{
+  //   background-color: #FFFFFF;
+  // }
+}
