@@ -16,7 +16,7 @@ export class AccountService {
   }
 
   postApplication(payload: any): Observable<any> {
-    return this.apiService.postWithoutModel('appDetails', payload).pipe(
+    return this.apiService.postWithoutModel('app_details', payload).pipe(
       map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {
@@ -36,7 +36,7 @@ export class AccountService {
   }
 
   postTestCases(payload: any): Observable<any> {
-    return this.apiService.postWithoutModel('saveTestCases', payload).pipe(
+    return this.apiService.postWithoutModel('save_test_cases', payload).pipe(
       map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {
@@ -56,7 +56,29 @@ export class AccountService {
   }
 
   getTestCases(){
-    return this.apiService.getWithoutModal('testCase').pipe(
+    return this.apiService.getWithoutModal('all_test_case').pipe(
+      map(applicationResponse => {
+        // Check if the response is valid, and return it
+        if (applicationResponse) {
+          console.log(applicationResponse);
+          
+          return applicationResponse; // Transformation logic (if needed)
+        } else {
+          // In case of an invalid response, throw an error
+          throw new Error('Invalid response');
+        }
+      }),
+      catchError(error => {
+        // Handle the error here
+        console.error('Error during the application submission:', error);
+        // Return a user-friendly error message or rethrow it
+        return throwError(() => new Error('Failed to submit application. Please try again.'));
+      })
+    );
+  }
+
+  getApplication(){
+    return this.apiService.getWithoutModal('get-applications').pipe(
       map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {

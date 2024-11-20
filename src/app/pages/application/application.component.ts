@@ -20,6 +20,10 @@ export class ApplicationComponent {
 
   }
 
+  ngOnInit(){
+    this.getApplication();
+  }
+
   openDialog() {
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(NoAppDialogComponent, {});
@@ -30,13 +34,13 @@ export class ApplicationComponent {
         if (result.confirmed) {
           console.log(result.data);
 
-        //   const appDetails = {
-        //     app_name: req.body.appName,
-        //     user_id: userId,
-        //     platform: req.body.platform,
-        //     test_case_results: req.body.test_case_results,
-        //     extra: JSON.stringify(req.body.extra),
-        // }
+          //   const appDetails = {
+          //     app_name: req.body.appName,
+          //     user_id: userId,
+          //     platform: req.body.platform,
+          //     test_case_results: req.body.test_case_results,
+          //     extra: JSON.stringify(req.body.extra),
+          // }
 
           const appDetails = {
             appName: result.data.application,
@@ -44,7 +48,7 @@ export class ApplicationComponent {
             test_case_results: null,
             extra: {}
           }
-          this.applicationDataArr.push(result.data);
+          // this.applicationDataArr.push(result.data);
           this.saveApplicationData(appDetails);
         }
       }
@@ -54,10 +58,26 @@ export class ApplicationComponent {
   saveApplicationData(data) {
 
 
-    this.accountService.postApplication(data).subscribe((data) => {
-      console.log(data);
-
+    this.accountService.postApplication(data).subscribe((response) => {
+      if (response) {
+        // After successful post, update applicationDataArr
+        this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
+        console.log('Item saved and added to array:', response);
+      }
+    }, (error) => {
+      console.error('Error saving test case:', error);
     });
+  }
+
+  getApplication() {
+    this.accountService.getApplication().subscribe((data) => {
+      console.log(data); // You can inspect what data you're receiving from the backend
+      if (data && data.length > 0) {
+        this.applicationDataArr = data; // Update the applicationDataArr with the data received from backend
+        console.log(this.applicationDataArr);
+        
+      }
+    })
   }
 
   navigate() {

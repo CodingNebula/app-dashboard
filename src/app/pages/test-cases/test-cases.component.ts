@@ -67,11 +67,11 @@ export class TestCasesComponent {
             const details = {
               title: result.data.application,
               types: result.data.testCases,
-              applicationId: "fd85a4ca-8ef5-4d26-b682-77af6f453ec8",
+              applicationId: "12e13954-ab70-4398-ae04-317ac55a41b8",
               extra: {}
             }
             this.saveTestCasesData(details);
-            this.applicationDataArr.push(result.data);
+            // this.applicationDataArr.push(result.data);
           }
         }
       }
@@ -84,8 +84,13 @@ export class TestCasesComponent {
   
       if (response) {
         // After successful post, update applicationDataArr
-        this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
-        console.log('Item saved and added to array:', response);
+        console.log(this.applicationDataArr);
+        if (Array.isArray(this.applicationDataArr)) {
+          this.applicationDataArr.push(response); // Add the new item to the array
+          
+        } else {
+          console.error('applicationDataArr is not an array');
+        }
       }
     }, (error) => {
       console.error('Error saving test case:', error);
@@ -94,9 +99,10 @@ export class TestCasesComponent {
 
   getTestCases(){
   this.accountService.getTestCases().subscribe((data) => {
-    console.log(data); // You can inspect what data you're receiving from the backend
-    if (data && data.length > 0) {
+    
+    if (data) {
       this.applicationDataArr = data; // Update the applicationDataArr with the data received from backend
+            
     }
   });
 }

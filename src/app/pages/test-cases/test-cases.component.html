@@ -5,16 +5,20 @@
   
 
   <div *ngIf="applicationDataArr.length > 0">
-    <div class="table-header-div">
-      <div class="table-header">Test Case Name</div>
-      <div class="table-header">Test Cases</div>
-      <div class="table-header-action">Action</div>
+    <div class="container">
+      <div class="row table-header-div">
+        <div class="col-2 s-no-div ">S.No</div>
+        <div class="col-4 table-header p-0">Test Case Name</div>
+        <div class="col-4 table-header ">Test Cases</div>
+        <div class="col-2 table-header-action">Action</div>
+      </div>
     </div>
     <div class="table-data-div-container">
-      <div class="table-data-div" *ngFor="let item of applicationDataArr">
-        <div class="table-data">{{item.application}}</div>
-        <div class="table-data"> {{ getTestCaseTitles(item.testCases) }}</div>
-        <div class="table-data-action">
+      <div class="table-data-div" *ngFor="let item of applicationDataArr; let i = index">
+        <div class="col-2">{{i + 1}}</div>
+        <div class="col-4 table-data">{{item.test_case_title}}</div>
+        <div class="col-4 table-data"> {{ getTestCaseTitles(item.test_case_types) }}</div>
+        <div class="col-2 table-data-action">
           <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon>
           </div>
       </div>
