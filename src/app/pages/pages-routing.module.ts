@@ -7,6 +7,7 @@ import { AutomateComponent } from './automate/automate.component';
 import { TestCasesComponent } from './test-cases/test-cases.component';
 import { ApplicationComponent } from './application/application.component';
 import { SignOutComponent } from './signout/signOut.component';
+import {TestReportsComponent} from "./test-reports/test-reports.component";
 
 const routes: Routes = [{
   path: '',
@@ -28,6 +29,10 @@ const routes: Routes = [{
       path: '',
       redirectTo: 'test-cases',
       pathMatch: 'full',
+    },
+    {
+      path: 'test-reports',
+      component: TestReportsComponent,
     },
     {
       path: 'signout',
