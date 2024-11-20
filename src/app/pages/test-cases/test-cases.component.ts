@@ -15,9 +15,31 @@ export class TestCasesComponent {
     private dialogService: NbDialogService, 
     protected router: Router,
   private accountService: AccountService){
-
-    
-
+    this.applicationDataArr = [
+      {
+        "test_case_title": "Welcome",
+        "test_case_types": [
+            {
+                "id": "0",
+                "screenName": "Welcome",
+                "title": "Welcome"
+            },
+            {
+                "id": "8",
+                "screenName": "Click_Image",
+                "btnName": "left_arrow",
+                "title": "Welcome_Next_Button"
+            },
+            {
+                "id": "1",
+                "screenName": "Permissions",
+                "title": "Permissions"
+            }
+        ],
+        "applicationId": "12e13954-ab70-4398-ae04-317ac55a41b8",
+        "extra": {}
+    }
+    ]
   }
 
   ngOnInit(){

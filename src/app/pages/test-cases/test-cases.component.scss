@@ -64,3 +64,16 @@ td{
     font-weight: 600;
     padding: 0;
 }
+
+.table-header-action{
+    font-weight: 600;
+}
+
+.table-data-action >  button{
+    border: none;
+    outline: none;
+}
+
+.table-data-action{
+    cursor: pointer;
+}

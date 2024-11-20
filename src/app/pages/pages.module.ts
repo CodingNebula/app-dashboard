@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbAccordionModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbSelectModule } from '@nebular/theme';
+import { NbAccordionModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbPopoverModule, NbSelectModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -24,7 +24,8 @@ import { SignOutComponent } from './signout/signOut.component';
     NbSelectModule,
     NbIconModule,
     NbDialogModule.forRoot(),
-    NbCardModule
+    NbCardModule,
+    NbPopoverModule
   ],
   declarations: [
     PagesComponent,

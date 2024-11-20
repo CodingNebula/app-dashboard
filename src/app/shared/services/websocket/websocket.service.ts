@@ -12,6 +12,9 @@ export class WebsocketService {
 
   private reconnectAttempts: number = 0;
   private maxReconnectAttempts: number = 5;
+  public testReportsData: any = {
+    reports: [],
+  };
 
   constructor() { }
 
@@ -20,13 +23,13 @@ export class WebsocketService {
       // this.socket = io('ws://192.168.1.29:3000', {
       //   withCredentials: true,
       //   extraHeaders: {
-      //     token: '12345',
+      //     token: localStorage.getItem('id'),
       //   },
       // });
 
       this.socket.on('connect', () => {
         console.log('Socket connected:', this.socket.id);
-        this.socket.emit('join', '12345');
+        this.socket.emit('join', localStorage.getItem('id'));
         this.socket.emit('Client has joined the room');
       });
 
@@ -52,6 +55,15 @@ export class WebsocketService {
     }
   }
 
+  socketConnect(token){
+    this.socket = io('ws://192.168.1.29:3000', {
+      withCredentials: true,
+      extraHeaders: {
+        token: token,
+      },
+    });
+  }
+
   private handleReconnect(): void {
     // Only attempt to reconnect a limited number of times
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
@@ -68,28 +80,55 @@ export class WebsocketService {
   sendTestCaseRequest(item?: any): void {
     console.log(item);
     console.log(this.message);
-
+  
+    // Assuming you want to push the item to some `reports` array
+    this.testReportsData.reports.push(item);
+  
+    console.log(this.testReportsData);
+  
     if (this.socket && this.socket.connected) {
-      // this.socket.emit("message", { room: "12345", message: JSON.stringify(item) });
+      this.socket.emit("sendTestCaseRequest", { room: "12345", message: JSON.stringify(item) });
+  
+      this.socket.on('testCaseResponse', (response: any) => {
+        console.log('Received server response:', response);
+        if (response.success) {
+          console.log(response);
+          // Handle success response
+        } else {
+          console.log('Test case request failed:', response.error);
+          // Handle error response
+        }
+      });
     } else {
       console.error('Socket is not connected.');
     }
   }
 
   sendAppLaunchRequest(item: any): void {
+    console.log(this.socket);
+
+    this.testReportsData.capabilities = item.capabilities;
+
+      console.log(this.testReportsData);
+    
     if (this.socket && this.socket.connected) {
       // this.appLaunchStatus = 'SUCCESS';
       console.log(item.capabilities);
 
+      // this.testReportsData.capabilities = item.capabilities;
+
+      // console.log(this.testReportsData);
+      
+
       this.socket.emit('message', {
-        room: '12345',
+        room: localStorage.getItem('id'),
         message: 'Hello, Room 12345!',
       });
 
-      this.socket.emit("message", {
-        room: "12345",
-        message: JSON.stringify(item.capabilities),
-      });   
+      // this.socket.emit("message", {
+      //   room: localStorage.getItem('id'),
+      //   message: JSON.stringify(item.capabilities),
+      // });   
     } else {
       console.error('Socket is not connected.');
     }

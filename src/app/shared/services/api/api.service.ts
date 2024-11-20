@@ -36,7 +36,7 @@ export class ApiService {
 
   postWithoutModelCapabilities(endpoint: string, payload: any) {
 
-    const apiURL = `https://abc/${endpoint}`;
+    const apiURL = `http://192.168.1.29:3000/automate/${endpoint}`;
     
     const headers = this.setHeaders();
     return this.http.post(apiURL, payload, { headers }).pipe(

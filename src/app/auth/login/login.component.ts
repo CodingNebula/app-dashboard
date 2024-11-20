@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { io, Socket } from "socket.io-client";
+import { io, Socket } from 'socket.io-client';
+import { WebsocketService } from '../../shared/services/websocket/websocket.service';
+// import { io, Socket } from "socket.io-client";
 
 @Component({
   selector: 'ngx-login',
@@ -20,7 +22,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private webSocketService: WebsocketService
   ) {}
 
   ngOnInit(): void {
@@ -68,12 +71,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('token', data.token);
             localStorage.setItem('id', data.id)
 
-            this.socket = io('ws://192.168.1.29:3000', {
-              withCredentials: true,
-              extraHeaders: {
-                token: data.token,
-              },
-            });
+            this.webSocketService.socketConnect(data?.token);
   
             this.router.navigateByUrl('pages/application');
           } else {

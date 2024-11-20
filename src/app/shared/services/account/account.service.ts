@@ -11,7 +11,7 @@ export class AccountService {
   constructor(private apiService: ApiService) { }
 
   postCapabilities(payload: any){
-    const endpoint = 'post-capabilities'    
+    const endpoint = 'v1/run'    
     return this.apiService.postWithoutModelCapabilities(endpoint, payload)
   }
 

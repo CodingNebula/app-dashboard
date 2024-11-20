@@ -2,7 +2,7 @@
   <div *ngIf="applicationDataArr.length === 0" class="no-app-div">
     <h4>No Test Cases Added Yet</h4>
   </div>
-  
+
 
   <div *ngIf="applicationDataArr.length > 0">
     <div class="container">
@@ -19,8 +19,15 @@
         <div class="col-4 table-data">{{item.test_case_title}}</div>
         <div class="col-4 table-data"> {{ getTestCaseTitles(item.test_case_types) }}</div>
         <div class="col-2 table-data-action">
-          <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon>
-          </div>
+          <button [nbPopover]="actionref" nbPopoverPlacement="bottom">
+            <nb-icon class="edit-icon" icon="edit-2-outline" ></nb-icon>
+          </button>
+          <ng-template #actionref>
+            <button (click)="openDialog(item)">Edit</button>
+            <button>Delete</button>
+          </ng-template>
+          <!-- <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon> -->
+        </div>
       </div>
     </div>
   </div>

@@ -339,6 +339,31 @@ export class AutomateComponent implements OnInit {
     //     console.error('API Error:', error);
     //   }
     // );
+
+    // this.accountService.postCapabilities({
+    //   capabilities: {
+    //     //  "browserName": "Android",
+    //     "platformName": "Android",
+    //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
+    //     //"app":"/home/codingnebula/Downloads/app-debug-hid.apk",
+    //     "appPackage": "com.example.app",
+    //     "automationName": "UIAutomator2",
+    //     //"deviceName": "CPH1859",
+    //     "deviceName": "Samsung",
+    //     "noReset": true,
+    //     "ignoreHiddenApiPolicyError": true,
+    //     //  "autoGrantPermissions": true,
+    //     "newCommandTimeout": 1200000
+    //   }
+    // }).subscribe((response) => {
+    //   if (response) {
+    //     // After successful post, update applicationDataArr
+    //     // this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
+    //     console.log(response);
+    //   }
+    // }, (error) => {
+    //   console.error('Error', error);
+    // });
     
       this.webSocketService.sendAppLaunchRequest(
         // [{ appType: "Android" },
