@@ -24,7 +24,7 @@ import { SignOutComponent } from './signout/signOut.component';
     NbSelectModule,
     NbIconModule,
     NbDialogModule.forRoot(),
-    NbCardModule
+    NbCardModule,
   ],
   declarations: [
     PagesComponent,
