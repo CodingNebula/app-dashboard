@@ -1,98 +1,88 @@
-<div class="row">
-  <div class="col-12">
-    <div class="row">
-      <!--    for chart and detail-->
-      <div class="col-6">
-        <!-- capabilities -->
-      </div>
-      <div class="col-6">
-        <!-- pie and completion -->
-        <nb-card class="chart-card revenue-card-main">
-          <nb-card-body>
-              <div class="chart-div revenue-chart-card" echarts [options]="CompletionChart"></div>
-          </nb-card-body>
-      </nb-card>
+<div>
+  <label class="heading">Reports</label>
+</div>
+<div class="parentDiv">
+
+  <div class="row">
+    <!--    for chart and detail-->
+    <div class="col-6 div-padding">
+      <!-- capabilities -->
+      <div class='testSpecification'>
+        <div class="dividerDiv">
+          <label class="labelHeading">App</label>
+          <label>AnyPay App (2.1 Alpha)</label>
+        </div>
+        <div class="dividerDiv">
+          <label class="labelHeading">Device Name</label>
+          <label>POCO X4 pro (5G)</label>
+        </div>
+        <div class="dividerDiv">
+          <label class="labelHeading">Platform</label>
+          <label>Android</label>
+        </div>
+        <div class="dividerDiv">
+          <label class="labelHeading">Started By</label>
+          <label>Nick Jones</label>
+        </div>
+        <div class="dividerDiv">
+          <label class="labelHeading">Started Time</label>
+          <label>14:15:00</label>
+        </div>
       </div>
     </div>
-    <div class="row">
-      <!--for table-->
-      <div class="col-12">
-        <!-- <table> -->
-        <div>
-          <div class="row table-row">
-            <div class="col-4">
-              <div class="table-heading">
-                Test Cases
-              </div>
-              <div class="table-data">
-                Welcome Page
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="table-heading">
-                Time Spent
-              </div>
-              <div class="table-data">
-                00:00:13.727
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="table-heading">
-                Assignee
-              </div>
-              <div class="table-data">
-                John Doe
-              </div>
-            </div>
-          </div>
-          <div class="row table-row m-2">
-            <div class="col-4">
-              <div class="table-heading">
-                Status
-              </div>
-              <div class="table-data">
-                Passed
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="table-heading">
-                Expected Result
-              </div>
-              <div class="table-data">
-                Should be able to enter the text
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="table-heading">
-                Defects
-              </div>
-              <div class="table-data">
-                -
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- <thead>
-            
-            <tr>
-              <th>Test Case</th>
-              <th>Time Spent</th>
-              <th>Assignee</th>
-            </tr>
-
-          </thead>
-          <tbody>
-            <tr>
-
-            </tr>
-          </tbody> -->
-
-
-        <!-- </table> -->
-
-
+    <div class="col-6  div-padding">
+      <div class='testSpecification'>
+      <div echarts style="height: 240px;"  [options]="CompletionChart"></div>
       </div>
+
+      <!-- pie and completion -->
+      <!-- <nb-card class="chart-card revenue-card-main">
+        <nb-card-body>
+        </nb-card-body>
+      </nb-card> -->
+    </div>
+  </div>
+  <div class="row">
+    <!--for table-->
+    <div class="col-12">
+      <nb-accordion>
+        <nb-accordion-item *ngFor="let testCase of filteredTestCases">
+          <nb-accordion-item-header style="position: relative;"
+            [ngClass]="testCase.result === 'Passed' ? 'passed' : 'failed'">
+            <nb-icon [icon]="testCase.result === 'Passed' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
+            <span style="margin-left: 1em;">{{ testCase.title }}</span>
+            <span style="position: absolute;right: 3em;">
+              <div>{{ testCase.result }} </div>
+            </span>
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <div class="row">
+              <div class="col-4">
+                <nb-card>
+                  <nb-card-body>
+                    <div> <span class="descriptionLabel">Expected Result -</span> {{testCase.expectedReult}}</div>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+              <div class="col-4" *ngIf="testCase.result ==='Failed'">
+                <nb-card>
+                  <nb-card-body>
+                    <div> <span class="descriptionLabel">Defect -</span> {{testCase.Defect}}</div>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+              <div class="col-4">
+                <nb-card>
+                  <nb-card-body>
+                    <div><span class="descriptionLabel">Time Spend -</span> {{testCase.timeSpent}}</div>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+            </div>
+
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+      </nb-accordion>
     </div>
   </div>
 </div>

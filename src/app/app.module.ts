@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+
 import { AppRoutingModule } from './app-routing.module';
 import {
   NbChatModule,
@@ -32,6 +34,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
     NbLayoutModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),

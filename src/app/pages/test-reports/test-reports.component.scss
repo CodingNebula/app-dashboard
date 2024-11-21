@@ -1,13 +1,138 @@
-.table-row{
+.table-row {
     display: flex;
     margin: 0.5em 0em;
 }
 
-.table-heading{
+.parentDiv {
+    height: 40.5em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.parentDiv::-webkit-scrollbar {
+    width: 9px;
+    margin-right: 1em;
+}
+
+.div-padding {
+    padding: 1em;
+}
+
+.parentDiv::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.parentDiv::-webkit-scrollbar-thumb {
+    background-color: #00a3ab;
+    border-radius: 10px;
+}
+
+.parentDiv::-webkit-scrollbar-thumb:hover {
+    background-color: #112e30;
+}
+
+.table-heading {
     font-weight: 600;
     text-align: start;
 }
 
-.table-data{
+.table-data {
     text-align: start;
+}
+
+.passed {
+    background-color: #d4edda; // Light green for passed
+}
+
+.failed {
+    background-color: #f8d7da; // Light red for failed
+}
+
+nb-accordion-item-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+nb-accordion-item-body {
+    max-height: 100px;
+    overflow-y: hidden;
+
+
+}
+
+nb-accordion {
+    // max-height: 250px; 
+    // overflow-y: auto;  
+}
+
+.descriptionLabel {
+    font-weight: bold;
+    color: #00a3ab;
+}
+
+nb-accordion-item-body::-webkit-scrollbar {
+    width: 9px;
+    margin-right: 1em;
+}
+
+nb-accordion-item-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+nb-accordion-item-body::-webkit-scrollbar-thumb {
+    background-color: #00a3ab;
+    border-radius: 10px;
+}
+
+nb-accordion-item-body::-webkit-scrollbar-thumb:hover {
+    background-color: #112e30;
+}
+
+nb-accordion::-webkit-scrollbar {
+    width: 5px;
+}
+
+nb-accordion::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+nb-accordion::-webkit-scrollbar-thumb {
+    background-color: #00a3ab;
+    border-radius: 10px;
+}
+
+nb-accordion::-webkit-scrollbar-thumb:hover {
+    background-color: #00a3ab;
+}
+
+.testSpecification {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+
+}
+
+.heading {
+    font-weight: 800;
+    font-size: 2em;
+    margin-bottom: .5em;
+}
+.dividerDiv{
+    border-bottom: 2px solid #eee;
+    width: 100%;
+    // height: 3em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+}
+.labelHeading{
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #00A3AB;
+}
+.reportChart{
+    height: 1em;
+    transform: translate(-45px, -81px);
 }
