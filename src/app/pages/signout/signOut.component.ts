@@ -7,6 +7,7 @@ import {NbDialogRef, NbDialogService, NbMenuService} from '@nebular/theme';
 import {Location} from "@angular/common";
 import {filter, pairwise} from "rxjs/operators";
 import {AccountService} from "../../shared/services/account/account.service";
+import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 
 @Component({
   template: `
@@ -22,7 +23,7 @@ export class SignOutComponent implements OnInit,OnDestroy{
     // public storage: StorageService, 
     private dialogService: NbDialogService, 
     public router: Router, 
-    // public websocketService: WebsocketService, 
+    public websocketService: WebsocketService, 
     public nbMenuService: NbMenuService,
     private accountService:AccountService) {
     /*this.dialogService.open(FilterModelComponent)
@@ -60,7 +61,7 @@ export class SignOutComponent implements OnInit,OnDestroy{
        // //console.log(previousNavigation)
      } else if (data === 'submit') {
       //  this.storage.getAuthenticationTokenClear();
-      //  this.websocketService.close();
+       this.websocketService.disconnectSocket();
        // this.accountService.gethandleSubscriptions().map((res)=>{
        //   res?.unsubscribe();
        // })

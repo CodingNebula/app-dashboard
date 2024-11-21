@@ -1,120 +1,125 @@
-
 <div>
 
   <nb-accordion>
     <nb-accordion-item [expanded]="isAccordionExpanded">
-    <nb-accordion-item-header>Application Details</nb-accordion-item-header>
-    <nb-accordion-item-body class="nb-accordion-body">
-      <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="custom-form">
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="platform">Platform Name:</label>
-            <nb-select id="platform" formControlName="platform" placeholder="Select Platform" [(selected)]="selectedItem" class="custom-select-dropdown">
-              <nb-option value="Android">Android</nb-option>
-              <nb-option value="IOS">IOS</nb-option>
-              <nb-option value="Windows">Windows</nb-option>
-              <nb-option value="MacOS">MacOS</nb-option>
-            </nb-select>
-            <div *ngIf="myForm.get('platform').touched && myForm.get('platform').invalid" class="error-message">
-              <small *ngIf="myForm.get('platform').hasError('required')">Platform Name is required!</small>
+      <nb-accordion-item-header>Application Details</nb-accordion-item-header>
+      <nb-accordion-item-body class="nb-accordion-body">
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="custom-form">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="platform">Platform Name:</label>
+              <nb-select id="platform" formControlName="platform" placeholder="Select Platform"
+                [(selected)]="selectedItem" class="custom-select-dropdown">
+                <nb-option value="Android">Android</nb-option>
+                <nb-option value="IOS">IOS</nb-option>
+                <nb-option value="Windows">Windows</nb-option>
+                <nb-option value="MacOS">MacOS</nb-option>
+              </nb-select>
+              <div *ngIf="myForm.get('platform').touched && myForm.get('platform').invalid" class="error-message">
+                <small *ngIf="myForm.get('platform').hasError('required')">Platform Name is required!</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="app">App Path:</label>
+              <input id="app" formControlName="app" class="form-control" />
+              <div *ngIf="myForm.get('app').touched && myForm.get('app').invalid" class="error-message">
+                <small *ngIf="myForm.get('app').hasError('required')">App is required!</small>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="app">App Path:</label>
-            <input id="app" formControlName="app" class="form-control" />
-            <div *ngIf="myForm.get('app').touched && myForm.get('app').invalid" class="error-message">
-              <small *ngIf="myForm.get('app').hasError('required')">App is required!</small>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="package">Package Name:</label>
+              <input id="package" formControlName="package" class="form-control" />
+              <div *ngIf="myForm.get('package').touched && myForm.get('package').invalid" class="error-message">
+                <small *ngIf="myForm.get('package').hasError('required')">Package name is required!</small>
+              </div>
             </div>
-          </div>
-        </div>
-      
-        <div class="form-row">
-          <div class="form-group">
-            <label for="package">Package Name:</label>
-            <input id="package" formControlName="package" class="form-control" />
-            <div *ngIf="myForm.get('package').touched && myForm.get('package').invalid" class="error-message">
-              <small *ngIf="myForm.get('package').hasError('required')">Package name is required!</small>
+
+            <div class="form-group">
+              <label for="automation">Automation Name:</label>
+              <input id="automation" formControlName="automation" class="form-control" />
+              <div *ngIf="myForm.get('automation').touched && myForm.get('automation').invalid" class="error-message">
+                <small *ngIf="myForm.get('automation').hasError('required')">Automation Name is required!</small>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="automation">Automation Name:</label>
-            <input id="automation" formControlName="automation" class="form-control" />
-            <div *ngIf="myForm.get('automation').touched && myForm.get('automation').invalid" class="error-message">
-              <small *ngIf="myForm.get('automation').hasError('required')">Automation Name is required!</small>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="device">Device Name:</label>
+              <input id="device" formControlName="device" class="form-control" />
+              <div *ngIf="myForm.get('device').touched && myForm.get('device').invalid" class="error-message">
+                <small *ngIf="myForm.get('device').hasError('required')">Device Name is required!</small>
+              </div>
             </div>
-          </div>
-        </div>
-      
-        <div class="form-row">
-          <div class="form-group">
-            <label for="device">Device Name:</label>
-            <input id="device" formControlName="device" class="form-control" />
-            <div *ngIf="myForm.get('device').touched && myForm.get('device').invalid" class="error-message">
-              <small *ngIf="myForm.get('device').hasError('required')">Device Name is required!</small>
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label for="timeout">New Command Timeout:</label>
-            <input id="timeout" type="number" formControlName="timeout" class="form-control" />
-            <div *ngIf="myForm.get('timeout').touched && myForm.get('timeout').invalid" class="error-message">
-              <small *ngIf="myForm.get('timeout').hasError('required')">Timeout is required!</small>
-            </div>
-          </div>
-        </div>
-      
-        <div class="form-row">
-          <div class="form-group">
-            <label for="noReset">No Reset:</label>
-            <nb-select id="noReset" formControlName="noReset" placeholder="Select" [(selected)]="noReset" class="custom-select-dropdown">
-              <nb-option value="True">True</nb-option>
-              <nb-option value="False">False</nb-option>
-            </nb-select>
-            <div *ngIf="myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
-              <small *ngIf="myForm.get('noReset').hasError('required')">No Reset is required!</small>
+            <div class="form-group">
+              <label for="timeout">New Command Timeout:</label>
+              <input id="timeout" type="number" formControlName="timeout" class="form-control" />
+              <div *ngIf="myForm.get('timeout').touched && myForm.get('timeout').invalid" class="error-message">
+                <small *ngIf="myForm.get('timeout').hasError('required')">Timeout is required!</small>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="hiddenApp">Ignore hidden app policy:</label>
-            <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" [(selected)]="hiddenApp" class="custom-select-dropdown">
-              <nb-option value="True">True</nb-option>
-              <nb-option value="False">False</nb-option>
-            </nb-select>
-            <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
-              <small *ngIf="myForm.get('hiddenApp').hasError('required')">Ignore hidden app policy is required!</small>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="noReset">No Reset:</label>
+              <nb-select id="noReset" [formControlName]="'noReset'" placeholder="Select" [disabled]="true" class="custom-select-dropdown">
+                <nb-option value="True" selected="true">True</nb-option>
+                <nb-option value="False">False</nb-option>
+              </nb-select>
+
+              <div *ngIf="myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
+                <small *ngIf="myForm.get('noReset').hasError('required')">No Reset is required!</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="hiddenApp">Ignore hidden app policy:</label>
+              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" [(selected)]="hiddenApp"
+                class="custom-select-dropdown">
+                <nb-option value="True">True</nb-option>
+                <nb-option value="False">False</nb-option>
+              </nb-select>
+              <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
+                <small *ngIf="myForm.get('hiddenApp').hasError('required')">Ignore hidden app policy is
+                  required!</small>
+              </div>
             </div>
           </div>
-        </div>
-      
-        <div class="form-row button-row">
-          <!-- <button type="submit" [disabled]="myForm.invalid" class="submit-button">Submit</button> -->
-          <!-- <button type="reset"  class="reset-button" (click)="onReset()">Reset</button> -->
-           
-          <button type="submit"  class="submit-button">Submit</button>
-        </div>
-      </form>
 
-    </nb-accordion-item-body>
-  </nb-accordion-item>
-</nb-accordion>
+          <div class="form-row button-row">
+            <!-- <button type="submit" [disabled]="myForm.invalid" class="submit-button">Submit</button> -->
+            <!-- <button type="reset"  class="reset-button" (click)="onReset()">Reset</button> -->
 
-<div class="test-case-container">
-  <div class="test-case-div">
-    <h6>App Launch</h6>
-    <span *ngIf="appLaunchStatus" class="status-message" [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </form>
 
-    <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button>
+      </nb-accordion-item-body>
+    </nb-accordion-item>
+  </nb-accordion>
+
+  <div class="test-case-container">
+    <div class="test-case-div">
+      <h6>App Launch</h6>
+      <span *ngIf="appLaunchStatus" class="status-message"
+        [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span>
+
+      <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button>
+    </div>
+    <div *ngFor="let item of temp" class="test-case-div">
+      <h6>{{item?.title}}</h6>
+      <span *ngIf="!item.loading && item.status" class="status-message"
+        [ngClass]="item.status === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.status}}</span>
+
+      <button class="start-button" (click)="onStart(item)" *ngIf="!item.status">Start</button>
+    </div>
   </div>
-  <div *ngFor="let item of temp" class="test-case-div">
-    <h6>{{item?.title}}</h6>
-    <span *ngIf="!item.loading && item.status" class="status-message" [ngClass]="item.status === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.status}}</span>
-
-    <button class="start-button" (click)="onStart(item)" *ngIf="!item.status">Start</button>
-  </div>
-</div>
 
 </div>

@@ -310,95 +310,36 @@ export class AutomateComponent implements OnInit {
   // }
 
   onStart(item) {
+    
     this.webSocketService.sendTestCaseRequest(item)
-    item.loading = true;
+    // item.loading = true;
 
-    item.status = this.webSocketService.message;
+    // item.status = this.webSocketService.message;
 
 
-    item.loading = false;
+    // item.loading = false;
   }
 
   onStartAppLaunch() {
-    // this.accountService.postCapabilities({
-    //   capabilities: {
-    //     platformName: "Android",
-    //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-    //     appPackage: "com.example.app",
-    //     automationName: "UIAutomator2",
-    //     deviceName: "Samsung",
-    //     noReset: true,
-    //     ignoreHiddenApiPolicyError: true,
-    //     newCommandTimeout: 1200000
-    //   }
-    // }).subscribe(
-    //   (response) => {
-    //     console.log('API Response:', response);
-    //   },
-    //   (error) => {
-    //     console.error('API Error:', error);
-    //   }
-    // );
-
-    // this.accountService.postCapabilities({
-    //   capabilities: {
-    //     //  "browserName": "Android",
-    //     "platformName": "Android",
-    //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-    //     //"app":"/home/codingnebula/Downloads/app-debug-hid.apk",
-    //     "appPackage": "com.example.app",
-    //     "automationName": "UIAutomator2",
-    //     //"deviceName": "CPH1859",
-    //     "deviceName": "Samsung",
-    //     "noReset": true,
-    //     "ignoreHiddenApiPolicyError": true,
-    //     //  "autoGrantPermissions": true,
-    //     "newCommandTimeout": 1200000
-    //   }
-    // }).subscribe((response) => {
-    //   if (response) {
-    //     // After successful post, update applicationDataArr
-    //     // this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
-    //     console.log(response);
-    //   }
-    // }, (error) => {
-    //   console.error('Error', error);
-    // });
-    
-      this.webSocketService.sendAppLaunchRequest(
-        // [{ appType: "Android" },
-
-        {
-          capabilities: {
-            //  "browserName": "Android",
-            "platformName": "Android",
-            "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-            //"app":"/home/codingnebula/Downloads/app-debug-hid.apk",
-            "appPackage": "com.example.app",
-            "automationName": "UIAutomator2",
-            //"deviceName": "CPH1859",
-            "deviceName": "Samsung",
-            "noReset": true,
-            "ignoreHiddenApiPolicyError": true,
-            //  "autoGrantPermissions": true,
-            "newCommandTimeout": 1200000
-          }
-        },
-
-        // {
-        //   config: {
-        //     "activationCode": "2994001",
-        //     "activationKey": "2994001",
-        //     "provider": "worldnet",
-        //     "endpoint": "worldnet",
-        //     "portfolio": "stormfront",
-        //     "accountNumber": "718032354"
-        //   }
-        // }]
-      )
-
-    // item.status = this.webSocketService.message;
-    // this.appLaunchStatus = this.webSocketService.appLaunchStatus;
+    this.accountService.postCapabilities({
+      capabilities: {
+        platformName: "Android",
+        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        appPackage: "com.example.app",
+        automationName: "UIAutomator2",
+        deviceName: "Samsung",
+        noReset: true,
+        ignoreHiddenApiPolicyError: true,
+        newCommandTimeout: 1200000
+      }
+    }).subscribe(
+      (response) => {
+        console.log('API Response:', response);
+      },
+      (error) => {
+        console.error('API Error:', error);
+      }
+    );
   }
 
 

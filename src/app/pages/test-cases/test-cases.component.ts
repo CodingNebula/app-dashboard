@@ -14,33 +14,7 @@ export class TestCasesComponent {
   constructor(
     private dialogService: NbDialogService, 
     protected router: Router,
-  private accountService: AccountService){
-    this.applicationDataArr = [
-      {
-        "test_case_title": "Welcome",
-        "test_case_types": [
-            {
-                "id": "0",
-                "screenName": "Welcome",
-                "title": "Welcome"
-            },
-            {
-                "id": "8",
-                "screenName": "Click_Image",
-                "btnName": "left_arrow",
-                "title": "Welcome_Next_Button"
-            },
-            {
-                "id": "1",
-                "screenName": "Permissions",
-                "title": "Permissions"
-            }
-        ],
-        "applicationId": "12e13954-ab70-4398-ae04-317ac55a41b8",
-        "extra": {}
-    }
-    ]
-  }
+  private accountService: AccountService){}
 
   ngOnInit(){
     this.getTestCases();
@@ -127,6 +101,14 @@ export class TestCasesComponent {
             
     }
   });
+}
+
+deleteTestCase(id: string){
+  this.accountService.deleteTestCase(id).subscribe((res) => {
+    if(res){
+      this.applicationDataArr = this.applicationDataArr.filter(item => item.test_case_id !== id);
+    }
+  })
 }
   
 
