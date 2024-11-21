@@ -22,6 +22,7 @@ import {
   NbLayoutModule,
   NbCardModule
 } from '@nebular/theme';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,7 +43,8 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
-    NbCardModule
+    NbCardModule,
+    NgxEchartsModule
   ],
   bootstrap: [AppComponent],
 })

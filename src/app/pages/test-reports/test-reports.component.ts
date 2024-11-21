@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 
 @Component({
   selector: 'ngx-test-reports',
@@ -10,6 +11,8 @@ export class TestReportsComponent {
   public customColumn = 'name';
   public defaultColumns = [ 'size', 'kind', 'items' ];
   public allColumns = [ this.customColumn, ...this.defaultColumns ];
+  public completionChart: any = null;
+  public reportData: any = null;
 
 public data = [
   {
@@ -54,4 +57,56 @@ public data = [
     ],
   },
 ];
+
+constructor(private webSocketService: WebsocketService){
+  this.reportData = webSocketService.testReportsData;
+
+  console.log(this.reportData);
+  
+}
+
+ngOnInit(): void {
+this.createCompletionChart();
+}
+
+createCompletionChart(){
+  this.completionChart = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    series: [
+      {
+        name: 'Access From',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { value: 1048, name: 'Search Engine' },
+          { value: 735, name: 'Direct' },
+          { value: 580, name: 'Email' },
+          { value: 484, name: 'Union Ads' },
+          { value: 300, name: 'Video Ads' }
+        ]
+      }
+    ]
+  };
+}
 }

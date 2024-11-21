@@ -12,9 +12,12 @@ import { ApplicationComponent } from './application/application.component';
 import { NoAppDialogComponent } from './component/no-app-dialog/no-app-dialog.component';
 import { TestCasesDialogComponent } from './component/test-cases-dialog/test-cases-dialog.component';
 import { SignOutComponent } from './signout/signOut.component';
+import {NgxEchartsModule} from 'ngx-echarts';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
+    CommonModule,
     PagesRoutingModule,
     ThemeModule,
     NbMenuModule,
@@ -25,7 +28,8 @@ import { SignOutComponent } from './signout/signOut.component';
     NbIconModule,
     NbDialogModule.forRoot(),
     NbCardModule,
-    NbPopoverModule
+    NbPopoverModule,
+    NgxEchartsModule,
   ],
   declarations: [
     PagesComponent,
