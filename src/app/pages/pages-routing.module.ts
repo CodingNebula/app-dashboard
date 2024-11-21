@@ -34,6 +34,7 @@ const routes: Routes = [{
       path: 'test-reports',
       component: TestReportsComponent,
     },
+    
     {
       path: 'signout',
       component: SignOutComponent,

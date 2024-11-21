@@ -14,6 +14,7 @@ import { TestCasesDialogComponent } from './component/test-cases-dialog/test-cas
 import { SignOutComponent } from './signout/signOut.component';
 import {NgxEchartsModule} from 'ngx-echarts';
 import { CommonModule } from '@angular/common';
+import { TestReportsComponent } from './test-reports/test-reports.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { CommonModule } from '@angular/common';
     NoAppDialogComponent,
     SignOutComponent,
     TestCasesDialogComponent,
+    TestReportsComponent
   ],
 })
 export class PagesModule {

@@ -11,7 +11,7 @@ export class TestReportsComponent {
   public customColumn = 'name';
   public defaultColumns = [ 'size', 'kind', 'items' ];
   public allColumns = [ this.customColumn, ...this.defaultColumns ];
-  public completionChart: any = null;
+  public CompletionChart: any = null;
   public reportData: any = null;
 
 public data = [
@@ -70,7 +70,7 @@ this.createCompletionChart();
 }
 
 createCompletionChart(){
-  this.completionChart = {
+  this.CompletionChart = {
     tooltip: {
       trigger: 'item'
     },

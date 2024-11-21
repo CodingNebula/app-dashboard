@@ -23,6 +23,7 @@ import {
   NbCardModule
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
+// import { TestReportsComponent } from './pages/test-reports/test-reports.component';
 
 @NgModule({
   declarations: [AppComponent],
