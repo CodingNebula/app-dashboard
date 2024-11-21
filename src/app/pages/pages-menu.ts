@@ -18,9 +18,9 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/automate',
   },
   {
-    title: 'Test Reports',
+    title: 'Reports',
     icon: 'home-outline',
-    link: '/pages/test-reports',
+    link: '/pages/reports',
   },
   {
     title: 'Sign Out',

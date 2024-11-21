@@ -1,0 +1,221 @@
+
+    .reports-container {
+        padding: 20px;
+    }
+
+    .reports-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        .reports-subheader{
+            display: flex;
+            align-items: center;
+            gap:10%;
+            img{
+                cursor: pointer;
+            }
+        }
+    }
+
+    .filters button {
+        margin-right: 10px;
+        padding: 8px 12px;
+        border: none;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+    }
+
+    .build-report-btn {
+        padding: 10px 20px;
+        background-color: teal;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        width: 14em;
+        height: 2.3em;
+        font-size: 1.5em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        ion-icon {
+            margin-left: 1em;
+        }
+    }
+
+    .pdf-name {
+        display: flex;
+        align-items: center;
+    }
+
+    .pdf-icon {
+        width: 1.5em;
+        margin-right: 1em;
+    }
+
+    .filters-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 28px;
+        position: relative;
+    }
+
+    .selected-filters span {
+        margin-right: 10px;
+        background-color: #5bf7ff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: #0099a1;
+        border-radius: 3vw;
+        font-size: 0.8em;
+    }
+a{
+    font-size: 0.8em;
+}
+    .search-bar {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        position: absolute;
+        right: 1%;
+        border-radius: 2vw;
+        background: #EBF0F7
+    }
+
+    .table-container {
+        max-height: 400px;
+        /* Adjust the height to make the table scrollable */
+        overflow-y: auto;
+    }
+
+    .reports-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .reports-table th,
+    .reports-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .reports-table a {
+        color: #0000ee;
+        text-decoration: none;
+    }
+
+    .pagination-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+    }
+
+    .pagination-controls button {
+        padding: 9px;
+        border: 1px solid #ccc;
+        background-color: #000000;
+        color: #fff;
+        width: 2em;
+        font-size: 1.5em;
+
+    }
+
+    .pagination-controls input {
+        width: 40px;
+        text-align: center;
+        background: #ebf0f7;
+        border: none;
+        margin-left: 1em;
+    }
+
+    /* Container for the segment buttons */
+    .segment {
+        display: flex;
+        overflow: hidden;
+        width: fit-content;
+        // margin-left: 2em;
+        margin-bottom: 1em;
+    }
+
+    /* Individual buttons inside the segment */
+    .segment-button {
+        padding: 9px 39px;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 15px;
+        background: none;
+        border: none;
+    }
+
+    //.segment-button:not(:last-child) {
+    //  border-right: 1px solid red;
+    //}
+
+    /* Active button */
+    .segment-button.active {
+        outline: none;
+        background-color: transparent;
+        color: #00a3ab !important;
+        border-bottom: 3px solid #00a3ab !important;
+
+    }
+
+    /* Button hover effect */
+    .segment-button:hover {
+        background-color: #ddd;
+    }
+
+    /* Button active state when clicked */
+    .segment-button:focus {
+        outline: none;
+        background-color: transparent;
+        color: #000000;
+        border-bottom: 3px solid #00a3ab !important;
+    }
+
+    .row-per-page-div {
+        display: flex;
+        align-items: center;
+        margin-right: 2em;
+    }
+
+    .row-per-page-label {
+        color: #c1c1c1;
+    }
+.downloadbtn{
+    border: none;
+    color: #00A3AB;
+    font-weight: 800;
+}
+.table-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #00a3ab;
+    border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background-color: #00a3ab;
+}
+    // .row-per-page-input{
+    //     // background: #EBF0F7;
+    //     // border: none;
+    //     // padding-left: 11px;
+    //     // width: 2em;
+    //     // margin-left: 1em;
+    // }
