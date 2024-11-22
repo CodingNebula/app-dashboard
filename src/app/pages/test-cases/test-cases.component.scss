@@ -77,3 +77,25 @@ td{
 .table-data-action{
     cursor: pointer;
 }
+.edit-popup{
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-btn{
+    display: block;
+    width: 100%;
+    margin: 0.5em 0em;
+    outline: none;
+    border: none;
+    border-radius: 25px;
+    color: #ffffff;
+}
+
+.popup-submit{
+    background-color: green;
+}
+
+.popup-delete{
+    background-color: red;
+}

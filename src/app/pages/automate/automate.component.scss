@@ -179,9 +179,47 @@
     color: red;
   }
 
+  .timeout-input{
+    cursor: not-allowed;
+  }
+
   .loader {
     display: inline-block;
     margin-left: 10px;
+  }
+
+  .loader-container {
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent dark overlay */
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    /* No opacity here, we control transparency via rgba background */
+  }
+  
+  .loader-div {
+    position: absolute;
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: black;
+  }
+  
+  .spinner-div {
+    height: 3em;
+    width: 3em;
   }
 
 

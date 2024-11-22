@@ -83,6 +83,19 @@ export class ApiService {
         })
       );
   }
+    deleteWithoutModal(endpoint: string, id: string): Observable<any>{
+      const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}/${id}`;
+    const headers = this.setHeaders();
+    return this.http.delete<any>(apiURL, { headers })
+    .pipe(
+      catchError(error => {
+        console.error('Error during HTTP request:', error);
+        return throwError(() => new Error('Failed to make request. Please try again.'));
+      })
+    );
+    
+    }
+
 
   private formatErrors(error: any) {
     // Handle error and return an observable

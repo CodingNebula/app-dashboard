@@ -3,23 +3,23 @@ import { NbMenuItem } from '@nebular/theme';
 export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Application',
-    icon: 'shopping-cart-outline',
+    icon: 'monitor-outline',
     link: '/pages/application',
     home: true,
   },
   {
     title: 'Test Cases',
-    icon: 'shopping-cart-outline',
+    icon: 'clipboard-outline',
     link: '/pages/test-cases',
   },
   {
     title: 'Automate',
-    icon: 'home-outline',
+    icon: 'repeat-outline',
     link: '/pages/automate',
   },
   {
     title: 'Reports',
-    icon: 'home-outline',
+    icon: 'file-text-outline',
     link: '/pages/reports',
   },
   {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AutomateComponent } from './automate.component';
+import { NbSpinnerModule } from '@nebular/theme';
 
 
 
@@ -9,7 +10,8 @@ import { AutomateComponent } from './automate.component';
     AutomateComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NbSpinnerModule
   ]
 })
 export class AutomateModule { }

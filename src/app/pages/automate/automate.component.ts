@@ -17,6 +17,7 @@ export class AutomateComponent implements OnInit {
   public temp: any[] = [];
   public status: string = null;
   public appLaunchStatus: string = null;
+  public appLaunchLoading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private webSocketService: WebsocketService,
@@ -280,20 +281,44 @@ export class AutomateComponent implements OnInit {
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
       app: ['', [Validators.required]],
-      package: ['', [Validators.required]],
+      package: ['com.example.app', [Validators.required]],
       automation: ['', [Validators.required]],
       device: ['', [Validators.required]],
-      noReset: ['', [Validators.required]],
-      hiddenApp: ['', [Validators.required]],
-      timeout: ['', [Validators.required]],
+      noReset: ['True', [Validators.required, this.noResetValidator]],
+      hiddenApp: ['True', [Validators.required, this.ignoreHiddenValidator]],
+      timeout: ['1200000', [Validators.required]],
     });
+
+    this.myForm.get('platform').valueChanges.subscribe(platform => {
+      if(platform === 'Android'){
+        this.myForm.get('automation').setValue('UIAutomator2');
+      }
+      else{
+        this.myForm.get('automation').setValue('');
+      }
+    })
   }
 
   onSubmit() {
     // if (this.myForm.valid) {
     //   this.isAccordionExpanded = false;
     this.webSocketService.connectWithAccessToken();
-    this.myForm.reset();
+  //   this.myForm.reset();
+  // }
+  }
+
+  noResetValidator(control) {
+    if (control.value === 'False') {
+      return { invalidValue: true };
+    }
+    return null;
+  }
+
+  ignoreHiddenValidator(control) {
+    if (control.value === 'False') {
+      return { invalidValue: true };
+    }
+    return null;
   }
 
   onReset() {
@@ -310,95 +335,39 @@ export class AutomateComponent implements OnInit {
   // }
 
   onStart(item) {
+    
     this.webSocketService.sendTestCaseRequest(item)
-    item.loading = true;
+    // item.loading = true;
 
-    item.status = this.webSocketService.message;
+    // item.status = this.webSocketService.message;
 
 
-    item.loading = false;
+    // item.loading = false;
   }
 
   onStartAppLaunch() {
-    // this.accountService.postCapabilities({
-    //   capabilities: {
-    //     platformName: "Android",
-    //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-    //     appPackage: "com.example.app",
-    //     automationName: "UIAutomator2",
-    //     deviceName: "Samsung",
-    //     noReset: true,
-    //     ignoreHiddenApiPolicyError: true,
-    //     newCommandTimeout: 1200000
-    //   }
-    // }).subscribe(
-    //   (response) => {
-    //     console.log('API Response:', response);
-    //   },
-    //   (error) => {
-    //     console.error('API Error:', error);
-    //   }
-    // );
-
-    // this.accountService.postCapabilities({
-    //   capabilities: {
-    //     //  "browserName": "Android",
-    //     "platformName": "Android",
-    //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-    //     //"app":"/home/codingnebula/Downloads/app-debug-hid.apk",
-    //     "appPackage": "com.example.app",
-    //     "automationName": "UIAutomator2",
-    //     //"deviceName": "CPH1859",
-    //     "deviceName": "Samsung",
-    //     "noReset": true,
-    //     "ignoreHiddenApiPolicyError": true,
-    //     //  "autoGrantPermissions": true,
-    //     "newCommandTimeout": 1200000
-    //   }
-    // }).subscribe((response) => {
-    //   if (response) {
-    //     // After successful post, update applicationDataArr
-    //     // this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
-    //     console.log(response);
-    //   }
-    // }, (error) => {
-    //   console.error('Error', error);
-    // });
-    
-      this.webSocketService.sendAppLaunchRequest(
-        // [{ appType: "Android" },
-
-        {
-          capabilities: {
-            //  "browserName": "Android",
-            "platformName": "Android",
-            "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-            //"app":"/home/codingnebula/Downloads/app-debug-hid.apk",
-            "appPackage": "com.example.app",
-            "automationName": "UIAutomator2",
-            //"deviceName": "CPH1859",
-            "deviceName": "Samsung",
-            "noReset": true,
-            "ignoreHiddenApiPolicyError": true,
-            //  "autoGrantPermissions": true,
-            "newCommandTimeout": 1200000
-          }
-        },
-
-        // {
-        //   config: {
-        //     "activationCode": "2994001",
-        //     "activationKey": "2994001",
-        //     "provider": "worldnet",
-        //     "endpoint": "worldnet",
-        //     "portfolio": "stormfront",
-        //     "accountNumber": "718032354"
-        //   }
-        // }]
-      )
-
-    // item.status = this.webSocketService.message;
-    // this.appLaunchStatus = this.webSocketService.appLaunchStatus;
+    // this.appLaunchLoading = true;
+    this.accountService.postCapabilities({
+      capabilities: {
+        platformName: "Android",
+        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        appPackage: "com.example.app",
+        automationName: "UIAutomator2",
+        deviceName: "Samsung",
+        noReset: true,
+        ignoreHiddenApiPolicyError: true,
+        newCommandTimeout: 1200000
+      }
+    }).subscribe(
+      (response) => {
+        console.log('API Response:', response);
+        this.appLaunchLoading = false;
+      },
+      (error) => {
+        console.error('API Error:', error);
+        this.appLaunchLoading = false;
+      }
+    );
   }
 
 

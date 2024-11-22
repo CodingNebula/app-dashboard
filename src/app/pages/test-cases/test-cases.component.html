@@ -22,9 +22,9 @@
           <button [nbPopover]="actionref" nbPopoverPlacement="bottom">
             <nb-icon class="edit-icon" icon="edit-2-outline" ></nb-icon>
           </button>
-          <ng-template #actionref>
-            <button (click)="openDialog(item)">Edit</button>
-            <button>Delete</button>
+          <ng-template class="edit-popup" #actionref>
+            <button class="popup-btn popup-submit" (click)="openDialog(item)">Edit</button>
+            <button class="popup-btn popup-delete" (click)="deleteTestCase(item?.test_case_id)">Delete</button>
           </ng-template>
           <!-- <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon> -->
         </div>
