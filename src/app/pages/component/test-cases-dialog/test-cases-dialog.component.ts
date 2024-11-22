@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -8,7 +8,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
   templateUrl: './test-cases-dialog.component.html',
   styleUrls: ['./test-cases-dialog.component.scss']
 })
-export class TestCasesDialogComponent {
+export class TestCasesDialogComponent implements OnInit {
   public myForm: FormGroup;
   public selectedItems: string[] = [];
   public context: any;
@@ -284,14 +284,7 @@ export class TestCasesDialogComponent {
     }
   }
 
-  ngAfterViewInit() {
-    // if (this.item) {
-    //   this.myForm.patchValue({
-    //     application: this.item?.application,
-    //     testCases: this.item?.testCases,
-    //   });
-    // } 
-  }
+
 
   onTestCaseChange(selectedItems: any[]) {
     // Update the testCases form control whenever the selection changes

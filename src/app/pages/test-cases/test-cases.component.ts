@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { TestCasesDialogComponent } from '../component/test-cases-dialog/test-cases-dialog.component';
@@ -9,7 +9,7 @@ import { AccountService } from '../../shared/services/account/account.service';
   templateUrl: './test-cases.component.html',
   styleUrls: ['./test-cases.component.scss']
 })
-export class TestCasesComponent {
+export class TestCasesComponent implements OnInit{
   public applicationDataArr: any[] = [];
   constructor(
     private dialogService: NbDialogService, 

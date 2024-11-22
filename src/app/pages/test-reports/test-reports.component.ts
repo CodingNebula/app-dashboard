@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 export interface TestCase {
   title: string;
@@ -141,9 +141,9 @@ export class TestReportsComponent {
     };
   }
 
-  ngOnInit(): void {
-    // this.createCompletionChart();
-  }
+  // ngOnInit(): void {
+  //   // this.createCompletionChart();
+  // }
   get filteredTestCases() {
     return this.testCases.filter(testCase =>
       testCase.title.toLowerCase().includes(this.searchTerm.toLowerCase())

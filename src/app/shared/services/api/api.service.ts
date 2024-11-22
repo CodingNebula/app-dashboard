@@ -10,7 +10,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  private setHeaders(): HttpHeaders  {
+  private setHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');  // Replace 'token' with the correct key if necessary
 
 
@@ -37,7 +37,7 @@ export class ApiService {
   postWithoutModelCapabilities(endpoint: string, payload: any) {
 
     const apiURL = `http://192.168.1.29:3000/automate/${endpoint}`;
-    
+
     const headers = this.setHeaders();
     return this.http.post(apiURL, payload, { headers }).pipe(
       catchError(ApiService.formatErrors));
@@ -48,8 +48,8 @@ export class ApiService {
     const headers = this.setHeaders();
 
     console.log(request);
-    
-  
+
+
     return this.http.post<any>(apiURL, request, { headers })
       .pipe(
         catchError(error => {
@@ -57,21 +57,32 @@ export class ApiService {
           return throwError(() => new Error('Failed to make request. Please try again.'));
         })
       );
-    }
+  }
 
-    getWithoutModal(endpoint: string): Observable<any>{
-      const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}`;
+  getWithoutModal(endpoint: string): Observable<any> {
+    const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}`;
     const headers = this.setHeaders();
     return this.http.get<any>(apiURL, { headers })
-    .pipe(
-      catchError(error => {
-        console.error('Error during HTTP request:', error);
-        return throwError(() => new Error('Failed to make request. Please try again.'));
-      })
-    );
-    
-    }
+      .pipe(
+        catchError(error => {
+          console.error('Error during HTTP request:', error);
+          return throwError(() => new Error('Failed to make request. Please try again.'));
+        })
+      );
 
+  }
+
+  getAllReports(): Observable<any> {
+    const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/get_all_report`;
+    const headers = this.setHeaders();
+    return this.http.get<any>(apiURL, { headers })
+      .pipe(
+        catchError(error => {
+          console.error('Error during HTTP request:', error);
+          return throwError(() => new Error('Failed to make request. Please try again.'));
+        })
+      );
+  }
 
   private formatErrors(error: any) {
     // Handle error and return an observable

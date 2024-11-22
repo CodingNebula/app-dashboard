@@ -115,24 +115,39 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
 
 .heading {
     font-weight: 800;
-    font-size: 2em;
+    font-size: 1.7em;
     margin-bottom: .5em;
 }
 .dividerDiv{
     border-bottom: 2px solid #eee;
     width: 100%;
-    // height: 3em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em;
+    text-align: center;
+    /* height: 1.5em; */
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+.subLabel{
+    font-size: 0.8em;
 }
 .labelHeading{
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 0.8em;
     color: #00A3AB;
 }
 .reportChart{
     height: 1em;
     transform: translate(-45px, -81px);
+}
+.header-div{
+    display: flex;justify-content: center;align-items: center;position: relative;
+}
+.date-label{
+    position: absolute;right: 1%;font-weight: bold;font-size: 1.1em;
+    span{
+        font-size: 0.7em !important;color: #00A3AB;text-decoration: underline;
+    }
 }
