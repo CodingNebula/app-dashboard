@@ -96,9 +96,8 @@ export class TestCasesComponent {
   getTestCases(){
   this.accountService.getTestCases().subscribe((data) => {
     
-    if (data) {
-      this.applicationDataArr = data; // Update the applicationDataArr with the data received from backend
-            
+    if (data?.message !== 'No Test Case Found') {
+      this.applicationDataArr = data;
     }
   });
 }

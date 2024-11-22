@@ -17,6 +17,7 @@ export class AutomateComponent implements OnInit {
   public temp: any[] = [];
   public status: string = null;
   public appLaunchStatus: string = null;
+  public appLaunchLoading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private webSocketService: WebsocketService,
@@ -280,20 +281,44 @@ export class AutomateComponent implements OnInit {
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
       app: ['', [Validators.required]],
-      package: ['', [Validators.required]],
+      package: ['com.example.app', [Validators.required]],
       automation: ['', [Validators.required]],
       device: ['', [Validators.required]],
-      noReset: ['', [Validators.required]],
-      hiddenApp: ['', [Validators.required]],
-      timeout: ['', [Validators.required]],
+      noReset: ['True', [Validators.required, this.noResetValidator]],
+      hiddenApp: ['True', [Validators.required, this.ignoreHiddenValidator]],
+      timeout: ['1200000', [Validators.required]],
     });
+
+    this.myForm.get('platform').valueChanges.subscribe(platform => {
+      if(platform === 'Android'){
+        this.myForm.get('automation').setValue('UIAutomator2');
+      }
+      else{
+        this.myForm.get('automation').setValue('');
+      }
+    })
   }
 
   onSubmit() {
     // if (this.myForm.valid) {
     //   this.isAccordionExpanded = false;
     this.webSocketService.connectWithAccessToken();
-    this.myForm.reset();
+  //   this.myForm.reset();
+  // }
+  }
+
+  noResetValidator(control) {
+    if (control.value === 'False') {
+      return { invalidValue: true };
+    }
+    return null;
+  }
+
+  ignoreHiddenValidator(control) {
+    if (control.value === 'False') {
+      return { invalidValue: true };
+    }
+    return null;
   }
 
   onReset() {
@@ -321,6 +346,7 @@ export class AutomateComponent implements OnInit {
   }
 
   onStartAppLaunch() {
+    // this.appLaunchLoading = true;
     this.accountService.postCapabilities({
       capabilities: {
         platformName: "Android",
@@ -335,9 +361,11 @@ export class AutomateComponent implements OnInit {
     }).subscribe(
       (response) => {
         console.log('API Response:', response);
+        this.appLaunchLoading = false;
       },
       (error) => {
         console.error('API Error:', error);
+        this.appLaunchLoading = false;
       }
     );
   }

@@ -162,8 +162,9 @@ export class WebsocketService {
       console.log('Message sent to server');
 
       // Listen for the response from the server
-      this.socket.on('testCaseResponse', (response: any) => {
+      this.socket.on('message', (response: any) => {
         console.log('Received server response:', response);
+        // Test case name and status
         if (response.success) {
           console.log('Test case request success:', response);
         } else {

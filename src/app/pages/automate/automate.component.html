@@ -1,5 +1,4 @@
-<div>
-
+<div >
   <nb-accordion>
     <nb-accordion-item [expanded]="isAccordionExpanded">
       <nb-accordion-item-header>Application Details</nb-accordion-item-header>
@@ -33,7 +32,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="package">Package Name:</label>
-              <input id="package" formControlName="package" class="form-control" />
+              <input id="package" formControlName="package" class="form-control timeout-input" readonly/>
               <div *ngIf="myForm.get('package').touched && myForm.get('package').invalid" class="error-message">
                 <small *ngIf="myForm.get('package').hasError('required')">Package name is required!</small>
               </div>
@@ -59,7 +58,7 @@
 
             <div class="form-group">
               <label for="timeout">New Command Timeout:</label>
-              <input id="timeout" type="number" formControlName="timeout" class="form-control" />
+              <input id="timeout" readonly type="number" formControlName="timeout" class="form-control timeout-input" />
               <div *ngIf="myForm.get('timeout').touched && myForm.get('timeout').invalid" class="error-message">
                 <small *ngIf="myForm.get('timeout').hasError('required')">Timeout is required!</small>
               </div>
@@ -69,26 +68,27 @@
           <div class="form-row">
             <div class="form-group">
               <label for="noReset">No Reset:</label>
-              <nb-select id="noReset" [formControlName]="'noReset'" placeholder="True" [disabled]="true" class="custom-select-dropdown">
+              <nb-select id="noReset" [formControlName]="'noReset'" [disabled]="true" class="custom-select-dropdown">
                 <nb-option value="True">True</nb-option>
                 <nb-option value="False">False</nb-option>
               </nb-select>
 
               <div *ngIf="myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
                 <small *ngIf="myForm.get('noReset').hasError('required')">No Reset is required!</small>
+                <small *ngIf="myForm.get('noReset').hasError('invalidValue')">You cannot select "False" for No Reset!</small>
               </div>
             </div>
 
             <div class="form-group">
               <label for="hiddenApp">Ignore hidden app policy:</label>
-              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" [(selected)]="hiddenApp"
+              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="True" [disabled]="true" 
                 class="custom-select-dropdown">
                 <nb-option value="True">True</nb-option>
                 <nb-option value="False">False</nb-option>
               </nb-select>
               <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
-                <small *ngIf="myForm.get('hiddenApp').hasError('required')">Ignore hidden app policy is
-                  required!</small>
+                <small *ngIf="myForm.get('hiddenApp').hasError('required')">Hidden App is required!</small>
+                <small *ngIf="myForm.get('hiddenApp').hasError('invalidValue')">You cannot select "False" for Ignore Hidden App!</small>
               </div>
             </div>
           </div>
@@ -122,4 +122,12 @@
     </div>
   </div>
 
+</div>
+
+<div *ngIf="appLaunchLoading" class="loader-container">
+  <div class="loader-div" >
+    <div>App Launching</div>
+    <div [nbSpinner]="appLaunchLoading" nbSpinnerStatus="info" class="spinner-div"></div>
+    <div>Please Wait...</div>
+  </div>
 </div>
