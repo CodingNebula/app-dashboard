@@ -1,6 +1,6 @@
 <div class="header-div">
-  <label class="heading">AnyPay App (2.1 Alpha)</label>
-  <label class="date-label">Created At: <span>22-11-2024</span></label>
+  <label class="heading">{{this.reportData.extras.app_name}}</label>
+  <label class="date-label">Created At: <span>{{this.reportData.extras.created_at}}</span></label>
 </div>
 <div class="parentDiv">
 
@@ -15,23 +15,23 @@
         </div> -->
         <div class="dividerDiv">
           <label class="labelHeading">Device Name</label>
-          <label class="subLabel">POCO X4 pro (5G)</label>
+          <label class="subLabel">{{this.reportData.capabilities.deviceName}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Platform</label>
-          <label class="subLabel">Android</label>
+          <label class="subLabel">{{this.reportData.capabilities.platformName}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started By</label>
-          <label class="subLabel">Nick Jones</label>
+          <label class="subLabel">{{this.reportData.extras.started_by}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started Time</label>
-          <label class="subLabel">14:15:00</label>
+          <label class="subLabel">{{this.reportData.extras.start_time}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Total Time taken</label>
-          <label class="subLabel">15 sec</label>
+          <label class="subLabel">{{convertMilliseconds(this.reportData.extras.time_taken)}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
@@ -56,13 +56,13 @@
     <!--for table-->
     <div class="col-12">
       <nb-accordion>
-        <nb-accordion-item *ngFor="let testCase of filteredTestCases">
+        <nb-accordion-item *ngFor="let testCase of this.reportData.reports">
           <nb-accordion-item-header style="position: relative;"
-            [ngClass]="testCase.result === 'Passed' ? 'passed' : 'failed'">
-            <nb-icon [icon]="testCase.result === 'Passed' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
-            <span style="margin-left: 1em;">{{ testCase.title }}</span>
+            [ngClass]="testCase.status === 'Passed' ? 'passed' : 'failed'">
+            <nb-icon [icon]="testCase.status === 'Passed' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
+            <span style="margin-left: 1em;">{{ testCase.test_case }}</span>
             <span style="position: absolute;right: 3em;">
-              <div>{{ testCase.result }} </div>
+              <div>{{ testCase.status }} </div>
             </span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
@@ -70,21 +70,21 @@
               <div class="col-4">
                 <nb-card>
                   <nb-card-body>
-                    <div> <span class="descriptionLabel">Expected Result -</span> {{testCase.expectedReult}}</div>
+                    <div> <span class="descriptionLabel">Expected Result -</span> {{testCase.expected_result}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>
-              <div class="col-4" *ngIf="testCase.result ==='Failed'">
+              <div class="col-4" *ngIf="testCase.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
-                    <div> <span class="descriptionLabel">Defect -</span> {{testCase.Defect}}</div>
+                    <div> <span class="descriptionLabel">Defect -</span> {{testCase.defect}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>
               <div class="col-4">
                 <nb-card>
                   <nb-card-body>
-                    <div><span class="descriptionLabel">Time Spend -</span> {{testCase.timeSpent}}</div>
+                    <div><span class="descriptionLabel">Time Spend -</span> {{convertMilliseconds(testCase.time_spent)}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>

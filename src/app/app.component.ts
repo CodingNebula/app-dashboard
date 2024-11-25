@@ -6,6 +6,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { SeoService } from './@core/utils/seo.service';
+import {jwtDecode} from 'jwt-decode';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-app',
@@ -13,11 +15,52 @@ import { SeoService } from './@core/utils/seo.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private analytics: AnalyticsService, private seoService: SeoService) {
+  constructor(
+    private analytics: AnalyticsService, 
+    private seoService: SeoService,
+    private router: Router  ) {
   }
 
   ngOnInit(): void {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
+
+    const token = localStorage.getItem('token');
+
+    if (token && this.isTokenExpired(token)) {
+        this.logoutUser();
+    }
   }
+
+  
+
+  isTokenExpired(token: string){
+    if(!token) return true;
+
+    try{
+      const decode: any = jwtDecode(token);
+
+      const expirationTime = decode.exp * 1000;
+
+      const currentTime = Date.now();
+
+      console.log(expirationTime - currentTime);
+      
+
+      return currentTime > expirationTime;
+    }
+    catch(error){
+      console.log(error);
+      
+    }
+  }
+
+  logoutUser(){
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('auth/login');
+  }
+
+
+
+
 }

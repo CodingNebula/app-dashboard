@@ -18,12 +18,67 @@ export class AutomateComponent implements OnInit {
   public status: string = null;
   public appLaunchStatus: string = null;
   public appLaunchLoading: boolean = false;
-  public resultArr: any[] = [];
+  public totalTimeTaken: number;
+  public resultArr: any[] = [
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+    {
+      "message": "SUCCESS",
+      "info": "Welcome Screen Test Case Passes",
+      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    },
+  ];
+  public reportData: any = {
+    general: {}
+  };
   constructor(
     private fb: FormBuilder,
     private webSocketService: WebsocketService,
     private accountService: AccountService) {
-      
+
 
     this.temp = [
       {
@@ -44,7 +99,7 @@ export class AutomateComponent implements OnInit {
       },
       {
         "id": "8",
-        "screenName": "Click_Image", 
+        "screenName": "Click_Image",
         "btnName": "left_arrow",
         "title": "Permissions_Next_Button"
       },
@@ -77,11 +132,11 @@ export class AutomateComponent implements OnInit {
         "btnName": "Continue",
         "title": "Permission_Continue_Button"
       },
-       {
-           "id":"7",
-           "screenName":"Terminal Setup",
-           "title": "Terminal Setup"
-       },
+      {
+        "id": "7",
+        "screenName": "Terminal Setup",
+        "title": "Terminal Setup"
+      },
       {
         "id": "8",
         "screenName": "Click_Image", // image
@@ -104,13 +159,13 @@ export class AutomateComponent implements OnInit {
         "btnName": "PROCEED",
         "title": "TerminalID_Setting_Proceed_Button"
       },
-        {
-            "id":"1",
-            "screenName":"Enter_Terminal_ID",
-            "terminal_id":["2994001"],
-            "title": "Welcome"
+      {
+        "id": "1",
+        "screenName": "Enter_Terminal_ID",
+        "terminal_id": ["2994001"],
+        "title": "Welcome"
 
-        },
+      },
       {
         "id": "6",
         "screenName": "Click_Button",
@@ -291,21 +346,28 @@ export class AutomateComponent implements OnInit {
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
-      if(platform === 'Android'){
+      if (platform === 'Android') {
         this.myForm.get('automation').setValue('UIAutomator2');
       }
-      else{
+      else {
         this.myForm.get('automation').setValue('');
       }
     })
   }
 
   onSubmit() {
-    // if (this.myForm.valid) {
-    //   this.isAccordionExpanded = false;
-    this.webSocketService.connectWithAccessToken();
-  //   this.myForm.reset();
-  // }
+    if (this.myForm.valid) {
+      this.isAccordionExpanded = false;
+      console.log(this.myForm.value);
+
+      this.reportData.general.platform = this.myForm.value?.platform;
+      this.reportData.general.device = this.myForm.value?.device;
+
+      console.log(this.reportData);
+
+      // this.webSocketService.connectWithAccessToken();
+      this.myForm.reset();
+    }
   }
 
   noResetValidator(control) {
@@ -336,7 +398,7 @@ export class AutomateComponent implements OnInit {
   // }
 
   onStart(item) {
-    
+
     this.webSocketService.sendTestCaseRequest(item)
     // item.loading = true;
 
@@ -373,421 +435,187 @@ export class AutomateComponent implements OnInit {
     );
   }
 
-  onStartTrans(){
-    let item = [  {
-      "id":"1",
-      "screenName":"Welcome"
-  },
+  onStartTrans() {
+    let item = [{
+      "id": "1",
+      "screenName": "Welcome"
+    },
     {
-      "id":"2",
-      "screenName":"Click_Image", // image 
-      "btnName":"left_arrow"
-  },
-  {
-      "id":"3",
-      "screenName":"Permissions"
-  },
+      "id": "2",
+      "screenName": "Click_Image", // image 
+      "btnName": "left_arrow"
+    },
     {
-      "id":"4",
-      "screenName":"Click_Image", // image 
-      "btnName":"left_arrow"
-  },
-  {
-      "id":"5",
-      "screenName":"Permissions_list"
-  },
-  {
-      "id":"6",
-      "screenName":"Allow_PhoneCalls",
-      "action":"Allow"
-  },
-  {
-      "id":"7",
-      "screenName":"Allow_DeviceLocation",
-      "action":"ALLOW"
-  },
-  {
-      "id":"8",
-      "screenName":"Allow_BluetoothConnection",
-      "action":"ALLOW"
-  },
-  {
-      "id":"9",
-      "screenName":"Click_Button",
-      "btnName":"Continue"
-  },
-  {
-      "id":"10",
-      "screenName":"Terminal Setup"
-  },
-  {
-      "id":"11",
-      "screenName":"Click_Image" // image 
-  },
-  {
-      "id":"12",
-      "screenName":"Select_Options",
-      "options":"Testing"
-  },
-   {
-      "id":"13",
-      "screenName":"Click_Button",
-      "btnName":"PROCEED"
-  },
-  {
-      "id":"14",
-      "screenName":"Enter_Terminal_ID",
-      "terminal_id":["2994001"]
-      
-  },
-  {
-      "id":"15",
-      "screenName":"Click_Button",
-      "btnName":"Next"
-  },
-     {
-      "id":"16",
-      "screenName":"Enter_Terminal_ID",
-      "terminal_id":["2994001"]
-      
-  },
-  {
-      "id":"17",
-      "screenName":"Click_Button",
-      "btnName":"Submit"
-  },
+      "id": "3",
+      "screenName": "Permissions"
+    },
+    {
+      "id": "4",
+      "screenName": "Click_Image", // image 
+      "btnName": "left_arrow"
+    },
+    {
+      "id": "5",
+      "screenName": "Permissions_list"
+    },
+    {
+      "id": "6",
+      "screenName": "Allow_PhoneCalls",
+      "action": "Allow"
+    },
+    {
+      "id": "7",
+      "screenName": "Allow_DeviceLocation",
+      "action": "ALLOW"
+    },
+    {
+      "id": "8",
+      "screenName": "Allow_BluetoothConnection",
+      "action": "ALLOW"
+    },
+    {
+      "id": "9",
+      "screenName": "Click_Button",
+      "btnName": "Continue"
+    },
+    {
+      "id": "10",
+      "screenName": "Terminal Setup"
+    },
+    {
+      "id": "11",
+      "screenName": "Click_Image" // image 
+    },
+    {
+      "id": "12",
+      "screenName": "Select_Options",
+      "options": "Testing"
+    },
+    {
+      "id": "13",
+      "screenName": "Click_Button",
+      "btnName": "PROCEED"
+    },
+    {
+      "id": "14",
+      "screenName": "Enter_Terminal_ID",
+      "terminal_id": ["2994001"]
 
-  {
-      "id":"18",
-      "screenName":"Profile_Login",
-      "pin":["9","2","0","4"]
-  },
-   {
-      "id":"19",
-      "screenName":"Click_Button",
-      "btnName":"Confirm"
-  },
-   {
-      "id":"20",
-      "screenName":"Click_Button",
-      "btnName":"GO"
-  },
-  {
-      "id":"21",
-      "screenName":"Click_Text",
-      "btnName":"Skip >"
-  },
-  {
-    "id":"22",
-    "screenName":"Click_Image",
-    "btnName":"gear-icon"
-},
- 
+    },
+    {
+      "id": "15",
+      "screenName": "Click_Button",
+      "btnName": "Next"
+    },
+    {
+      "id": "16",
+      "screenName": "Enter_Terminal_ID",
+      "terminal_id": ["2994001"]
 
-  // connect reader steps start
-  {
-      "id":"23",
-      "screenName":"Click_View",
-      "btnName":"Device"
-  },
-
-
-  {
-      "id":"24",
-      "screenName":"Click_Button",
-      "btnName":"CONNECT TO READER"
-  },
-  {
-      "id":"25",
-      "screenName":"Wait_For_Text",
-      // "btnName":"WPS323247002051"
-       "btnName":"WPC323951000219"
-      //   "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-  }, 
-  {
-      "id":"26",
-      "screenName":"Click_Text",
-      // "btnName":"WPS323247002051"
-      "btnName":"WPC323951000219"
-      // "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-  },
-  {
-      "id":"27",
-      "screenName":"Find_Button",
-      "btnName":"Disconnect"
-  },
-   {
-      "id":"28",
-      "screenName":"Click_Image" // image 
-  },
-  // connect reader steps ends
-  // transaction step starts  
-  {
-      "id":"29",
-      "screenName":"Click_Image", // image 
-      "btnName":"Sale"
-  
-  },
-  {
-      "id":"30",
-      "screenName":"Enter_Amount",
-      "amount":"200.00"
-  },
-    {
-      "id":"31",
-      "screenName":"Click_Text",
-      "btnName":"Clear"
-  },
-    {
-      "id":"32",
-      "screenName":"Enter_Amount",
-      "amount":"50.00"
-  },
-   {
-      "id":"33",
-      "screenName":"Click_View",
-      "btnName":"2 / 4"
-  },
-   {
-      "id":"34",
-      "screenName":"Click_Text",
-      "btnName":"Go"
-  },
-  //custom tip
-  //     {
-  //     "id":9,
-  //     "screenName":"Click_Text",
-  //     "btnName":"Custom"
-  // },
-  //   {
-  //     "id":14,
-  //     "screenName":"Enter_Amount",
-  //     "amount":"500.00"
-  // },
-  // fix tip
-    {
-      "id":"35",
-      "screenName":"Click_Text",
-      "btnName":"10%"
-  },
-  {
-      "id":"36",
-      "screenName":"Click_Button",
-      "btnName":"Continue"
-  },
-   {
-      "id":"37",
-      "screenName":"Wait_For_Text",
-       "btnName":"Transaction ID"
-  },
-   {
-      "id":"38",
-      "screenName":"Element_Avail", // image 
-      "elementName":["Transaction FAILED", "Transaction Approved"]
-  },
-
-  {
-      "id":"39",
-      "screenName":"Click_Button",
-      "btnName":"See Details"
-  }
-];
-    this.webSocketService.sendTestCaseRequest(item);
-
-  //   {
-  //     "sender": "6d1b7721-4973-4c98-9fd4-a3564d83ac10",
-  //     "message": {
-  //         "message": "SUCCESS",
-  //         "info": "Welcome Screen Test Case Passes",
-  //         "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-  //     }
-  // }
-    this.webSocketService.getSubject().subscribe((res) => {
-      if(res?.message && res?.message?.info){
-        this.resultArr.push(res.message);
-      }
-    })
-      
-  }
-
-  onStartTemp(){
-      let item = [   {
-        "id":"0",
-        "screenName":"Welcome"
-    },
-      {
-        "id":"8",
-        "screenName":"Click_Image", // image 
-        "btnName":"left_arrow"
     },
     {
-        "id":"1",
-        "screenName":"Permissions"
-    },
-      {
-        "id":"8",
-        "screenName":"Click_Image", // image 
-        "btnName":"left_arrow"
-    },
-    {
-        "id":"2",
-        "screenName":"Permissions_list"
-    },
-    {
-        "id":"3",
-        "screenName":"Allow_PhoneCalls",
-        "action":"Allow"
-    },
-    {
-        "id":"4",
-        "screenName":"Allow_DeviceLocation",
-        "action":"ALLOW"
-    },
-    {
-        "id":"5",
-        "screenName":"Allow_BluetoothConnection",
-        "action":"ALLOW"
-    },
-    {
-        "id":"6",
-        "screenName":"Click_Button",
-        "btnName":"Continue"
-    },
-    {
-        "id":"7",
-        "screenName":"Terminal Setup"
-    },
-    {
-        "id":"8",
-        "screenName":"Click_Image" // image 
-    },
-    {
-        "id":"9",
-        "screenName":"Select_Options",
-        "options":"Testing"
-    },
-     {
-        "id":"6",
-        "screenName":"Click_Button",
-        "btnName":"PROCEED"
-    },
-    {
-        "id":"1",
-        "screenName":"Enter_Terminal_ID",
-        "terminal_id":["2994001"]
-        
-    },
-    {
-        "id":"6",
-        "screenName":"Click_Button",
-        "btnName":"Next"
-    },
-       {
-        "id":"10",
-        "screenName":"Enter_Terminal_ID",
-        "terminal_id":["2994001"]
-        
-    },
-    {
-        "id":"6",
-        "screenName":"Click_Button",
-        "btnName":"Submit"
+      "id": "17",
+      "screenName": "Click_Button",
+      "btnName": "Submit"
     },
 
     {
-        "id":"11",
-        "screenName":"Profile_Login",
-        "pin":["9","2","0","4"]
-    },
-     {
-        "id":"6",
-        "screenName":"Click_Button",
-        "btnName":"Confirm"
-    },
-     {
-        "id":"6",
-        "screenName":"Click_Button",
-        "btnName":"GO"
+      "id": "18",
+      "screenName": "Profile_Login",
+      "pin": ["9", "2", "0", "4"]
     },
     {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"Skip >"
+      "id": "19",
+      "screenName": "Click_Button",
+      "btnName": "Confirm"
     },
-   
+    {
+      "id": "20",
+      "screenName": "Click_Button",
+      "btnName": "GO"
+    },
+    {
+      "id": "21",
+      "screenName": "Click_Text",
+      "btnName": "Skip >"
+    },
+    {
+      "id": "22",
+      "screenName": "Click_Image",
+      "btnName": "gear-icon"
+    },
+
 
     // connect reader steps start
     {
-        "id":10,
-        "screenName":"Click_View",
-        "btnName":"Device"
+      "id": "23",
+      "screenName": "Click_View",
+      "btnName": "Device"
     },
 
 
     {
-        "id":12,
-        "screenName":"Click_Button",
-        "btnName":"CONNECT TO READER"
+      "id": "24",
+      "screenName": "Click_Button",
+      "btnName": "CONNECT TO READER"
     },
     {
-        "id":13,
-        "screenName":"Wait_For_Text",
-        // "btnName":"WPS323247002051"
-         "btnName":"WPC323951000219"
-        //   "btnName":"CHB2A6132009935"
-        // "btnName":"CHB204650000480"
-    }, 
-    {
-        "id":13,
-        "screenName":"Click_Text",
-        // "btnName":"WPS323247002051"
-        "btnName":"WPC323951000219"
-        // "btnName":"CHB2A6132009935"
-        // "btnName":"CHB204650000480"
+      "id": "25",
+      "screenName": "Wait_For_Text",
+      // "btnName":"WPS323247002051"
+      "btnName": "WPC323951000219"
+      //   "btnName":"CHB2A6132009935"
+      // "btnName":"CHB204650000480"
     },
     {
-        "id":14,
-        "screenName":"Find_Button",
-        "btnName":"Disconnect"
+      "id": "26",
+      "screenName": "Click_Text",
+      // "btnName":"WPS323247002051"
+      "btnName": "WPC323951000219"
+      // "btnName":"CHB2A6132009935"
+      // "btnName":"CHB204650000480"
     },
-     {
-        "id":"8",
-        "screenName":"Click_Image" // image 
+    {
+      "id": "27",
+      "screenName": "Find_Button",
+      "btnName": "Disconnect"
+    },
+    {
+      "id": "28",
+      "screenName": "Click_Image" // image 
     },
     // connect reader steps ends
     // transaction step starts  
     {
-        "id":"8",
-        "screenName":"Click_Image", // image 
-        "btnName":"Sale"
-    
+      "id": "29",
+      "screenName": "Click_Image", // image 
+      "btnName": "Sale"
+
     },
     {
-        "id":14,
-        "screenName":"Enter_Amount",
-        "amount":"200.00"
+      "id": "30",
+      "screenName": "Enter_Amount",
+      "amount": "200.00"
     },
-      {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"Clear"
+    {
+      "id": "31",
+      "screenName": "Click_Text",
+      "btnName": "Clear"
     },
-      {
-        "id":14,
-        "screenName":"Enter_Amount",
-        "amount":"50.00"
+    {
+      "id": "32",
+      "screenName": "Enter_Amount",
+      "amount": "50.00"
     },
-     {
-        "id":10,
-        "screenName":"Click_View",
-        "btnName":"2 / 4"
+    {
+      "id": "33",
+      "screenName": "Click_View",
+      "btnName": "2 / 4"
     },
-     {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"Go"
+    {
+      "id": "34",
+      "screenName": "Click_Text",
+      "btnName": "Go"
     },
     //custom tip
     //     {
@@ -801,79 +629,37 @@ export class AutomateComponent implements OnInit {
     //     "amount":"500.00"
     // },
     // fix tip
-      {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"10%"
+    {
+      "id": "35",
+      "screenName": "Click_Text",
+      "btnName": "10%"
     },
     {
-        "id":12,
-        "screenName":"Click_Button",
-        "btnName":"Continue"
+      "id": "36",
+      "screenName": "Click_Button",
+      "btnName": "Continue"
     },
-     {
-        "id":13,
-        "screenName":"Wait_For_Text",
-         "btnName":"Transaction ID"
+    {
+      "id": "37",
+      "screenName": "Wait_For_Text",
+      "btnName": "Transaction ID"
     },
-     {
-        "id":"14",
-        "screenName":"Element_Avail", // image 
-        "elementName":["Transaction FAILED", "Transaction Approved"]
+    {
+      "id": "38",
+      "screenName": "Element_Avail", // image 
+      "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
 
     {
-        "id":"12",
-        "screenName":"Click_Button",
-        "btnName":"See Details"
-    },
-//     // 2nd transaction starts
-  {
-         "id":"8",
-        "screenName":"Click_Image", // image 
-         "btnName":"Sale"
-    
-     },
-     {
-         "id":14,
-         "screenName":"Enter_Amount",
-         "amount":"25.00"
-     },
-      {
-         "id":9,
-         "screenName":"Click_Text",
-         "btnName":"Go"
-     },
-     {
-         "id":12,
-         "screenName":"Click_Button",
-         "btnName":"Continue"
-     },
-      {
-         "id":13,
-         "screenName":"Wait_For_Text",
-         // "btnName":"WPS323247002051"
-          "btnName":"Transaction ID"
-     },
-      {
-         "id":"14",
-         "screenName":"Element_Avail", // image 
-         "elementName":["Transaction FAILED", "Transaction Approved"]
-     },
-     {
-         "id":"12",
-         "screenName":"Click_Button",
-         "btnName":"See Details"
-     },
-{
-         "id":"8",
-        "screenName":"Click_Image", // image 
-         "btnName":"Sale"
-    
-     },
-  ];
-      this.webSocketService.sendTestCaseRequest(item);
-  
+      "id": "39",
+      "screenName": "Click_Button",
+      "btnName": "See Details"
+    }
+    ];
+    this.webSocketService.sendTestCaseRequest(item);
+    this.reportData.general.createdAt = this.formatDate(new Date());
+    const startTime = Date.now();
+
     //   {
     //     "sender": "6d1b7721-4973-4c98-9fd4-a3564d83ac10",
     //     "message": {
@@ -882,12 +668,307 @@ export class AutomateComponent implements OnInit {
     //         "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
     //     }
     // }
-      this.webSocketService.getSubject().subscribe((res) => {
-        this.resultArr.push(res.message);
-      })
-        console.log(this.resultArr);
-        
-    
+
+    // this.webSocketService.getSubject().subscribe((res) => {
+    //   if (res?.message && res?.message?.info) {
+    //     this.resultArr.push(res.message);
+    //   }
+    // })
+    const endTime = Date.now();  // Capture end time after the last response
+    const elapsedTimeInSeconds = (endTime - startTime) / 1000;  // Calculate elapsed time in seconds
+    console.log(`Total Time: ${elapsedTimeInSeconds} seconds`);
+
+    // Store the elapsed time (in seconds) in the report
+    this.reportData.general.executionTime = Math.round(elapsedTimeInSeconds);
+    console.log(this.reportData);
+
+
+
+  }
+
+  onStartTemp() {
+    let item = [{
+      "id": "0",
+      "screenName": "Welcome"
+    },
+    {
+      "id": "8",
+      "screenName": "Click_Image", // image 
+      "btnName": "left_arrow"
+    },
+    {
+      "id": "1",
+      "screenName": "Permissions"
+    },
+    {
+      "id": "8",
+      "screenName": "Click_Image", // image 
+      "btnName": "left_arrow"
+    },
+    {
+      "id": "2",
+      "screenName": "Permissions_list"
+    },
+    {
+      "id": "3",
+      "screenName": "Allow_PhoneCalls",
+      "action": "Allow"
+    },
+    {
+      "id": "4",
+      "screenName": "Allow_DeviceLocation",
+      "action": "ALLOW"
+    },
+    {
+      "id": "5",
+      "screenName": "Allow_BluetoothConnection",
+      "action": "ALLOW"
+    },
+    {
+      "id": "6",
+      "screenName": "Click_Button",
+      "btnName": "Continue"
+    },
+    {
+      "id": "7",
+      "screenName": "Terminal Setup"
+    },
+    {
+      "id": "8",
+      "screenName": "Click_Image" // image 
+    },
+    {
+      "id": "9",
+      "screenName": "Select_Options",
+      "options": "Testing"
+    },
+    {
+      "id": "6",
+      "screenName": "Click_Button",
+      "btnName": "PROCEED"
+    },
+    {
+      "id": "1",
+      "screenName": "Enter_Terminal_ID",
+      "terminal_id": ["2994001"]
+
+    },
+    {
+      "id": "6",
+      "screenName": "Click_Button",
+      "btnName": "Next"
+    },
+    {
+      "id": "10",
+      "screenName": "Enter_Terminal_ID",
+      "terminal_id": ["2994001"]
+
+    },
+    {
+      "id": "6",
+      "screenName": "Click_Button",
+      "btnName": "Submit"
+    },
+
+    {
+      "id": "11",
+      "screenName": "Profile_Login",
+      "pin": ["9", "2", "0", "4"]
+    },
+    {
+      "id": "6",
+      "screenName": "Click_Button",
+      "btnName": "Confirm"
+    },
+    {
+      "id": "6",
+      "screenName": "Click_Button",
+      "btnName": "GO"
+    },
+    {
+      "id": 9,
+      "screenName": "Click_Text",
+      "btnName": "Skip >"
+    },
+
+
+    // connect reader steps start
+    {
+      "id": 10,
+      "screenName": "Click_View",
+      "btnName": "Device"
+    },
+
+
+    {
+      "id": 12,
+      "screenName": "Click_Button",
+      "btnName": "CONNECT TO READER"
+    },
+    {
+      "id": 13,
+      "screenName": "Wait_For_Text",
+      // "btnName":"WPS323247002051"
+      "btnName": "WPC323951000219"
+      //   "btnName":"CHB2A6132009935"
+      // "btnName":"CHB204650000480"
+    },
+    {
+      "id": 13,
+      "screenName": "Click_Text",
+      // "btnName":"WPS323247002051"
+      "btnName": "WPC323951000219"
+      // "btnName":"CHB2A6132009935"
+      // "btnName":"CHB204650000480"
+    },
+    {
+      "id": 14,
+      "screenName": "Find_Button",
+      "btnName": "Disconnect"
+    },
+    {
+      "id": "8",
+      "screenName": "Click_Image" // image 
+    },
+    // connect reader steps ends
+    // transaction step starts  
+    {
+      "id": "8",
+      "screenName": "Click_Image", // image 
+      "btnName": "Sale"
+
+    },
+    {
+      "id": 14,
+      "screenName": "Enter_Amount",
+      "amount": "200.00"
+    },
+    {
+      "id": 9,
+      "screenName": "Click_Text",
+      "btnName": "Clear"
+    },
+    {
+      "id": 14,
+      "screenName": "Enter_Amount",
+      "amount": "50.00"
+    },
+    {
+      "id": 10,
+      "screenName": "Click_View",
+      "btnName": "2 / 4"
+    },
+    {
+      "id": 9,
+      "screenName": "Click_Text",
+      "btnName": "Go"
+    },
+    //custom tip
+    //     {
+    //     "id":9,
+    //     "screenName":"Click_Text",
+    //     "btnName":"Custom"
+    // },
+    //   {
+    //     "id":14,
+    //     "screenName":"Enter_Amount",
+    //     "amount":"500.00"
+    // },
+    // fix tip
+    {
+      "id": 9,
+      "screenName": "Click_Text",
+      "btnName": "10%"
+    },
+    {
+      "id": 12,
+      "screenName": "Click_Button",
+      "btnName": "Continue"
+    },
+    {
+      "id": 13,
+      "screenName": "Wait_For_Text",
+      "btnName": "Transaction ID"
+    },
+    {
+      "id": "14",
+      "screenName": "Element_Avail", // image 
+      "elementName": ["Transaction FAILED", "Transaction Approved"]
+    },
+
+    {
+      "id": "12",
+      "screenName": "Click_Button",
+      "btnName": "See Details"
+    },
+    //     // 2nd transaction starts
+    {
+      "id": "8",
+      "screenName": "Click_Image", // image 
+      "btnName": "Sale"
+
+    },
+    {
+      "id": 14,
+      "screenName": "Enter_Amount",
+      "amount": "25.00"
+    },
+    {
+      "id": 9,
+      "screenName": "Click_Text",
+      "btnName": "Go"
+    },
+    {
+      "id": 12,
+      "screenName": "Click_Button",
+      "btnName": "Continue"
+    },
+    {
+      "id": 13,
+      "screenName": "Wait_For_Text",
+      // "btnName":"WPS323247002051"
+      "btnName": "Transaction ID"
+    },
+    {
+      "id": "14",
+      "screenName": "Element_Avail", // image 
+      "elementName": ["Transaction FAILED", "Transaction Approved"]
+    },
+    {
+      "id": "12",
+      "screenName": "Click_Button",
+      "btnName": "See Details"
+    },
+    {
+      "id": "8",
+      "screenName": "Click_Image", // image 
+      "btnName": "Sale"
+
+    },
+    ];
+    this.webSocketService.sendTestCaseRequest(item);
+
+    //   {
+    //     "sender": "6d1b7721-4973-4c98-9fd4-a3564d83ac10",
+    //     "message": {
+    //         "message": "SUCCESS",
+    //         "info": "Welcome Screen Test Case Passes",
+    //         "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
+    //     }
+    // }
+    this.webSocketService.getSubject().subscribe((res) => {
+      this.resultArr.push(res.message);
+    })
+    console.log(this.resultArr);
+
+
+  }
+
+  formatDate(date: Date): string {
+    const day = ("0" + date.getDate()).slice(-2); // Add leading zero if day is single digit
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Add leading zero if month is single digit (note: months are 0-based)
+    const year = date.getFullYear(); // Get the full year
+    return `${day}-${month}-${year}`; // Return the formatted string
   }
 
 }

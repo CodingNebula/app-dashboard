@@ -25,6 +25,7 @@ export class ReportsComponent {
       this.reports = res;
       console.log(res, 'result')
     })
+    console.log(this.reports, 'result')
   }
   goToPreviousPage() {
     if (this.currentPage > 1) {

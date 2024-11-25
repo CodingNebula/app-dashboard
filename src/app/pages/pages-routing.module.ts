@@ -35,14 +35,13 @@ const routes: Routes = [{
       path: 'test-reports',
       component: TestReportsComponent,
     },
-    
-    {
-      path: 'signout',
-      component: SignOutComponent,
-    },
     {
       path:'reports',
       component:ReportsComponent
+    },
+    {
+      path: 'signout',
+      component: SignOutComponent,
     },
     {
       path: '**',

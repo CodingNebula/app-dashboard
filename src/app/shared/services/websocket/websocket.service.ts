@@ -68,9 +68,11 @@ export class WebsocketService {
         },
       ],
       extras: {
-        app_name: 'Anypay 2.1 (Alpha)',
+        app_name: 'Anypay 2.10 (Alpha)',
         started_by: 'Nick Jones',
-        start_time: '14:15:00'
+        start_time: '14:15:00',
+        created_at: '25-11-2024',
+        time_taken: 12000,
       }
     }
    }

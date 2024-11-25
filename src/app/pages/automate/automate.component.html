@@ -96,10 +96,10 @@
           </div>
 
           <div class="form-row button-row">
-            <!-- <button type="submit" [disabled]="myForm.invalid" class="submit-button">Submit</button> -->
+            <button type="submit" [disabled]="myForm.invalid" class="submit-button">Submit</button>
             <!-- <button type="reset"  class="reset-button" (click)="onReset()">Reset</button> -->
 
-            <button type="submit" class="submit-button">Submit</button>
+            <!-- <button type="submit" class="submit-button">Submit</button> -->
           </div>
         </form>
 
@@ -113,13 +113,16 @@
       <!-- <span *ngIf="appLaunchStatus" class="status-message"
         [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span> -->
 
-        <nb-icon *ngIf="appLaunchStatus === 'SUCCESS'" [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : ''" icon="checkmark-outline"></nb-icon>
-        <nb-icon *ngIf="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'failed-status' : ''" icon="close-outline"></nb-icon>
+      <nb-icon *ngIf="appLaunchStatus === 'SUCCESS'" [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : ''"
+        icon="checkmark-outline"></nb-icon>
+      <nb-icon *ngIf="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'failed-status' : ''"
+        icon="close-outline"></nb-icon>
       <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button>
     </div>
+
     <div class="test-case-div">
       <h5>Do a Transaction</h5>
-      <button class="start-button" (click)="onStartTrans()">Start</button>
+      <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button>
 
     </div>
     <!-- <div  class="test-case-div">
@@ -127,15 +130,19 @@
   <button class="start-button" (click)="onStartTrans()">Start</button>
    
     </div> -->
+    <div class="test-case-status-container">
     <div *ngFor="let item of resultArr" class="test-case-div">
       <!-- <div>{{item | json}}</div> -->
       <h6>{{item?.info}}</h6>
       <!-- <span *ngIf="!item.loading && item.status" class="status-message"
         [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
 
-      <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item?.message}}</div>
+      <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}}
+      </div>
     </div>
+
   </div>
+</div>
 
 </div>
 

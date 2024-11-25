@@ -55,49 +55,7 @@ export class TestReportsComponent {
 
     // Add more test cases as needed
   ];
-  public data = [
-    {
-      data: { name: 'Projects', size: '1.8 MB', items: 5, kind: 'dir' },
-      children: [
-        { data: { name: 'project-1.doc', kind: 'doc', size: '240 KB' } },
-        { data: { name: 'project-2.doc', kind: 'doc', size: '290 KB' } },
-        {
-          data: { name: 'project-3', kind: 'dir', size: '466 KB', items: 3 },
-          children: [
-            { data: { name: 'project-3A.doc', kind: 'doc', size: '200 KB' } },
-            { data: { name: 'project-3B.doc', kind: 'doc', size: '266 KB' } },
-            { data: { name: 'project-3C.doc', kind: 'doc', size: '0' } },
-          ],
-        },
-        { data: { name: 'project-4.docx', kind: 'docx', size: '900 KB' } },
-      ],
-    },
-    {
-      data: { name: 'Reports', kind: 'dir', size: '400 KB', items: 2 },
-      children: [
-        {
-          data: { name: 'Report 1', kind: 'dir', size: '100 KB', items: 1 },
-          children: [
-            { data: { name: 'report-1.doc', kind: 'doc', size: '100 KB' } },
-          ],
-        },
-        {
-          data: { name: 'Report 2', kind: 'dir', size: '300 KB', items: 2 },
-          children: [
-            { data: { name: 'report-2.doc', kind: 'doc', size: '290 KB' } },
-            { data: { name: 'report-2-note.txt', kind: 'txt', size: '10 KB' } },
-          ],
-        },
-      ],
-    },
-    {
-      data: { name: 'Other', kind: 'dir', size: '109 MB', items: 2 },
-      children: [
-        { data: { name: 'backup.bkp', kind: 'bkp', size: '107 MB' } },
-        { data: { name: 'secret-note.txt', kind: 'txt', size: '2 MB' } },
-      ],
-    },
-  ];
+
 
   constructor(private webSocketService: WebsocketService) {
     this.reportData = webSocketService.testReportsData;
@@ -124,10 +82,9 @@ export class TestReportsComponent {
           center: ['50%', '50%'],
           selectedMode: 'single',
           data: [
-            { value: 335, name: 'CityA' },
-            { value: 434, name: 'CityB' },
-            { value: 735, name: 'CityC' },
-            { value: 510, name: 'CityD' },
+            { value: 50, name: 'Passed' },
+            { value: 24, name: 'Failed' },
+            { value: 7, name: 'Untested' },
           ],
           emphasis: {
             itemStyle: {
@@ -149,7 +106,28 @@ export class TestReportsComponent {
       testCase.title.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
-  // createCompletionChart() {
+  
+  convertMilliseconds(milliseconds: number): string {
+    const hours = Math.floor(milliseconds / 3600000); // Total hours
+    const minutes = Math.floor((milliseconds % 3600000) / 60000); // Total minutes
+    const remainingSeconds = (milliseconds % 60000) / 1000; // Remaining seconds with fractional part
 
-  // }
+    let timeString = '';
+
+    if (hours > 0) {
+      timeString += `${hours} hour${hours > 1 ? 's' : ''}`;
+    }
+
+    if (minutes > 0) {
+      if (timeString) timeString += ', '; // Add a comma if hours were added
+      timeString += `${minutes} minute${minutes > 1 ? 's' : ''}`;
+    }
+
+    if (remainingSeconds > 0 || timeString === '') {
+      if (timeString) timeString += ', '; // Add a comma if hours or minutes were added
+      timeString += `${remainingSeconds.toFixed(1)} second${remainingSeconds !== 1 ? 's' : ''}`; // Use fractional seconds
+    }
+
+    return timeString;
+  }
 }
