@@ -363,10 +363,12 @@ export class AutomateComponent implements OnInit {
       (response) => {
         console.log('API Response:', response);
         this.appLaunchLoading = false;
+        this.appLaunchStatus = 'SUCCESS'
       },
       (error) => {
         console.error('API Error:', error);
         this.appLaunchLoading = false;
+        this.appLaunchStatus = 'FAILED'
       }
     );
   }

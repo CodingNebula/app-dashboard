@@ -1,4 +1,4 @@
-<div >
+<div>
   <nb-accordion>
     <nb-accordion-item [expanded]="isAccordionExpanded">
       <nb-accordion-item-header>Application Details</nb-accordion-item-header>
@@ -32,7 +32,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="package">Package Name:</label>
-              <input id="package" formControlName="package" class="form-control timeout-input" readonly/>
+              <input id="package" formControlName="package" class="form-control timeout-input" readonly />
               <div *ngIf="myForm.get('package').touched && myForm.get('package').invalid" class="error-message">
                 <small *ngIf="myForm.get('package').hasError('required')">Package name is required!</small>
               </div>
@@ -75,20 +75,22 @@
 
               <div *ngIf="myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
                 <small *ngIf="myForm.get('noReset').hasError('required')">No Reset is required!</small>
-                <small *ngIf="myForm.get('noReset').hasError('invalidValue')">You cannot select "False" for No Reset!</small>
+                <small *ngIf="myForm.get('noReset').hasError('invalidValue')">You cannot select "False" for No
+                  Reset!</small>
               </div>
             </div>
 
             <div class="form-group">
               <label for="hiddenApp">Ignore hidden app policy:</label>
-              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="True" [disabled]="true" 
+              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="True" [disabled]="true"
                 class="custom-select-dropdown">
                 <nb-option value="True">True</nb-option>
                 <nb-option value="False">False</nb-option>
               </nb-select>
               <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
                 <small *ngIf="myForm.get('hiddenApp').hasError('required')">Hidden App is required!</small>
-                <small *ngIf="myForm.get('hiddenApp').hasError('invalidValue')">You cannot select "False" for Ignore Hidden App!</small>
+                <small *ngIf="myForm.get('hiddenApp').hasError('invalidValue')">You cannot select "False" for Ignore
+                  Hidden App!</small>
               </div>
             </div>
           </div>
@@ -108,15 +110,17 @@
   <div class="test-case-container">
     <div class="test-case-div">
       <h5>App Launch</h5>
-      <span *ngIf="appLaunchStatus" class="status-message"
-        [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span>
+      <!-- <span *ngIf="appLaunchStatus" class="status-message"
+        [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span> -->
 
+        <nb-icon *ngIf="appLaunchStatus === 'SUCCESS'" [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : ''" icon="checkmark-outline"></nb-icon>
+        <nb-icon *ngIf="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'failed-status' : ''" icon="close-outline"></nb-icon>
       <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button>
     </div>
-    <div  class="test-case-div">
+    <div class="test-case-div">
       <h5>Do a Transaction</h5>
-  <button class="start-button" (click)="onStartTrans()">Start</button>
-   
+      <button class="start-button" (click)="onStartTrans()">Start</button>
+
     </div>
     <!-- <div  class="test-case-div">
       <h5>Do a Transaction</h5>
@@ -129,14 +133,14 @@
       <!-- <span *ngIf="!item.loading && item.status" class="status-message"
         [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
 
-      <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status' : 'failed-status'" >{{item?.message}}</div>
+      <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item?.message}}</div>
     </div>
   </div>
 
 </div>
 
 <div *ngIf="appLaunchLoading" class="loader-container">
-  <div class="loader-div" >
+  <div class="loader-div">
     <div>App Launching</div>
     <div [nbSpinner]="appLaunchLoading" nbSpinnerStatus="info" class="spinner-div"></div>
     <div>Please Wait...</div>
