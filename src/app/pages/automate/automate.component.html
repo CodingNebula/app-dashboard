@@ -107,18 +107,29 @@
 
   <div class="test-case-container">
     <div class="test-case-div">
-      <h6>App Launch</h6>
+      <h5>App Launch</h5>
       <span *ngIf="appLaunchStatus" class="status-message"
         [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span>
 
       <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button>
     </div>
-    <div *ngFor="let item of temp" class="test-case-div">
-      <h6>{{item?.title}}</h6>
-      <span *ngIf="!item.loading && item.status" class="status-message"
-        [ngClass]="item.status === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.status}}</span>
+    <div  class="test-case-div">
+      <h5>Do a Transaction</h5>
+  <button class="start-button" (click)="onStartTrans()">Start</button>
+   
+    </div>
+    <!-- <div  class="test-case-div">
+      <h5>Do a Transaction</h5>
+  <button class="start-button" (click)="onStartTrans()">Start</button>
+   
+    </div> -->
+    <div *ngFor="let item of resultArr" class="test-case-div">
+      <!-- <div>{{item | json}}</div> -->
+      <h6>{{item?.info}}</h6>
+      <!-- <span *ngIf="!item.loading && item.status" class="status-message"
+        [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
 
-      <button class="start-button" (click)="onStart(item)" *ngIf="!item.status">Start</button>
+      <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status' : 'failed-status'" >{{item?.message}}</div>
     </div>
   </div>
 

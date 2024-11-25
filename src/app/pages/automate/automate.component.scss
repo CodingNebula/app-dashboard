@@ -222,6 +222,10 @@
     width: 3em;
   }
 
+  .not-allowed{
+    cursor: not-allowed;
+  }
+
 
   @media screen and (min-width: 2561px) and (max-width: 3840px) {
     nb-accordion-item-header{
@@ -250,7 +254,9 @@
     .test-case-div > h6{
       font-size: 1.2em;
     }
-
+    .test-case-div > h5{
+      font-size: 1.2em;
+    }
     .test-case-container{
       height: 84vh;
     }

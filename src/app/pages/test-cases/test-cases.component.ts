@@ -63,7 +63,7 @@ export class TestCasesComponent {
             const details = {
               title: result.data.application,
               types: result.data.testCases,
-              applicationId: "12e13954-ab70-4398-ae04-317ac55a41b8",
+              applicationId: "2b2f4979-9dbb-443d-a881-407c714f6e45",
               extra: {}
             }
             this.saveTestCasesData(details);

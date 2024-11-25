@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { io, Socket } from "socket.io-client";
 
 @Injectable({
@@ -6,7 +7,7 @@ import { io, Socket } from "socket.io-client";
 })
 export class WebsocketService {
   public socket: Socket;
-
+  private mySubject = new BehaviorSubject<any>(null);
   public message: string | null = null;
   public appLaunchStatus: string | null = null;
 
@@ -29,7 +30,7 @@ export class WebsocketService {
         ignoreHiddenApiPolicyError: true,
         newCommandTimeout: 1200000
       },
-      report: [
+      reports: [
         {
           test_case: 'Welcome',
           status: 'Passed',
@@ -73,7 +74,9 @@ export class WebsocketService {
       }
     }
    }
-
+   getSubject() {
+    return this.mySubject.asObservable();
+  }
   connectWithAccessToken(): void {
     // if (!this.socket || !this.socket.connected) {
     // this.socket = io('ws://192.168.1.29:3000', {
@@ -116,6 +119,16 @@ export class WebsocketService {
     //   // this.handleReconnect();
     // });
     // }
+
+    // this.socket.on('message', (response: any) => {
+    //   console.log('Received server response:', response);
+    //   // Test case name and status
+    //   if (response.success) {
+    //     console.log('Test case request success:', response);
+    //   } else {
+    //     console.error('Test case request failed:', response.error);
+    //   }
+    // });
   }
 
   socketConnect(token) {
@@ -136,6 +149,9 @@ export class WebsocketService {
         room: localStorage.getItem('id') 
       });
     });
+    this.socket.on('ping', (response: any) => {
+      console.log(response,'receive pings')
+    })
   }
 
   private handleReconnect(): void {
@@ -157,26 +173,29 @@ export class WebsocketService {
     // Check if the socket is connected before emitting
     if (this.socket && this.socket.connected) {
       console.log('Emitting sendTestCaseRequest with data:', { room: localStorage.getItem('id'), message: JSON.stringify(item) });
-      this.socket.emit("message", { room: localStorage.getItem('id'), message: JSON.stringify(item) });
+      this.socket.emit("message", { room: localStorage.getItem('id'), message: item });
 
       console.log('Message sent to server');
 
       // Listen for the response from the server
       this.socket.on('message', (response: any) => {
         console.log('Received server response:', response);
+this.updateValue(response);
         // Test case name and status
-        if (response.success) {
-          console.log('Test case request success:', response);
-        } else {
-          console.error('Test case request failed:', response.error);
-        }
+        // if (response.success) {
+        //   console.log('Test case request success:', response);
+        // } else {
+        //   console.error('Test case request failed:', response.error);
+        // }
       });
     } else {
       console.error('Socket is not connected.');
     }
   }
 
-
+ updateValue(newValue: any) {
+    this.mySubject.next(newValue);
+  }
   sendAppLaunchRequest(item: any): void {
     console.log(this.socket);
 
