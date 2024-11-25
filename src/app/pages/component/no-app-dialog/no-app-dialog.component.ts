@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -7,7 +7,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
   templateUrl: './no-app-dialog.component.html',
   styleUrls: ['./no-app-dialog.component.scss']
 })
-export class NoAppDialogComponent {
+export class NoAppDialogComponent implements OnInit{
   public myForm: FormGroup;
   public selectedItem: '';
   constructor(private dialogRef: NbDialogRef<NoAppDialogComponent>, private fb: FormBuilder){

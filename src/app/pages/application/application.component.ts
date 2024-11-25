@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { NoAppDialogComponent } from '../component/no-app-dialog/no-app-dialog.component';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { AccountService } from '../../shared/services/account/account.service';
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss']
 })
-export class ApplicationComponent {
+export class ApplicationComponent implements OnInit {
   public applicationDataArr: any[] = [];
 
   constructor(
