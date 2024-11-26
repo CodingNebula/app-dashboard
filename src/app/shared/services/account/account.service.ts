@@ -55,8 +55,8 @@ export class AccountService {
     );
   }
 
-  getTestCases(){
-    return this.apiService.getWithoutModal('all_test_case').pipe(
+  getTestCases(id: any){
+    return this.apiService.getWithoutModal(`app_test_case/${id}`).pipe(
       map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {

@@ -7,11 +7,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/application',
     home: true,
   },
-  {
-    title: 'Test Cases',
-    icon: 'clipboard-outline',
-    link: '/pages/test-cases',
-  },
+  // {
+  //   title: 'Test Cases',
+  //   icon: 'clipboard-outline',
+  //   link: '/pages/test-cases',
+  // },
   {
     title: 'Automate',
     icon: 'repeat-outline',

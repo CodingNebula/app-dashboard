@@ -113,16 +113,20 @@
       <!-- <span *ngIf="appLaunchStatus" class="status-message"
         [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : 'failed-status'">{{appLaunchStatus}}</span> -->
 
-      <nb-icon *ngIf="appLaunchStatus === 'SUCCESS'" [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : ''"
+      <!-- <nb-icon *ngIf="appLaunchStatus === 'SUCCESS'" [ngClass]="appLaunchStatus === 'SUCCESS' ? 'success-status' : ''"
         icon="checkmark-outline"></nb-icon>
       <nb-icon *ngIf="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'failed-status' : ''"
-        icon="close-outline"></nb-icon>
-      <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button>
+        icon="close-outline"></nb-icon> -->
+      <!-- <button class="start-button" (click)="onStartAppLaunch()" *ngIf="!appLaunchStatus">Start</button> -->
+      <button class="start-button" (click)="onStartAppLaunch()">Start</button>
+    
     </div>
 
     <div class="test-case-div">
       <h5>Do a Transaction</h5>
-      <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button>
+      <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
+      <button class="start-button" (click)="onStartTrans()">Start</button>
+
 
     </div>
     <!-- <div  class="test-case-div">

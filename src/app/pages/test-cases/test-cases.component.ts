@@ -11,13 +11,23 @@ import { AccountService } from '../../shared/services/account/account.service';
 })
 export class TestCasesComponent implements OnInit{
   public applicationDataArr: any[] = [];
+  public applicationId: any;
   constructor(
     private dialogService: NbDialogService, 
     protected router: Router,
   private accountService: AccountService){}
 
   ngOnInit(){
+    const state = window.history.state;
+    console.log(state);
+
+    if (state && state.id) {
+      this.applicationId = state.id;
+      console.log(this.applicationId);
+    }
+    
     this.getTestCases();
+
   }
 
   getTestCaseTitles(testCases: any[]): string {
@@ -94,7 +104,8 @@ export class TestCasesComponent implements OnInit{
   }
 
   getTestCases(){
-  this.accountService.getTestCases().subscribe((data) => {
+    
+  this.accountService.getTestCases(this.applicationId).subscribe((data) => {
     
     if (data?.message !== 'No Test Case Found') {
       this.applicationDataArr = data;

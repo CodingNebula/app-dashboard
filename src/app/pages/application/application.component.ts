@@ -3,6 +3,7 @@ import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { NoAppDialogComponent } from '../component/no-app-dialog/no-app-dialog.component';
 import { Router } from '@angular/router';
 import { AccountService } from '../../shared/services/account/account.service';
+import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
 
 
 @Component({
@@ -16,11 +17,12 @@ export class ApplicationComponent implements OnInit {
   constructor(
     private dialogService: NbDialogService,
     protected router: Router,
-    private accountService: AccountService) {
+    private accountService: AccountService,
+    private automateDataService: AutomationDataService) {
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.getApplication();
   }
 
@@ -75,12 +77,14 @@ export class ApplicationComponent implements OnInit {
       if (data && data.length > 0) {
         this.applicationDataArr = data; // Update the applicationDataArr with the data received from backend
         console.log(this.applicationDataArr);
-        
+
       }
     })
   }
 
-  navigate() {
-    this.router.navigateByUrl('pages/test-cases');
+  navigate(item: any) {
+    this.automateDataService.saveSelectedApplication(item);
+    
+    this.router.navigateByUrl('pages/test-cases', { state: { id: item.id } });
   }
 }

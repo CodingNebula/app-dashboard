@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AccountService } from '../../shared/services/account/account.service';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
+import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-automate',
@@ -19,65 +21,17 @@ export class AutomateComponent implements OnInit {
   public appLaunchStatus: string = null;
   public appLaunchLoading: boolean = false;
   public totalTimeTaken: number;
-  public resultArr: any[] = [
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-    {
-      "message": "SUCCESS",
-      "info": "Welcome Screen Test Case Passes",
-      "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    },
-  ];
+  public resultArr: any[] = [];
   public reportData: any = {
     general: {}
   };
+  public applicationData: any;
   constructor(
     private fb: FormBuilder,
     private webSocketService: WebsocketService,
-    private accountService: AccountService) {
+    private accountService: AccountService,
+    private automateDataService: AutomationDataService,
+    private router: Router) {
 
 
     this.temp = [
@@ -330,6 +284,9 @@ export class AutomateComponent implements OnInit {
       //      "screenName":"Find_Screen_Elements"
       //  }
     ]
+
+    this.applicationData = this.automateDataService.selectedApplication;
+
   }
 
   ngOnInit() {
@@ -353,6 +310,8 @@ export class AutomateComponent implements OnInit {
         this.myForm.get('automation').setValue('');
       }
     })
+
+
   }
 
   onSubmit() {
@@ -366,6 +325,30 @@ export class AutomateComponent implements OnInit {
       console.log(this.reportData);
 
       // this.webSocketService.connectWithAccessToken();
+      this.appLaunchLoading = true;
+    this.accountService.postCapabilities({
+      capabilities: {
+        platformName: "Android",
+        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        appPackage: "com.example.app",
+        automationName: "UIAutomator2",
+        deviceName: "Samsung",
+        noReset: true,
+        ignoreHiddenApiPolicyError: true,
+        newCommandTimeout: 1200000
+      }
+    }).subscribe(
+      (response) => {
+        console.log('API Response:', response);
+        this.appLaunchLoading = false;
+        this.appLaunchStatus = 'SUCCESS'
+      },
+      (error) => {
+        console.error('API Error:', error);
+        this.appLaunchLoading = false;
+        this.appLaunchStatus = 'FAILED'
+      }
+    );
       this.myForm.reset();
     }
   }
@@ -409,30 +392,30 @@ export class AutomateComponent implements OnInit {
   }
 
   onStartAppLaunch() {
-    this.appLaunchLoading = true;
-    this.accountService.postCapabilities({
-      capabilities: {
-        platformName: "Android",
-        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-        appPackage: "com.example.app",
-        automationName: "UIAutomator2",
-        deviceName: "Samsung",
-        noReset: true,
-        ignoreHiddenApiPolicyError: true,
-        newCommandTimeout: 1200000
-      }
-    }).subscribe(
-      (response) => {
-        console.log('API Response:', response);
-        this.appLaunchLoading = false;
-        this.appLaunchStatus = 'SUCCESS'
-      },
-      (error) => {
-        console.error('API Error:', error);
-        this.appLaunchLoading = false;
-        this.appLaunchStatus = 'FAILED'
-      }
-    );
+    // this.appLaunchLoading = true;
+    // this.accountService.postCapabilities({
+    //   capabilities: {
+    //     platformName: "Android",
+    //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+    //     appPackage: "com.example.app",
+    //     automationName: "UIAutomator2",
+    //     deviceName: "Samsung",
+    //     noReset: true,
+    //     ignoreHiddenApiPolicyError: true,
+    //     newCommandTimeout: 1200000
+    //   }
+    // }).subscribe(
+    //   (response) => {
+    //     console.log('API Response:', response);
+    //     this.appLaunchLoading = false;
+    //     this.appLaunchStatus = 'SUCCESS'
+    //   },
+    //   (error) => {
+    //     console.error('API Error:', error);
+    //     this.appLaunchLoading = false;
+    //     this.appLaunchStatus = 'FAILED'
+    //   }
+    // );
   }
 
   onStartTrans() {
@@ -657,8 +640,8 @@ export class AutomateComponent implements OnInit {
     }
     ];
     this.webSocketService.sendTestCaseRequest(item);
-    this.reportData.general.createdAt = this.formatDate(new Date());
-    const startTime = Date.now();
+    // this.reportData.general.createdAt = this.formatDate(new Date());
+    // const startTime = Date.now();
 
     //   {
     //     "sender": "6d1b7721-4973-4c98-9fd4-a3564d83ac10",
@@ -669,18 +652,30 @@ export class AutomateComponent implements OnInit {
     //     }
     // }
 
-    // this.webSocketService.getSubject().subscribe((res) => {
-    //   if (res?.message && res?.message?.info) {
-    //     this.resultArr.push(res.message);
-    //   }
-    // })
-    const endTime = Date.now();  // Capture end time after the last response
-    const elapsedTimeInSeconds = (endTime - startTime) / 1000;  // Calculate elapsed time in seconds
-    console.log(`Total Time: ${elapsedTimeInSeconds} seconds`);
+    // const expectedMessCnt = item.length;
+    const expectedMessCnt = 0;
+    let receivedMessCnt = 0;
 
-    // Store the elapsed time (in seconds) in the report
-    this.reportData.general.executionTime = Math.round(elapsedTimeInSeconds);
-    console.log(this.reportData);
+    this.webSocketService.getSubject().subscribe((res) => {
+      receivedMessCnt++;
+      if (res?.message && res?.message?.info) {
+        this.resultArr.push(res.message);
+      }
+    })
+
+    if (expectedMessCnt === receivedMessCnt) {
+      console.log('expected');
+      
+      this.router.navigateByUrl('test-reports')
+    }
+
+    // const endTime = Date.now();  // Capture end time after the last response
+    // const elapsedTimeInSeconds = (endTime - startTime) / 1000;  // Calculate elapsed time in seconds
+    // console.log(`Total Time: ${elapsedTimeInSeconds} seconds`);
+
+    // // Store the elapsed time (in seconds) in the report
+    // this.reportData.general.executionTime = Math.round(elapsedTimeInSeconds);
+    // console.log(this.reportData);
 
 
 
@@ -970,5 +965,7 @@ export class AutomateComponent implements OnInit {
     const year = date.getFullYear(); // Get the full year
     return `${day}-${month}-${year}`; // Return the formatted string
   }
+
+
 
 }

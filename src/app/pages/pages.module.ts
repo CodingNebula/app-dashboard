@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbAccordionModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbSpinnerModule } from '@nebular/theme';
+import { NbAccordionModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbSpinnerModule, NbTooltipModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -32,7 +32,8 @@ import { ReportsComponent } from './reports/reports.component';
     NbCardModule,
     NbPopoverModule,
     NgxEchartsModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    NbTooltipModule
   ],
   declarations: [
     PagesComponent,
