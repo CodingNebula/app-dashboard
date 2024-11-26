@@ -10,8 +10,8 @@
         <div class="col-1 s-no-div ">S.No</div>
         <div class="col-4 table-header p-0">Test Case Name</div>
         <div class="col-4 table-header ">Test Cases</div>
-        <div class="col-1 table-header-action">Action</div>
-        <div class="col-2 table-header"></div>
+        <div class="col-2 table-header-action">Action</div>
+        <div class="col-1 table-header"></div>
       </div>
     </div>
     <div class="table-data-div-container">
@@ -19,7 +19,7 @@
         <div class="col-1">{{i + 1}}</div>
         <div class="col-4 table-data">{{item.test_case_title}}</div>
         <div class="col-4 table-data" [nbTooltip]="getTestCaseTitles(item.test_case_types)"> {{ getTestCaseTitles(item.test_case_types) }}</div>
-        <div class="col-1 table-data-action">
+        <div class="col-2 table-data-action">
           <button [nbPopover]="actionref" nbPopoverPlacement="bottom">
             <nb-icon class="edit-icon" icon="edit-2-outline" ></nb-icon>
           </button>
@@ -29,7 +29,9 @@
           </ng-template>
           <!-- <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon> -->
         </div>
-        <div class="col-2 table-data">Automate</div>
+        <div class="col-1 table-data-auto">
+          <nb-icon nbTooltip="Automate" class="edit-icon" icon="settings-2-outline" ></nb-icon>
+        </div>
       </div>
     </div>
   </div>

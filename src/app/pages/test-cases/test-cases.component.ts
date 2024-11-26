@@ -73,7 +73,7 @@ export class TestCasesComponent implements OnInit{
             const details = {
               title: result.data.application,
               types: result.data.testCases,
-              applicationId: "2b2f4979-9dbb-443d-a881-407c714f6e45",
+              applicationId: this.applicationId,
               extra: {}
             }
             this.saveTestCasesData(details);

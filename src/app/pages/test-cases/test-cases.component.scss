@@ -70,6 +70,7 @@ td{
 
 .table-header-action{
     font-weight: 600;
+    text-align: center;
 }
 
 .table-data-action >  button{
@@ -78,6 +79,10 @@ td{
 }
 
 .table-data-action{
+    cursor: pointer;
+    text-align: center;
+}
+.table-data-auto{
     cursor: pointer;
 }
 .edit-popup{
