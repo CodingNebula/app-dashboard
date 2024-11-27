@@ -19,11 +19,9 @@ export class TestCasesComponent implements OnInit{
 
   ngOnInit(){
     const state = window.history.state;
-    console.log(state);
 
     if (state && state.id) {
       this.applicationId = state.id;
-      console.log(this.applicationId);
     }
     
     this.getTestCases();
@@ -47,10 +45,14 @@ export class TestCasesComponent implements OnInit{
       if (result) {
         if (result.confirmed) {
           if (itemToEdit) {
-            // If item is being edited, update the existing item
             const index = this.applicationDataArr.findIndex((item) => item === itemToEdit);
+            
             if (index > -1) {
-              this.applicationDataArr[index] = result.data;  // Update the existing item
+              // this.applicationDataArr[index] = result.data; // Update the existing item
+              this.applicationDataArr[index].test_case_title = result.data.application;
+              this.applicationDataArr[index].test_case_types = result.data.testCases;
+
+              // this.accountService.updateTestCase();
             }
           } else {
             // Otherwise, add a new item
@@ -68,7 +70,6 @@ export class TestCasesComponent implements OnInit{
         //         "TerminalID_Next_Button"
         //     ]
         // }
-          console.log(result.data);
           
             const details = {
               title: result.data.application,
@@ -86,11 +87,8 @@ export class TestCasesComponent implements OnInit{
 
   saveTestCasesData(data) {
     this.accountService.postTestCases(data).subscribe((response) => {
-      console.log(response); // Inspect the response from the POST request
   
       if (response) {
-        // After successful post, update applicationDataArr
-        console.log(this.applicationDataArr);
         if (Array.isArray(this.applicationDataArr)) {
           this.applicationDataArr.push(response); // Add the new item to the array
           

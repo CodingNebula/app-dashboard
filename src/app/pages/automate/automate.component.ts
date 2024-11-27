@@ -317,15 +317,14 @@ export class AutomateComponent implements OnInit {
   onSubmit() {
     if (this.myForm.valid) {
       this.isAccordionExpanded = false;
-      console.log(this.myForm.value);
 
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
-      console.log(this.reportData);
 
       // this.webSocketService.connectWithAccessToken();
       this.appLaunchLoading = true;
+
     this.accountService.postCapabilities({
       capabilities: {
         platformName: "Android",
@@ -339,7 +338,6 @@ export class AutomateComponent implements OnInit {
       }
     }).subscribe(
       (response) => {
-        console.log('API Response:', response);
         this.appLaunchLoading = false;
         this.appLaunchStatus = 'SUCCESS'
       },
@@ -406,7 +404,6 @@ export class AutomateComponent implements OnInit {
     //   }
     // }).subscribe(
     //   (response) => {
-    //     console.log('API Response:', response);
     //     this.appLaunchLoading = false;
     //     this.appLaunchStatus = 'SUCCESS'
     //   },
@@ -416,6 +413,10 @@ export class AutomateComponent implements OnInit {
     //     this.appLaunchStatus = 'FAILED'
     //   }
     // );
+  }
+
+  onSaveDescription(){
+    
   }
 
   onStartTrans() {
@@ -652,33 +653,85 @@ export class AutomateComponent implements OnInit {
     //     }
     // }
 
-    // const expectedMessCnt = item.length;
-    const expectedMessCnt = 0;
-    let receivedMessCnt = 0;
-
+    
     this.webSocketService.getSubject().subscribe((res) => {
-      receivedMessCnt++;
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
       }
     })
 
-    if (expectedMessCnt === receivedMessCnt) {
-      console.log('expected');
-      
       this.router.navigateByUrl('test-reports')
-    }
 
     // const endTime = Date.now();  // Capture end time after the last response
     // const elapsedTimeInSeconds = (endTime - startTime) / 1000;  // Calculate elapsed time in seconds
-    // console.log(`Total Time: ${elapsedTimeInSeconds} seconds`);
+    
 
     // // Store the elapsed time (in seconds) in the report
     // this.reportData.general.executionTime = Math.round(elapsedTimeInSeconds);
-    // console.log(this.reportData);
+    
 
 
 
+  }
+
+  generateReport(){
+    this.webSocketService.saveTestReportData({
+      id: 0,
+      capabilities: {
+        platformName: "Android",
+        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        appPackage: "com.example.app",
+        automationName: "UIAutomator2",
+        deviceName: "Samsung",
+        noReset: true,
+        ignoreHiddenApiPolicyError: true,
+        newCommandTimeout: 1200000
+      },
+      reports: [
+        {
+          test_case: 'Welcome',
+          status: 'Passed',
+          defect: '',
+          time_spent: 300,
+          expected_result: 'Should be able to enter the text'
+        },
+        {
+          test_case: 'Permission',
+          status: 'Failed',
+          defect: 'User not allowed permissions',
+          time_spent: 200,
+          expected_result: 'Permission should allowed'
+        },
+        {
+          test_case: 'Device Connection',
+          status: 'Passed',
+          defect: '',
+          time_spent: 280,
+          expected_result: 'Device connected'
+        },
+        {
+          test_case: 'Transaction',
+          status: 'Failed',
+          defect: 'Reader not connected',
+          time_spent: 300,
+          expected_result: 'Reader should be connected'
+        },
+        {
+          test_case: 'Receipt',
+          status: 'Untested',
+          defect: '',
+          time_spent: 300,
+          expected_result: 'Receipt send on email'
+        },
+      ],
+      extras: {
+        app_name: 'Anypay 2.10 (Alpha)',
+        started_by: 'Nick Jones',
+        start_time: '14:15:00',
+        created_at: '25-11-2024',
+        time_taken: 12000,
+      }
+    });
   }
 
   onStartTemp() {
@@ -954,7 +1007,6 @@ export class AutomateComponent implements OnInit {
     this.webSocketService.getSubject().subscribe((res) => {
       this.resultArr.push(res.message);
     })
-    console.log(this.resultArr);
 
 
   }

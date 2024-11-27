@@ -11,10 +11,14 @@ export class AutomationDataService {
   }
 
   saveSelectedApplication(item: any){
+    console.log(item);
+    
     this.selectedApplication = item;
   }
 
   saveSelectedTestCase(item: any){
+    console.log(item);
+    
     this.selectedTestCase = item;
   }
 }

@@ -79,6 +79,10 @@ export class WebsocketService {
    getSubject() {
     return this.mySubject.asObservable();
   }
+
+  saveTestReportData(reportData: any){
+    this.testReportsData = reportData
+  }
   connectWithAccessToken(): void {
     // if (!this.socket || !this.socket.connected) {
     // this.socket = io('ws://192.168.1.29:3000', {
@@ -88,7 +92,6 @@ export class WebsocketService {
     //   },
     // });
 
-    // console.log('Socket connected:', this.socket);
     // this.socket.emit('join', localStorage.getItem('id'));
     // this.socket.on('connect', () => {
     //   this.socket.emit('join', localStorage.getItem('id'));
@@ -103,11 +106,9 @@ export class WebsocketService {
 
     // this.socket.on('result', (message: any) => {
     //   this.message = message;
-    //   console.log(message, 'message');
     // });
 
     // this.socket.on('disconnect', () => {
-    //   console.log('Socket disconnected.');
     //   // this.handleReconnect();
     // });
 
@@ -123,10 +124,8 @@ export class WebsocketService {
     // }
 
     // this.socket.on('message', (response: any) => {
-    //   console.log('Received server response:', response);
     //   // Test case name and status
     //   if (response.success) {
-    //     console.log('Test case request success:', response);
     //   } else {
     //     console.error('Test case request failed:', response.error);
     //   }
@@ -151,15 +150,12 @@ export class WebsocketService {
         room: localStorage.getItem('id') 
       });
     });
-    this.socket.on('ping', (response: any) => {
-      console.log(response,'receive pings')
-    })
+    
   }
 
   private handleReconnect(): void {
     // Only attempt to reconnect a limited number of times
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
-      console.log(`Reconnecting... Attempt ${this.reconnectAttempts + 1}`);
       this.reconnectAttempts++;
       setTimeout(() => {
         this.connectWithAccessToken();
@@ -174,18 +170,13 @@ export class WebsocketService {
 
     // Check if the socket is connected before emitting
     if (this.socket && this.socket.connected) {
-      console.log('Emitting sendTestCaseRequest with data:', { room: localStorage.getItem('id'), message: JSON.stringify(item) });
       this.socket.emit("message", { room: localStorage.getItem('id'), message: item });
-
-      console.log('Message sent to server');
 
       // Listen for the response from the server
       this.socket.on('message', (response: any) => {
-        console.log('Received server response:', response);
 this.updateValue(response);
         // Test case name and status
         // if (response.success) {
-        //   console.log('Test case request success:', response);
         // } else {
         //   console.error('Test case request failed:', response.error);
         // }
@@ -199,19 +190,15 @@ this.updateValue(response);
     this.mySubject.next(newValue);
   }
   sendAppLaunchRequest(item: any): void {
-    console.log(this.socket);
 
     this.testReportsData.capabilities = item.capabilities;
 
-    console.log(this.testReportsData);
 
     if (this.socket && this.socket.connected) {
       // this.appLaunchStatus = 'SUCCESS';
-      console.log(item.capabilities);
 
       // this.testReportsData.capabilities = item.capabilities;
 
-      // console.log(this.testReportsData);
 
 
       this.socket.emit('message', {
@@ -232,7 +219,6 @@ this.updateValue(response);
     if (this.socket) {
       this.socket.close();  // Close the connection
       this.socket = null;   // Clear the socket reference
-      console.log('WebSocket disconnected');
     }
   }
 

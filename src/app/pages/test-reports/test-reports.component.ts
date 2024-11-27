@@ -20,6 +20,7 @@ export class TestReportsComponent {
   public allColumns = [this.customColumn, ...this.defaultColumns];
   public CompletionChart: any = null;
   public reportData: any = null;
+  public pieData: any[] = [];
 
 
   public searchTerm: string = '';
@@ -60,43 +61,108 @@ export class TestReportsComponent {
   constructor(private webSocketService: WebsocketService) {
     this.reportData = webSocketService.testReportsData;
 
-    console.log(this.reportData);
-    this.CompletionChart = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)'
-      },
-      legend: {
-        orient: 'vertical', // Vertical or horizontal orientation
-        right: 'right',       // Position of the legend: 'left', 'right', 'center', or specific px/% values
-        top: 'middle',      // Adjust vertical positioning
-        textStyle: {
-          fontSize: 10,     // Font size for legend text
-          color: '#333'     // Color for legend text
-        }
-      },
-      series: [
-        {
-          type: 'pie',
-          radius: '60%', // Decreased radius percentage
-          center: ['50%', '50%'],
-          selectedMode: 'single',
-          data: [
-            { value: 50, name: 'Passed' },
-            { value: 24, name: 'Failed' },
-            { value: 7, name: 'Untested' },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+    // this.CompletionChart = {
+    //   tooltip: {
+    //     trigger: 'item',
+    //     formatter: '{a} <br/>{b} : {c} ({d}%)'
+    //   },
+    //   legend: {
+    //     orient: 'vertical', // Vertical or horizontal orientation
+    //     right: 'right',       // Position of the legend: 'left', 'right', 'center', or specific px/% values
+    //     top: 'middle',      // Adjust vertical positioning
+    //     textStyle: {
+    //       fontSize: 10,     // Font size for legend text
+    //       color: '#333'     // Color for legend text
+    //     }
+    //   },
+    //   series: [
+    //     {
+    //       type: 'pie',
+    //       radius: '60%', // Decreased radius percentage
+    //       center: ['50%', '50%'],
+    //       selectedMode: 'single',
+    //       data: this.pieData,
+    //       emphasis: {
+    //         itemStyle: {
+    //           shadowBlur: 10,
+    //           shadowOffsetX: 0,
+    //           shadowColor: 'rgba(0, 0, 0, 0.5)'
+    //         }
+    //       }
+    //     }
+    //   ]
+    // };
+
+    this.generatePie();
+  }
+
+  generatePie() {
+    // Initialize the array to hold the pie chart data
+    const dataArr = [];
+  
+    // Initialize counters for passed, failed, and untested
+    let passedCount = 0;
+    let failedCount = 0;
+    let untestedCount = 0;
+  
+    // Iterate over the reports to count the number of passed, failed, and untested test cases
+    this.reportData?.reports.map((testCase) => {
+      if (testCase.status === 'Passed') {
+        passedCount++;
+      } else if (testCase.status === 'Failed') {
+        failedCount++;
+      } else if (testCase.status === 'Untested') {
+        untestedCount++;
+      }
+    });
+  
+    dataArr.push({ name: 'Passed', value: passedCount });
+    dataArr.push({ name: 'Failed', value: failedCount });
+    dataArr.push({ name: 'Untested', value: untestedCount });
+  
+    console.log(dataArr);
+    this.pieData = dataArr
+
+    this.generatePieData();
+  }
+
+  generatePieData(){
+    setTimeout(() => {
+      this.CompletionChart = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical', // Vertical or horizontal orientation
+          right: 'right',       // Position of the legend: 'left', 'right', 'center', or specific px/% values
+          top: 'middle',      // Adjust vertical positioning
+          textStyle: {
+            fontSize: 10,     // Font size for legend text
+            color: '#333'     // Color for legend text
+          }
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: '60%', // Decreased radius percentage
+            center: ['50%', '50%'],
+            selectedMode: 'single',
+            data: this.pieData,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
             }
           }
-        }
-      ]
-    };
+        ],
+        color: ['#10EB93', '#EE4748', '#A64C52'], 
+      };
+    }, 10)
   }
+  
 
   // ngOnInit(): void {
   //   // this.createCompletionChart();

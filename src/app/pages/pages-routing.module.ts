@@ -9,6 +9,7 @@ import { ApplicationComponent } from './application/application.component';
 import { SignOutComponent } from './signout/signOut.component';
 import {TestReportsComponent} from "./test-reports/test-reports.component";
 import { ReportsComponent } from './reports/reports.component';
+import { TemplateComponent } from './template/template.component';
 
 const routes: Routes = [{
   path: '',
@@ -38,6 +39,10 @@ const routes: Routes = [{
     {
       path:'reports',
       component:ReportsComponent
+    },
+    {
+      path:'template',
+      component: TemplateComponent
     },
     {
       path: 'signout',

@@ -16,6 +16,7 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import { CommonModule } from '@angular/common';
 import { TestReportsComponent } from './test-reports/test-reports.component';
 import { ReportsComponent } from './reports/reports.component';
+import { TemplateComponent } from './template/template.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { ReportsComponent } from './reports/reports.component';
     SignOutComponent,
     TestCasesDialogComponent,
     TestReportsComponent,
-    ReportsComponent
+    ReportsComponent,
+    TemplateComponent
   ],
 })
 export class PagesModule {

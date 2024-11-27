@@ -44,7 +44,6 @@ export class AppComponent implements OnInit {
 
       const currentTime = Date.now();
 
-      console.log(expirationTime - currentTime);
       
 
       return currentTime > expirationTime;

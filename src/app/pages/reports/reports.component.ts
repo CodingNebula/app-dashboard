@@ -23,9 +23,7 @@ export class ReportsComponent {
   ngOnInit() {
     this.apiService.getAllReports().subscribe((res: any) => {
       this.reports = res;
-      console.log(res, 'result')
     })
-    console.log(this.reports, 'result')
   }
   goToPreviousPage() {
     if (this.currentPage > 1) {
@@ -47,7 +45,6 @@ export class ReportsComponent {
     this.activeBtn = value;
   }
   openReportDetail($event: Event) {
-    console.log($event, 'event')
     $event.stopPropagation();
     this.router.navigateByUrl('pages/test-reports')
   }
@@ -58,7 +55,6 @@ export class ReportsComponent {
       { name: 'Test User1', age: 38, email: 'testUser1@example.com' }
 
     ];
-    console.log($event, 'event')
     $event.stopPropagation();
     const doc = new jsPDF();
     // Define the columns based on the keys of the JSON object
@@ -69,9 +65,6 @@ export class ReportsComponent {
     ];
     // Convert jsonData to the desired format
     const convertedData = jsonData.map(item => [item.name,item.age.toString(), item.email]);
-
-    console.log(convertedData,'sdsfsfsdf');
-    console.log(columns, jsonData)
     // Generate the table using autoTable
     autoTable(doc, {
       head: [columns],

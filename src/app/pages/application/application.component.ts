@@ -34,7 +34,6 @@ export class ApplicationComponent implements OnInit {
     dialogRef.onClose.subscribe((result) => {
       if (result) {
         if (result.confirmed) {
-          console.log(result.data);
 
           //   const appDetails = {
           //     app_name: req.body.appName,
@@ -64,7 +63,7 @@ export class ApplicationComponent implements OnInit {
       if (response) {
         // After successful post, update applicationDataArr
         this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
-        console.log('Item saved and added to array:', response);
+        
       }
     }, (error) => {
       console.error('Error saving test case:', error);
@@ -73,12 +72,8 @@ export class ApplicationComponent implements OnInit {
 
   getApplication() {
     this.accountService.getApplication().subscribe((data) => {
-      console.log(data); // You can inspect what data you're receiving from the backend
       if (data && data.length > 0) {
-        this.applicationDataArr = data; // Update the applicationDataArr with the data received from backend
-        console.log(this.applicationDataArr);
-
-      }
+        this.applicationDataArr = data; }
     })
   }
 

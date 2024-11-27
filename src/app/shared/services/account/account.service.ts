@@ -60,7 +60,6 @@ export class AccountService {
       map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {
-          console.log(applicationResponse);
           
           return applicationResponse; // Transformation logic (if needed)
         } else {
@@ -115,5 +114,23 @@ export class AccountService {
         return throwError(() => new Error('Failed to submit application. Please try again.'));
       })
     );
+  }
+
+  updateTestCase(id: string, request: any){
+    return this.apiService.updateWithoutModal(`app_test_case/${id}`, request).pipe(
+      map(resp => {
+        if(resp){
+          return resp;
+        }
+        else{
+          throw new Error('Invalid Response');
+        }
+      }),
+      catchError(error => {
+        console.error('Error Updating test case:', error);
+        return throwError(() => new Error('Failed to update test case. Please try again.'))
+        
+      })
+    )
   }
 }

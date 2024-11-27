@@ -42,8 +42,6 @@ export class SignOutComponent implements OnInit,OnDestroy{
         const upcomingRoute = event.url;
         if (upcomingRoute === 'transaction-history'){
           // const creds = this.storage.getCreds();
-          //console.log('Upcoming Route:', upcomingRoute);
-          //console.log('creeesds:', creds);
         }
       }});
 
@@ -58,14 +56,12 @@ export class SignOutComponent implements OnInit,OnDestroy{
 
        // window.history.back();
        // const previousNavigation = this.router.getCurrentNavigation();
-       // //console.log(previousNavigation)
      } else if (data === 'submit') {
       //  this.storage.getAuthenticationTokenClear();
        this.websocketService.disconnectSocket();
        // this.accountService.gethandleSubscriptions().map((res)=>{
        //   res?.unsubscribe();
        // })
-//console.log(this.previousUrl,'prevurl')
        this.router.navigate(['auth/login']);
      } else {
        window.history.back();
@@ -78,7 +74,6 @@ export class SignOutComponent implements OnInit,OnDestroy{
   }
 
   ngOnInit() {
-    //console.log('fireeed')
     this.location.replaceState('/auth/login');
 
   }
