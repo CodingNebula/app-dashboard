@@ -10,6 +10,8 @@ import { SignOutComponent } from './signout/signOut.component';
 import {TestReportsComponent} from "./test-reports/test-reports.component";
 import { ReportsComponent } from './reports/reports.component';
 import { TemplateComponent } from './template/template.component';
+import { CapabilitiesComponent } from './component/capabilities/capabilities.component';
+import { InstructionsComponent } from './component/instructions/instructions.component';
 
 const routes: Routes = [{
   path: '',
@@ -47,6 +49,14 @@ const routes: Routes = [{
     {
       path: 'signout',
       component: SignOutComponent,
+    },
+    {
+      path: 'capabilities',
+      component: CapabilitiesComponent
+    },
+    {
+      path: 'instructions',
+      component: InstructionsComponent
     },
     {
       path: '**',

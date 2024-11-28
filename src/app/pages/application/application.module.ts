@@ -8,7 +8,7 @@ import { NbIconModule } from '@nebular/theme';
   declarations: [],
   imports: [
     CommonModule,
-    NbIconModule
+    NbIconModule,
   ]
 })
 export class ApplicationModule { }

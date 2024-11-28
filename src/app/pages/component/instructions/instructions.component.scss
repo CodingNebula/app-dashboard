@@ -1,3 +1,21 @@
+.instructions-heading{
+    padding-left: 1.3em;
+    margin-bottom: 1em;
+}
+.instructions-header-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.save-btn{
+    background-color: #00A3AB;
+    padding: 0.3em 1em;
+    outline: none;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+    color: #ffffff;
+}
 .plus-circle-icon{
     color: #00A3AB;
     font-size: 3em;

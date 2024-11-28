@@ -1,0 +1,47 @@
+<nb-card>
+    <nb-card-header>Instructions</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="myForm"  class="custom-form">
+            <div class="form-row">
+            <div class="form-group">
+              <label for="actions">Actions:</label>
+              <nb-select id="actions" formControlName="actions" placeholder="Select Actions" [(selected)]="selectedItem" class="custom-select-dropdown">
+                <nb-option value="click_button">click_button</nb-option>
+                <nb-option value="left-arrow">left-arrow</nb-option>
+                <nb-option value="right-arrow">left-arrow</nb-option>
+                <nb-option value="click_image">click_image</nb-option>
+              </nb-select>
+              <div *ngIf="myForm.get('actions').touched && myForm.get('actions').invalid" class="error-message">
+                <small *ngIf="myForm.get('actions').hasError('required')">Actions are required!</small>
+              </div>
+            </div>
+          </div>
+            <div class="form-row">
+                <div class="form-group">
+                  <label for="elem_name">Element Name:</label>
+                  <input id="elem_name" formControlName="elem_name" class="form-control" />
+                  <div *ngIf="myForm.get('elem_name').touched && myForm.get('elem_name').invalid" class="error-message">
+                    <small *ngIf="myForm.get('elem_name').hasError('required')">Element name is required!</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                  <div class="form-group">
+                    <label for="normal_name">Normal Name:</label>
+                    <input id="normal_name" formControlName="normal_name" class="form-control" />
+                    <div *ngIf="myForm.get('normal_name').touched && myForm.get('normal_name').invalid" class="error-message">
+                      <small *ngIf="myForm.get('normal_name').hasError('required')">Normal name is required!</small>
+                    </div>
+                  </div>
+                </div>
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>

@@ -120,7 +120,6 @@ export class TestReportsComponent {
     dataArr.push({ name: 'Failed', value: failedCount });
     dataArr.push({ name: 'Untested', value: untestedCount });
   
-    console.log(dataArr);
     this.pieData = dataArr
 
     this.generatePieData();

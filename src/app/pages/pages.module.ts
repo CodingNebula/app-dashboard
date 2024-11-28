@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbAccordionModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbSpinnerModule, NbTooltipModule } from '@nebular/theme';
+import { NbAccordionModule, NbAlertModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbSpinnerModule, NbTooltipModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -17,6 +17,9 @@ import { CommonModule } from '@angular/common';
 import { TestReportsComponent } from './test-reports/test-reports.component';
 import { ReportsComponent } from './reports/reports.component';
 import { TemplateComponent } from './template/template.component';
+import { CapabilitiesComponent } from './component/capabilities/capabilities.component';
+import { InstructionsComponent } from './component/instructions/instructions.component';
+import { InstructionsDialogComponent } from './component/instructions-dialog/instructions-dialog.component';
 
 @NgModule({
   imports: [
@@ -34,7 +37,8 @@ import { TemplateComponent } from './template/template.component';
     NbPopoverModule,
     NgxEchartsModule,
     NbSpinnerModule,
-    NbTooltipModule
+    NbTooltipModule,
+    NbAlertModule
   ],
   declarations: [
     PagesComponent,
@@ -46,7 +50,10 @@ import { TemplateComponent } from './template/template.component';
     TestCasesDialogComponent,
     TestReportsComponent,
     ReportsComponent,
-    TemplateComponent
+    TemplateComponent,
+    CapabilitiesComponent,
+    InstructionsComponent,
+    InstructionsDialogComponent
   ],
 })
 export class PagesModule {

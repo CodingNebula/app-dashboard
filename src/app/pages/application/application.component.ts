@@ -4,6 +4,7 @@ import { NoAppDialogComponent } from '../component/no-app-dialog/no-app-dialog.c
 import { Router } from '@angular/router';
 import { AccountService } from '../../shared/services/account/account.service';
 import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
+import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class ApplicationComponent implements OnInit {
     private dialogService: NbDialogService,
     protected router: Router,
     private accountService: AccountService,
-    private automateDataService: AutomationDataService) {
+    private automateDataService: AutomationDataService,
+    private applicationDataService: ApplicationDataService) {
 
   }
 
@@ -51,6 +53,8 @@ export class ApplicationComponent implements OnInit {
           }
           // this.applicationDataArr.push(result.data);
           this.saveApplicationData(appDetails);
+          this.applicationDataService.setData('app_details', appDetails);
+          this.router.navigateByUrl('pages/capabilities');
         }
       }
     });
@@ -63,7 +67,7 @@ export class ApplicationComponent implements OnInit {
       if (response) {
         // After successful post, update applicationDataArr
         this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
-        
+
       }
     }, (error) => {
       console.error('Error saving test case:', error);
@@ -73,13 +77,14 @@ export class ApplicationComponent implements OnInit {
   getApplication() {
     this.accountService.getApplication().subscribe((data) => {
       if (data && data.length > 0) {
-        this.applicationDataArr = data; }
+        this.applicationDataArr = data;
+      }
     })
   }
 
   navigate(item: any) {
     this.automateDataService.saveSelectedApplication(item);
-    
+
     this.router.navigateByUrl('pages/test-cases', { state: { id: item.id } });
   }
 }
