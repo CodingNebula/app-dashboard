@@ -23,6 +23,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/reports',
   },
   {
+    title: 'Template',
+    icon: 'file-text-outline',
+    link: '/pages/template',
+  },
+  {
     title: 'Sign Out',
     icon: 'log-in-outline',
     link: '/pages/signout',

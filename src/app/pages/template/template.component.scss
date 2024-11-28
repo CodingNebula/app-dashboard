@@ -1,0 +1,150 @@
+.test-case-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-test-case-btn{
+    color: #00A3AB;
+    border: 1px solid #00A3AB;
+    padding: 0.5em 1em;
+    text-align: center;
+    border-radius: 25px;
+    margin: 0.5em 0em;
+    outline: none;
+}
+
+// .test-case-main{
+//     position: relative;
+// }
+.test-case-container{
+    height: 35vh;
+}
+.plus-circle-icon{
+    color: #00A3AB;
+    font-size: 3em;
+    cursor: pointer;
+
+    position: fixed; 
+    bottom: 0px; 
+    left: 60%; 
+    transform: translateX(-50%); 
+    z-index: 1000;
+}
+.no-app-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+}
+
+.no-template-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 77%;
+    left: 50%;
+}
+
+.data-table{
+    width: 100%;
+}
+
+.edit-icon{
+    color: #00A3AB;
+}
+
+td{
+    padding: 1em 0em;
+}
+
+.table-header-div{
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0em;
+}
+
+.table-header{
+    width: 40%;
+    font-weight: 600;
+}
+.test-case-div-container{
+    height: 29vh;
+    overflow-y: auto;
+}
+.table-data-div-container{
+    height: 72vh;
+    overflow-y: auto;
+}
+
+.table-data-div{
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0em;
+}
+.table-data{
+    width: 40%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.s-no-div {
+    font-weight: 600;
+    padding: 0;
+}
+
+.table-header-action{
+    font-weight: 600;
+    text-align: center;
+}
+
+.table-data-action >  button{
+    border: none;
+    outline: none;
+}
+
+.table-data-action{
+    cursor: pointer;
+    text-align: center;
+}
+.table-data-auto{
+    cursor: pointer;
+}
+.edit-popup{
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-btn{
+    display: block;
+    width: 100%;
+    margin: 0.5em 0em;
+    outline: none;
+    border: none;
+    border-radius: 25px;
+    color: #ffffff;
+}
+
+.popup-submit{
+    background-color: green;
+}
+
+.popup-delete{
+    background-color: red;
+}
+.accordian-container{
+    width: 100%;
+}
+.accordian-header{
+    padding: 0.5em;
+}
+nb-accordion-item-body .item-body{
+    height: 12vh;
+    overflow: auto;
+}
