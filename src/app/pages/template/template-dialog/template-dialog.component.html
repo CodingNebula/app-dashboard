@@ -1,0 +1,76 @@
+<nb-card *ngIf="selectedAction === 'testCase'">
+    <nb-card-header>Anypay 2.0 Test Case</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="myForm"  class="custom-form">
+            <div class="form-row">
+                <div class="form-group">
+                  <label for="test_case_name">Test Case Name:</label>
+                  <input id="test_case_name" formControlName="test_case_name" class="form-control" />
+                  <div *ngIf="myForm.get('test_case_name').touched && myForm.get('test_case_name').invalid" class="error-message">
+                    <small *ngIf="myForm.get('test_case_name').hasError('required')">Test Case name is required!</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+              <div class="form-group">
+                <label for="testCases">Instruction:</label>
+                <nb-select id="testCases" formControlName="testCases" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
+                  <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.normal_name}}</nb-option>
+                  <!-- <nb-option value="IOS">IOS</nb-option>
+                  <nb-option value="Windows">Windows</nb-option>
+                  <nb-option value="MacOS">MacOS</nb-option> -->
+                </nb-select>
+                <div *ngIf="myForm.get('testCases').touched && myForm.get('testCases').invalid" class="error-message">
+                  <small *ngIf="myForm.get('testCases').hasError('required')">Platform Name is required!</small>
+                </div>
+              </div>
+            </div>
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>
+
+
+  <nb-card *ngIf="selectedAction === 'template'">
+    <nb-card-header>Anypay 2.0 Templates</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="templateForm"  class="custom-form">
+            <div class="form-row">
+                <div class="form-group">
+                  <label for="templateName">Template Name:</label>
+                  <input id="templateName" formControlName="templateName" class="form-control" />
+                  <div *ngIf="templateForm.get('templateName').touched && templateForm.get('templateName').invalid" class="error-message">
+                    <small *ngIf="templateForm.get('templateName').hasError('required')">Template name is required!</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+              <div class="form-group">
+                <label for="templates">Test Case</label>
+                <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
+                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.test_case_name}}</nb-option>
+                  
+                </nb-select>
+                <div *ngIf="templateForm.get('templates').touched && templateForm.get('templates').invalid" class="error-message">
+                  <small *ngIf="templateForm.get('templates').hasError('required')">Platform Name is required!</small>
+                </div>
+              </div>
+            </div>
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>

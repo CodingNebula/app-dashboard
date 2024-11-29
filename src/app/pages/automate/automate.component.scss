@@ -138,6 +138,34 @@ label {
   outline: none;
 }
 
+.edit-button {
+  background-color: #ff7e00;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 20%;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:disabled {
+  background-color: #ba6007;
+  color: #000000;
+  cursor: not-allowed;
+}
+
+.edit-button:hover:not(:disabled) {
+  background-color: #ff7e00;
+  color: #ffffff;
+}
+
+.edit-button:focus {
+  border: none;
+  outline: none;
+}
+
 .button-row {
   justify-content: end;
 }

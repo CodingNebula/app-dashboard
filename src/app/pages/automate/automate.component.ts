@@ -26,6 +26,9 @@ export class AutomateComponent implements OnInit {
     general: {}
   };
   public applicationData: any;
+  public templateData: any[] = [];
+  public testCases: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private webSocketService: WebsocketService,
@@ -311,7 +314,13 @@ export class AutomateComponent implements OnInit {
       }
     })
 
+    const state = window.history.state;
 
+    if(state && state.templateArr){
+      this.templateData = state.templateArr
+    }
+
+    this.formateTestCaseData();
   }
 
   onSubmit() {
@@ -321,8 +330,6 @@ export class AutomateComponent implements OnInit {
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
-
-      // this.webSocketService.connectWithAccessToken();
       this.appLaunchLoading = true;
 
     this.accountService.postCapabilities({
@@ -372,21 +379,9 @@ export class AutomateComponent implements OnInit {
 
   }
 
-  // onStart(item){
-  //   this.webSocketService.sendTestCaseRequest(item)
-  //   item.status = this.webSocketService.message;
-  //   alert(this.status);
-  // }
 
   onStart(item) {
-
     this.webSocketService.sendTestCaseRequest(item)
-    // item.loading = true;
-
-    // item.status = this.webSocketService.message;
-
-
-    // item.loading = false;
   }
 
   onStartAppLaunch() {
@@ -641,19 +636,6 @@ export class AutomateComponent implements OnInit {
     }
     ];
     this.webSocketService.sendTestCaseRequest(item);
-    // this.reportData.general.createdAt = this.formatDate(new Date());
-    // const startTime = Date.now();
-
-    //   {
-    //     "sender": "6d1b7721-4973-4c98-9fd4-a3564d83ac10",
-    //     "message": {
-    //         "message": "SUCCESS",
-    //         "info": "Welcome Screen Test Case Passes",
-    //         "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    //     }
-    // }
-
-    
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
@@ -661,16 +643,6 @@ export class AutomateComponent implements OnInit {
     })
 
       this.router.navigateByUrl('test-reports')
-
-    // const endTime = Date.now();  // Capture end time after the last response
-    // const elapsedTimeInSeconds = (endTime - startTime) / 1000;  // Calculate elapsed time in seconds
-    
-
-    // // Store the elapsed time (in seconds) in the report
-    // this.reportData.general.executionTime = Math.round(elapsedTimeInSeconds);
-    
-
-
 
   }
 
@@ -996,14 +968,6 @@ export class AutomateComponent implements OnInit {
     ];
     this.webSocketService.sendTestCaseRequest(item);
 
-    //   {
-    //     "sender": "6d1b7721-4973-4c98-9fd4-a3564d83ac10",
-    //     "message": {
-    //         "message": "SUCCESS",
-    //         "info": "Welcome Screen Test Case Passes",
-    //         "id": "6d1b7721-4973-4c98-9fd4-a3564d83ac10"
-    //     }
-    // }
     this.webSocketService.getSubject().subscribe((res) => {
       this.resultArr.push(res.message);
     })
@@ -1012,10 +976,21 @@ export class AutomateComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-    const day = ("0" + date.getDate()).slice(-2); // Add leading zero if day is single digit
-    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Add leading zero if month is single digit (note: months are 0-based)
-    const year = date.getFullYear(); // Get the full year
-    return `${day}-${month}-${year}`; // Return the formatted string
+    const day = ("0" + date.getDate()).slice(-2); 
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); 
+    const year = date.getFullYear(); 
+    return `${day}-${month}-${year}`;
+  }
+
+
+  formateTestCaseData(){
+    this.templateData[0]?.templates.map((item) => {
+      item?.testCases?.map((testCase) => {
+        this.testCases.push(testCase);
+      })
+    })
+    console.log(this.testCases);
+    
   }
 
 

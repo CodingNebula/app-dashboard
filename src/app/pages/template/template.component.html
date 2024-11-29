@@ -2,10 +2,10 @@
     <div class="test-case-container">
         <div class="test-case-head">
             <h5>Test Cases</h5>
-            <button class="add-test-case-btn">Add Test Case</button>
+            <button class="add-test-case-btn" (click)="openDialog('testCase')">Add Test Case</button>
         </div>
         <div class="test-case-main">
-            <div *ngIf="testCases.length === 0" class="no-app-div">
+            <div *ngIf="testCasesArray.length === 0" class="no-app-div">
               <h4>No Test Cases Added Yet</h4>
             </div>
           
@@ -16,12 +16,12 @@
                     <nb-accordion class="accordian-container">
                       <nb-accordion-item>
                         <nb-accordion-item-header class="accordian-header">
-                          {{ testCase[0] }} <!-- Display test case name -->
+                          {{ testCase?.test_case_name }} 
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>
                           <div class="accordian-body-div">
-                            <div *ngFor="let action of testCase[1].test_cases">
-                              {{ action }} <!-- Display each action -->
+                            <div *ngFor="let testcase of testCase?.testCases">
+                              {{ testcase?.normal_name }}
                             </div>
                           </div>
                         </nb-accordion-item-body>
@@ -61,24 +61,36 @@
     <div class="test-case-container">
         <div class="test-case-head">
             <h5>Templates</h5>
-            <button class="add-test-case-btn">Add Template</button>
+            <button class="add-test-case-btn" (click)="openDialog('template')">Create Template</button>
         </div>
         <div class="test-case-main">
-            <div *ngIf="testCases.length === 0" class="no-template-div">
+            <div *ngIf="templateArray.length === 0" class="no-template-div">
               <h4>No Template Added Yet</h4>
             </div>
-            <div *ngIf="testCases.length > 0">
-              <div class="table-data-div-container">
-                <div class="table-data-div" *ngFor="let testCase of testCases | keyvalue; let i = index">
-                    <nb-accordion>
+            <div *ngIf="templateArray.length > 0">
+              <div class="template-div-container">
+                <div class="table-data-div" *ngFor="let template of templateArray">
+                    <nb-accordion class="accordian-container">
                       <nb-accordion-item>
-                        <nb-accordion-item-header>
-                          {{ testCase.key }} <!-- Display test case name (e.g., "Welcome Happy Flow") -->
+                        <nb-accordion-item-header class="template-header">
+                          {{ template?.templateName }}
+                          <nb-icon (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>
-                          <div *ngFor="let action of testCase.value.test_cases">
-                            {{ action }} <!-- Display each test case item (e.g., "click_image", "click_next_button") -->
-                          </div>
+                          <nb-accordion class="accordian-container" *ngFor="let testCase of template?.templates">
+                            <nb-accordion-item>
+                              <nb-accordion-item-header class="accordian-header">
+                                {{ testCase?.test_case_name }} 
+                              </nb-accordion-item-header>
+                              <nb-accordion-item-body>
+                                <div class="accordian-body-div">
+                                  <div *ngFor="let testcase of testCase?.testCases">
+                                    {{ testcase?.normal_name }}
+                                  </div>
+                                </div>
+                              </nb-accordion-item-body>
+                            </nb-accordion-item>
+                          </nb-accordion>
                         </nb-accordion-item-body>
                       </nb-accordion-item>
                     </nb-accordion>
@@ -86,30 +98,6 @@
                   
               </div>
             </div>
-          
-          
-            <!-- <div *ngIf="applicationDataArr.length > 0">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th style="width: 40%;">Test Case Name</th>
-                    <th style="width: 40%;">Test Cases</th>
-                    <th style="width: 20%;">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of applicationDataArr">
-                    <td>{{item.application}}</td>
-                    <td>{{item.testCases.join(', ')}}</td>
-                    <td>
-                      <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon>
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-            </div> -->
-            <!-- <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon> -->
           </div>
     </div>
 </div>

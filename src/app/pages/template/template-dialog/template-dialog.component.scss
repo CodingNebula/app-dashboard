@@ -1,0 +1,94 @@
+
+.form-row {
+    display: flex;
+    gap: 20px; 
+    margin-bottom: 10px;
+    width: 300px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .form-control,
+  .custom-select-dropdown {
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border 0.3s ease;
+    max-width: 100% !important;
+  }
+  
+  .form-control:focus,
+  .custom-select-dropdown:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .error-message {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .submit-button {
+    background-color: #00A3AB;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  .close-button{
+    background-color: #0a0a23;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 20%;
+    transition: background-color 0.3s ease;
+    outline: none;
+  }
+  
+  .submit-button:disabled {
+    background-color: #07f6ce;
+    color: #000000;
+    cursor: not-allowed;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    background-color: #00A3AB;
+    color: #ffffff;
+  }
+
+  .submit-button:focus {
+    border: none;
+    outline: none;
+  }
+
+  .button-row{
+    justify-content: end;
+  }
+
+  nb-card-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0 10px;
+  }
+  

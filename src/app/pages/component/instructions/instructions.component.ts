@@ -44,6 +44,8 @@ export class InstructionsComponent {
           }
           
           this.applicationDataArr.push(result.data);
+          console.log(this.applicationDataArr);
+          
           // this.saveApplicationData(appDetails);
           // this.applicationDataService.setData('app_details', appDetails);
           // this.router.navigateByUrl('pages/capabilities');

@@ -20,6 +20,7 @@ import { TemplateComponent } from './template/template.component';
 import { CapabilitiesComponent } from './component/capabilities/capabilities.component';
 import { InstructionsComponent } from './component/instructions/instructions.component';
 import { InstructionsDialogComponent } from './component/instructions-dialog/instructions-dialog.component';
+import { TemplateDialogComponent } from './template/template-dialog/template-dialog.component';
 
 @NgModule({
   imports: [
@@ -53,7 +54,8 @@ import { InstructionsDialogComponent } from './component/instructions-dialog/ins
     TemplateComponent,
     CapabilitiesComponent,
     InstructionsComponent,
-    InstructionsDialogComponent
+    InstructionsDialogComponent,
+    TemplateDialogComponent,
   ],
 })
 export class PagesModule {
