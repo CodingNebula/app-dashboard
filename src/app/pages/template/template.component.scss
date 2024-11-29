@@ -159,3 +159,34 @@ nb-accordion-item-body .item-body{
     color: #00A3AB;
     font-size: 1.8em;
 }
+.template-description {
+    color: #00A3AB;
+    width: 50%; /* You may adjust this width based on your layout needs */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    cursor: pointer; /* Ensures the user knows the element is interactive */
+    position: relative; /* Ensure positioning for the tooltip */
+  }
+  
+  .template-description > span {
+    color: #000000;
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
+  .nb-tooltip {
+    white-space: normal; /* Ensures that the tooltip content wraps correctly */
+    max-width: none; /* Prevent the tooltip from truncating the text */
+  }
+
+  ::ng-deep nb-tooltip {
+    white-space: normal; /* Allows the tooltip text to wrap */
+    max-width: 300px; /* Prevents truncation of text */
+    word-wrap: break-word;
+  }
+  

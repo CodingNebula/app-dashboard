@@ -49,7 +49,8 @@ export class TemplateDialogComponent {
 
     this.templateForm = this.fb.group({
       templateName: ['', [Validators.required]],
-      templates: [[], Validators.required]
+      templates: [[], Validators.required],
+      description: ['', Validators.required],
     })
 
 

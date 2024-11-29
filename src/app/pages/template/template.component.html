@@ -74,6 +74,9 @@
                       <nb-accordion-item>
                         <nb-accordion-item-header class="template-header">
                           {{ template?.templateName }}
+                          <div *ngIf="template?.description" [nbTooltip]="template?.description" nbTooltipPosition="top" class="template-description">
+                            Description: <span>{{template?.description}}</span>
+                          </div>                          
                           <nb-icon (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>

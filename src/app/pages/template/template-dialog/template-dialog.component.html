@@ -52,6 +52,15 @@
                 </div>
               </div>
               <div class="form-row">
+                <div class="form-group">
+                  <label for="description">Template Description:</label>
+                  <input id="description" formControlName="description" class="form-control" />
+                  <div *ngIf="templateForm.get('description').touched && templateForm.get('description').invalid" class="error-message">
+                    <small *ngIf="templateForm.get('description').hasError('required')">Description is required!</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
               <div class="form-group">
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>

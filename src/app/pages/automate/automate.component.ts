@@ -28,6 +28,7 @@ export class AutomateComponent implements OnInit {
   public applicationData: any;
   public templateData: any[] = [];
   public testCases: any[] = [];
+  public isEditMode: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -300,8 +301,8 @@ export class AutomateComponent implements OnInit {
       package: ['com.example.app', [Validators.required]],
       automation: ['', [Validators.required]],
       device: ['', [Validators.required]],
-      noReset: ['True', [Validators.required, this.noResetValidator]],
-      hiddenApp: ['True', [Validators.required, this.ignoreHiddenValidator]],
+      noReset: ['True', [Validators.required]],
+      hiddenApp: ['True', [Validators.required]],
       timeout: ['1200000', [Validators.required]],
     });
 
@@ -326,7 +327,7 @@ export class AutomateComponent implements OnInit {
   onSubmit() {
     if (this.myForm.valid) {
       this.isAccordionExpanded = false;
-
+      
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
@@ -345,6 +346,7 @@ export class AutomateComponent implements OnInit {
       }
     }).subscribe(
       (response) => {
+      
         this.appLaunchLoading = false;
         this.appLaunchStatus = 'SUCCESS'
       },
@@ -358,58 +360,19 @@ export class AutomateComponent implements OnInit {
     }
   }
 
-  noResetValidator(control) {
-    if (control.value === 'False') {
-      return { invalidValue: true };
-    }
-    return null;
-  }
+  // noResetValidator(control) {
+  //   if (control.value === 'False') {
+  //     return { invalidValue: true };
+  //   }
+  //   return null;
+  // }
 
-  ignoreHiddenValidator(control) {
-    if (control.value === 'False') {
-      return { invalidValue: true };
-    }
-    return null;
-  }
-
-  onReset() {
-    this.myForm.reset();
-  }
-  getFile(event) {
-
-  }
-
-
-  onStart(item) {
-    this.webSocketService.sendTestCaseRequest(item)
-  }
-
-  onStartAppLaunch() {
-    // this.appLaunchLoading = true;
-    // this.accountService.postCapabilities({
-    //   capabilities: {
-    //     platformName: "Android",
-    //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-    //     appPackage: "com.example.app",
-    //     automationName: "UIAutomator2",
-    //     deviceName: "Samsung",
-    //     noReset: true,
-    //     ignoreHiddenApiPolicyError: true,
-    //     newCommandTimeout: 1200000
-    //   }
-    // }).subscribe(
-    //   (response) => {
-    //     this.appLaunchLoading = false;
-    //     this.appLaunchStatus = 'SUCCESS'
-    //   },
-    //   (error) => {
-    //     console.error('API Error:', error);
-    //     this.appLaunchLoading = false;
-    //     this.appLaunchStatus = 'FAILED'
-    //   }
-    // );
-  }
-
+  // ignoreHiddenValidator(control) {
+  //   if (control.value === 'False') {
+  //     return { invalidValue: true };
+  //   }
+  //   return null;
+  // }
   onSaveDescription(){
     
   }
@@ -991,6 +954,34 @@ export class AutomateComponent implements OnInit {
     })
     console.log(this.testCases);
     
+  }
+
+  onEdit(){
+    this.isEditMode = true;
+    this.enableFields(true);
+  }
+
+  enableFields(enable: boolean){
+    if(enable){
+      this.myForm.get('platform').enable();
+      this.myForm.get('app').enable();
+      this.myForm.get('package').enable();
+      this.myForm.get('automation').enable();
+      this.myForm.get('device').enable();
+      this.myForm.get('timeout').enable();
+      this.myForm.get('noReset').enable();
+      this.myForm.get('hiddenApp').enable();
+    }
+    else{
+      this.myForm.get('platform').disable();
+      this.myForm.get('app').disable();
+      this.myForm.get('package').disable();
+      this.myForm.get('automation').disable();
+      this.myForm.get('device').disable();
+      this.myForm.get('timeout').disable();
+      this.myForm.get('noReset').disable();
+      this.myForm.get('hiddenApp').disable();
+    }
   }
 
 
