@@ -1,30 +1,28 @@
 <nb-card *ngIf="selectedAction === 'testCase'">
     <nb-card-header>Anypay 2.0 Test Case</nb-card-header>
     <nb-card-body>
-        <form [formGroup]="myForm"  class="custom-form">
-            <div class="form-row">
+        <form [formGroup]="testCaseName"  class="custom-form">
+            <div class="form-row" *ngIf="selectedType === 'name'">
                 <div class="form-group">
                   <label for="test_case_name">Test Case Name:</label>
                   <input id="test_case_name" formControlName="test_case_name" class="form-control" />
-                  <div *ngIf="myForm.get('test_case_name').touched && myForm.get('test_case_name').invalid" class="error-message">
-                    <small *ngIf="myForm.get('test_case_name').hasError('required')">Test Case name is required!</small>
+                  <div *ngIf="testCaseName.get('test_case_name').touched && testCaseName.get('test_case_name').invalid" class="error-message">
+                    <small *ngIf="testCaseName.get('test_case_name').hasError('required')">Test Case name is required!</small>
                   </div>
                 </div>
               </div>
-              <div class="form-row">
+              <!-- <div class="form-row" *ngIf="selectedType === 'instruction'">
               <div class="form-group">
                 <label for="testCases">Instruction:</label>
                 <nb-select id="testCases" formControlName="testCases" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
                   <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.normal_name}}</nb-option>
-                  <!-- <nb-option value="IOS">IOS</nb-option>
-                  <nb-option value="Windows">Windows</nb-option>
-                  <nb-option value="MacOS">MacOS</nb-option> -->
+                  
                 </nb-select>
-                <div *ngIf="myForm.get('testCases').touched && myForm.get('testCases').invalid" class="error-message">
-                  <small *ngIf="myForm.get('testCases').hasError('required')">Platform Name is required!</small>
+                <div *ngIf="testCaseName.get('testCases').touched && testCaseName.get('testCases').invalid" class="error-message">
+                  <small *ngIf="testCaseName.get('testCases').hasError('required')">Platform Name is required!</small>
                 </div>
               </div>
-            </div>
+            </div> -->
           
             
           </form>
@@ -32,7 +30,7 @@
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
       <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+        <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
         </div>
     </nb-card-footer>
   </nb-card>

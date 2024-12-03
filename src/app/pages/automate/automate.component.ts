@@ -4,6 +4,7 @@ import { AccountService } from '../../shared/services/account/account.service';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
 import { Router } from '@angular/router';
+import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
 
 @Component({
   selector: 'ngx-automate',
@@ -29,12 +30,14 @@ export class AutomateComponent implements OnInit {
   public templateData: any[] = [];
   public testCases: any[] = [];
   public isEditMode: boolean = false;
+  public appData: any;
 
   constructor(
     private fb: FormBuilder,
     private webSocketService: WebsocketService,
     private accountService: AccountService,
     private automateDataService: AutomationDataService,
+    private applicationDataService: ApplicationDataService,
     private router: Router) {
 
 
@@ -295,15 +298,20 @@ export class AutomateComponent implements OnInit {
 
   ngOnInit() {
     // Create the form with FormBuilder
+    this.appData = this.applicationDataService.getData();
+
+    console.log(this.appData);
+    
+
     this.myForm = this.fb.group({
-      platform: ['', [Validators.required]],
-      app: ['', [Validators.required]],
-      package: ['com.example.app', [Validators.required]],
-      automation: ['', [Validators.required]],
-      device: ['', [Validators.required]],
-      noReset: ['True', [Validators.required]],
-      hiddenApp: ['True', [Validators.required]],
-      timeout: ['1200000', [Validators.required]],
+      platform: [this.appData?.capabilities?.platform, [Validators.required]],
+      app: [this.appData?.capabilities?.app, [Validators.required]],
+      package: [this.appData?.capabilities?.package, [Validators.required]],
+      automation: [this.appData?.capabilities?.automation, [Validators.required]],
+      device: [this.appData?.capabilities?.device, [Validators.required]],
+      noReset: [this.appData?.capabilities?.noReset, [Validators.required]],
+      hiddenApp: [this.appData?.capabilities?.hiddenApp, [Validators.required]],
+      timeout: [this.appData?.capabilities?.timeout, [Validators.required]],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -320,7 +328,8 @@ export class AutomateComponent implements OnInit {
     if(state && state.templateArr){
       this.templateData = state.templateArr
     }
-
+    console.log(this.templateData);
+    
     this.formateTestCaseData();
   }
 

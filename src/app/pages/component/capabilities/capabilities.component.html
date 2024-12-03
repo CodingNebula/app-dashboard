@@ -1,6 +1,6 @@
 <div>
     <nb-alert *ngIf="showSuccessAlert" status="success">Capabilities saved succcessfully!</nb-alert>
-    <h3>Application Capabilities</h3>
+    <h3>{{appDetails?.app_details?.appName}} Capabilities</h3>
         
           <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="custom-form">
   

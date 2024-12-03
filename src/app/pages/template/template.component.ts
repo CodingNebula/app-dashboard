@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { TemplateDialogComponent } from './template-dialog/template-dialog.component';
 import { Router } from '@angular/router';
+import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
+import { AccountService } from '../../shared/services/account/account.service';
 
 @Component({
   selector: 'ngx-template',
@@ -16,7 +18,13 @@ export class TemplateComponent {
 
   constructor(
     private dialogService: NbDialogService,
-    private router: Router) {
+    private router: Router,
+    private accountService: AccountService,
+    private applicationDataService: ApplicationDataService) {
+      const appDetails = this.applicationDataService.getData();
+    console.log(appDetails);
+    
+      
     // this.testCases = {
     //   "Welcome Happy Flow": {
     //     description: "A test case for the happy flow scenario",
@@ -60,18 +68,40 @@ export class TemplateComponent {
     // this.testCasesArray = Object.entries(this.testCases);
   }
 
-  openDialog(action: string) {
+  openDialog(action: string, type: string) {
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
-      context: { selectedAction: action, testCaseArr: this.testCasesArray },
+      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray },
     });
+
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
-      if (result) {
         if (result.confirmed) {
           if (result.selectedAction === 'testCase') {
+            if(result.selectedType === 'name'){
+              console.log(result.data);
+              
+              const details = {
+                screenName: result.data.test_case_name,
+                applicationId: localStorage.getItem('app_id'),
+                extra: {},
+            }
+              console.log(result.data);
 
+              
+              // this.saveApplicationData(appDetails);
+              this.accountService.postPageName(details).subscribe((resp) => {
+                if(resp){
+                  console.log(resp);
+                  
+                  this.testCasesArray.push(resp[0]);
+                  
+                }
+              })
+              this.applicationDataService.setData('testCases', this.testCasesArray);
+              // this.router.navigateByUrl('pages/capabilities');
+            }
 
             //   const appDetails = {
             //     app_name: req.body.appName,
@@ -81,18 +111,18 @@ export class TemplateComponent {
             //     extra: JSON.stringify(req.body.extra),
             // }
 
-            const appDetails = {
-              appName: result.data.application,
-              platform: result.data.platform,
-              test_case_results: null,
-              extra: {}
-            }
-            console.log(result.data);
+            // const appDetails = {
+            //   appName: result.data.application,
+            //   platform: result.data.platform,
+            //   test_case_results: null,
+            //   extra: {}
+            // }
+            // console.log(result.data);
 
-            this.testCasesArray.push(result.data);
-            // this.saveApplicationData(appDetails);
-            // this.applicationDataService.setData('app_details', appDetails);
-            // this.router.navigateByUrl('pages/capabilities');
+            // this.testCasesArray.push(result.data);
+            // // this.saveApplicationData(appDetails);
+            // this.applicationDataService.setData('testCases', this.testCasesArray);
+            // // this.router.navigateByUrl('pages/capabilities');
           }
           else if (result.selectedAction === 'template') {
 
@@ -116,11 +146,11 @@ export class TemplateComponent {
             console.log(this.templateArray);
 
             // this.saveApplicationData(appDetails);
-            // this.applicationDataService.setData('app_details', appDetails);
+            this.applicationDataService.setData('templates', this.templateArray);
             // this.router.navigateByUrl('pages/capabilities');
           }
         }
-      }
+      // }
     });
   }
 

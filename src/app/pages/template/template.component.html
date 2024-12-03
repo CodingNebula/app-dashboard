@@ -2,7 +2,7 @@
     <div class="test-case-container">
         <div class="test-case-head">
             <h5>Test Cases</h5>
-            <button class="add-test-case-btn" (click)="openDialog('testCase')">Add Test Case</button>
+            <button class="add-test-case-btn" (click)="openDialog('testCase', 'name')">Add Test Case</button>
         </div>
         <div class="test-case-main">
             <div *ngIf="testCasesArray.length === 0" class="no-app-div">
@@ -16,7 +16,7 @@
                     <nb-accordion class="accordian-container">
                       <nb-accordion-item>
                         <nb-accordion-item-header class="accordian-header">
-                          {{ testCase?.test_case_name }} 
+                          {{ testCase?.screen_name }} 
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>
                           <div class="accordian-body-div">
@@ -61,7 +61,7 @@
     <div class="test-case-container">
         <div class="test-case-head">
             <h5>Templates</h5>
-            <button class="add-test-case-btn" (click)="openDialog('template')">Create Template</button>
+            <button class="add-test-case-btn" (click)="openDialog('template', 'name')">Create Template</button>
         </div>
         <div class="test-case-main">
             <div *ngIf="templateArray.length === 0" class="no-template-div">
@@ -74,7 +74,7 @@
                       <nb-accordion-item>
                         <nb-accordion-item-header class="template-header">
                           {{ template?.templateName }}
-                          <div *ngIf="template?.description" [nbTooltip]="template?.description" nbTooltipPosition="top" class="template-description">
+                          <div *ngIf="template?.description" [nbTooltip]="template?.description" class="template-description">
                             Description: <span>{{template?.description}}</span>
                           </div>                          
                           <nb-icon (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>

@@ -187,6 +187,6 @@ nb-accordion-item-body .item-body{
   ::ng-deep nb-tooltip {
     white-space: normal; /* Allows the tooltip text to wrap */
     max-width: 300px; /* Prevents truncation of text */
-    word-wrap: break-word;
+    word-break: break-all;
   }
   

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
+import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 
 @Component({
   selector: 'ngx-template-dialog',
@@ -8,43 +9,34 @@ import { NbDialogRef } from '@nebular/theme';
   styleUrls: ['./template-dialog.component.scss']
 })
 export class TemplateDialogComponent {
-  public myForm: FormGroup;
+  public testCaseName: FormGroup;
   public templateForm: FormGroup;
   public selectedItems: string[] = [];
   public instructionsArr: any[] = [];
-  public selectedAction : string;
+  public selectedAction: string;
   public testCaseArr: any[] = [];
   public templates: string[] = [];
+  public appDetails: any;
+  public selectedType: string;
 
-  constructor(private dialogRef: NbDialogRef<TemplateDialogComponent>, private fb: FormBuilder){
-    this.instructionsArr = [
-      {
-          "actions": "click_button",
-          "elem_name": "Welcome_Next_Button",
-          "normal_name": "Welcome_Next_Button"
-      },
-      {
-          "actions": "left-arrow",
-          "elem_name": "Welcome_Back_Button",
-          "normal_name": "Welcome_Back_Button"
-      },
-      {
-          "actions": "right-arrow",
-          "elem_name": "Permission_Next_Button",
-          "normal_name": "Permission_Next_Button"
-      },
-      {
-          "actions": "click_image",
-          "elem_name": "Permission_Image",
-          "normal_name": "Permission_Image"
-      }
-  ]
-  }
+  constructor(
+    private dialogRef: NbDialogRef<TemplateDialogComponent>,
+    private fb: FormBuilder,
+    private applicationDataService: ApplicationDataService) {
+    }
 
   ngOnInit() {
-    this.myForm = this.fb.group({
+    this.appDetails = this.applicationDataService.getData();
+    console.log(this.appDetails?.instructions);
+
+    console.log(this.selectedType);
+    
+    
+    this.instructionsArr = this.appDetails?.instructions;
+
+    this.testCaseName = this.fb.group({
       test_case_name: ['', [Validators.required]],
-      testCases: [[], [Validators.required]],
+      // testCases: [[], [Validators.required]],
     });
 
     this.templateForm = this.fb.group({
@@ -63,26 +55,26 @@ export class TemplateDialogComponent {
   }
 
   onSubmit() {
-    if (this.myForm.valid) {
-      this.dialogRef.close({ confirmed: true, data: this.myForm.value, selectedAction: this.selectedAction });
+    if (this.testCaseName.valid) {
+      this.dialogRef.close({ confirmed: true, data: this.testCaseName.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
     }
 
     if (this.templateForm.valid) {
-      this.dialogRef.close({ confirmed: true, data: this.templateForm.value, selectedAction: this.selectedAction });
+      this.dialogRef.close({ confirmed: true, data: this.templateForm.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
     }
   }
 
   onTestCaseChange(selectedItems: any[]) {
     // Update the testCases form control whenever the selection changes
-    this.myForm.get('testCases')?.setValue(selectedItems);
+    this.testCaseName.get('testCases')?.setValue(selectedItems);
   }
 
-  onTemplateChange(templates: any[]){
+  onTemplateChange(templates: any[]) {
     this.templateForm.get('templates')?.setValue(templates);
   }
 
   close() {
-    this.dialogRef.close({confirmed: false});  
+    this.dialogRef.close({ confirmed: false });
   }
 
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { error } from 'console';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class ApiService {
 
   postWithoutModelCapabilities(endpoint: string, payload: any) {
 
-    const apiURL = `http://192.168.1.29:3000/automate/${endpoint}`;
+    const apiURL = `${environment.api_url}/${endpoint}`;
 
     const headers = this.setHeaders();
     return this.http.post(apiURL, payload, { headers }).pipe(
@@ -45,7 +46,7 @@ export class ApiService {
   }
 
   postWithoutModel(endpoint: string, request: any): Observable<any> {
-    const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}`;
+    const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
     const headers = this.setHeaders();
 
     return this.http.post<any>(apiURL, request, { headers })
@@ -58,7 +59,7 @@ export class ApiService {
   }
 
   getWithoutModal(endpoint: string): Observable<any> {
-    const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}`;
+    const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
     const headers = this.setHeaders();
     return this.http.get<any>(apiURL, { headers })
       .pipe(
@@ -71,7 +72,7 @@ export class ApiService {
   }
 
   getAllReports(): Observable<any> {
-    const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/get_all_report`;
+    const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/get_all_report`;
     const headers = this.setHeaders();
     return this.http.get<any>(apiURL, { headers })
       .pipe(
@@ -82,7 +83,7 @@ export class ApiService {
       );
   }
     deleteWithoutModal(endpoint: string, id: string): Observable<any>{
-      const apiURL = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}/${id}`;
+      const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}/${id}`;
     const headers = this.setHeaders();
     return this.http.delete<any>(apiURL, { headers })
     .pipe(
@@ -95,7 +96,7 @@ export class ApiService {
     }
 
     updateWithoutModal(endpoint: string, request: any): Observable<any>{
-      const apiUrl = `http://192.168.1.29:3000/automate/${localStorage.getItem('id')}/${endpoint}`;
+      const apiUrl = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
       const headers = this.setHeaders();
       return this.http.put<any>(apiUrl, request, {headers})
       .pipe(

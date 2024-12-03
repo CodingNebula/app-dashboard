@@ -96,7 +96,7 @@
           </div>
 
           <div class="form-row button-row">
-            <button class="edit-button" (click)="onEdit()">Edit</button>
+            <!-- <button class="edit-button" (click)="onEdit()">Edit</button> -->
             <button type="submit" [disabled]="myForm.invalid" (click)="onSubmit()" class="submit-button">Submit</button>
             <!-- <button type="submit" class="submit-button">Submit</button> -->
           </div>
@@ -106,7 +106,7 @@
     </nb-accordion-item>
   </nb-accordion>
 
-  <div class="test-case-container">
+  <div class="test-case-container" *ngIf="templateData?.[0]?.templates?.length > 0">
 
     <div class="test-case-div">
       <h5>{{templateData?.[0]?.templateName}}</h5>
@@ -123,7 +123,6 @@
     </div> -->
     <div class="test-case-status-container">
     <div *ngFor="let item of testCases" class="test-case-div">
-      <!-- <div>{{item | json}}</div> -->
       <h6>{{item?.normal_name}}</h6>
       <!-- <span *ngIf="!item.loading && item.status" class="status-message"
         [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->

@@ -1,6 +1,6 @@
 <div class="application-main">
     <div class="instructions-header-div">
-        <h5 class="instructions-heading">Anypay 2.0 Instructions</h5>
+        <h5 class="instructions-heading">{{appDetails?.app_details?.appName}} Instructions</h5>
         <!-- <button *ngIf="applicationDataArr.length > 0" (click)="saveInstructions()" class="save-btn">Save Instructions</button> -->
     </div>
     <div *ngIf="applicationDataArr.length === 0" class="no-app-div">
@@ -18,9 +18,9 @@
       <div class="container">
         <div class="row table-data-div" *ngFor="let item of applicationDataArr; let i = index">
           <div class="col-1">{{i + 1}}</div>
-          <div class="col-3 table-data">{{item.actions}}</div>
-          <div class="col-4 table-data">{{item.elem_name}}</div>
-          <div class="col-4 table-data">{{item.normal_name}}</div>
+          <div class="col-3 table-data">{{item.back_name}}</div>
+          <div class="col-4 table-data">{{item.element_name}}</div>
+          <div class="col-4 table-data">{{item.instruction_name}}</div>
         </div>
       </div>
     </div>

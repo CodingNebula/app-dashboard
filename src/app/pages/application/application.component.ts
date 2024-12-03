@@ -51,10 +51,12 @@ export class ApplicationComponent implements OnInit {
             test_case_results: null,
             extra: {}
           }
-          // this.applicationDataArr.push(result.data);
+          // this.applicationDataArr.push(appDetails);
           this.saveApplicationData(appDetails);
-          this.applicationDataService.setData('app_details', appDetails);
-          this.router.navigateByUrl('pages/capabilities');
+          // this.applicationDataService.setData('app_details', appDetails);
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/capabilities');
+          }, 1500)
         }
       }
     });
@@ -67,7 +69,8 @@ export class ApplicationComponent implements OnInit {
       if (response) {
         // After successful post, update applicationDataArr
         this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
-
+        this.applicationDataService.setData('app_details', response);
+        localStorage.setItem('app_id', response?.id);
       }
     }, (error) => {
       console.error('Error saving test case:', error);
@@ -83,8 +86,9 @@ export class ApplicationComponent implements OnInit {
   }
 
   navigate(item: any) {
-    this.automateDataService.saveSelectedApplication(item);
+    this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
 
-    this.router.navigateByUrl('pages/test-cases', { state: { id: item.id } });
+    this.applicationDataService.setData('app_details', item);
+    localStorage.setItem('app_id', item?.id);
   }
 }

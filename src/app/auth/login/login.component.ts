@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { io, Socket } from 'socket.io-client';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 // import { io, Socket } from "socket.io-client";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'ngx-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private http: HttpClient,
-    private webSocketService: WebsocketService
+    private webSocketService: WebsocketService,
   ) {}
 
   ngOnInit(): void {
@@ -64,7 +65,7 @@ export class LoginComponent implements OnInit {
     };
   
     // Make the POST request to authenticate the user
-    this.http.post<any>('http://192.168.1.29:3000/automate/authenticate', payload)
+    this.http.post<any>(`${environment.api_url}/authenticate`, payload)
       .subscribe(
         (data) => {
           if (data?.token) {

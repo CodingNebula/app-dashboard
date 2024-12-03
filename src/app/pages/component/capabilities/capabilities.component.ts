@@ -12,6 +12,7 @@ export class CapabilitiesComponent {
   public myForm: FormGroup;
   public showSuccessAlert: boolean = false;
   public selectedItem: '';
+  public appDetails : any;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +44,10 @@ export class CapabilitiesComponent {
       }
     })
 
+    this.appDetails = this.applicationDataService.getData();
 
+    console.log(this.appDetails);
+    
   }
 
   noResetValidator(control) {
