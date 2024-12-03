@@ -1,8 +1,8 @@
-<nb-card *ngIf="selectedAction === 'testCase'">
+<nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'name'">
     <nb-card-header>Anypay 2.0 Test Case</nb-card-header>
     <nb-card-body>
         <form [formGroup]="testCaseName"  class="custom-form">
-            <div class="form-row" *ngIf="selectedType === 'name'">
+            <div class="form-row">
                 <div class="form-group">
                   <label for="test_case_name">Test Case Name:</label>
                   <input id="test_case_name" formControlName="test_case_name" class="form-control" />
@@ -11,20 +11,6 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="form-row" *ngIf="selectedType === 'instruction'">
-              <div class="form-group">
-                <label for="testCases">Instruction:</label>
-                <nb-select id="testCases" formControlName="testCases" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
-                  <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.normal_name}}</nb-option>
-                  
-                </nb-select>
-                <div *ngIf="testCaseName.get('testCases').touched && testCaseName.get('testCases').invalid" class="error-message">
-                  <small *ngIf="testCaseName.get('testCases').hasError('required')">Platform Name is required!</small>
-                </div>
-              </div>
-            </div> -->
-          
-            
           </form>
     </nb-card-body>
     <nb-card-footer>
@@ -35,8 +21,36 @@
     </nb-card-footer>
   </nb-card>
 
+  <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'instruction'">
+    <nb-card-header>Anypay 2.0 Test Case</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="instruction"  class="custom-form">
+              <div class="form-row">
+              <div class="form-group">
+                <label for="instructionArr">Instruction:</label>
+                <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
+                  <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.instruction_name}}</nb-option>
+                  
+                </nb-select>
+                <div *ngIf="instruction.get('instructionArr').touched && instruction.get('instructionArr').invalid" class="error-message">
+                  <small *ngIf="instruction.get('instructionArr').hasError('required')">Platform Name is required!</small>
+                </div>
+              </div>
+            </div>
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="instruction.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>
 
-  <nb-card *ngIf="selectedAction === 'template'">
+
+  <nb-card *ngIf="selectedAction === 'template' && selectedType === 'name'">
     <nb-card-header>Anypay 2.0 Templates</nb-card-header>
     <nb-card-body>
         <form [formGroup]="templateForm"  class="custom-form">
@@ -58,7 +72,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-row">
+              <!-- <div class="form-row">
               <div class="form-group">
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
@@ -67,6 +81,34 @@
                 </nb-select>
                 <div *ngIf="templateForm.get('templates').touched && templateForm.get('templates').invalid" class="error-message">
                   <small *ngIf="templateForm.get('templates').hasError('required')">Platform Name is required!</small>
+                </div>
+              </div>
+            </div> -->
+          
+            
+          </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="close()" class="close-button">Close</button>
+      <div class="form-row button-row">
+        <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Submit</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>
+
+  <nb-card *ngIf="selectedAction === 'template' && selectedType === 'testCase'">
+    <nb-card-header>Anypay 2.0 Templates</nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="testCases"  class="custom-form">
+              <div class="form-row">
+              <div class="form-group">
+                <label for="templates">Test Case</label>
+                <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
+                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.test_case_name}}</nb-option>
+                  
+                </nb-select>
+                <div *ngIf="testCases.get('templates').touched && testCases.get('templates').invalid" class="error-message">
+                  <small *ngIf="testCases.get('templates').hasError('required')">Platform Name is required!</small>
                 </div>
               </div>
             </div>

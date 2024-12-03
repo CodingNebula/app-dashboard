@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
+import { AccountService } from '../../../shared/services/account/account.service';
 
 @Component({
   selector: 'ngx-template-dialog',
@@ -10,6 +11,7 @@ import { ApplicationDataService } from '../../../shared/services/applicationData
 })
 export class TemplateDialogComponent {
   public testCaseName: FormGroup;
+  public instruction: FormGroup;
   public templateForm: FormGroup;
   public selectedItems: string[] = [];
   public instructionsArr: any[] = [];
@@ -18,11 +20,13 @@ export class TemplateDialogComponent {
   public templates: string[] = [];
   public appDetails: any;
   public selectedType: string;
+  public testCases: FormGroup;
 
   constructor(
     private dialogRef: NbDialogRef<TemplateDialogComponent>,
     private fb: FormBuilder,
-    private applicationDataService: ApplicationDataService) {
+    private applicationDataService: ApplicationDataService,
+  private accountService: AccountService) {
     }
 
   ngOnInit() {
@@ -32,35 +36,40 @@ export class TemplateDialogComponent {
     console.log(this.selectedType);
     
     
-    this.instructionsArr = this.appDetails?.instructions;
 
     this.testCaseName = this.fb.group({
       test_case_name: ['', [Validators.required]],
       // testCases: [[], [Validators.required]],
     });
+    
+    this.instruction = this.fb.group({
+      instructionArr: [[], [Validators.required]],
+    })
 
     this.templateForm = this.fb.group({
       templateName: ['', [Validators.required]],
-      templates: [[], Validators.required],
       description: ['', Validators.required],
     })
 
+    this.testCases = this.fb.group({
+      templates: [[], Validators.required],
+    })
 
-    // if (this.item) {
-    //   this.myForm.patchValue({
-    //     application: this.item?.application,
-    //     testCases: this.item?.testCases,
-    //   });
-    // }
   }
 
   onSubmit() {
     if (this.testCaseName.valid) {
       this.dialogRef.close({ confirmed: true, data: this.testCaseName.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
     }
+    if (this.instruction.valid) {
+      this.dialogRef.close({ confirmed: true, data: this.instruction.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
+    }
 
     if (this.templateForm.valid) {
       this.dialogRef.close({ confirmed: true, data: this.templateForm.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
+    }
+    if (this.testCases.valid) {
+      this.dialogRef.close({ confirmed: true, data: this.testCases.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
     }
   }
 
@@ -76,5 +85,7 @@ export class TemplateDialogComponent {
   close() {
     this.dialogRef.close({ confirmed: false });
   }
+
+  // 
 
 }

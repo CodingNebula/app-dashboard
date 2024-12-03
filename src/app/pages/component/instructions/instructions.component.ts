@@ -84,6 +84,7 @@ export class InstructionsComponent {
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
         this.applicationDataArr = data;
+        this.applicationDataService.setData('instructions', data)
       }
     })
   }

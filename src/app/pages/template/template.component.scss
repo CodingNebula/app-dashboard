@@ -143,6 +143,18 @@ td{
 }
 .accordian-header{
     padding: 0.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.add-new{
+    border: none;
+    background-color: #00A3AB;
+    color: #ffffff;
+    border-radius: 2em;
+    outline: none;
+    margin-right: 2em;
+    padding: 0.5em;
 }
 nb-accordion-item-body .item-body{
     height: 12vh;

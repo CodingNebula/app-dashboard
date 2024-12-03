@@ -172,8 +172,67 @@ export class AccountService {
     )
   }
 
+  postPageInstructions(request: any) {
+    return this.apiService.postWithoutModel(`page/${localStorage.getItem('app_id')}`, request).pipe(
+      map(resp => {
+        if (resp) {
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
   getInstruction(id: string){
     return this.apiService.getWithoutModal(`instruction/${id}`).pipe(
+      map(applicationResponse => {
+        // Check if the response is valid, and return it
+        if (applicationResponse) {
+          return applicationResponse; // Transformation logic (if needed)
+        } else {
+          // In case of an invalid response, throw an error
+          throw new Error('Invalid response');
+        }
+      }),
+      catchError(error => {
+        // Handle the error here
+        console.error('Error during the application submission:', error);
+        // Return a user-friendly error message or rethrow it
+        return throwError(() => new Error('Failed to submit application. Please try again.'));
+      })
+    );
+  }
+
+  getAllPages(id: string){
+    return this.apiService.getWithoutModal(`page/${id}`).pipe(
+      map(applicationResponse => {
+        // Check if the response is valid, and return it
+        if (applicationResponse) {
+          return applicationResponse; // Transformation logic (if needed)
+        } else {
+          // In case of an invalid response, throw an error
+          throw new Error('Invalid response');
+        }
+      }),
+      catchError(error => {
+        // Handle the error here
+        console.error('Error during the application submission:', error);
+        // Return a user-friendly error message or rethrow it
+        return throwError(() => new Error('Failed to submit application. Please try again.'));
+      })
+    );
+  }
+
+  getAllTemplates(id: string){
+    return this.apiService.getWithoutModal(`workflow/${id}`).pipe(
       map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {
