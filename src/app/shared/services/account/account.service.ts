@@ -172,6 +172,44 @@ export class AccountService {
     )
   }
 
+  postTemplateName(request: any) {
+    return this.apiService.postWithoutModel(`workflow`, request).pipe(
+      map(resp => {
+        if (resp) {
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
+  postTemplates(id: string, request: any) {
+    return this.apiService.postWithoutModel(`workflow/${id}`, request).pipe(
+      map(resp => {
+        if (resp) {
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
   postPageInstructions(request: any) {
     return this.apiService.postWithoutModel(`page/${localStorage.getItem('app_id')}`, request).pipe(
       map(resp => {
@@ -250,4 +288,5 @@ export class AccountService {
       })
     );
   }
+  
 }

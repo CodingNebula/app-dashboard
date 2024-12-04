@@ -17,6 +17,7 @@ export class TemplateComponent {
   public templateArray: any[] = [];
   public screenNameId: any;
   public instructionsArr: any[] = [];
+  public templateId: any;
 
   constructor(
     private dialogService: NbDialogService,
@@ -27,47 +28,7 @@ export class TemplateComponent {
     console.log(appDetails);
     
       
-    // this.testCases = {
-    //   "Welcome Happy Flow": {
-    //     description: "A test case for the happy flow scenario",
-    //     test_cases: [
-    //       'click_image',
-    //       'click_next_button'
-    //     ]
-    //   },
-    //   "Permission happy Flow": {
-    //     description: "A test case for the failed login scenario",
-    //     test_cases: [
-    //       'click_image',
-    //       'click_next_button'
-    //     ]
-    //   },
-    //   "Welcome Happy flow": {
-    //     description: "A test case for the happy flow scenario",
-    //     test_cases: [
-    //       'click_image',
-    //       'click_next_button'
-    //     ]
-    //   },
-    //   "Permission Happy Flow": {
-    //     description: "A test case for the failed login scenario",
-    //     test_cases: [
-    //       'click_image',
-    //       'click_next_button'
-    //     ]
-    //   },
-
-    //   "Permission Happy flow": {
-    //     description: "A test case for the failed login scenario",
-    //     test_cases: [
-    //       'click_image',
-    //       'click_next_button'
-    //     ]
-    //   },
-    //   // Add more test cases as needed
-    // };
-
-    // this.testCasesArray = Object.entries(this.testCases);
+    
   }
 
   ngOnInit(){
@@ -76,8 +37,10 @@ export class TemplateComponent {
     this.getInstructions()
   }
 
-  openDialog(action: string, type: string) {
+  openDialog(action: string, type: string, id?: string) {
     // Open the dialog and pass data to it using 'context'
+    console.log(id);
+    
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
       context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr },
     });
@@ -144,7 +107,70 @@ export class TemplateComponent {
             }
           }
           else if (result.selectedAction === 'template') {
+            if(result.selectedType === 'name'){
+              console.log(result.data);
+              
+            //   const details = {
+            //     screenName: result.data.test_case_name,
+            //     applicationId: localStorage.getItem('app_id'),
+            //     extra: {},
+            // }
 
+            const details = {
+              templateName: result.data.templateName,
+              applicationId: localStorage.getItem('app_id'),
+              description: result.data.description,
+              extra: {},
+          }
+
+          
+              console.log(result.data);
+
+              
+              // this.saveApplicationData(appDetails);
+              this.accountService.postTemplateName(details).subscribe((resp) => {
+                if(resp){
+                  console.log(resp);
+                  
+                  // this.testCasesArray.push(resp[0]);
+                  this.templateId = resp[0]?.id
+                  
+                }
+              })
+              this.applicationDataService.setData('testCases', this.testCasesArray);
+              // this.router.navigateByUrl('pages/capabilities');
+            }
+
+            if(result.selectedType === 'testCase'){
+              console.log(result.data);
+              
+              let body = {
+                application_id: localStorage.getItem('app_id'),  // This value can be dynamic
+                instructions_set: result?.data?.templates?.map((instruction, index) => {
+                    return {
+                        id: instruction?.instruction_set_id,  // Mapping the dynamic id from instructionsArray
+                        order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                        extra: {}  // Adding any extra dynamic data
+                    };
+                })
+            };
+
+            console.log(body);
+            
+
+              
+              this.accountService.postTemplates(this.templateId, body).subscribe((resp) => {
+                if(resp){
+                  console.log(resp);
+                  
+                  this.testCasesArray.push(resp[0]);
+                  console.log(this.testCasesArray);
+                  
+                }
+              })
+              this.applicationDataService.setData('testCases', this.testCasesArray);
+              // this.router.navigateByUrl('pages/capabilities');
+            }
 
             //   const appDetails = {
             //     app_name: req.body.appName,
@@ -182,7 +208,29 @@ export class TemplateComponent {
     const id = localStorage.getItem('app_id');
     this.accountService.getAllPages(id).subscribe((resp) => {
       console.log(resp);
-      
+      const groupedInstructions = resp.reduce((acc, curr) => {
+        const { instruction_set_id, screen_name } = curr;
+        
+        // Check if this instruction_set_id already exists in the accumulator
+        if (!acc[instruction_set_id]) {
+            acc[instruction_set_id] = {
+                instruction_set_id: instruction_set_id,
+                screen_name: screen_name,
+                instructions: []
+            };
+        }
+    
+        // Add current instruction to the appropriate group
+        acc[instruction_set_id].instructions.push(curr);
+    
+        return acc;
+    }, {});
+    
+    // Convert the grouped object to an array
+    const result = Object.values(groupedInstructions);
+  
+    this.testCasesArray = result;
+    console.log(result);
     })
   }
 
@@ -190,7 +238,44 @@ export class TemplateComponent {
   getAllTempates(){
     const id = localStorage.getItem('app_id');
     this.accountService.getAllTemplates(id).subscribe((resp) => {
-      console.log(resp);
+      // console.log(resp);
+
+      const groupedData = resp.reduce((acc, curr) => {
+        let wtGroup = acc.find(group => group.wt_id === curr.wt_id);
+      
+        if (!wtGroup) {
+          wtGroup = {
+            wt_id: curr.wt_id,
+            wt_name: curr.wt_name,
+            wt_desc: curr.wt_desc,
+            screens: [],
+          };
+          acc.push(wtGroup);
+        }
+      
+        let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
+      
+        if (!screenGroup) {
+          screenGroup = {
+            ins_set_id: curr.ins_set_id,
+            ins_set_screen_name: curr.ins_set_screen_name,
+            instructions: [],
+          };
+          wtGroup.screens.push(screenGroup);
+        }
+      
+        // Check if the instruction is already added to the screenGroup
+        const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
+        if (!instructionExists) {
+          screenGroup.instructions.push(curr);
+        }
+      
+        return acc;
+      }, []);
+      
+      this.templateArray = groupedData
+      console.log(groupedData);
+      
     })
   }
 
@@ -199,7 +284,7 @@ export class TemplateComponent {
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
         this.instructionsArr = data;
-        console.log(data);
+        console.log(this.instructionsArr);
       }
     })
   }

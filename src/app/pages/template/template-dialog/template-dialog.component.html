@@ -104,7 +104,7 @@
               <div class="form-group">
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
-                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.test_case_name}}</nb-option>
+                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.screen_name}}</nb-option>
                   
                 </nb-select>
                 <div *ngIf="testCases.get('templates').touched && testCases.get('templates').invalid" class="error-message">
@@ -119,7 +119,7 @@
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
       <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Submit</button>
+        <button type="submit" (click)="onSubmit()" [disabled]="testCases.invalid" class="submit-button">Submit</button>
         </div>
     </nb-card-footer>
   </nb-card>

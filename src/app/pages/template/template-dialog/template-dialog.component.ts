@@ -55,6 +55,9 @@ export class TemplateDialogComponent {
       templates: [[], Validators.required],
     })
 
+    console.log(this.testCaseArr);
+    
+
   }
 
   onSubmit() {
