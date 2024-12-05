@@ -18,6 +18,9 @@ export class TemplateComponent {
   public screenNameId: any;
   public instructionsArr: any[] = [];
   public templateId: any;
+  public tempTestCase: any = {};
+  public tempTemplate: any = {};
+  public appName : any;
 
   constructor(
     private dialogService: NbDialogService,
@@ -34,7 +37,9 @@ export class TemplateComponent {
   ngOnInit(){
     this.getAllPages();
     this.getAllTempates();
-    this.getInstructions()
+    this.getInstructions();
+
+    this.appName = localStorage.getItem('app_name');
   }
 
   openDialog(action: string, type: string, id?: string) {
@@ -60,6 +65,7 @@ export class TemplateComponent {
             }
               console.log(result.data);
 
+
               
               // this.saveApplicationData(appDetails);
               this.accountService.postPageName(details).subscribe((resp) => {
@@ -68,6 +74,8 @@ export class TemplateComponent {
                   
                   this.testCasesArray.push(resp[0]);
                   this.screenNameId = resp[0]?.id
+                  this.tempTestCase.screen_name = result.data.test_case_name;
+                  this.tempTestCase.instruction_set_id = resp[0]?.id;
                   
                 }
               })
@@ -97,7 +105,14 @@ export class TemplateComponent {
                 if(resp){
                   console.log(resp);
                   
-                  this.testCasesArray.push(resp[0]);
+                  // this.testCasesArray.push(resp[0]);
+                  if (this.testCasesArray.length > 0) {
+                    this.testCasesArray.pop();
+                }
+                  this.tempTestCase.instructions = result.data.instructionArr;
+                  this.testCasesArray.push(this.tempTestCase);
+                  console.log(this.tempTestCase);
+                  
                   console.log(this.testCasesArray);
                   
                 }
@@ -134,7 +149,13 @@ export class TemplateComponent {
                   
                   // this.testCasesArray.push(resp[0]);
                   this.templateId = resp[0]?.id
-                  
+                  this.tempTemplate.wt_name = resp[0]?.template_name;
+                  this.tempTemplate.wt_desc = resp[0]?.description;
+                  this.tempTemplate.wt_id = resp[0]?.id;
+
+
+
+                  this.templateArray.push(this.tempTemplate)
                 }
               })
               this.applicationDataService.setData('testCases', this.testCasesArray);
@@ -157,42 +178,35 @@ export class TemplateComponent {
 
             console.log(body);
             
-
+            let screens = result?.data?.templates?.map((screen, index) => {
+              return {
+                ins_set_screen_name: screen?.screen_name,  // Setting the screen name dynamically from result.data.screen_name
+                  instructions: screen?.instructions?.map((instruction) => {
+                      return {
+                        ins_element_name: instruction?.instruction_name  // Mapping each instruction's inst_name dynamically
+                      };
+                  })
+              };
+          });
+          
+          console.log(screens);
               
               this.accountService.postTemplates(this.templateId, body).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
+
+                  if (this.templateArray.length > 0) {
+                    this.templateArray.pop();
+                }
                   
-                  this.testCasesArray.push(resp[0]);
-                  console.log(this.testCasesArray);
+                  this.tempTemplate.screens = screens;
+
+                  this.templateArray.push(this.tempTemplate);
                   
                 }
               })
-              this.applicationDataService.setData('testCases', this.testCasesArray);
-              // this.router.navigateByUrl('pages/capabilities');
             }
 
-            //   const appDetails = {
-            //     app_name: req.body.appName,
-            //     user_id: userId,
-            //     platform: req.body.platform,
-            //     test_case_results: req.body.test_case_results,
-            //     extra: JSON.stringify(req.body.extra),
-            // }
-
-            const appDetails = {
-              appName: result.data.application,
-              platform: result.data.platform,
-              test_case_results: null,
-              extra: {}
-            }
-
-            this.templateArray.push(result.data);
-            console.log(this.templateArray);
-
-            // this.saveApplicationData(appDetails);
-            this.applicationDataService.setData('templates', this.templateArray);
-            // this.router.navigateByUrl('pages/capabilities');
           }
         }
       // }
@@ -200,8 +214,18 @@ export class TemplateComponent {
   }
 
   automateTemplate(template: any) {
+    const capabilities = {
+      platformName: "Android",
+      app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+      appPackage: "com.example.app",
+      automationName: "UIAutomator2",
+      deviceName: "Samsung",
+      noReset: true,
+      ignoreHiddenApiPolicyError: true,
+      newCommandTimeout: 1200000
+    }
 
-    this.router.navigateByUrl('/pages/automate', { state: { templateArr: this.templateArray } })
+    this.router.navigateByUrl('/pages/automate', { state: { templateArr: template, capabilities: capabilities } })
   }
 
   getAllPages(){

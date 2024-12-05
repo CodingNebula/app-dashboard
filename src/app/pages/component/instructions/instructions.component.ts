@@ -13,6 +13,7 @@ import { AccountService } from '../../../shared/services/account/account.service
 export class InstructionsComponent {
   public applicationDataArr: any[] = [];
   public appDetails: any;
+  public appName: any;
 
 
   constructor(
@@ -28,6 +29,8 @@ export class InstructionsComponent {
     this.appDetails = this.applicationDataService.getData();
 
     this.getInstructions();
+
+    this.appName = localStorage.getItem('app_name');
   }
 
   openDialog() {

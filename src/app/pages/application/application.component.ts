@@ -68,9 +68,12 @@ export class ApplicationComponent implements OnInit {
     this.accountService.postApplication(data).subscribe((response) => {
       if (response) {
         // After successful post, update applicationDataArr
+        console.log(response);
+        
         this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
         this.applicationDataService.setData('app_details', response);
         localStorage.setItem('app_id', response?.id);
+        localStorage.setItem('app_name', response?.app_name);
       }
     }, (error) => {
       console.error('Error saving test case:', error);
@@ -87,8 +90,10 @@ export class ApplicationComponent implements OnInit {
 
   navigate(item: any) {
     this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
-
+    console.log(item);
+    
     this.applicationDataService.setData('app_details', item);
     localStorage.setItem('app_id', item?.id);
+    localStorage.setItem('app_name', item?.app_name);
   }
 }

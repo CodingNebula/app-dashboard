@@ -27,10 +27,11 @@ export class AutomateComponent implements OnInit {
     general: {}
   };
   public applicationData: any;
-  public templateData: any[] = [];
+  public templateData: any = {};
   public testCases: any[] = [];
   public isEditMode: boolean = false;
   public appData: any;
+  public appCapabilities: any;
 
   constructor(
     private fb: FormBuilder,
@@ -297,21 +298,41 @@ export class AutomateComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Create the form with FormBuilder
+    const state = window.history.state;
+
+    if(state && state.templateArr){
+      this.templateData = state.templateArr
+    }
+
+    if(state && state.capabilities){
+      this.appCapabilities = state.capabilities;
+    }
+
+    console.log(this.appCapabilities);
+    
     this.appData = this.applicationDataService.getData();
 
     console.log(this.appData);
     
-
+  //   {
+  //     "platformName": "Android",
+  //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
+  //     "appPackage": "com.example.app",
+  //     "automationName": "UIAutomator2",
+  //     "deviceName": "Samsung",
+  //     "noReset": true,
+  //     "ignoreHiddenApiPolicyError": true,
+  //     "newCommandTimeout": 1200000
+  // }
     this.myForm = this.fb.group({
-      platform: [this.appData?.capabilities?.platform, [Validators.required]],
-      app: [this.appData?.capabilities?.app, [Validators.required]],
-      package: [this.appData?.capabilities?.package, [Validators.required]],
-      automation: [this.appData?.capabilities?.automation, [Validators.required]],
-      device: [this.appData?.capabilities?.device, [Validators.required]],
-      noReset: [this.appData?.capabilities?.noReset, [Validators.required]],
-      hiddenApp: [this.appData?.capabilities?.hiddenApp, [Validators.required]],
-      timeout: [this.appData?.capabilities?.timeout, [Validators.required]],
+      platform: [this.appCapabilities?.platformName, [Validators.required]],
+      app: [this.appCapabilities?.app, [Validators.required]],
+      package: [this.appCapabilities?.appPackage, [Validators.required]],
+      automation: [this.appCapabilities?.automationName, [Validators.required]],
+      device: [this.appCapabilities?.deviceName, [Validators.required]],
+      noReset: [this.appCapabilities?.noReset, [Validators.required]],
+      hiddenApp: [this.appCapabilities?.ignoreHiddenApiPolicyError, [Validators.required]],
+      timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -323,14 +344,9 @@ export class AutomateComponent implements OnInit {
       }
     })
 
-    const state = window.history.state;
-
-    if(state && state.templateArr){
-      this.templateData = state.templateArr
-    }
-    console.log(this.templateData);
     
-    this.formateTestCaseData();
+    
+    this.formatTestCaseData();
   }
 
   onSubmit() {
@@ -955,15 +971,21 @@ export class AutomateComponent implements OnInit {
   }
 
 
-  formateTestCaseData(){
-    this.templateData[0]?.templates.map((item) => {
-      item?.testCases?.map((testCase) => {
-        this.testCases.push(testCase);
-      })
-    })
-    console.log(this.testCases);
+  formatTestCaseData() {
+    this.templateData?.screens.map((item) => {
+        item?.instructions?.map((testCase) => {
+            // Check if testCase with the same ins_set_id is already present
+            const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === testCase.ins_set_id);
+
+            if (!exists) {
+                this.testCases.push(testCase);
+            }
+        });
+    });
     
-  }
+    console.log(this.testCases);
+}
+
 
   onEdit(){
     this.isEditMode = true;

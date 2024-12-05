@@ -106,10 +106,10 @@
     </nb-accordion-item>
   </nb-accordion>
 
-  <div class="test-case-container" *ngIf="templateData?.[0]?.templates?.length > 0">
+  <div class="test-case-container" *ngIf="templateData?.screens?.length > 0">
 
     <div class="test-case-div">
-      <h5>{{templateData?.[0]?.templateName}}</h5>
+      <h5>{{templateData?.wt_name}}</h5>
       
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
       <button class="start-button" (click)="onStartTrans()">Start All</button>
@@ -123,7 +123,7 @@
     </div> -->
     <div class="test-case-status-container">
     <div *ngFor="let item of testCases" class="test-case-div">
-      <h6>{{item?.normal_name}}</h6>
+      <h6>{{item?.ins_set_screen_name}}</h6>
       <!-- <span *ngIf="!item.loading && item.status" class="status-message"
         [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
         <button class="start-button" (click)="onStartTrans()">Start</button>

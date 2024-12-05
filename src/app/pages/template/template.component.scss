@@ -181,6 +181,14 @@ nb-accordion-item-body .item-body{
     cursor: pointer; /* Ensures the user knows the element is interactive */
     position: relative; /* Ensure positioning for the tooltip */
   }
+  .template-name{
+    color: #000000;
+    display: block;
+    width: 15%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
   
   .template-description > span {
     color: #000000;

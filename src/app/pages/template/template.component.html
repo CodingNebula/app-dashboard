@@ -1,7 +1,7 @@
 <div>
     <div class="test-case-container">
         <div class="test-case-head">
-            <h5>Test Cases</h5>
+            <h5>{{appName}} Test Cases</h5>
             <button class="add-test-case-btn" (click)="openDialog('testCase', 'name')">Add Test Case</button>
         </div>
         <div class="test-case-main">
@@ -32,36 +32,12 @@
                 </div>
               </div>
               
-              
-          
-            <!-- <div *ngIf="applicationDataArr.length > 0">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th style="width: 40%;">Test Case Name</th>
-                    <th style="width: 40%;">Test Cases</th>
-                    <th style="width: 20%;">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of applicationDataArr">
-                    <td>{{item.application}}</td>
-                    <td>{{item.testCases.join(', ')}}</td>
-                    <td>
-                      <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon>
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-            </div> -->
-            <!-- <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon> -->
           </div>
     </div>
     <hr>
     <div class="test-case-container">
         <div class="test-case-head">
-            <h5>Templates</h5>
+            <h5>{{appName}} Templates</h5>
             <button class="add-test-case-btn" (click)="openDialog('template', 'name')">Create Template</button>
         </div>
         <div class="test-case-main">
@@ -74,7 +50,9 @@
                     <nb-accordion class="accordian-container">
                       <nb-accordion-item>
                         <nb-accordion-item-header class="template-header">
-                          {{ template?.wt_name }}
+                          <div *ngIf="template?.wt_name" [nbTooltip]="template?.wt_name" class="template-name">
+                            {{template?.wt_name}}
+                          </div>
                           <div *ngIf="template?.wt_desc" [nbTooltip]="template?.wt_desc" class="template-description">
                             Description: <span>{{template?.wt_desc}}</span>
                           </div>

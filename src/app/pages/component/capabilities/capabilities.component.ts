@@ -13,6 +13,7 @@ export class CapabilitiesComponent {
   public showSuccessAlert: boolean = false;
   public selectedItem: '';
   public appDetails : any;
+  public appName: any;
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +48,8 @@ export class CapabilitiesComponent {
     this.appDetails = this.applicationDataService.getData();
 
     console.log(this.appDetails);
+
+    this.appName = localStorage.getItem('app_name');
     
   }
 
