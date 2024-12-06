@@ -18,7 +18,7 @@ export class InstructionsDialogComponent {
   ngOnInit() {
     this.myForm = this.fb.group({
       actions: ['', [Validators.required]],
-      elem_name: ['', [Validators.required]],
+      elem_name: [''],
       normal_name: ['', [Validators.required]]
     });
   }

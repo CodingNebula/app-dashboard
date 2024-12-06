@@ -402,236 +402,283 @@ export class AutomateComponent implements OnInit {
     
   }
 
-  onStartTrans() {
-    let item = [{
-      "id": "1",
-      "screenName": "Welcome"
-    },
-    {
-      "id": "2",
-      "screenName": "Click_Image", // image 
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "3",
-      "screenName": "Permissions"
-    },
-    {
-      "id": "4",
-      "screenName": "Click_Image", // image 
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "5",
-      "screenName": "Permissions_list"
-    },
-    {
-      "id": "6",
-      "screenName": "Allow_PhoneCalls",
-      "action": "Allow"
-    },
-    {
-      "id": "7",
-      "screenName": "Allow_DeviceLocation",
-      "action": "ALLOW"
-    },
-    {
-      "id": "8",
-      "screenName": "Allow_BluetoothConnection",
-      "action": "ALLOW"
-    },
-    {
-      "id": "9",
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": "10",
-      "screenName": "Terminal Setup"
-    },
-    {
-      "id": "11",
-      "screenName": "Click_Image" // image 
-    },
-    {
-      "id": "12",
-      "screenName": "Select_Options",
-      "options": "Testing"
-    },
-    {
-      "id": "13",
-      "screenName": "Click_Button",
-      "btnName": "PROCEED"
-    },
-    {
-      "id": "14",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
+  onStartTrans(itemData) {
+    console.log(itemData);
 
-    },
-    {
-      "id": "15",
-      "screenName": "Click_Button",
-      "btnName": "Next"
-    },
-    {
-      "id": "16",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
+    const result = itemData.screens.map(screen => {
+      return screen.instructions.map(instruction => {
+          return {
+              screenName: instruction.ins_back_name,
+              btnName: instruction.ins_element_name
+          };
+      });
+  }).flat();
+  
+  console.log(result);
 
-    },
-    {
-      "id": "17",
-      "screenName": "Click_Button",
-      "btnName": "Submit"
-    },
-
-    {
-      "id": "18",
-      "screenName": "Profile_Login",
-      "pin": ["9", "2", "0", "4"]
-    },
-    {
-      "id": "19",
-      "screenName": "Click_Button",
-      "btnName": "Confirm"
-    },
-    {
-      "id": "20",
-      "screenName": "Click_Button",
-      "btnName": "GO"
-    },
-    {
-      "id": "21",
-      "screenName": "Click_Text",
-      "btnName": "Skip >"
-    },
-    {
-      "id": "22",
-      "screenName": "Click_Image",
-      "btnName": "gear-icon"
-    },
-
-
-    // connect reader steps start
-    {
-      "id": "23",
-      "screenName": "Click_View",
-      "btnName": "Device"
-    },
-
-
-    {
-      "id": "24",
-      "screenName": "Click_Button",
-      "btnName": "CONNECT TO READER"
-    },
-    {
-      "id": "25",
-      "screenName": "Wait_For_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      //   "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": "26",
-      "screenName": "Click_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      // "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": "27",
-      "screenName": "Find_Button",
-      "btnName": "Disconnect"
-    },
-    {
-      "id": "28",
-      "screenName": "Click_Image" // image 
-    },
-    // connect reader steps ends
-    // transaction step starts  
-    {
-      "id": "29",
-      "screenName": "Click_Image", // image 
-      "btnName": "Sale"
-
-    },
-    {
-      "id": "30",
-      "screenName": "Enter_Amount",
-      "amount": "200.00"
-    },
-    {
-      "id": "31",
-      "screenName": "Click_Text",
-      "btnName": "Clear"
-    },
-    {
-      "id": "32",
-      "screenName": "Enter_Amount",
-      "amount": "50.00"
-    },
-    {
-      "id": "33",
-      "screenName": "Click_View",
-      "btnName": "2 / 4"
-    },
-    {
-      "id": "34",
-      "screenName": "Click_Text",
-      "btnName": "Go"
-    },
-    //custom tip
-    //     {
-    //     "id":9,
-    //     "screenName":"Click_Text",
-    //     "btnName":"Custom"
+    
+    // let item = [{
+    //   "id": "1",
+    //   "screenName": "Welcome",
+    // "btnName": ""
     // },
-    //   {
-    //     "id":14,
-    //     "screenName":"Enter_Amount",
-    //     "amount":"500.00"
+    // {
+    //   "id": "2",
+    //   "screenName": "Click_Image", // image 
+    //   "btnName": "left_arrow"
     // },
-    // fix tip
-    {
-      "id": "35",
-      "screenName": "Click_Text",
-      "btnName": "10%"
-    },
-    {
-      "id": "36",
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": "37",
-      "screenName": "Wait_For_Text",
-      "btnName": "Transaction ID"
-    },
-    {
-      "id": "38",
-      "screenName": "Element_Avail", // image 
-      "elementName": ["Transaction FAILED", "Transaction Approved"]
-    },
+    // {
+    //   "id": "3",
+    //   "screenName": "Permissions"
+    // },
+    // {
+    //   "id": "4",
+    //   "screenName": "Click_Image", // image 
+    //   "btnName": "left_arrow"
+    // },
+    // {
+    //   "id": "5",
+    //   "screenName": "Permissions_list"
+    // },
+    // {
+    //   "id": "6",
+    //   "screenName": "Allow_PhoneCalls",
+    //   "action": "Allow"
+    // },
+    // {
+    //   "id": "7",
+    //   "screenName": "Allow_DeviceLocation",
+    //   "action": "ALLOW"
+    // },
+    // {
+    //   "id": "8",
+    //   "screenName": "Allow_BluetoothConnection",
+    //   "action": "ALLOW"
+    // },
+    // {
+    //   "id": "9",
+    //   "screenName": "Click_Button",
+    //   "btnName": "Continue"
+    // },
+    // {
+    //   "id": "10",
+    //   "screenName": "Terminal Setup"
+    // },
+    // {
+    //   "id": "11",
+    //   "screenName": "Click_Image" // image 
+    // },
+    // {
+    //   "id": "12",
+    //   "screenName": "Select_Options",
+    //   "options": "Testing"
+    // },
+    // {
+    //   "id": "13",
+    //   "screenName": "Click_Button",
+    //   "btnName": "PROCEED"
+    // },
+    // {
+    //   "id": "14",
+    //   "screenName": "Enter_Terminal_ID",
+    //   "terminal_id": ["2994001"]
 
-    {
-      "id": "39",
-      "screenName": "Click_Button",
-      "btnName": "See Details"
-    }
-    ];
-    this.webSocketService.sendTestCaseRequest(item);
+    // },
+    // {
+    //   "id": "15",
+    //   "screenName": "Click_Button",
+    //   "btnName": "Next"
+    // },
+    // {
+    //   "id": "16",
+    //   "screenName": "Enter_Terminal_ID",
+    //   "terminal_id": ["2994001"]
+
+    // },
+    // {
+    //   "id": "17",
+    //   "screenName": "Click_Button",
+    //   "btnName": "Submit"
+    // },
+
+    // {
+    //   "id": "18",
+    //   "screenName": "Profile_Login",
+    //   "pin": ["9", "2", "0", "4"]
+    // },
+    // {
+    //   "id": "19",
+    //   "screenName": "Click_Button",
+    //   "btnName": "Confirm"
+    // },
+    // {
+    //   "id": "20",
+    //   "screenName": "Click_Button",
+    //   "btnName": "GO"
+    // },
+    // {
+    //   "id": "21",
+    //   "screenName": "Click_Text",
+    //   "btnName": "Skip >"
+    // },
+    // {
+    //   "id": "22",
+    //   "screenName": "Click_Image",
+    //   "btnName": "gear-icon"
+    // },
+
+
+    // // connect reader steps start
+    // {
+    //   "id": "23",
+    //   "screenName": "Click_View",
+    //   "btnName": "Device"
+    // },
+
+
+    // {
+    //   "id": "24",
+    //   "screenName": "Click_Button",
+    //   "btnName": "CONNECT TO READER"
+    // },
+    // {
+    //   "id": "25",
+    //   "screenName": "Wait_For_Text",
+    //   // "btnName":"WPS323247002051"
+    //   "btnName": "WPC323951000219"
+    //   //   "btnName":"CHB2A6132009935"
+    //   // "btnName":"CHB204650000480"
+    // },
+    // {
+    //   "id": "26",
+    //   "screenName": "Click_Text",
+    //   // "btnName":"WPS323247002051"
+    //   "btnName": "WPC323951000219"
+    //   // "btnName":"CHB2A6132009935"
+    //   // "btnName":"CHB204650000480"
+    // },
+    // {
+    //   "id": "27",
+    //   "screenName": "Find_Button",
+    //   "btnName": "Disconnect"
+    // },
+    // {
+    //   "id": "28",
+    //   "screenName": "Click_Image" // image 
+    // },
+    // // connect reader steps ends
+    // // transaction step starts  
+    // {
+    //   "id": "29",
+    //   "screenName": "Click_Image", // image 
+    //   "btnName": "Sale"
+
+    // },
+    // {
+    //   "id": "30",
+    //   "screenName": "Enter_Amount",
+    //   "amount": "200.00"
+    // },
+    // {
+    //   "id": "31",
+    //   "screenName": "Click_Text",
+    //   "btnName": "Clear"
+    // },
+    // {
+    //   "id": "32",
+    //   "screenName": "Enter_Amount",
+    //   "amount": "50.00"
+    // },
+    // {
+    //   "id": "33",
+    //   "screenName": "Click_View",
+    //   "btnName": "2 / 4"
+    // },
+    // {
+    //   "id": "34",
+    //   "screenName": "Click_Text",
+    //   "btnName": "Go"
+    // },
+    // //custom tip
+    // //     {
+    // //     "id":9,
+    // //     "screenName":"Click_Text",
+    // //     "btnName":"Custom"
+    // // },
+    // //   {
+    // //     "id":14,
+    // //     "screenName":"Enter_Amount",
+    // //     "amount":"500.00"
+    // // },
+    // // fix tip
+    // {
+    //   "id": "35",
+    //   "screenName": "Click_Text",
+    //   "btnName": "10%"
+    // },
+    // {
+    //   "id": "36",
+    //   "screenName": "Click_Button",
+    //   "btnName": "Continue"
+    // },
+    // {
+    //   "id": "37",
+    //   "screenName": "Wait_For_Text",
+    //   "btnName": "Transaction ID"
+    // },
+    // {
+    //   "id": "38",
+    //   "screenName": "Element_Avail", // image 
+    //   "elementName": ["Transaction FAILED", "Transaction Approved"]
+    // },
+
+    // {
+    //   "id": "39",
+    //   "screenName": "Click_Button",
+    //   "btnName": "See Details"
+    // }
+    // ];
+    this.webSocketService.sendTestCaseRequest(result);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
+        console.log(res);
+        
       }
     })
 
-      this.router.navigateByUrl('test-reports')
+    //   this.router.navigateByUrl('test-reports')
 
+  }
+
+  onStart(item){
+    console.log(item);
+
+    const res = item.testCase.map((item) => {
+      return {
+        screenName: item.ins_back_name,
+              btnName: item.ins_element_name
+      }
+    })
+
+    console.log(res);
+    
+    this.webSocketService.sendTestCaseRequest(res);
+    this.webSocketService.getSubject().subscribe((res) => {
+      if (res?.message && res?.message?.info) {
+        this.resultArr.push(res.message);
+        console.log(res);
+        
+      }
+    })
+    
+    // const obj = {
+    //   screenName: item?.ins_back_name,
+    //   btnName: item?.ins_element_name
+    // }
+
+    // console.log(obj);
+    
   }
 
   generateReport(){
@@ -972,13 +1019,20 @@ export class AutomateComponent implements OnInit {
 
 
   formatTestCaseData() {
+    console.log(this.templateData);
+    
     this.templateData?.screens.map((item) => {
         item?.instructions?.map((testCase) => {
             // Check if testCase with the same ins_set_id is already present
             const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === testCase.ins_set_id);
 
             if (!exists) {
-                this.testCases.push(testCase);
+              this.testCases.push({
+                ins_set_id: testCase.ins_set_id,
+                ins_set_screen_name: testCase.ins_set_screen_name, // Include ins_set_id to keep track of uniqueness
+                testCase: item.instructions  // Add the entire instructions array as a nested property named testCase
+            });
+                
             }
         });
     });

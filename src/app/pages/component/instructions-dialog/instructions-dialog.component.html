@@ -5,12 +5,14 @@
             <div class="form-row">
             <div class="form-group">
               <label for="actions">Actions:</label>
-              <nb-select id="actions" formControlName="actions" placeholder="Select Actions" [(selected)]="selectedItem" class="custom-select-dropdown">
+              <!-- <nb-select id="actions" formControlName="actions" placeholder="Select Actions" [(selected)]="selectedItem" class="custom-select-dropdown">
                 <nb-option value="click_button">click_button</nb-option>
                 <nb-option value="left-arrow">left-arrow</nb-option>
                 <nb-option value="right-arrow">left-arrow</nb-option>
                 <nb-option value="click_image">click_image</nb-option>
-              </nb-select>
+              </nb-select> -->
+              <input id="actions" formControlName="actions" class="form-control" />
+                  
               <div *ngIf="myForm.get('actions').touched && myForm.get('actions').invalid" class="error-message">
                 <small *ngIf="myForm.get('actions').hasError('required')">Actions are required!</small>
               </div>

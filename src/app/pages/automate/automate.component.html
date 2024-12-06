@@ -68,7 +68,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="noReset">No Reset:</label>
-              <nb-select id="noReset" [formControlName]="'noReset'" class="custom-select-dropdown">
+              <nb-select id="noReset" [formControlName]="'noReset'" placeholder="Select" class="custom-select-dropdown">
                 <nb-option value="True">True</nb-option>
                 <nb-option value="False">False</nb-option>
               </nb-select>
@@ -112,7 +112,7 @@
       <h5>{{templateData?.wt_name}}</h5>
       
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button class="start-button" (click)="onStartTrans()">Start All</button>
+      <button class="start-button" (click)="onStartTrans(templateData)">Start All</button>
 
 
     </div>
@@ -126,7 +126,7 @@
       <h6>{{item?.ins_set_screen_name}}</h6>
       <!-- <span *ngIf="!item.loading && item.status" class="status-message"
         [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
-        <button class="start-button" (click)="onStartTrans()">Start</button>
+        <button class="start-button" (click)="onStart(item)">Start</button>
       <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
       <!-- </div> -->
     </div>
