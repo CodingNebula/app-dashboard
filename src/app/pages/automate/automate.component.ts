@@ -32,6 +32,7 @@ export class AutomateComponent implements OnInit {
   public isEditMode: boolean = false;
   public appData: any;
   public appCapabilities: any;
+  public showResult: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -403,251 +404,258 @@ export class AutomateComponent implements OnInit {
   }
 
   onStartTrans(itemData) {
-  //   console.log(itemData);
+    console.log(itemData);
 
     const result = itemData.screens.map(screen => {
-      return screen.instructions.map(instruction => {
+      return screen.instructions.map((instruction, index) => {
           return {
+              id: index,
               screenName: instruction.ins_back_name,
-              btnName: instruction.ins_element_name
+              btnName: instruction.ins_element_name,
+              displayname: instruction.ins_name,
           };
       });
   }).flat();
-  
-  console.log(result);
 
-    
-    let item = [{
-      "id": "1",
-      "screenName": "Welcome",
-    "btnName": ""
-    },
-    {
-      "id": "2",
-      "screenName": "Click_Image", // image 
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "3",
-      "screenName": "Permissions"
-    },
-    {
-      "id": "4",
-      "screenName": "Click_Image", // image 
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "5",
-      "screenName": "Permissions_list"
-    },
-    {
-      "id": "6",
-      "screenName": "Allow_PhoneCalls",
-      "action": "Allow"
-    },
-    {
-      "id": "7",
-      "screenName": "Allow_DeviceLocation",
-      "action": "ALLOW"
-    },
-    {
-      "id": "8",
-      "screenName": "Allow_BluetoothConnection",
-      "action": "ALLOW"
-    },
-    {
-      "id": "9",
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": "10",
-      "screenName": "Terminal Setup"
-    },
-    {
-      "id": "11",
-      "screenName": "Click_Image" // image 
-    },
-    {
-      "id": "12",
-      "screenName": "Select_Options",
-      "options": "Testing"
-    },
-    {
-      "id": "13",
-      "screenName": "Click_Button",
-      "btnName": "PROCEED"
-    },
-    {
-      "id": "14",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
+  result.push({"screenName": "End_Instructions"});
 
-    },
-    {
-      "id": "15",
-      "screenName": "Click_Button",
-      "btnName": "Next"
-    },
-    {
-      "id": "16",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
+  const obj = {"id": "111", "screenName": "End_Instructions"};
 
-    },
+let item = [
+  {
+     "id":"0",
+     "screenName":"Welcome",
+     "btnName":"Welcome"
+ },
+  {
+     "id":"8",
+     "screenName":"Click_Image", // image 
+     "btnName":"left_arrow"
+ },
+ {
+     "id":"1",
+     "screenName":"Permissions"
+ },
+  {
+     "id":"8",
+     "screenName":"Click_Image", // image 
+     "btnName":"left_arrow"
+ },
+ {
+     "id":"2",
+     "screenName":"Permissions_list"
+ },
+ {
+     "id":"3",
+     "screenName":"Allow_PhoneCalls",
+     "btnName":"Allow"
+ },
+ {
+     "id":"4",
+     "screenName":"Allow_DeviceLocation",
+     "btnName":"ALLOW"
+ },
+ {
+     "id":"5",
+     "screenName":"Allow_BluetoothConnection",
+     "btnName":"ALLOW"
+ },
+ {
+     "id":"6",
+     "screenName":"Click_Button",
+     "btnName":"Continue"
+ },
+ {
+     "id":"7",
+     "screenName":"Terminal Setup"
+ },
+ {
+     "id":"8",
+     "screenName":"Click_Image" // image 
+ },
+ {
+     "id":"9",
+     "screenName":"Select_Options",
+     "options":"Testing"
+ },
+  {
+     "id":"6",
+     "screenName":"Click_Button",
+     "btnName":"PROCEED"
+ },
+ {
+     "id":"1",
+     "screenName":"Enter_Terminal_ID",
+     "terminal_id":["2994001"]
+     
+ },
+ {
+     "id":"6",
+     "screenName":"Click_Button",
+     "btnName":"Next"
+ },
     {
-      "id": "17",
-      "screenName": "Click_Button",
-      "btnName": "Submit"
-    },
+     "id":"10",
+     "screenName":"Enter_Terminal_ID",
+     "terminal_id":["2994001"]
+     
+ },
+ {
+     "id":"6",
+     "screenName":"Click_Button",
+     "btnName":"Submit"
+ },
 
-    {
-      "id": "18",
-      "screenName": "Profile_Login",
-      "pin": ["9", "2", "0", "4"]
-    },
-    {
-      "id": "19",
-      "screenName": "Verify_Details",
-    },
-    // {
-    //   "id": "19",
-    //   "screenName": "Click_Button",
-    //   "btnName": "Confirm"
-    // },
-    {
-      "id": "20",
-      "screenName": "Click_Button",
-      "btnName": "GO"
-    },
-    {
-      "id": "21",
-      "screenName": "Click_Text",
-      "btnName": "Skip >"
-    },
-    {
-      "id": "22",
-      "screenName": "Click_Image",
-      "btnName": "gear-icon"
-    },
+ {
+     "id":"11",
+     "screenName":"Profile_Login",
+     "pin":["9","2","0","4"]
+ },
+  {
+     "id":"6",
+     "screenName":"Click_Button",
+     "btnName":"Confirm"
+ },
+  {
+     "id":"6",
+     "screenName":"Click_Button",
+     "btnName":"GO"
+ },
+ {
+     "id":9,
+     "screenName":"Click_Text",
+     "btnName":"Skip >"
+ },
+ {
+     "id":9,
+     "screenName":"homePage",
+     "action":"Transaction"
+ },
 
-
-    // connect reader steps start
-    {
-      "id": "23",
-      "screenName": "Click_View",
-      "btnName": "Device"
-    },
+ // connect reader steps start
+ {
+     "id":10,
+     "screenName":"Click_View",
+     "btnName":"Device"
+ },
 
 
-    {
-      "id": "24",
-      "screenName": "Click_Button",
-      "btnName": "CONNECT TO READER"
-    },
-    {
-      "id": "25",
-      "screenName": "Wait_For_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      //   "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": "26",
-      "screenName": "Click_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      // "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": "27",
-      "screenName": "Find_Button",
-      "btnName": "Disconnect"
-    },
-    {
-      "id": "28",
-      "screenName": "Click_Image" // image 
-    },
-    // connect reader steps ends
-    // transaction step starts  
-    {
-      "id": "29",
-      "screenName": "Click_Image", // image 
-      "btnName": "Sale"
+ {
+     "id":12,
+     "screenName":"Click_Button",
+     "btnName":"CONNECT TO READER"
+ },
+ {
+     "id":13,
+     "screenName":"Wait_For_Text",
+     // "btnName":"WPS323247002051"
+      "btnName":"WPC323951000219"
+     //   "btnName":"CHB2A6132009935"
+     // "btnName":"CHB204650000480"
+ }, 
+ {
+     "id":13,
+     "screenName":"Click_Text",
+     // "btnName":"WPS323247002051"
+     "btnName":"WPC323951000219"
+     // "btnName":"CHB2A6132009935"
+     // "btnName":"CHB204650000480"
+ },
+ {
+     "id":14,
+     "screenName":"Find_Button",
+     "btnName":"Disconnect"
+ },
+  {
+     "id":"8",
+     "screenName":"Click_Image" // image 
+ },
 
-    },
-    {
-      "id": "30",
-      "screenName": "Enter_Amount",
-      "amount": "200.00"
-    },
-    {
-      "id": "31",
-      "screenName": "Click_Text",
-      "btnName": "Clear"
-    },
-    {
-      "id": "32",
-      "screenName": "Enter_Amount",
-      "amount": "50.00"
-    },
-    {
-      "id": "33",
-      "screenName": "Click_View",
-      "btnName": "2 / 4"
-    },
-    // {
-    //   "id": "34",
-    //   "screenName": "Click_Text",
-    //   "btnName": "Go"
-    // },
-    // //custom tip
-    // //     {
-    // //     "id":9,
-    // //     "screenName":"Click_Text",
-    // //     "btnName":"Custom"
-    // // },
-    // //   {
-    // //     "id":14,
-    // //     "screenName":"Enter_Amount",
-    // //     "amount":"500.00"
-    // // },
-    // // fix tip
-    // {
-    //   "id": "35",
-    //   "screenName": "Click_Text",
-    //   "btnName": "10%"
-    // },
-    // {
-    //   "id": "36",
-    //   "screenName": "Click_Button",
-    //   "btnName": "Continue"
-    // },
-    // {
-    //   "id": "37",
-    //   "screenName": "Wait_For_Text",
-    //   "btnName": "Transaction ID"
-    // },
-    // {
-    //   "id": "38",
-    //   "screenName": "Element_Avail", // image 
-    //   "elementName": ["Transaction FAILED", "Transaction Approved"]
-    // },
+ {
+     "id":"8",
+     "screenName":"Click_Image", // image 
+     "btnName":"Sale"
+ },
+ {
+     "id":14,
+     "screenName":"Enter_Amount",
+     "amount":"200.00"
+ },
+   {
+     "id":9,
+     "screenName":"Click_Text",
+     "btnName":"Clear"
+ },
+   {
+     "id":14,
+     "screenName":"Enter_Amount",
+     "amount":"50.00"
+ },
+  {
+     "id":10,
+     "screenName":"Click_View",
+     "btnName":"2 / 4"
+ },
+  {
+     "id":9,
+     "screenName":"Click_Text",
+     "btnName":"Go"
+ },
 
-    // {
-    //   "id": "39",
-    //   "screenName": "Click_Button",
-    //   "btnName": "See Details"
-    // }
-    ];
+   {
+     "id":9,
+     "screenName":"Click_Text",
+     "btnName":"10%"
+ },
+ {
+     "id":12,
+     "screenName":"Click_Button",
+     "btnName":"Continue"
+ },
+  {
+     "id":13,
+     "screenName":"Wait_For_Text",
+      "btnName":"Transaction ID"
+ },
+  {
+     "id":"14",
+     "screenName":"Element_Avail", // image 
+     "elementName":["Transaction FAILED", "Transaction Approved"]
+ },
+
+ {
+     "id":"12",
+     "screenName":"Click_Button",
+     "btnName":"See Details"
+ },
+
+ {
+     "id":"8",
+     "screenName":"Click_Image" // image 
+ 
+ },
+
+ 
+]
+
+item.push(obj);
+
+// Output the modified item array
+console.log(item); 
+this.showResult = true;
+
     this.webSocketService.sendTestCaseRequest(itemData);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
         console.log(res);
-        
+        if(res.message.info === "End_Instructions"){
+          const report = {
+            capabilities: localStorage.getItem('app_capa'),
+            resultArr: this.resultArr
+          }
+          this.router.navigateByUrl('test-reports', { state: { reportData: report } });
+        }
       }
     })
 

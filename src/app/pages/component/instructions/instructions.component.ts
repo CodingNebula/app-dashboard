@@ -21,7 +21,7 @@ export class InstructionsComponent {
     private applicationDataService: ApplicationDataService,
     protected router: Router,
     private accountService: AccountService
-  ){
+  ) {
 
   }
 
@@ -55,16 +55,23 @@ export class InstructionsComponent {
             elementName: result.data.elem_name, // Frontend-specific element name
             backendName: result.data.actions, // Server-specific backend name for the instruction
             extra: {}, // Additional metadata or information (optional)
-        }
+          }
           console.log(instructionDetails);
-          
+
           // this.saveApplicationData(appDetails);
           const app_id = localStorage.getItem('app_id');
           this.accountService.postInstruction(app_id, instructionDetails).subscribe((response) => {
             if (response) {
               // After successful post, update applicationDataArr
               console.log(response[0]);
-              
+
+              const resp = response[0].element_name;
+
+              const fixedString = resp.replace(/[{}"]/g, '');
+              const result = [fixedString];
+              response[0].element_name = result;
+              console.log(response[0]);
+
               this.applicationDataArr.push(response[0]); // Assuming the response contains the newly saved item
               this.applicationDataService.setData('instructions', response[0]);
             }
@@ -78,21 +85,74 @@ export class InstructionsComponent {
     });
   }
 
-  saveInstructions(){
+  saveInstructions() {
     this.router.navigateByUrl('pages/application');
   }
 
-  getInstructions(){
+  getInstructions() {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
+        console.log(data);
+    
+        // Loop through each item in the data array
+        data.forEach(item => {
+            // Check if element_name exists in the item
+            if (data && data.length > 0) {
+              console.log(data);
+          
+              // Loop through each item in the data array
+              data.forEach(item => {
+                  // Check if element_name exists in the item
+                  if (item.element_name) {
+                      let resp = item.element_name;
+          
+                      // If the element_name is a string that looks like a JSON array, parse it
+                      if (resp.startsWith("{") && resp.endsWith("}")) {
+                          try {
+                              // Try to parse it as a JSON string (removes extra characters like quotes and braces)
+                              resp = JSON.parse("[" + resp.replace(/[{}"]/g, '') + "]");
+                          } catch (error) {
+                              console.error('Error parsing element_name:', error);
+                          }
+                      } else if (resp.includes(',')) {
+                          // If there are commas separating elements, treat it as a CSV-like string
+                          resp = resp.split(',').map(item => item.trim());
+                      }
+          
+                      // If it is still a single string (not an array-like format), leave it as it is
+                      if (!Array.isArray(resp)) {
+                          resp = [resp];  // Wrap it in an array only if it's a single string
+                      }
+          
+                      // Update element_name with the cleaned result
+                      item.element_name = resp;
+                  }
+              });
+          
+              // Log the updated data
+              console.log(data);
+          
+              // Update the applicationDataArr and save the modified data to the applicationDataService
+              this.applicationDataArr = data;
+              this.applicationDataService.setData('instructions', data);
+          }
+          
+        });
+    
+        // Log the updated data
+        console.log(data);
+    
+        // Update the applicationDataArr and save the modified data to the applicationDataService
         this.applicationDataArr = data;
-        this.applicationDataService.setData('instructions', data)
-      }
+        this.applicationDataService.setData('instructions', data);
+    }
+    
+    
     })
   }
 
-  toTemplate(){
+  toTemplate() {
     this.router.navigateByUrl('pages/template');
   }
 }
