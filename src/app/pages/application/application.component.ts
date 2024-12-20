@@ -54,6 +54,7 @@ export class ApplicationComponent implements OnInit {
           // this.applicationDataArr.push(appDetails);
           this.saveApplicationData(appDetails);
           // this.applicationDataService.setData('app_details', appDetails);
+
           setTimeout(() => {
             this.router.navigateByUrl('pages/capabilities');
           }, 1500)
@@ -69,7 +70,7 @@ export class ApplicationComponent implements OnInit {
       if (response) {
         // After successful post, update applicationDataArr
         console.log(response);
-        
+
         this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
         this.applicationDataService.setData('app_details', response);
         localStorage.setItem('app_id', response?.id);
@@ -89,11 +90,57 @@ export class ApplicationComponent implements OnInit {
   }
 
   navigate(item: any) {
-    this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
-    console.log(item);
-    
-    this.applicationDataService.setData('app_details', item);
+    // Store app_id and app_name in localStorage
     localStorage.setItem('app_id', item?.id);
     localStorage.setItem('app_name', item?.app_name);
+  
+    // Retrieve and parse the app_capa from localStorage
+    const app_capa = localStorage.getItem("app_capa");
+    const parsedAppCapa = app_capa ? JSON.parse(app_capa) : null;
+  
+    console.log(parsedAppCapa);
+  
+    // Initialize instructionsArr
+    const app_id = item.id;
+  
+    // Fetch instructions asynchronously using the app_id
+    this.accountService.getInstruction(app_id).subscribe((data) => {
+      let instructionsArr = [];
+      if (data && data.length > 0) {
+        instructionsArr = data;
+        console.log(instructionsArr);
+      }
+  
+      // Now that we have the instructions, check the conditions
+      if (parsedAppCapa && parsedAppCapa.app_id === item.id && instructionsArr.length === 0) {
+        // Navigate to instructions page if app_id matches and no instructions
+        this.router.navigateByUrl('pages/instructions');
+      } else if (parsedAppCapa && parsedAppCapa.app_id === item.id && instructionsArr.length > 0) {
+        // Navigate to template page if app_id matches and there are instructions
+        this.router.navigateByUrl('pages/template');
+      } else {
+        // Navigate to capabilities page if no conditions are met
+        this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
+  
+        // Log item and store data
+        console.log(item);
+        this.applicationDataService.setData('app_details', item);
+  
+        // Store app_id and app_name again in localStorage (optional redundancy)
+        localStorage.setItem('app_id', item?.id);
+        localStorage.setItem('app_name', item?.app_name);
+      }
+    });
+  }
+  
+
+  getInstructions(){
+    const app_id = localStorage.getItem('app_id');
+    this.accountService.getInstruction(app_id).subscribe((data) => {
+      if (data && data.length > 0) {
+        this.applicationDataArr = data;
+        this.applicationDataService.setData('instructions', data)
+      }
+    })
   }
 }

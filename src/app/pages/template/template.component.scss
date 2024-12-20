@@ -209,4 +209,23 @@ nb-accordion-item-body .item-body{
     max-width: 300px; /* Prevents truncation of text */
     word-break: break-all;
   }
+
+  .done-btn{
+    color: #00A3AB;
+    font-size: 1em;
+    cursor: pointer;
+    // position: fixed; 
+    // bottom: 1%; 
+    // right: 1%; 
+    z-index: 1000;
+    border: 1px solid #00A3AB;
+    border-radius: 25px;
+    padding: 0.5rem;
+}
+
+.add-btn-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
   

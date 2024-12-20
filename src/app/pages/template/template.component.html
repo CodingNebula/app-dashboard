@@ -1,86 +1,91 @@
 <div>
-    <div class="test-case-container">
-        <div class="test-case-head">
-            <h5>{{appName}} Test Cases</h5>
-            <button class="add-test-case-btn" (click)="openDialog('testCase', 'name')">Add Test Case</button>
-        </div>
-        <div class="test-case-main">
-            <div *ngIf="testCasesArray.length === 0" class="no-app-div">
-              <h4>No Test Cases Added Yet</h4>
-            </div>
-          
-          
-            <div *ngIf="testCasesArray.length > 0">
-                <div class="test-case-div-container">
-                  <div class="table-data-div" *ngFor="let testCase of testCasesArray; let i = index">
-                    <nb-accordion class="accordian-container">
-                      <nb-accordion-item>
-                        <nb-accordion-item-header class="accordian-header">
-                          {{ testCase?.screen_name }} 
-                          <button class="add-new" (click)="openDialog('testCase', 'instruction', 'testCase?.instruction_set_id')">Add Instructions</button>
-                        </nb-accordion-item-header>
-                        <nb-accordion-item-body>
-                          <div class="accordian-body-div">
-                            <div *ngFor="let testcase of testCase?.instructions">
-                              {{ testcase?.instruction_name }}
-                            </div>
-                          </div>
-                        </nb-accordion-item-body>
-                      </nb-accordion-item>
-                    </nb-accordion>
-                  </div>
-                </div>
-              </div>
-              
-          </div>
+  <div class="add-btn-div">
+    <button class="done-btn" (click)="toInstructions()">Add Instructions</button>
+  </div>
+  <div class="test-case-container">
+    <div class="test-case-head">
+      <h5>{{appName}} Test Cases</h5>
+      <button class="add-test-case-btn" (click)="openDialog('testCase', 'name')">Add Test Case</button>
     </div>
-    <hr>
-    <div class="test-case-container">
-        <div class="test-case-head">
-            <h5>{{appName}} Templates</h5>
-            <button class="add-test-case-btn" (click)="openDialog('template', 'name')">Create Template</button>
-        </div>
-        <div class="test-case-main">
-            <div *ngIf="templateArray.length === 0" class="no-template-div">
-              <h4>No Template Added Yet</h4>
-            </div>
-            <div *ngIf="templateArray.length > 0">
-              <div class="template-div-container">
-                <div class="table-data-div" *ngFor="let template of templateArray">
-                    <nb-accordion class="accordian-container">
-                      <nb-accordion-item>
-                        <nb-accordion-item-header class="template-header">
-                          <div *ngIf="template?.wt_name" [nbTooltip]="template?.wt_name" class="template-name">
-                            {{template?.wt_name}}
-                          </div>
-                          <div *ngIf="template?.wt_desc" [nbTooltip]="template?.wt_desc" class="template-description">
-                            Description: <span>{{template?.wt_desc}}</span>
-                          </div>
-                          <button class="add-new" (click)="openDialog('template', 'testCase')">Add Screens</button>                          
-                          <nb-icon (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
-                        </nb-accordion-item-header>
-                        <nb-accordion-item-body>
-                          <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
-                            <nb-accordion-item>
-                              <nb-accordion-item-header class="accordian-header">
-                                {{ testCase?.ins_set_screen_name }} 
-                              </nb-accordion-item-header>
-                              <nb-accordion-item-body>
-                                <div class="accordian-body-div">
-                                  <div *ngFor="let testcase of testCase?.instructions">
-                                    {{ testcase?.ins_element_name }}
-                                  </div>
-                                </div>
-                              </nb-accordion-item-body>
-                            </nb-accordion-item>
-                          </nb-accordion>
-                        </nb-accordion-item-body>
-                      </nb-accordion-item>
-                    </nb-accordion>
+    <div class="test-case-main">
+      <div *ngIf="testCasesArray.length === 0" class="no-app-div">
+        <h4>Add Test Cases</h4>
+      </div>
+
+
+      <div *ngIf="testCasesArray.length > 0">
+        <div class="test-case-div-container">
+          <div class="table-data-div" *ngFor="let testCase of testCasesArray; let i = index">
+            <nb-accordion class="accordian-container">
+              <nb-accordion-item>
+                <nb-accordion-item-header class="accordian-header">
+                  {{ testCase?.screen_name }}
+                  <button class="add-new"
+                    (click)="openDialog('testCase', 'instruction', 'testCase?.instruction_set_id')">Add
+                    Instructions</button>
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+                  <div class="accordian-body-div">
+                    <div *ngFor="let testcase of testCase?.instructions">
+                      {{ testcase?.instruction_name }}
+                    </div>
                   </div>
-                  
-              </div>
-            </div>
+                </nb-accordion-item-body>
+              </nb-accordion-item>
+            </nb-accordion>
           </div>
+        </div>
+      </div>
+
     </div>
+  </div>
+  <hr>
+  <div class="test-case-container">
+    <div class="test-case-head">
+      <h5>{{appName}} Templates</h5>
+      <button class="add-test-case-btn" (click)="openDialog('template', 'name')">Create Template</button>
+    </div>
+    <div class="test-case-main">
+      <div *ngIf="templateArray.length === 0" class="no-template-div">
+        <h4>Add Templates</h4>
+      </div>
+      <div *ngIf="templateArray.length > 0">
+        <div class="template-div-container">
+          <div class="table-data-div" *ngFor="let template of templateArray">
+            <nb-accordion class="accordian-container">
+              <nb-accordion-item>
+                <nb-accordion-item-header class="template-header">
+                  <div *ngIf="template?.wt_name" [nbTooltip]="template?.wt_name" class="template-name">
+                    {{template?.wt_name}}
+                  </div>
+                  <div *ngIf="template?.wt_desc" [nbTooltip]="template?.wt_desc" class="template-description">
+                    Description: <span>{{template?.wt_desc}}</span>
+                  </div>
+                  <button class="add-new" (click)="openDialog('template', 'testCase')">Add Screens</button>
+                  <nb-icon (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+                  <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
+                    <nb-accordion-item>
+                      <nb-accordion-item-header class="accordian-header">
+                        {{ testCase?.ins_set_screen_name }}
+                      </nb-accordion-item-header>
+                      <nb-accordion-item-body>
+                        <div class="accordian-body-div">
+                          <div *ngFor="let testcase of testCase?.instructions">
+                            {{ testcase?.ins_element_name }}
+                          </div>
+                        </div>
+                      </nb-accordion-item-body>
+                    </nb-accordion-item>
+                  </nb-accordion>
+                </nb-accordion-item-body>
+              </nb-accordion-item>
+            </nb-accordion>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

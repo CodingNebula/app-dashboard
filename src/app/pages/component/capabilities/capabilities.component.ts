@@ -25,6 +25,9 @@ export class CapabilitiesComponent {
 
   ngOnInit() {
     // Create the form with FormBuilder
+    
+    
+
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
       app: ['', [Validators.required]],
@@ -71,6 +74,12 @@ export class CapabilitiesComponent {
   onSubmit() {
     if (this.myForm.valid) {
       this.showSuccessAlert = true
+
+      const app_id = localStorage.getItem("app_id");
+
+      const capabilities = {app_id: app_id, capabilities: this.myForm.value};
+
+      localStorage.setItem("app_capa", JSON.stringify(capabilities));
       
       setTimeout(() => {
         this.router.navigateByUrl('pages/instructions')

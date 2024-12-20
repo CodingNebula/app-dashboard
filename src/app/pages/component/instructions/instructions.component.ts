@@ -56,7 +56,7 @@ export class InstructionsComponent {
             backendName: result.data.actions, // Server-specific backend name for the instruction
             extra: {}, // Additional metadata or information (optional)
         }
-          console.log(this.appDetails);
+          console.log(instructionDetails);
           
           // this.saveApplicationData(appDetails);
           const app_id = localStorage.getItem('app_id');
@@ -90,5 +90,9 @@ export class InstructionsComponent {
         this.applicationDataService.setData('instructions', data)
       }
     })
+  }
+
+  toTemplate(){
+    this.router.navigateByUrl('pages/template');
   }
 }

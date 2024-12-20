@@ -12,11 +12,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
   //   icon: 'clipboard-outline',
   //   link: '/pages/test-cases',
   // },
-  {
-    title: 'Automate',
-    icon: 'repeat-outline',
-    link: '/pages/automate',
-  },
+  // {
+  //   title: 'Automate',
+  //   icon: 'repeat-outline',
+  //   link: '/pages/automate',
+  // },
   {
     title: 'Reports',
     icon: 'file-text-outline',

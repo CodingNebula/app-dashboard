@@ -214,6 +214,8 @@ export class TemplateComponent {
   }
 
   automateTemplate(template: any) {
+    console.log(template);
+    
     const capabilities = {
       platformName: "Android",
       app: "/home/codingnebula/Downloads/app-debug-v12.apk",
@@ -311,6 +313,10 @@ export class TemplateComponent {
         console.log(this.instructionsArr);
       }
     })
+  }
+
+  toInstructions(){
+    this.router.navigateByUrl('pages/instructions');
   }
   
 }
