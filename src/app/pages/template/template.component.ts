@@ -183,7 +183,8 @@ export class TemplateComponent {
                 ins_set_screen_name: screen?.screen_name,  // Setting the screen name dynamically from result.data.screen_name
                   instructions: screen?.instructions?.map((instruction) => {
                       return {
-                        ins_element_name: instruction?.instruction_name  // Mapping each instruction's inst_name dynamically
+                        ins_element_name: instruction?.instruction_name,
+                        // ins_back_name: instruction?.  // Mapping each instruction's inst_name dynamically
                       };
                   })
               };
@@ -202,6 +203,8 @@ export class TemplateComponent {
                   this.tempTemplate.screens = screens;
 
                   this.templateArray.push(this.tempTemplate);
+                  console.log(this.templateArray);
+                  
                   
                 }
               })
@@ -253,8 +256,26 @@ export class TemplateComponent {
     }, {});
     
     // Convert the grouped object to an array
-    const result = Object.values(groupedInstructions);
-  
+    const result = Object.values(groupedInstructions); // assuming groupedInstructions is an object
+console.log(result);
+
+// Flatten and sort the instructions by 'instruction_order'
+const sortedInstructions = result
+  .map((item: any) => {
+    // Sort the instructions in each item by instruction_order
+    item.instructions.sort((a: any, b: any) => {
+      return parseInt(a.instruction_order) - parseInt(b.instruction_order);
+    });
+    return item;
+  })
+console.log(sortedInstructions);
+
+// sortedInstructions.forEach((instruction: any) => {
+//   console.log(instruction);
+// });
+
+    
+    
     this.testCasesArray = result;
     console.log(result);
     })

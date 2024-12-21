@@ -643,8 +643,9 @@ item.push(obj);
 // Output the modified item array
 console.log(item); 
 this.showResult = true;
+console.log(result);
 
-    this.webSocketService.sendTestCaseRequest(itemData);
+    this.webSocketService.sendTestCaseRequest(result);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);

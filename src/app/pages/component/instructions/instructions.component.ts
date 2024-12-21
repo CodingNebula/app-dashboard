@@ -94,61 +94,26 @@ export class InstructionsComponent {
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
         console.log(data);
-    
-        // Loop through each item in the data array
+
         data.forEach(item => {
-            // Check if element_name exists in the item
-            if (data && data.length > 0) {
-              console.log(data);
-          
-              // Loop through each item in the data array
-              data.forEach(item => {
-                  // Check if element_name exists in the item
-                  if (item.element_name) {
-                      let resp = item.element_name;
-          
-                      // If the element_name is a string that looks like a JSON array, parse it
-                      if (resp.startsWith("{") && resp.endsWith("}")) {
-                          try {
-                              // Try to parse it as a JSON string (removes extra characters like quotes and braces)
-                              resp = JSON.parse("[" + resp.replace(/[{}"]/g, '') + "]");
-                          } catch (error) {
-                              console.error('Error parsing element_name:', error);
-                          }
-                      } else if (resp.includes(',')) {
-                          // If there are commas separating elements, treat it as a CSV-like string
-                          resp = resp.split(',').map(item => item.trim());
-                      }
-          
-                      // If it is still a single string (not an array-like format), leave it as it is
-                      if (!Array.isArray(resp)) {
-                          resp = [resp];  // Wrap it in an array only if it's a single string
-                      }
-          
-                      // Update element_name with the cleaned result
-                      item.element_name = resp;
-                  }
-              });
-          
-              // Log the updated data
-              console.log(data);
-          
-              // Update the applicationDataArr and save the modified data to the applicationDataService
-              this.applicationDataArr = data;
-              this.applicationDataService.setData('instructions', data);
+          if (item.element_name) {
+            let resp = item.element_name;
+
+            if (typeof resp === 'string') {
+              item.element_name = resp.split(',').map(el => el.trim().replace(/["{}]/g, ''));
+            } else if (Array.isArray(resp)) {
+              item.element_name = resp.map(el => el.replace(/["{}]/g, '').trim());
+            }
+
+            console.log(item);
           }
-          
         });
-    
-        // Log the updated data
+
         console.log(data);
-    
-        // Update the applicationDataArr and save the modified data to the applicationDataService
+
         this.applicationDataArr = data;
         this.applicationDataService.setData('instructions', data);
-    }
-    
-    
+      }
     })
   }
 
