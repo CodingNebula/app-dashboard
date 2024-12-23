@@ -15,6 +15,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 export class ApplicationComponent implements OnInit {
   public applicationDataArr: any[] = [];
   public instructionsArr: any[] = [];
+  public appCapabilities: any;
 
   constructor(
     private dialogService: NbDialogService,
@@ -112,8 +113,12 @@ export class ApplicationComponent implements OnInit {
         this.instructionsArr = data;
         console.log(this.instructionsArr);
       }
-  
     });
+
+    this.accountService.getCapabilites(app_id).subscribe((data) => {
+      console.log(data);
+      this.appCapabilities = data.extra.capabilities;
+    })
       // Now that we have the instructions, check the conditions
       if (parsedAppCapa && parsedAppCapa.app_id === item.id && this.instructionsArr.length === 0) {
         // Navigate to instructions page if app_id matches and no instructions

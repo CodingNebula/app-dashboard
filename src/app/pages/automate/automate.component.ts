@@ -357,9 +357,28 @@ export class AutomateComponent implements OnInit {
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
-      this.appLaunchLoading = true;
+      // this.appLaunchLoading = true;
 
-      // this.accountService.postCapabilities({
+      const app_id = localStorage.getItem('app_id');
+
+      console.log(this.myForm.value);
+
+      this.accountService.updateCapabilities(app_id, 
+        {
+          extra: {
+            capabilities: this.myForm.value
+          }
+        }
+      ).subscribe((response) => {
+        console.log(response);
+        this.appLaunch(app_id);
+        
+      }, (error) => {
+        console.log(error);
+        
+      })
+      
+      // this.accountService.launchApp({
       //   capabilities: {
       //     platformName: "Android",
       //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
@@ -370,7 +389,7 @@ export class AutomateComponent implements OnInit {
       //     ignoreHiddenApiPolicyError: true,
       //     newCommandTimeout: 1200000
       //   }
-      // }).subscribe(
+      // }, app_id).subscribe(
       //   (response) => {
 
       //     this.appLaunchLoading = false;
@@ -1083,6 +1102,32 @@ export class AutomateComponent implements OnInit {
       this.myForm.get('noReset').disable();
       this.myForm.get('hiddenApp').disable();
     }
+  }
+
+  appLaunch(id){
+    this.accountService.launchApp({
+        capabilities: {
+          platformName: "Android",
+          app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+          appPackage: "com.example.app",
+          automationName: "UIAutomator2",
+          deviceName: "Samsung",
+          noReset: true,
+          ignoreHiddenApiPolicyError: true,
+          newCommandTimeout: 1200000
+        }
+      }, id).subscribe(
+        (response) => {
+
+          this.appLaunchLoading = false;
+          this.appLaunchStatus = 'SUCCESS'
+        },
+        (error) => {
+          console.error('API Error:', error);
+          this.appLaunchLoading = false;
+          this.appLaunchStatus = 'FAILED'
+        }
+      );
   }
 
 

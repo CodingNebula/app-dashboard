@@ -84,12 +84,12 @@ export class CapabilitiesComponent {
       localStorage.setItem("app_capa", JSON.stringify(capabilities));
 
 
-      this.accountService.postCapabilities(
+      this.accountService.updateCapabilities(app_id,
         {
           extra: {
             capabilities: this.myForm.value
           }
-        }, app_id).subscribe(
+        }).subscribe(
           (response) => {
             console.log(response);
             
