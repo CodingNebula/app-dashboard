@@ -64,7 +64,12 @@ export class TestReportsComponent {
     this.reportData = webSocketService.testReportsData;
     this.reportHeading = localStorage.getItem('app_name')
     let plaformdata = localStorage.getItem('app_capa')
-    this.platform= JSON.parse(plaformdata)
+    this.platform = JSON.parse(plaformdata);
+
+    const state = window.history.state;
+
+    console.log(state);
+    
 
     // this.CompletionChart = {
     //   tooltip: {

@@ -24,6 +24,7 @@ export class TestCasesComponent implements OnInit{
       this.applicationId = state.id;
     }
     
+    
     this.getTestCases();
 
   }

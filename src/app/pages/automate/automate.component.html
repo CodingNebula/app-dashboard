@@ -134,7 +134,7 @@
 
   <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container">
     <div *ngFor="let item of resultArr" class="test-case-div">
-      <h6>{{item?.info}}</h6>
+      <h6>{{item?.successMessage || item?.failedMessage}}</h6>
       <span *ngIf=" item.message" class="status-message"
         [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>
         <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->

@@ -33,6 +33,7 @@ export class AutomateComponent implements OnInit {
   public appData: any;
   public appCapabilities: any;
   public showResult: boolean = false;
+  public completeAppData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -305,6 +306,14 @@ export class AutomateComponent implements OnInit {
       this.templateData = state.templateArr
     }
 
+    // Call getCapabilities() and subscribe to it
+    this.getCapabilities().subscribe((appCapabilities) => {
+      console.log(appCapabilities);  // This will log the data once it's available
+      this.completeAppData = appCapabilities
+    });
+
+
+
     if (state && state.capabilities) {
       this.appCapabilities = state.capabilities;
     }
@@ -357,13 +366,13 @@ export class AutomateComponent implements OnInit {
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
-      // this.appLaunchLoading = true;
+      this.appLaunchLoading = true;
 
       const app_id = localStorage.getItem('app_id');
 
       console.log(this.myForm.value);
 
-      this.accountService.updateCapabilities(app_id, 
+      this.accountService.updateCapabilities(app_id,
         {
           extra: {
             capabilities: this.myForm.value
@@ -372,12 +381,12 @@ export class AutomateComponent implements OnInit {
       ).subscribe((response) => {
         console.log(response);
         this.appLaunch(app_id);
-        
+
       }, (error) => {
         console.log(error);
-        
+
       })
-      
+
       // this.accountService.launchApp({
       //   capabilities: {
       //     platformName: "Android",
@@ -438,7 +447,13 @@ export class AutomateComponent implements OnInit {
       });
     }).flat();
 
-    result.push({ "screenName": "End_Instructions" });
+    result.push(
+      {
+        screenName: "End_Instructions",
+        successMessage: "End_Instructions",
+        roomId: localStorage.getItem("id"),
+      }
+    );
 
     const obj = { "id": "111", "screenName": "End_Instructions" };
 
@@ -668,15 +683,32 @@ export class AutomateComponent implements OnInit {
 
     this.webSocketService.sendTestCaseRequest(result);
     this.webSocketService.getSubject().subscribe((res) => {
-      if (res?.message && res?.message?.info) {
+      if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
         this.resultArr.push(res.message);
         console.log(res);
-        if (res.message.info === "End_Instructions") {
-          const report = {
-            capabilities: localStorage.getItem('app_capa'),
+        if (res?.message?.successMessage === "End_Instructions") {
+          const socketReport = {
+            capabilities: this.completeAppData,
             resultArr: this.resultArr
           }
-          this.router.navigateByUrl('test-reports', { state: { reportData: report } });
+
+          const body = {
+            applicationId: localStorage.getItem('app_id'),
+            filename: 'Test sale',
+            app_version: "2.1",
+            totalTestCase: result?.length,
+            passed: "15",
+            failed: "0",
+            crash_count: "0",
+            extra: socketReport,
+          }
+          this.accountService.postReportData(body).subscribe((resp) => {
+            if(resp){
+              console.log(resp);
+              this.router.navigateByUrl('test-reports', { state: { reportData: resp } });
+              
+            }
+          })
         }
       }
     })
@@ -697,6 +729,15 @@ export class AutomateComponent implements OnInit {
 
     console.log(res);
 
+    //   {
+    //     "sender": "e6135615-48a5-4b5d-a121-af82670e0a92",
+    //     "message": {
+    //         "message": "SUCCESS",
+    //         "info": "Continue Button Clicked on Screen",
+    //         "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+    //         "successMessage": "Permission list Continue button Passed"
+    //     }
+    // }
     this.webSocketService.sendTestCaseRequest(res);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
@@ -1054,13 +1095,13 @@ export class AutomateComponent implements OnInit {
 
   formatTestCaseData() {
     console.log(this.templateData);
-  
+
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((testCase) => {
         // Check if testCase with the same ins_set_id is already present in testCases array 
         // Check if the current ins_set_id exists in this.testCases
         const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
-  
+
         if (!exists) {
           this.testCases.push({
             ins_set_id: item.ins_set_id,
@@ -1070,10 +1111,10 @@ export class AutomateComponent implements OnInit {
         }
       });
     });
-  
+
     console.log(this.testCases);
   }
-  
+
 
 
   onEdit() {
@@ -1104,32 +1145,36 @@ export class AutomateComponent implements OnInit {
     }
   }
 
-  appLaunch(id){
+  appLaunch(id) {
     this.accountService.launchApp({
-        capabilities: {
-          platformName: "Android",
-          app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-          appPackage: "com.example.app",
-          automationName: "UIAutomator2",
-          deviceName: "Samsung",
-          noReset: true,
-          ignoreHiddenApiPolicyError: true,
-          newCommandTimeout: 1200000
-        }
-      }, id).subscribe(
-        (response) => {
+      capabilities: {
+        platformName: "Android",
+        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        appPackage: "com.example.app",
+        automationName: "UIAutomator2",
+        deviceName: "Samsung",
+        noReset: true,
+        ignoreHiddenApiPolicyError: true,
+        newCommandTimeout: 1200000
+      }
+    }, id).subscribe(
+      (response) => {
 
-          this.appLaunchLoading = false;
-          this.appLaunchStatus = 'SUCCESS'
-        },
-        (error) => {
-          console.error('API Error:', error);
-          this.appLaunchLoading = false;
-          this.appLaunchStatus = 'FAILED'
-        }
-      );
+        this.appLaunchLoading = false;
+        this.appLaunchStatus = 'SUCCESS'
+      },
+      (error) => {
+        console.error('API Error:', error);
+        this.appLaunchLoading = false;
+        this.appLaunchStatus = 'FAILED'
+      }
+    );
   }
 
+  getCapabilities() {
+    const app_id = localStorage.getItem('app_id');
+    return this.accountService.getCapabilites(app_id);
+  }
 
 
 }

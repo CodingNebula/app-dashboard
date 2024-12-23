@@ -229,6 +229,24 @@ export class AccountService {
     )
   }
 
+  postReportData(request: any){
+    return this.apiService.postWithoutModel(`save_report`, request).pipe(
+      map(resp => {
+        if(resp){
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
   getInstruction(id: string){
     return this.apiService.getWithoutModal(`instruction/${id}`).pipe(
       map(applicationResponse => {
