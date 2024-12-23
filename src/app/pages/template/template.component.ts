@@ -36,7 +36,7 @@ export class TemplateComponent {
 
   ngOnInit(){
     this.getAllPages();
-    this.getAllTempates();
+    this.getAllTemplates();
     this.getInstructions();
 
     this.appName = localStorage.getItem('app_name');
@@ -180,11 +180,13 @@ export class TemplateComponent {
             
             let screens = result?.data?.templates?.map((screen, index) => {
               return {
+                ins_set_id: screen?.instruction_set_id,
                 ins_set_screen_name: screen?.screen_name,  // Setting the screen name dynamically from result.data.screen_name
                   instructions: screen?.instructions?.map((instruction) => {
                       return {
-                        ins_element_name: instruction?.instruction_name,
-                        // ins_back_name: instruction?.  // Mapping each instruction's inst_name dynamically
+                        ins_name: instruction?.instruction_name,
+                        ins_back_name: instruction?.server_name,
+                        ins_element_name: instruction?.element_name,  // Mapping each instruction's inst_name dynamically
                       };
                   })
               };
@@ -282,49 +284,47 @@ console.log(sortedInstructions);
   }
 
 
-  getAllTempates(){
+  getAllTemplates() {
     const id = localStorage.getItem('app_id');
     this.accountService.getAllTemplates(id).subscribe((resp) => {
-      // console.log(resp);
+        const groupedData = [];
+        
 
-      const groupedData = resp.reduce((acc, curr) => {
-        let wtGroup = acc.find(group => group.wt_id === curr.wt_id);
-      
-        if (!wtGroup) {
-          wtGroup = {
-            wt_id: curr.wt_id,
-            wt_name: curr.wt_name,
-            wt_desc: curr.wt_desc,
-            screens: [],
-          };
-          acc.push(wtGroup);
-        }
-      
-        let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
-      
-        if (!screenGroup) {
-          screenGroup = {
-            ins_set_id: curr.ins_set_id,
-            ins_set_screen_name: curr.ins_set_screen_name,
-            instructions: [],
-          };
-          wtGroup.screens.push(screenGroup);
-        }
-      
-        // Check if the instruction is already added to the screenGroup
-        const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
-        if (!instructionExists) {
-          screenGroup.instructions.push(curr);
-        }
-      
-        return acc;
-      }, []);
-      
-      this.templateArray = groupedData
-      console.log(groupedData);
-      
-    })
-  }
+        resp.forEach((curr) => {
+            // Find or create the weight group
+            let wtGroup = groupedData.find(group => group.wt_id === curr.wt_id);
+            if (!wtGroup) {
+                wtGroup = {
+                    wt_id: curr.wt_id,
+                    wt_name: curr.wt_name,
+                    wt_desc: curr.wt_desc,
+                    screens: [],
+                };
+                groupedData.push(wtGroup);
+            }
+
+            // Find or create the screen group
+            let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
+            if (!screenGroup) {
+                screenGroup = {
+                    ins_set_id: curr.ins_set_id,
+                    ins_set_screen_name: curr.ins_set_screen_name,
+                    instructions: [],
+                };
+                wtGroup.screens.push(screenGroup);
+            }
+
+            // Check if the instruction is already added to the screenGroup
+            const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
+            if (!instructionExists) {
+                screenGroup.instructions.push(curr);
+            }
+        });
+        
+        this.templateArray = groupedData;
+        console.log(groupedData);
+    });
+}
 
   getInstructions(){
     const app_id = localStorage.getItem('app_id');

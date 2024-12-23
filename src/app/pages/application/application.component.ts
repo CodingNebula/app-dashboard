@@ -14,6 +14,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class ApplicationComponent implements OnInit {
   public applicationDataArr: any[] = [];
+  public instructionsArr: any[] = [];
 
   constructor(
     private dialogService: NbDialogService,
@@ -26,6 +27,7 @@ export class ApplicationComponent implements OnInit {
 
   ngOnInit() {
     this.getApplication();
+    this.getCapabilities();
   }
 
   openDialog() {
@@ -105,17 +107,18 @@ export class ApplicationComponent implements OnInit {
   
     // Fetch instructions asynchronously using the app_id
     this.accountService.getInstruction(app_id).subscribe((data) => {
-      let instructionsArr = [];
+      this.instructionsArr = [];
       if (data && data.length > 0) {
-        instructionsArr = data;
-        console.log(instructionsArr);
+        this.instructionsArr = data;
+        console.log(this.instructionsArr);
       }
   
+    });
       // Now that we have the instructions, check the conditions
-      if (parsedAppCapa && parsedAppCapa.app_id === item.id && instructionsArr.length === 0) {
+      if (parsedAppCapa && parsedAppCapa.app_id === item.id && this.instructionsArr.length === 0) {
         // Navigate to instructions page if app_id matches and no instructions
         this.router.navigateByUrl('pages/instructions');
-      } else if (parsedAppCapa && parsedAppCapa.app_id === item.id && instructionsArr.length > 0) {
+      } else if (parsedAppCapa && parsedAppCapa.app_id === item.id && this.instructionsArr.length > 0) {
         // Navigate to template page if app_id matches and there are instructions
         this.router.navigateByUrl('pages/template');
       } else {
@@ -130,7 +133,6 @@ export class ApplicationComponent implements OnInit {
         localStorage.setItem('app_id', item?.id);
         localStorage.setItem('app_name', item?.app_name);
       }
-    });
   }
   
 
@@ -141,6 +143,14 @@ export class ApplicationComponent implements OnInit {
         this.applicationDataArr = data;
         this.applicationDataService.setData('instructions', data)
       }
+    })
+  }
+
+  getCapabilities(){
+    const app_id = localStorage.getItem('app_id');
+    this.accountService.getCapabilites(app_id).subscribe((data) => {
+      console.log(data);
+      
     })
   }
 }

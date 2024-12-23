@@ -41,7 +41,7 @@ export class ApiService {
     const apiURL = `${environment.api_url}/${endpoint}`;
 
     const headers = this.setHeaders();
-    return this.http.post(apiURL, payload, { headers }).pipe(
+    return this.http.put(apiURL, payload, { headers }).pipe(
       catchError(ApiService.formatErrors));
   }
 

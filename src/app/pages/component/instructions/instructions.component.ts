@@ -60,24 +60,17 @@ export class InstructionsComponent {
 
           // this.saveApplicationData(appDetails);
           const app_id = localStorage.getItem('app_id');
-          this.accountService.postInstruction(app_id, instructionDetails).subscribe((response) => {
-            if (response) {
-              // After successful post, update applicationDataArr
-              console.log(response[0]);
+          // this.accountService.postInstruction(app_id, instructionDetails).subscribe((response) => {
+          //   if (response) {
+          //     // After successful post, update applicationDataArr
+          //     console.log(response[0]);
 
-              const resp = response[0].element_name;
-
-              const fixedString = resp.replace(/[{}"]/g, '');
-              const result = [fixedString];
-              response[0].element_name = result;
-              console.log(response[0]);
-
-              this.applicationDataArr.push(response[0]); // Assuming the response contains the newly saved item
-              this.applicationDataService.setData('instructions', response[0]);
-            }
-          }, (error) => {
-            console.error('Error saving test case:', error);
-          });
+          //     this.applicationDataArr.push(response[0]); // Assuming the response contains the newly saved item
+          //     this.applicationDataService.setData('instructions', response[0]);
+          //   }
+          // }, (error) => {
+          //   console.error('Error saving test case:', error);
+          // });
           this.applicationDataService.setData('instructions', this.applicationDataArr);
           // this.router.navigateByUrl('pages/capabilities');
         }

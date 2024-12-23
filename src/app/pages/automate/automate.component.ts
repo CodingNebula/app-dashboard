@@ -301,30 +301,30 @@ export class AutomateComponent implements OnInit {
   ngOnInit() {
     const state = window.history.state;
 
-    if(state && state.templateArr){
+    if (state && state.templateArr) {
       this.templateData = state.templateArr
     }
 
-    if(state && state.capabilities){
+    if (state && state.capabilities) {
       this.appCapabilities = state.capabilities;
     }
 
     console.log(this.appCapabilities);
-    
+
     this.appData = this.applicationDataService.getData();
 
     console.log(this.appData);
-    
-  //   {
-  //     "platformName": "Android",
-  //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-  //     "appPackage": "com.example.app",
-  //     "automationName": "UIAutomator2",
-  //     "deviceName": "Samsung",
-  //     "noReset": true,
-  //     "ignoreHiddenApiPolicyError": true,
-  //     "newCommandTimeout": 1200000
-  // }
+
+    //   {
+    //     "platformName": "Android",
+    //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
+    //     "appPackage": "com.example.app",
+    //     "automationName": "UIAutomator2",
+    //     "deviceName": "Samsung",
+    //     "noReset": true,
+    //     "ignoreHiddenApiPolicyError": true,
+    //     "newCommandTimeout": 1200000
+    // }
     this.myForm = this.fb.group({
       platform: [this.appCapabilities?.platformName, [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
@@ -345,43 +345,43 @@ export class AutomateComponent implements OnInit {
       }
     })
 
-    
-    
+
+
     this.formatTestCaseData();
   }
 
   onSubmit() {
     if (this.myForm.valid) {
       this.isAccordionExpanded = false;
-      
+
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
       this.appLaunchLoading = true;
 
-    this.accountService.postCapabilities({
-      capabilities: {
-        platformName: "Android",
-        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-        appPackage: "com.example.app",
-        automationName: "UIAutomator2",
-        deviceName: "Samsung",
-        noReset: true,
-        ignoreHiddenApiPolicyError: true,
-        newCommandTimeout: 1200000
-      }
-    }).subscribe(
-      (response) => {
-      
-        this.appLaunchLoading = false;
-        this.appLaunchStatus = 'SUCCESS'
-      },
-      (error) => {
-        console.error('API Error:', error);
-        this.appLaunchLoading = false;
-        this.appLaunchStatus = 'FAILED'
-      }
-    );
+      // this.accountService.postCapabilities({
+      //   capabilities: {
+      //     platformName: "Android",
+      //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+      //     appPackage: "com.example.app",
+      //     automationName: "UIAutomator2",
+      //     deviceName: "Samsung",
+      //     noReset: true,
+      //     ignoreHiddenApiPolicyError: true,
+      //     newCommandTimeout: 1200000
+      //   }
+      // }).subscribe(
+      //   (response) => {
+
+      //     this.appLaunchLoading = false;
+      //     this.appLaunchStatus = 'SUCCESS'
+      //   },
+      //   (error) => {
+      //     console.error('API Error:', error);
+      //     this.appLaunchLoading = false;
+      //     this.appLaunchStatus = 'FAILED'
+      //   }
+      // );
       this.myForm.reset();
     }
   }
@@ -399,8 +399,8 @@ export class AutomateComponent implements OnInit {
   //   }
   //   return null;
   // }
-  onSaveDescription(){
-    
+  onSaveDescription() {
+
   }
 
   onStartTrans(itemData) {
@@ -408,249 +408,251 @@ export class AutomateComponent implements OnInit {
 
     const result = itemData.screens.map(screen => {
       return screen.instructions.map((instruction, index) => {
-          return {
-              id: index,
-              screenName: instruction.ins_back_name,
-              btnName: instruction.ins_element_name,
-              displayname: instruction.ins_name,
-          };
+        return {
+          id: index,
+          screenName: instruction.ins_back_name,
+          btnName: instruction.ins_element_name,
+          successMessage: `${instruction.ins_name} Passed`,
+          failedMessage: `${instruction.ins_name} Failed`,
+          roomId: localStorage.getItem("id"),
+        };
       });
-  }).flat();
+    }).flat();
 
-  result.push({"screenName": "End_Instructions"});
+    result.push({ "screenName": "End_Instructions" });
 
-  const obj = {"id": "111", "screenName": "End_Instructions"};
+    const obj = { "id": "111", "screenName": "End_Instructions" };
 
-let item = [
-  {
-     "id":"0",
-     "screenName":"Welcome",
-     "btnName":"Welcome"
- },
-  {
-     "id":"8",
-     "screenName":"Click_Image", // image 
-     "btnName":"left_arrow"
- },
- {
-     "id":"1",
-     "screenName":"Permissions"
- },
-  {
-     "id":"8",
-     "screenName":"Click_Image", // image 
-     "btnName":"left_arrow"
- },
- {
-     "id":"2",
-     "screenName":"Permissions_list"
- },
- {
-     "id":"3",
-     "screenName":"Allow_PhoneCalls",
-     "btnName":"Allow"
- },
- {
-     "id":"4",
-     "screenName":"Allow_DeviceLocation",
-     "btnName":"ALLOW"
- },
- {
-     "id":"5",
-     "screenName":"Allow_BluetoothConnection",
-     "btnName":"ALLOW"
- },
- {
-     "id":"6",
-     "screenName":"Click_Button",
-     "btnName":"Continue"
- },
- {
-     "id":"7",
-     "screenName":"Terminal Setup"
- },
- {
-     "id":"8",
-     "screenName":"Click_Image" // image 
- },
- {
-     "id":"9",
-     "screenName":"Select_Options",
-     "options":"Testing"
- },
-  {
-     "id":"6",
-     "screenName":"Click_Button",
-     "btnName":"PROCEED"
- },
- {
-     "id":"1",
-     "screenName":"Enter_Terminal_ID",
-     "terminal_id":["2994001"]
-     
- },
- {
-     "id":"6",
-     "screenName":"Click_Button",
-     "btnName":"Next"
- },
-    {
-     "id":"10",
-     "screenName":"Enter_Terminal_ID",
-     "terminal_id":["2994001"]
-     
- },
- {
-     "id":"6",
-     "screenName":"Click_Button",
-     "btnName":"Submit"
- },
+    let item = [
+      {
+        "id": "0",
+        "screenName": "Welcome",
+        "btnName": "Welcome"
+      },
+      {
+        "id": "8",
+        "screenName": "Click_Image", // image 
+        "btnName": "left_arrow"
+      },
+      {
+        "id": "1",
+        "screenName": "Permissions"
+      },
+      {
+        "id": "8",
+        "screenName": "Click_Image", // image 
+        "btnName": "left_arrow"
+      },
+      {
+        "id": "2",
+        "screenName": "Permissions_list"
+      },
+      {
+        "id": "3",
+        "screenName": "Allow_PhoneCalls",
+        "btnName": "Allow"
+      },
+      {
+        "id": "4",
+        "screenName": "Allow_DeviceLocation",
+        "btnName": "ALLOW"
+      },
+      {
+        "id": "5",
+        "screenName": "Allow_BluetoothConnection",
+        "btnName": "ALLOW"
+      },
+      {
+        "id": "6",
+        "screenName": "Click_Button",
+        "btnName": "Continue"
+      },
+      {
+        "id": "7",
+        "screenName": "Terminal Setup"
+      },
+      {
+        "id": "8",
+        "screenName": "Click_Image" // image 
+      },
+      {
+        "id": "9",
+        "screenName": "Select_Options",
+        "options": "Testing"
+      },
+      {
+        "id": "6",
+        "screenName": "Click_Button",
+        "btnName": "PROCEED"
+      },
+      {
+        "id": "1",
+        "screenName": "Enter_Terminal_ID",
+        "terminal_id": ["2994001"]
 
- {
-     "id":"11",
-     "screenName":"Profile_Login",
-     "pin":["9","2","0","4"]
- },
-  {
-     "id":"6",
-     "screenName":"Click_Button",
-     "btnName":"Confirm"
- },
-  {
-     "id":"6",
-     "screenName":"Click_Button",
-     "btnName":"GO"
- },
- {
-     "id":9,
-     "screenName":"Click_Text",
-     "btnName":"Skip >"
- },
- {
-     "id":9,
-     "screenName":"homePage",
-     "action":"Transaction"
- },
+      },
+      {
+        "id": "6",
+        "screenName": "Click_Button",
+        "btnName": "Next"
+      },
+      {
+        "id": "10",
+        "screenName": "Enter_Terminal_ID",
+        "terminal_id": ["2994001"]
 
- // connect reader steps start
- {
-     "id":10,
-     "screenName":"Click_View",
-     "btnName":"Device"
- },
+      },
+      {
+        "id": "6",
+        "screenName": "Click_Button",
+        "btnName": "Submit"
+      },
+
+      {
+        "id": "11",
+        "screenName": "Profile_Login",
+        "pin": ["9", "2", "0", "4"]
+      },
+      {
+        "id": "6",
+        "screenName": "Click_Button",
+        "btnName": "Confirm"
+      },
+      {
+        "id": "6",
+        "screenName": "Click_Button",
+        "btnName": "GO"
+      },
+      {
+        "id": 9,
+        "screenName": "Click_Text",
+        "btnName": "Skip >"
+      },
+      {
+        "id": 9,
+        "screenName": "homePage",
+        "action": "Transaction"
+      },
+
+      // connect reader steps start
+      {
+        "id": 10,
+        "screenName": "Click_View",
+        "btnName": "Device"
+      },
 
 
- {
-     "id":12,
-     "screenName":"Click_Button",
-     "btnName":"CONNECT TO READER"
- },
- {
-     "id":13,
-     "screenName":"Wait_For_Text",
-     // "btnName":"WPS323247002051"
-      "btnName":"WPC323951000219"
-     //   "btnName":"CHB2A6132009935"
-     // "btnName":"CHB204650000480"
- }, 
- {
-     "id":13,
-     "screenName":"Click_Text",
-     // "btnName":"WPS323247002051"
-     "btnName":"WPC323951000219"
-     // "btnName":"CHB2A6132009935"
-     // "btnName":"CHB204650000480"
- },
- {
-     "id":14,
-     "screenName":"Find_Button",
-     "btnName":"Disconnect"
- },
-  {
-     "id":"8",
-     "screenName":"Click_Image" // image 
- },
+      {
+        "id": 12,
+        "screenName": "Click_Button",
+        "btnName": "CONNECT TO READER"
+      },
+      {
+        "id": 13,
+        "screenName": "Wait_For_Text",
+        // "btnName":"WPS323247002051"
+        "btnName": "WPC323951000219"
+        //   "btnName":"CHB2A6132009935"
+        // "btnName":"CHB204650000480"
+      },
+      {
+        "id": 13,
+        "screenName": "Click_Text",
+        // "btnName":"WPS323247002051"
+        "btnName": "WPC323951000219"
+        // "btnName":"CHB2A6132009935"
+        // "btnName":"CHB204650000480"
+      },
+      {
+        "id": 14,
+        "screenName": "Find_Button",
+        "btnName": "Disconnect"
+      },
+      {
+        "id": "8",
+        "screenName": "Click_Image" // image 
+      },
 
- {
-     "id":"8",
-     "screenName":"Click_Image", // image 
-     "btnName":"Sale"
- },
- {
-     "id":14,
-     "screenName":"Enter_Amount",
-     "amount":"200.00"
- },
-   {
-     "id":9,
-     "screenName":"Click_Text",
-     "btnName":"Clear"
- },
-   {
-     "id":14,
-     "screenName":"Enter_Amount",
-     "amount":"50.00"
- },
-  {
-     "id":10,
-     "screenName":"Click_View",
-     "btnName":"2 / 4"
- },
-  {
-     "id":9,
-     "screenName":"Click_Text",
-     "btnName":"Go"
- },
+      {
+        "id": "8",
+        "screenName": "Click_Image", // image 
+        "btnName": "Sale"
+      },
+      {
+        "id": 14,
+        "screenName": "Enter_Amount",
+        "amount": "200.00"
+      },
+      {
+        "id": 9,
+        "screenName": "Click_Text",
+        "btnName": "Clear"
+      },
+      {
+        "id": 14,
+        "screenName": "Enter_Amount",
+        "amount": "50.00"
+      },
+      {
+        "id": 10,
+        "screenName": "Click_View",
+        "btnName": "2 / 4"
+      },
+      {
+        "id": 9,
+        "screenName": "Click_Text",
+        "btnName": "Go"
+      },
 
-   {
-     "id":9,
-     "screenName":"Click_Text",
-     "btnName":"10%"
- },
- {
-     "id":12,
-     "screenName":"Click_Button",
-     "btnName":"Continue"
- },
-  {
-     "id":13,
-     "screenName":"Wait_For_Text",
-      "btnName":"Transaction ID"
- },
-  {
-     "id":"14",
-     "screenName":"Element_Avail", // image 
-     "elementName":["Transaction FAILED", "Transaction Approved"]
- },
+      {
+        "id": 9,
+        "screenName": "Click_Text",
+        "btnName": "10%"
+      },
+      {
+        "id": 12,
+        "screenName": "Click_Button",
+        "btnName": "Continue"
+      },
+      {
+        "id": 13,
+        "screenName": "Wait_For_Text",
+        "btnName": "Transaction ID"
+      },
+      {
+        "id": "14",
+        "screenName": "Element_Avail", // image 
+        "elementName": ["Transaction FAILED", "Transaction Approved"]
+      },
 
- {
-     "id":"12",
-     "screenName":"Click_Button",
-     "btnName":"See Details"
- },
+      {
+        "id": "12",
+        "screenName": "Click_Button",
+        "btnName": "See Details"
+      },
 
- {
-     "id":"8",
-     "screenName":"Click_Image" // image 
- 
- },
+      {
+        "id": "8",
+        "screenName": "Click_Image" // image 
 
- 
-]
+      },
 
-item.push(obj);
 
-// Output the modified item array
-console.log(item); 
-this.showResult = true;
-console.log(result);
+    ]
+
+    item.push(obj);
+
+    // Output the modified item array
+    console.log(item);
+    this.showResult = true;
+    console.log(result);
 
     this.webSocketService.sendTestCaseRequest(result);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
         console.log(res);
-        if(res.message.info === "End_Instructions"){
+        if (res.message.info === "End_Instructions") {
           const report = {
             capabilities: localStorage.getItem('app_capa'),
             resultArr: this.resultArr
@@ -664,37 +666,37 @@ console.log(result);
 
   }
 
-  onStart(item){
+  onStart(item) {
     console.log(item);
 
     const res = item.testCase.map((item) => {
       return {
         screenName: item.ins_back_name,
-              btnName: item.ins_element_name
+        btnName: item.ins_element_name
       }
     })
 
     console.log(res);
-    
+
     this.webSocketService.sendTestCaseRequest(res);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
         console.log(res);
-        
+
       }
     })
-    
+
     // const obj = {
     //   screenName: item?.ins_back_name,
     //   btnName: item?.ins_element_name
     // }
 
     // console.log(obj);
-    
+
   }
 
-  generateReport(){
+  generateReport() {
     this.webSocketService.saveTestReportData({
       id: 0,
       capabilities: {
@@ -1024,43 +1026,44 @@ console.log(result);
   }
 
   formatDate(date: Date): string {
-    const day = ("0" + date.getDate()).slice(-2); 
-    const month = ("0" + (date.getMonth() + 1)).slice(-2); 
-    const year = date.getFullYear(); 
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
 
 
   formatTestCaseData() {
     console.log(this.templateData);
-    
+  
     this.templateData?.screens.map((item) => {
-        item?.instructions?.map((testCase) => {
-            // Check if testCase with the same ins_set_id is already present
-            const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === testCase.ins_set_id);
-
-            if (!exists) {
-              this.testCases.push({
-                ins_set_id: testCase.ins_set_id,
-                ins_set_screen_name: testCase.ins_set_screen_name, // Include ins_set_id to keep track of uniqueness
-                testCase: item.instructions  // Add the entire instructions array as a nested property named testCase
-            });
-                
-            }
-        });
+      item?.instructions?.map((testCase) => {
+        // Check if testCase with the same ins_set_id is already present in testCases array 
+        // Check if the current ins_set_id exists in this.testCases
+        const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
+  
+        if (!exists) {
+          this.testCases.push({
+            ins_set_id: item.ins_set_id,
+            ins_set_screen_name: item.ins_set_screen_name, // Include ins_set_screen_name for reference
+            testCase: item.instructions  // Add the entire instructions array as a nested property
+          });
+        }
+      });
     });
-    
+  
     console.log(this.testCases);
-}
+  }
+  
 
 
-  onEdit(){
+  onEdit() {
     this.isEditMode = true;
     this.enableFields(true);
   }
 
-  enableFields(enable: boolean){
-    if(enable){
+  enableFields(enable: boolean) {
+    if (enable) {
       this.myForm.get('platform').enable();
       this.myForm.get('app').enable();
       this.myForm.get('package').enable();
@@ -1070,7 +1073,7 @@ console.log(result);
       this.myForm.get('noReset').enable();
       this.myForm.get('hiddenApp').enable();
     }
-    else{
+    else {
       this.myForm.get('platform').disable();
       this.myForm.get('app').disable();
       this.myForm.get('package').disable();

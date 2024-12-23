@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { Router } from '@angular/router';
+import { AccountService } from '../../../shared/services/account/account.service';
 
 @Component({
   selector: 'ngx-capabilities',
@@ -12,21 +13,22 @@ export class CapabilitiesComponent {
   public myForm: FormGroup;
   public showSuccessAlert: boolean = false;
   public selectedItem: '';
-  public appDetails : any;
+  public appDetails: any;
   public appName: any;
 
   constructor(
     private fb: FormBuilder,
     private applicationDataService: ApplicationDataService,
-    private router: Router
-  ){
+    private router: Router,
+    private accountService: AccountService,
+  ) {
 
   }
 
   ngOnInit() {
     // Create the form with FormBuilder
-    
-    
+
+
 
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
@@ -53,7 +55,7 @@ export class CapabilitiesComponent {
     console.log(this.appDetails);
 
     this.appName = localStorage.getItem('app_name');
-    
+
   }
 
   noResetValidator(control) {
@@ -77,34 +79,30 @@ export class CapabilitiesComponent {
 
       const app_id = localStorage.getItem("app_id");
 
-      const capabilities = {app_id: app_id, capabilities: this.myForm.value};
+      const capabilities = { app_id: app_id, capabilities: this.myForm.value };
 
       localStorage.setItem("app_capa", JSON.stringify(capabilities));
-      
-      setTimeout(() => {
-        this.router.navigateByUrl('pages/instructions')
-      }, 1000)
-    // this.accountService.postCapabilities({
-    //   capabilities: {
-    //     platformName: "Android",
-    //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-    //     appPackage: "com.example.app",
-    //     automationName: "UIAutomator2",
-    //     deviceName: "Samsung",
-    //     noReset: true,
-    //     ignoreHiddenApiPolicyError: true,
-    //     newCommandTimeout: 1200000
-    //   }
-    // }).subscribe(
-    //   (response) => {
-        
-    //   },
-    //   (error) => {
-    //     console.error('API Error:', error);
-    //   }
-    // );
+
+
+      this.accountService.postCapabilities(
+        {
+          extra: {
+            capabilities: this.myForm.value
+          }
+        }, app_id).subscribe(
+          (response) => {
+            console.log(response);
+            
+            setTimeout(() => {
+              this.router.navigateByUrl('pages/instructions')
+            }, 1000)
+          },
+          (error) => {
+            console.error('API Error:', error);
+          }
+        );
       // this.myForm.reset();
-      this.applicationDataService.setData('capabilities' ,this.myForm.value);
+      this.applicationDataService.setData('capabilities', this.myForm.value);
     }
   }
 }

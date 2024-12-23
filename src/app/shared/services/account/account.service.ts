@@ -10,8 +10,8 @@ export class AccountService {
 
   constructor(private apiService: ApiService) { }
 
-  postCapabilities(payload: any) {
-    const endpoint = 'v1/run'
+  postCapabilities(payload: any, id) {
+    const endpoint = `${localStorage.getItem('id')}/app_details/${id}`
     return this.apiService.postWithoutModelCapabilities(endpoint, payload)
   }
 
@@ -287,6 +287,24 @@ export class AccountService {
         return throwError(() => new Error('Failed to submit application. Please try again.'));
       })
     );
+  }
+
+  getCapabilites(id){
+    return this.apiService.getWithoutModal(`app_details/${id}`).pipe(
+      map(applicationRes => {
+        if(applicationRes){
+          return applicationRes;
+        }
+        else{
+          throw new Error('Invalid response');
+        }
+      }
+    ),
+    catchError(error => {
+      console.error('Error during getting the application data', error);
+      return throwError(() => new Error('Failed to get application data'));
+    })
+  )
   }
   
 }
