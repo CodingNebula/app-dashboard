@@ -64,7 +64,7 @@
           </tr>
         </tbody>
       </table>
-      <div *ngIf="!reports" class="noDataDiv">
+      <div *ngIf="reports?.length === 0" class="noDataDiv">
         <h5>No Data Available...</h5>
       </div>
     </div>

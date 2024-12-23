@@ -21,7 +21,9 @@ export class TestReportsComponent {
   public CompletionChart: any = null;
   public reportData: any = null;
   public pieData: any[] = [];
-
+  // suraj
+  public reportHeading : string;
+  public platform :any;
 
   public searchTerm: string = '';
   public testCases: TestCase[] = [
@@ -60,6 +62,9 @@ export class TestReportsComponent {
 
   constructor(private webSocketService: WebsocketService) {
     this.reportData = webSocketService.testReportsData;
+    this.reportHeading = localStorage.getItem('app_name')
+    let plaformdata = localStorage.getItem('app_capa')
+    this.platform= JSON.parse(plaformdata)
 
     // this.CompletionChart = {
     //   tooltip: {
@@ -99,12 +104,12 @@ export class TestReportsComponent {
   generatePie() {
     // Initialize the array to hold the pie chart data
     const dataArr = [];
-  
+
     // Initialize counters for passed, failed, and untested
     let passedCount = 0;
     let failedCount = 0;
     let untestedCount = 0;
-  
+
     // Iterate over the reports to count the number of passed, failed, and untested test cases
     this.reportData?.reports.map((testCase) => {
       if (testCase.status === 'Passed') {
@@ -115,22 +120,23 @@ export class TestReportsComponent {
         untestedCount++;
       }
     });
-  
+
     dataArr.push({ name: 'Passed', value: passedCount });
     dataArr.push({ name: 'Failed', value: failedCount });
     dataArr.push({ name: 'Untested', value: untestedCount });
-  
+
     this.pieData = dataArr
 
     this.generatePieData();
   }
 
   generatePieData(){
+
     setTimeout(() => {
       this.CompletionChart = {
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+          formatter: '{b} : {c} ({d}%)'
         },
         legend: {
           orient: 'vertical', // Vertical or horizontal orientation
@@ -157,11 +163,11 @@ export class TestReportsComponent {
             }
           }
         ],
-        color: ['#10EB93', '#EE4748', '#A64C52'], 
+        color: ['#10EB93', '#EE4748', '#A64C52'],
       };
     }, 10)
   }
-  
+
 
   // ngOnInit(): void {
   //   // this.createCompletionChart();
@@ -171,7 +177,7 @@ export class TestReportsComponent {
       testCase.title.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
-  
+
   convertMilliseconds(milliseconds: number): string {
     const hours = Math.floor(milliseconds / 3600000); // Total hours
     const minutes = Math.floor((milliseconds % 3600000) / 60000); // Total minutes

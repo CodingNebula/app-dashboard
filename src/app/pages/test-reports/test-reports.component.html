@@ -1,5 +1,5 @@
 <div class="header-div">
-  <label class="heading">{{this.reportData.extras.app_name}}</label>
+  <label class="heading">{{ this.reportHeading }}</label>
   <label class="date-label">Created At: <span>{{this.reportData.extras.created_at}}</span></label>
 </div>
 <div class="parentDiv">
@@ -15,11 +15,11 @@
         </div> -->
         <div class="dividerDiv">
           <label class="labelHeading">Device Name</label>
-          <label class="subLabel">{{this.reportData.capabilities.deviceName}}</label>
+          <label class="subLabel">{{this.platform.capabilities.device}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Platform</label>
-          <label class="subLabel">{{this.reportData.capabilities.platformName}}</label>
+          <label class="subLabel">{{this.platform.capabilities.platform}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started By</label>
@@ -35,8 +35,8 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
-          <label class="subLabel">Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita nam autem sunt,
-            distinctio numquam saepe voluptatum aliquam hic sequi officia?</label>
+          <label class="subLabel"> The border color is controlled through a CSS custom property defined in the global class.This allows you to modify the border color across multiple
+            pages simply by adjusting the global variable.</label>
         </div>
       </div>
     </div>

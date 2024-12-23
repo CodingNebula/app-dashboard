@@ -62,8 +62,8 @@ nb-accordion-item-body {
 }
 
 // nb-accordion {
-//     // max-height: 250px; 
-//     // overflow-y: auto;  
+//     // max-height: 250px;
+//     // overflow-y: auto;f
 // }
 
 .descriptionLabel {
@@ -132,6 +132,8 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
 }
 .subLabel{
     font-size: 0.8em;
+    text-align: left;
+    margin-left: 3rem;
 }
 .labelHeading{
     font-weight: bold;
@@ -146,6 +148,8 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     display: flex;justify-content: center;align-items: center;position: relative;
 }
 .date-label{
+  display: flex;
+  gap: 5px;
     position: absolute;right: 1%;font-weight: bold;font-size: 1.1em;
     span{
         font-size: 0.7em !important;color: #00A3AB;text-decoration: underline;
