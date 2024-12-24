@@ -67,6 +67,8 @@ td{
 .application-container{
     display: flex;
     flex-wrap: wrap;
+    height: 82vh;
+    overflow: auto;
 }
 .application-div{
     margin: 1em;

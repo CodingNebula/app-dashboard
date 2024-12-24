@@ -1,6 +1,6 @@
 <div class="header-div">
   <label class="heading">{{ this.reportHeading }}</label>
-  <label class="date-label">Created At: <span>{{this.reportData.extras.created_at}}</span></label>
+  <label class="date-label">Created At: <span>{{this.extras?.createdAt}}</span></label>
 </div>
 <div class="parentDiv">
 
@@ -15,28 +15,27 @@
         </div> -->
         <div class="dividerDiv">
           <label class="labelHeading">Device Name</label>
-          <label class="subLabel">{{this.platform.capabilities.device}}</label>
+          <label class="subLabel">{{this.capabilities?.extra?.capabilities.device}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Platform</label>
-          <label class="subLabel">{{this.platform.capabilities.platform}}</label>
+          <label class="subLabel">{{this.capabilities?.extra?.capabilities.platform}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started By</label>
-          <label class="subLabel">{{this.reportData.extras.started_by}}</label>
+          <label class="subLabel">John Doe</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started Time</label>
-          <label class="subLabel">{{this.reportData.extras.start_time}}</label>
+          <label class="subLabel">{{this.extras?.startedTime}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Total Time taken</label>
-          <label class="subLabel">{{convertMilliseconds(this.reportData.extras.time_taken)}}</label>
+          <label class="subLabel">{{this.extras?.timeTaken}} Sec</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
-          <label class="subLabel"> The border color is controlled through a CSS custom property defined in the global class.This allows you to modify the border color across multiple
-            pages simply by adjusting the global variable.</label>
+          <label class="subLabel discription-label"> {{this.reportData?.filename}}</label>
         </div>
       </div>
     </div>
@@ -56,13 +55,13 @@
     <!--for table-->
     <div class="col-12">
       <nb-accordion>
-        <nb-accordion-item *ngFor="let testCase of this.reportData.reports">
+        <nb-accordion-item *ngFor="let testCase of this.testCases">
           <nb-accordion-item-header style="position: relative;"
-            [ngClass]="testCase.status === 'Passed' ? 'passed' : 'failed'">
-            <nb-icon [icon]="testCase.status === 'Passed' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
-            <span style="margin-left: 1em;">{{ testCase.test_case }}</span>
+            [ngClass]="testCase.message === 'SUCCESS' ? 'passed' : 'failed'">
+            <nb-icon [icon]="testCase.message === 'SUCCESS' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
+            <span style="margin-left: 1em;">{{ testCase?.successMessage || testCase?.failedMessage}}</span>
             <span style="position: absolute;right: 3em;">
-              <div>{{ testCase.status }} </div>
+              <div>{{ testCase?.message }} </div>
             </span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
@@ -70,14 +69,14 @@
               <div class="col-4">
                 <nb-card>
                   <nb-card-body>
-                    <div> <span class="descriptionLabel">Expected Result -</span> {{testCase.expected_result}}</div>
+                    <div> <span class="descriptionLabel">Expected Result -</span> {{testCase?.expected_result}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>
               <div class="col-4" *ngIf="testCase.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
-                    <div> <span class="descriptionLabel">Defect -</span> {{testCase.defect}}</div>
+                    <div> <span class="descriptionLabel">Defect -</span> {{testCase?.defect}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>

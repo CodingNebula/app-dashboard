@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AccountService } from '../../shared/services/account/account.service';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
@@ -12,6 +12,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
   styleUrls: ['./automate.component.scss']
 })
 export class AutomateComponent implements OnInit {
+  @ViewChild('resultContainer') resultContainer: ElementRef;
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -34,6 +35,7 @@ export class AutomateComponent implements OnInit {
   public appCapabilities: any;
   public showResult: boolean = false;
   public completeAppData: any;
+  public extras: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -414,6 +416,16 @@ export class AutomateComponent implements OnInit {
     }
   }
 
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    if (this.resultContainer) {
+      this.resultContainer.nativeElement.scrollTop = this.resultContainer.nativeElement.scrollHeight;
+    }
+  }
+
   // noResetValidator(control) {
   //   if (control.value === 'False') {
   //     return { invalidValue: true };
@@ -432,6 +444,7 @@ export class AutomateComponent implements OnInit {
   }
 
   onStartTrans(itemData) {
+    let count = 0;
     console.log(itemData);
 
     const result = itemData.screens.map(screen => {
@@ -455,7 +468,7 @@ export class AutomateComponent implements OnInit {
       }
     );
 
-    const obj = { "id": "111", "screenName": "End_Instructions" };
+    const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
 
     let item = [
       {
@@ -681,32 +694,68 @@ export class AutomateComponent implements OnInit {
     this.showResult = true;
     console.log(result);
 
-    this.webSocketService.sendTestCaseRequest(result);
+    this.webSocketService.sendTestCaseRequest(item);
+
+    let counterInterval = setInterval(() => {
+      count++;
+    }, 1000);
+
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
-        this.resultArr.push(res.message);
-        console.log(res);
+        if (res?.message?.successMessage !== "End_Instructions") {
+          this.resultArr.push(res.message);
+          this.scrollToBottom();
+          console.log(res);
+        }
         if (res?.message?.successMessage === "End_Instructions") {
+          clearInterval(counterInterval);
+          this.extras.timeTaken = count;
+          const now = new Date();
+          const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+          this.extras.startedTime = formattedTime;
+          const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+          this.extras.createdAt = formattedDate;
           const socketReport = {
             capabilities: this.completeAppData,
-            resultArr: this.resultArr
+            resultArr: this.resultArr,
+            extras: this.extras,
           }
+
+          let passedCount = 0;
+          let failedCount = 0;
+          let untestedCount = 0;
+
+          // Iterate over the reports to count the number of passed, failed, and untested test cases
+          this.resultArr?.map((testCase) => {
+            if (testCase?.successMessage !== "End_Instructions") {
+              console.log(testCase);
+              if (testCase.message === 'SUCCESS') {
+                passedCount++;
+              } else if (testCase.message === 'FAILED') {
+                failedCount++;
+              } else if (testCase.message === 'Untested') {
+                untestedCount++;
+              }
+            }
+          });
 
           const body = {
             applicationId: localStorage.getItem('app_id'),
-            filename: 'Test sale',
+            filename: itemData?.wt_desc,
             app_version: "2.1",
-            totalTestCase: result?.length,
-            passed: "15",
-            failed: "0",
-            crash_count: "0",
+            totalTestCase: result?.length - 1,
+            passed: passedCount,
+            failed: failedCount,
+            crash_count: untestedCount,
             extra: socketReport,
           }
           this.accountService.postReportData(body).subscribe((resp) => {
-            if(resp){
+            if (resp) {
               console.log(resp);
-              this.router.navigateByUrl('test-reports', { state: { reportData: resp } });
-              
+              setTimeout(() => {
+                this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+              }, 1000)
+
             }
           })
         }

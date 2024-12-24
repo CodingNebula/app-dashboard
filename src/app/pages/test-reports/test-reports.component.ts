@@ -21,53 +21,83 @@ export class TestReportsComponent {
   public CompletionChart: any = null;
   public reportData: any = null;
   public pieData: any[] = [];
-  // suraj
   public reportHeading : string;
   public platform :any;
-
+  public capabilities: any;
   public searchTerm: string = '';
-  public testCases: TestCase[] = [
-    {
-      title: 'Test Case 1', expectedReult: '', Defect: '', timeSpent: '00:00:05', description: 'Description of Test Case 1', result: 'Passed'
-    },
-    {
-      title: 'Test Case 2', expectedReult: '', Defect: '', timeSpent: '00:00:15', description: 'Description of Test Case 2', result: 'Failed'
-    },
-    {
-      title: 'Test Case 3', expectedReult: '', Defect: '', timeSpent: '00:00:08', description: 'Description of Test Case 3', result: 'Passed'
-    },
-    {
-      title: 'Test Case 4', expectedReult: '', Defect: '', timeSpent: '00:00:10', description: 'Description of Test Case 4', result: 'Failed'
-    },
-    ,
-    {
-      title: 'Test Case 4', expectedReult: '', Defect: '', timeSpent: '00:00:10', description: 'Description of Test Case 4', result: 'Failed'
-    }
-    ,
-    {
-      title: 'Test Case 4', expectedReult: '', Defect: '', timeSpent: '00:00:10', description: 'Description of Test Case 4', result: 'Failed'
-    }
-    ,
-    {
-      title: 'Test Case 4', expectedReult: '', Defect: '', timeSpent: '00:00:10', description: 'Description of Test Case 4', result: 'Failed'
-    }
-    ,
-    {
-      title: 'Test Case 4', expectedReult: '', Defect: '', timeSpent: '00:00:10', description: 'Description of Test Case 4', result: 'Failed'
-    }
-
-    // Add more test cases as needed
-  ];
+  public testCases: any;
+  public extras: any = {};
 
 
   constructor(private webSocketService: WebsocketService) {
-    this.reportData = webSocketService.testReportsData;
+    
     this.reportHeading = localStorage.getItem('app_name')
     let plaformdata = localStorage.getItem('app_capa')
     this.platform = JSON.parse(plaformdata);
 
     const state = window.history.state;
-
+    this.capabilities = state?.reportData?.extra?.capabilities;
+    console.log(this.capabilities);
+    this.testCases = state?.reportData?.extra?.resultArr;
+    this.reportData = state?.reportData;
+    this.extras = state?.reportData?.extra?.extras;
+    console.log(this.extras);
+    
+  //   {
+  //     "reportData": {
+  //         "id": "8fe201ee-7c84-409f-808a-f01ea46b6350",
+  //         "application_id": "f51e27df-be0f-491c-bafe-bf8e1068fc52",
+  //         "user_id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+  //         "filename": "Test sale",
+  //         "application_version": "2.1",
+  //         "testcase_performed": "3",
+  //         "testcase_passed": "15",
+  //         "testcase_failed": "0",
+  //         "crash_count": 0,
+  //         "extra": {
+  //             "resultArr": [
+  //                 {
+  //                     "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+  //                     "info": "Welcome Screen Test Case Passes",
+  //                     "message": "SUCCESS",
+  //                     "successMessage": "Welcome Text Passed"
+  //                 },
+  //                 {
+  //                     "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+  //                     "info": "left_arrow image clicked on Screen",
+  //                     "message": "SUCCESS",
+  //                     "successMessage": "Welcome Next Button Passed"
+  //                 },
+  //                 {
+  //                     "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+  //                     "successMessage": "End_Instructions"
+  //                 }
+  //             ],
+  //             "capabilities": {
+  //                 "id": "f51e27df-be0f-491c-bafe-bf8e1068fc52",
+  //                 "extra": {
+  //                     "capabilities": {
+  //                         "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
+  //                         "device": "Samsung",
+  //                         "noReset": "True",
+  //                         "package": "com.example.app",
+  //                         "timeout": 1200000,
+  //                         "platform": "Android",
+  //                         "hiddenApp": "True",
+  //                         "automation": "UIAutomator2"
+  //                     }
+  //                 },
+  //                 "user_id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+  //                 "app_name": "Anypay 3.6",
+  //                 "platform": "Android",
+  //                 "created_at": "2024-12-23T13:27:19.046Z",
+  //                 "updated_at": "2024-12-24T05:35:01.869Z",
+  //                 "test_case_results": null
+  //             }
+  //         }
+  //     },
+  //     "navigationId": 9
+  // }
     console.log(state);
     
 
@@ -111,23 +141,17 @@ export class TestReportsComponent {
     const dataArr = [];
 
     // Initialize counters for passed, failed, and untested
-    let passedCount = 0;
-    let failedCount = 0;
-    let untestedCount = 0;
+    let passedCount = this.reportData?.testcase_passed;
+    let failedCount = this.reportData?.testcase_failed;
+    let untestedCount = this.reportData?.crash_count;
 
-    // Iterate over the reports to count the number of passed, failed, and untested test cases
-    this.reportData?.reports.map((testCase) => {
-      if (testCase.status === 'Passed') {
-        passedCount++;
-      } else if (testCase.status === 'Failed') {
-        failedCount++;
-      } else if (testCase.status === 'Untested') {
-        untestedCount++;
-      }
-    });
+    console.log(this.reportData);
 
-    dataArr.push({ name: 'Passed', value: passedCount });
-    dataArr.push({ name: 'Failed', value: failedCount });
+
+    
+
+    dataArr.push({ name: 'SUCCESS', value: passedCount });
+    dataArr.push({ name: 'FAILED', value: failedCount });
     dataArr.push({ name: 'Untested', value: untestedCount });
 
     this.pieData = dataArr
@@ -177,11 +201,6 @@ export class TestReportsComponent {
   // ngOnInit(): void {
   //   // this.createCompletionChart();
   // }
-  get filteredTestCases() {
-    return this.testCases.filter(testCase =>
-      testCase.title.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
 
   convertMilliseconds(milliseconds: number): string {
     const hours = Math.floor(milliseconds / 3600000); // Total hours

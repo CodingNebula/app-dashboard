@@ -48,6 +48,10 @@
     background-color: #f8d7da; // Light red for failed
 }
 
+.discription-label{
+    word-break: break-word;
+}
+
 nb-accordion-item-header {
     display: flex;
     align-items: center;

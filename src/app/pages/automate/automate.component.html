@@ -132,7 +132,7 @@
   </div>
 
 
-  <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container">
+  <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container" #resultContainer>
     <div *ngFor="let item of resultArr" class="test-case-div">
       <h6>{{item?.successMessage || item?.failedMessage}}</h6>
       <span *ngIf=" item.message" class="status-message"
