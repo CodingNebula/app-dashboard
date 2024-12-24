@@ -694,7 +694,7 @@ export class AutomateComponent implements OnInit {
     this.showResult = true;
     console.log(result);
 
-    this.webSocketService.sendTestCaseRequest(item);
+    this.webSocketService.sendTestCaseRequest(result);
 
     let counterInterval = setInterval(() => {
       count++;

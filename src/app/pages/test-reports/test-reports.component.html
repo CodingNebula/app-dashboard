@@ -1,18 +1,13 @@
 <div class="header-div">
-  <label class="heading">{{ this.reportHeading }}</label>
+  <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">DownloadPDF</label>
+  <label class="heading">{{ this.reportData?.app_name }}</label>
   <label class="date-label">Created At: <span>{{this.extras?.createdAt}}</span></label>
 </div>
 <div class="parentDiv">
 
   <div class="row">
-    <!--    for chart and detail-->
     <div class="col-6 div-padding">
-      <!-- capabilities -->
       <div class='testSpecification'>
-        <!-- <div class="dividerDiv">
-          <label class="labelHeading">App</label>
-          <label>AnyPay App (2.1 Alpha)</label>
-        </div> -->
         <div class="dividerDiv">
           <label class="labelHeading">Device Name</label>
           <label class="subLabel">{{this.capabilities?.extra?.capabilities.device}}</label>
@@ -41,18 +36,11 @@
     </div>
     <div class="col-6  div-padding">
       <div class='testSpecification'>
-        <div echarts style="height: 240px;" [options]="CompletionChart"></div>
+        <div echarts style="height: 240px;" [options]="CompletionChart" #chartElement (chartInit)="onChartInit($event)"></div>
       </div>
-
-      <!-- pie and completion -->
-      <!-- <nb-card class="chart-card revenue-card-main">
-        <nb-card-body>
-        </nb-card-body>
-      </nb-card> -->
     </div>
   </div>
   <div class="row">
-    <!--for table-->
     <div class="col-12">
       <nb-accordion>
         <nb-accordion-item *ngFor="let testCase of this.testCases">
@@ -83,7 +71,7 @@
               <div class="col-4">
                 <nb-card>
                   <nb-card-body>
-                    <div><span class="descriptionLabel">Time Spend -</span> {{convertMilliseconds(testCase.time_spent)}}</div>
+                    <div><span class="descriptionLabel">Time Spend -</span> - </div>
                   </nb-card-body>
                 </nb-card>
               </div>

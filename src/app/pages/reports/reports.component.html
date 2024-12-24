@@ -49,7 +49,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr (click)="openReportDetail($event)" *ngFor="let reportData of reports; let j = index">
+          <tr *ngFor="let reportData of reports; let j = index" (click)="openReportDetail(reportData, $event)">
             <!-- <td><input type="checkbox"></td> -->
              <td>{{j+1}}</td>
             <td>
@@ -60,7 +60,7 @@
             </td>
             <td>{{reportData.application_version}}</td>
             <td>{{reportData.testcase_performed}}</td>
-            <td><button class="downloadbtn" (click)="downloadPDF($event)">Download</button></td>
+            <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>
           </tr>
         </tbody>
       </table>

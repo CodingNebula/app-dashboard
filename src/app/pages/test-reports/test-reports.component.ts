@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { EChartsInstance } from 'echarts';
+
 export interface TestCase {
   title: string;
   description: string;
@@ -14,6 +18,8 @@ export interface TestCase {
   styleUrls: ['./test-reports.component.scss']
 })
 export class TestReportsComponent {
+  @ViewChild('chartElement', { static: false }) chartElement: any;
+  private echartsInstance: EChartsInstance | null = null;
 
   public customColumn = 'name';
   public defaultColumns = ['size', 'kind', 'items'];
@@ -42,98 +48,13 @@ export class TestReportsComponent {
     this.reportData = state?.reportData;
     this.extras = state?.reportData?.extra?.extras;
     console.log(this.extras);
-    
-  //   {
-  //     "reportData": {
-  //         "id": "8fe201ee-7c84-409f-808a-f01ea46b6350",
-  //         "application_id": "f51e27df-be0f-491c-bafe-bf8e1068fc52",
-  //         "user_id": "e6135615-48a5-4b5d-a121-af82670e0a92",
-  //         "filename": "Test sale",
-  //         "application_version": "2.1",
-  //         "testcase_performed": "3",
-  //         "testcase_passed": "15",
-  //         "testcase_failed": "0",
-  //         "crash_count": 0,
-  //         "extra": {
-  //             "resultArr": [
-  //                 {
-  //                     "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
-  //                     "info": "Welcome Screen Test Case Passes",
-  //                     "message": "SUCCESS",
-  //                     "successMessage": "Welcome Text Passed"
-  //                 },
-  //                 {
-  //                     "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
-  //                     "info": "left_arrow image clicked on Screen",
-  //                     "message": "SUCCESS",
-  //                     "successMessage": "Welcome Next Button Passed"
-  //                 },
-  //                 {
-  //                     "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
-  //                     "successMessage": "End_Instructions"
-  //                 }
-  //             ],
-  //             "capabilities": {
-  //                 "id": "f51e27df-be0f-491c-bafe-bf8e1068fc52",
-  //                 "extra": {
-  //                     "capabilities": {
-  //                         "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-  //                         "device": "Samsung",
-  //                         "noReset": "True",
-  //                         "package": "com.example.app",
-  //                         "timeout": 1200000,
-  //                         "platform": "Android",
-  //                         "hiddenApp": "True",
-  //                         "automation": "UIAutomator2"
-  //                     }
-  //                 },
-  //                 "user_id": "e6135615-48a5-4b5d-a121-af82670e0a92",
-  //                 "app_name": "Anypay 3.6",
-  //                 "platform": "Android",
-  //                 "created_at": "2024-12-23T13:27:19.046Z",
-  //                 "updated_at": "2024-12-24T05:35:01.869Z",
-  //                 "test_case_results": null
-  //             }
-  //         }
-  //     },
-  //     "navigationId": 9
-  // }
     console.log(state);
-    
-
-    // this.CompletionChart = {
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{a} <br/>{b} : {c} ({d}%)'
-    //   },
-    //   legend: {
-    //     orient: 'vertical', // Vertical or horizontal orientation
-    //     right: 'right',       // Position of the legend: 'left', 'right', 'center', or specific px/% values
-    //     top: 'middle',      // Adjust vertical positioning
-    //     textStyle: {
-    //       fontSize: 10,     // Font size for legend text
-    //       color: '#333'     // Color for legend text
-    //     }
-    //   },
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: '60%', // Decreased radius percentage
-    //       center: ['50%', '50%'],
-    //       selectedMode: 'single',
-    //       data: this.pieData,
-    //       emphasis: {
-    //         itemStyle: {
-    //           shadowBlur: 10,
-    //           shadowOffsetX: 0,
-    //           shadowColor: 'rgba(0, 0, 0, 0.5)'
-    //         }
-    //       }
-    //     }
-    //   ]
-    // };
 
     this.generatePie();
+  }
+
+  onChartInit(instance: EChartsInstance): void {
+    this.echartsInstance = instance; // Capture the ECharts instance
   }
 
   generatePie() {
@@ -146,10 +67,6 @@ export class TestReportsComponent {
     let untestedCount = this.reportData?.crash_count;
 
     console.log(this.reportData);
-
-
-    
-
     dataArr.push({ name: 'SUCCESS', value: passedCount });
     dataArr.push({ name: 'FAILED', value: failedCount });
     dataArr.push({ name: 'Untested', value: untestedCount });
@@ -197,10 +114,107 @@ export class TestReportsComponent {
     }, 10)
   }
 
+  downloadPDF(item, $event: Event) {
+    
+    console.log(item);
+    
+    this.capabilities = item?.extra?.capabilities;
+    console.log(this.capabilities);
+    this.testCases = item?.extra?.resultArr;
+    // this.reportData = item?.reportData;
+    this.extras = item?.extra?.extras;
+    console.log(this.extras);
+    console.log(item);
+    $event.stopPropagation();
+    const doc = new jsPDF();
 
-  // ngOnInit(): void {
-  //   // this.createCompletionChart();
-  // }
+    // Add report header
+    doc.setFontSize(16);
+    doc.text(item?.app_name || 'App Name', 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Created At: ${this.extras?.createdAt || 'N/A'}`, 14, 30);
+
+    // Add device and platform information
+    doc.setFontSize(14);
+    doc.text('Device Information', 14, 40);
+    doc.setFontSize(12);
+    doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
+    doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
+    doc.text(`Started By: John Doe`, 14, 70);
+    doc.text(`Started Time: ${this.extras?.startedTime || 'N/A'}`, 14, 80);
+    doc.text(`Total Time Taken: ${this.extras?.timeTaken || 'N/A'} Sec`, 14, 90);
+    doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
+
+    // Add a line break
+    doc.text('', 14, 110);
+
+    // Add test cases
+    doc.setFontSize(14);
+    doc.text('Test Cases', 14, 120);
+
+    console.log(this.testCases);
+    
+    // Prepare data for the table
+    const testCaseData = this.testCases.map(testCase => ({
+        info: testCase.info,
+        message: testCase.message,
+        expectedResult: testCase.expected_result,
+        defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
+        timeSpent: this.convertMilliseconds(testCase.time_spent)
+    }));
+
+    // Create the table
+    autoTable(doc, {
+        head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
+        body: testCaseData.map(tc => [
+            tc.info,
+            tc.message,
+            tc.expectedResult,
+            tc.defect,
+            tc.timeSpent
+        ]),
+        startY: 130,
+        theme: 'grid',
+        headStyles: {
+            fillColor: [22, 160, 133],
+            textColor: [255, 255, 255],
+            fontSize: 12,
+            fontStyle: 'bold'
+        },
+        bodyStyles: {
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0],
+            fontSize: 10,
+        },
+        alternateRowStyles: {
+            fillColor: [240, 240, 240]
+        },
+        margin: { top: 20 },
+    });
+
+  //   const chartInstance = this.CompletionChart;
+
+  //   const chartImage = chartInstance.getDataURL({
+  //     type: 'png',
+  //     pixelRatio: 2,
+  //     backgroundColor: '#fff'
+  // });
+  if (this.echartsInstance) {
+    // Get chart as Base64 image
+    const chartImage = this.echartsInstance.getDataURL({
+      type: 'png', // Specify the image format
+      pixelRatio: 2, // Higher pixel ratio for better quality
+      backgroundColor: '#fff' // Optional: Set a background color
+    });
+    doc.addImage(chartImage, 'PNG', 10, 10, 180, 90);
+    
+  }
+  // // Add the chart image to the PDF
+  // doc.addImage(chartImage, 'PNG', 14, 20, 180, 100); // Adjust the position and size as needed
+
+    // Save the PDF
+    doc.save('report.pdf');
+}
 
   convertMilliseconds(milliseconds: number): string {
     const hours = Math.floor(milliseconds / 3600000); // Total hours

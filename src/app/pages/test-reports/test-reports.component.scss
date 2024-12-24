@@ -48,8 +48,15 @@
     background-color: #f8d7da; // Light red for failed
 }
 
-.discription-label{
+.discription-label {
     word-break: break-word;
+}
+
+.downloadbtn {
+    border: none;
+    color: #00A3AB;
+    font-weight: 800;
+    cursor: pointer;
 }
 
 nb-accordion-item-header {
@@ -122,7 +129,8 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     font-size: 1.7em;
     margin-bottom: .5em;
 }
-.dividerDiv{
+
+.dividerDiv {
     border-bottom: 2px solid #eee;
     width: 100%;
     display: flex;
@@ -134,28 +142,41 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
-.subLabel{
+
+.subLabel {
     font-size: 0.8em;
     text-align: left;
     margin-left: 3rem;
 }
-.labelHeading{
+
+.labelHeading {
     font-weight: bold;
     font-size: 0.8em;
     color: #00A3AB;
 }
-.reportChart{
+
+.reportChart {
     height: 1em;
     transform: translate(-45px, -81px);
 }
-.header-div{
-    display: flex;justify-content: center;align-items: center;position: relative;
+
+.header-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
-.date-label{
-  display: flex;
-  gap: 5px;
-    position: absolute;right: 1%;font-weight: bold;font-size: 1.1em;
-    span{
-        font-size: 0.7em !important;color: #00A3AB;text-decoration: underline;
+
+.date-label {
+    display: flex;
+    gap: 5px;
+    right: 1%;
+    font-weight: bold;
+    font-size: 1.1em;
+
+    span {
+        font-size: 0.7em !important;
+        color: #00A3AB;
+        text-decoration: underline;
     }
 }
