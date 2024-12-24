@@ -114,107 +114,100 @@ export class TestReportsComponent {
     }, 10)
   }
 
-  downloadPDF(item, $event: Event) {
-    
-    console.log(item);
-    
-    this.capabilities = item?.extra?.capabilities;
-    console.log(this.capabilities);
-    this.testCases = item?.extra?.resultArr;
-    // this.reportData = item?.reportData;
-    this.extras = item?.extra?.extras;
-    console.log(this.extras);
-    console.log(item);
-    $event.stopPropagation();
-    const doc = new jsPDF();
 
-    // Add report header
-    doc.setFontSize(16);
-    doc.text(item?.app_name || 'App Name', 14, 20);
-    doc.setFontSize(12);
-    doc.text(`Created At: ${this.extras?.createdAt || 'N/A'}`, 14, 30);
+downloadPDF(item, $event: Event) {
+  console.log(item);
 
-    // Add device and platform information
-    doc.setFontSize(14);
-    doc.text('Device Information', 14, 40);
-    doc.setFontSize(12);
-    doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
-    doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
-    doc.text(`Started By: John Doe`, 14, 70);
-    doc.text(`Started Time: ${this.extras?.startedTime || 'N/A'}`, 14, 80);
-    doc.text(`Total Time Taken: ${this.extras?.timeTaken || 'N/A'} Sec`, 14, 90);
-    doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
+  this.capabilities = item?.extra?.capabilities;
+  console.log(this.capabilities);
+  this.testCases = item?.extra?.resultArr;
+  this.extras = item?.extra?.extras;
+  console.log(this.extras);
+  console.log(item);
 
-    // Add a line break
-    doc.text('', 14, 110);
+  $event.stopPropagation();
+  const doc = new jsPDF();
 
-    // Add test cases
-    doc.setFontSize(14);
-    doc.text('Test Cases', 14, 120);
+  // Add report header
+  doc.setFontSize(16);
+  doc.text(item?.app_name || 'App Name', 14, 20);
+  doc.setFontSize(12);
+  doc.text(`Created At: ${this.extras?.createdAt || 'N/A'}`, 14, 30);
 
-    console.log(this.testCases);
-    
-    // Prepare data for the table
-    const testCaseData = this.testCases.map(testCase => ({
-        info: testCase.info,
-        message: testCase.message,
-        expectedResult: testCase.expected_result,
-        defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-        timeSpent: this.convertMilliseconds(testCase.time_spent)
-    }));
+  // Add device and platform information
+  doc.setFontSize(14);
+  doc.text('Device Information', 14, 40);
+  doc.setFontSize(12);
+  doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
+  doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
+  doc.text(`Started By: John Doe`, 14, 70);
+  doc.text(`Started Time: ${this.extras?.startedTime || 'N/A'}`, 14, 80);
+  doc.text(`Total Time Taken: ${this.extras?.timeTaken || 'N/A'} Sec`, 14, 90);
+  doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
 
-    // Create the table
-    autoTable(doc, {
-        head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
-        body: testCaseData.map(tc => [
-            tc.info,
-            tc.message,
-            tc.expectedResult,
-            tc.defect,
-            tc.timeSpent
-        ]),
-        startY: 130,
-        theme: 'grid',
-        headStyles: {
-            fillColor: [22, 160, 133],
-            textColor: [255, 255, 255],
-            fontSize: 12,
-            fontStyle: 'bold'
-        },
-        bodyStyles: {
-            fillColor: [255, 255, 255],
-            textColor: [0, 0, 0],
-            fontSize: 10,
-        },
-        alternateRowStyles: {
-            fillColor: [240, 240, 240]
-        },
-        margin: { top: 20 },
-    });
+  // Add a line break
+  doc.text('', 14, 110);
 
-  //   const chartInstance = this.CompletionChart;
+  // Add test cases
+  doc.setFontSize(14);
+  doc.text('Test Cases', 14, 120);
 
-  //   const chartImage = chartInstance.getDataURL({
-  //     type: 'png',
-  //     pixelRatio: 2,
-  //     backgroundColor: '#fff'
-  // });
+  console.log(this.testCases);
+
+  // Prepare data for the table
+  const testCaseData = this.testCases.map(testCase => ({
+      info: testCase.info,
+      message: testCase.message,
+      expectedResult: testCase.expected_result,
+      defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
+      timeSpent: this.convertMilliseconds(testCase.time_spent)
+  }));
+
+  // Create the table
+  autoTable(doc, {
+      head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
+      body: testCaseData.map(tc => [
+          tc.info,
+          tc.message,
+          tc.expectedResult,
+          tc.defect,
+          tc.timeSpent
+      ]),
+      startY: 130,  // Ensure the table starts after the previous content
+      theme: 'grid',
+      headStyles: {
+          fillColor: [22, 160, 133],
+          textColor: [255, 255, 255],
+          fontSize: 12,
+          fontStyle: 'bold'
+      },
+      bodyStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontSize: 10,
+      },
+      alternateRowStyles: {
+          fillColor: [240, 240, 240]
+      },
+      margin: { top: 20 },
+  });
+
   if (this.echartsInstance) {
-    // Get chart as Base64 image
-    const chartImage = this.echartsInstance.getDataURL({
-      type: 'png', // Specify the image format
-      pixelRatio: 2, // Higher pixel ratio for better quality
-      backgroundColor: '#fff' // Optional: Set a background color
-    });
-    doc.addImage(chartImage, 'PNG', 10, 10, 180, 90);
-    
-  }
-  // // Add the chart image to the PDF
-  // doc.addImage(chartImage, 'PNG', 14, 20, 180, 100); // Adjust the position and size as needed
+      // Get chart as Base64 image
+      const chartImage = this.echartsInstance.getDataURL({
+          type: 'png',
+          pixelRatio: 2,
+          backgroundColor: '#fff'
+      });
 
-    // Save the PDF
-    doc.save('report.pdf');
+      // Move the image down to avoid overlapping the header
+      doc.addImage(chartImage, 'PNG', 10, 210, 180, 90); // Adjust the Y-position here
+  }
+
+  // Save the PDF
+  doc.save('report.pdf');
 }
+
 
   convertMilliseconds(milliseconds: number): string {
     const hours = Math.floor(milliseconds / 3600000); // Total hours
