@@ -397,7 +397,7 @@ export class AutomateComponent implements OnInit {
       //     automationName: "UIAutomator2",
       //     deviceName: "Samsung",
       //     noReset: true,
-      //     ignoreHiddenApiPolicyError: true,
+      //     ignoreHiddenApiPolicPUSyError: true,
       //     newCommandTimeout: 1200000
       //   }
       // }, app_id).subscribe(

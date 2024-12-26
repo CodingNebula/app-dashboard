@@ -106,9 +106,9 @@ export class TemplateComponent {
                   console.log(resp);
                   
                   // this.testCasesArray.push(resp[0]);
-                  if (this.testCasesArray.length > 0) {
-                    this.testCasesArray.pop();
-                }
+                //   if (this.testCasesArray.length > 0) {
+                //     this.testCasesArray.pop();
+                // }
                   this.tempTestCase.instructions = result.data.instructionArr;
                   this.testCasesArray.push(this.tempTestCase);
                   console.log(this.tempTestCase);
@@ -198,9 +198,9 @@ export class TemplateComponent {
                 if(resp){
                   console.log(resp);
 
-                  if (this.templateArray.length > 0) {
-                    this.templateArray.pop();
-                }
+                //   if (this.templateArray.length > 0) {
+                //     this.templateArray.pop();
+                // }
                   
                   this.tempTemplate.screens = screens;
 
@@ -238,7 +238,7 @@ export class TemplateComponent {
   getAllPages(){
     const id = localStorage.getItem('app_id');
     this.accountService.getAllPages(id).subscribe((resp) => {
-      console.log(resp);
+      console.log(resp,'lodi');
       const groupedInstructions = resp.reduce((acc, curr) => {
         const { instruction_set_id, screen_name } = curr;
         
