@@ -21,7 +21,7 @@
                 <nb-accordion-item-header class="accordian-header">
                   {{ testCase?.screen_name }}
                   <button class="add-new"
-                    (click)="openDialog('testCase', 'instruction', 'testCase?.instruction_set_id')">Add
+                    (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
                     Instructions</button>
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
@@ -61,7 +61,7 @@
                   <div *ngIf="template?.wt_desc" [nbTooltip]="template?.wt_desc" class="template-description">
                     Description: <span>{{template?.wt_desc}}</span>
                   </div>
-                  <button class="add-new" (click)="openDialog('template', 'testCase')">Add Screens</button>
+                  <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button>
                   <nb-icon (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>

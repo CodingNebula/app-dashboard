@@ -53,7 +53,7 @@ export class TemplateComponent {
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
-        if (result.confirmed) {
+        if (result?.confirmed) {
           if (result.selectedAction === 'testCase') {
             if(result.selectedType === 'name'){
               console.log(result.data);
@@ -87,7 +87,7 @@ export class TemplateComponent {
               console.log(result.data);
               
               let body = {
-                instruction_set_id: this.screenNameId,  // This value can be dynamic
+                instruction_set_id: id,  // This value can be dynamic
                 instruction_id: result?.data?.instructionArr?.map((instruction, index) => {
                     return {
                         id: instruction.id,  // Mapping the dynamic id from instructionsArray
@@ -123,7 +123,7 @@ export class TemplateComponent {
           }
           else if (result.selectedAction === 'template') {
             if(result.selectedType === 'name'){
-              console.log(result.data);
+              console.log(result.data,'datum');
               
             //   const details = {
             //     screenName: result.data.test_case_name,
@@ -148,7 +148,7 @@ export class TemplateComponent {
                   console.log(resp);
                   
                   // this.testCasesArray.push(resp[0]);
-                  this.templateId = resp[0]?.id
+                  this.templateId = resp[0]?.wt_id
                   // this.tempTemplate.wt_name = resp[0]?.template_name;
                   // this.tempTemplate.wt_desc = resp[0]?.description;
                   // this.tempTemplate.wt_id = resp[0]?.id;
@@ -168,6 +168,7 @@ export class TemplateComponent {
               
               let body = {
                 application_id: localStorage.getItem('app_id'),  // This value can be dynamic
+                wt_id:id,
                 instructions_set: result?.data?.templates?.map((instruction, index) => {
                     return {
                         id: instruction?.instruction_set_id,  // Mapping the dynamic id from instructionsArray
@@ -177,10 +178,11 @@ export class TemplateComponent {
                 })
             };
 
-            console.log(body);
-            
+            console.log(body,'body');
+            console.log(result,'sult')
             let screens = result?.data?.templates?.map((screen, index) => {
               return {
+                wt_id:screen?.wt_id,
                 ins_set_id: screen?.instruction_set_id,
                 ins_set_screen_name: screen?.screen_name,  // Setting the screen name dynamically from result.data.screen_name
                   instructions: screen?.instructions?.map((instruction) => {
@@ -194,8 +196,10 @@ export class TemplateComponent {
           });
           
           console.log(screens);
-              console.log(this.templateId,'tempid')
-              this.accountService.postTemplates(this.templateId, body).subscribe((resp) => {
+              console.log(this.templateId,'tempid');
+              let appId=localStorage.getItem('app_id');
+              console.log(result,'res')
+              this.accountService.postTemplates(id, body).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
 

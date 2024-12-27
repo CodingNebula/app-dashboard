@@ -265,7 +265,7 @@ this.chartData.forEach((ele:any,ind)=>{
       this.capabilities = item?.extra?.capabilities;
       console.log(this.capabilities);
       this.testCases = item?.extra?.resultArr;
-      // this.reportData = item?.reportData;
+      // this.reportData = item?.reporesrtData;
       this.extras = item?.extra?.extras;
       console.log(this.extras);
       console.log(item);

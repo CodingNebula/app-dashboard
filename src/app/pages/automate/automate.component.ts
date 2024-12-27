@@ -24,6 +24,7 @@ export class AutomateComponent implements OnInit {
   public appLaunchLoading: boolean = false;
   public totalTimeTaken: number;
   public resultArr: any[] = [];
+  public startInterval:any;
   public reportData: any = {
     general: {}
   };
@@ -246,7 +247,7 @@ export class AutomateComponent implements OnInit {
       //      "amount":"200.00"
       //  },
       //    {
-      //      "id":9,
+      //      "id":9,get
       //      "screenName":"Click_Text",
       //      "btnName":"Clear"
       //  },
@@ -300,7 +301,9 @@ export class AutomateComponent implements OnInit {
     this.applicationData = this.automateDataService.selectedApplication;
 
   }
-
+ngOnDestroy(){
+  clearInterval(this.startInterval)
+}
   ngOnInit() {
     const state = window.history.state;
 
@@ -336,6 +339,7 @@ export class AutomateComponent implements OnInit {
     //     "ignoreHiddenApiPolicyError": true,
     //     "newCommandTimeout": 1200000
     // }
+
     this.myForm = this.fb.group({
       platform: [this.appCapabilities?.platformName, [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
@@ -345,6 +349,8 @@ export class AutomateComponent implements OnInit {
       noReset: [this.appCapabilities?.noReset, [Validators.required]],
       hiddenApp: [this.appCapabilities?.ignoreHiddenApiPolicyError, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
+      description:[this.appCapabilities?.description, [Validators.required]],
+      buildNo:[this.appCapabilities?.buildNo, [Validators.required]],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -421,9 +427,12 @@ export class AutomateComponent implements OnInit {
   }
 
   scrollToBottom() {
-    if (this.resultContainer) {
-      this.resultContainer.nativeElement.scrollTop = this.resultContainer.nativeElement.scrollHeight;
-    }
+    setTimeout(()=>{
+      const parentDiv = document.getElementsByClassName('test-case-container')[0]
+      if (parentDiv) {
+        parentDiv.scrollTop = parentDiv.scrollHeight
+      }
+    },500)
   }
 
   // noResetValidator(control) {
@@ -705,7 +714,7 @@ export class AutomateComponent implements OnInit {
     //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
     let startInterval;
     function startCounting() {
-      startInterval = setInterval(() => {
+      this.startInterval = setInterval(() => {
         individualCount = individualCount + 1;
         console.log('count started:', individualCount);
       }, 1000);
@@ -725,14 +734,14 @@ export class AutomateComponent implements OnInit {
         const hours = String(currentDate.getHours()).padStart(2, '0');
         const minutes = String(currentDate.getMinutes()).padStart(2, '0');
         const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-        res.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       }
 
       if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
 
-        res.timeSpent = individualCount;
+        res.extra.timeSpent = individualCount;
         individualCount = 0;
-        clearInterval(startInterval);
+        clearInterval(this.startInterval);
 
         // Restart the interval by calling the function
         startCounting();
@@ -745,10 +754,12 @@ export class AutomateComponent implements OnInit {
         if (res?.message?.successMessage === "End_Instructions") {
           clearInterval(counterInterval);
           clearInterval(startInterval)
-          this.extras.timeTaken = count;
+          res.extra.timeTaken = count;
+     
           const now = new Date();
           const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
           this.extras.startedTime = formattedTime;
+          res.extra.startedTime=formattedTime;
           const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
           this.extras.createdAt = formattedDate;
           const socketReport = {
@@ -798,7 +809,9 @@ export class AutomateComponent implements OnInit {
         }
       }
     }, (err) => {
-      clearInterval(startInterval);
+      console.log(err,'err')
+
+      clearInterval(this.startInterval);
     })
 
     //   this.router.navigateByUrl('test-reports')
@@ -1220,6 +1233,9 @@ export class AutomateComponent implements OnInit {
       this.myForm.get('timeout').enable();
       this.myForm.get('noReset').enable();
       this.myForm.get('hiddenApp').enable();
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
+  
     }
     else {
       this.myForm.get('platform').disable();
@@ -1230,6 +1246,8 @@ export class AutomateComponent implements OnInit {
       this.myForm.get('timeout').disable();
       this.myForm.get('noReset').disable();
       this.myForm.get('hiddenApp').disable();
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
     }
   }
 

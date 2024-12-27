@@ -21,6 +21,7 @@ export class TemplateDialogComponent {
   public appDetails: any;
   public selectedType: string;
   public testCases: FormGroup;
+  public appName: any;
 
   constructor(
     private dialogRef: NbDialogRef<TemplateDialogComponent>,
@@ -34,7 +35,7 @@ export class TemplateDialogComponent {
     console.log(this.appDetails?.instructions);
 
     console.log(this.selectedType);
-    
+    this.appName = localStorage.getItem('app_name');
     
 
     this.testCaseName = this.fb.group({

@@ -195,7 +195,7 @@ public chartData:any=[];
   downloadPDF(item, $event: Event) {
     console.log(item);
     this.chartData = [];
-
+    this.testCases = this.testCases.filter(test=> test.hasOwnProperty('info'));
 
     this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
 this.chartData.forEach((ele:any,ind)=>{
@@ -244,8 +244,8 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${this.extras?.startedTime || 'N/A'}`, 14, 80);
-      doc.text(`Total Time Taken: ${this.extras?.timeTaken || 'N/A'} Sec`, 14, 90);
+      doc.text(`Started Time: ${this.reportData.extra?.startedTime || 'N/A'}`, 14, 80);
+      doc.text(`Total Time Taken: ${this.reportData.extra?.timeTaken || 'N/A'} Sec`, 14, 90);
       doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
   
       // Add a line break

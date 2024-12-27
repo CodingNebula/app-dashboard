@@ -69,8 +69,8 @@
             <div class="form-group">
               <label for="noReset">No Reset:</label>
               <nb-select id="noReset" [formControlName]="'noReset'" placeholder="Select" class="custom-select-dropdown">
-                <nb-option value="True">True</nb-option>
-                <nb-option value="False">False</nb-option>
+                <nb-option value="true">True</nb-option>
+                <nb-option value="false">False</nb-option>
               </nb-select>
 
               <div *ngIf="myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
@@ -84,8 +84,8 @@
               <label for="hiddenApp">Ignore hidden app policy:</label>
               <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" 
                 class="custom-select-dropdown">
-                <nb-option value="True">True</nb-option>
-                <nb-option value="False">False</nb-option>
+                <nb-option value="true">True</nb-option>
+                <nb-option value="false">False</nb-option>
               </nb-select>
               <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
                 <small *ngIf="myForm.get('hiddenApp').hasError('required')">Hidden App is required!</small>
@@ -93,6 +93,29 @@
                   <!-- Hidden App!</small> -->
               </div>
             </div>
+          </div>
+
+
+          <div class="form-row">
+
+
+
+            <div class="form-group">
+              <label for="buildNo">Build No:</label>
+              <input id="buildNo" formControlName="buildNo" class="form-control" />
+              <div *ngIf="myForm.get('buildNo').touched && myForm.get('buildNo').invalid" class="error-message">
+                <small *ngIf="myForm.get('buildNo').hasError('required')">Build Name is required!</small>
+              </div>
+            </div>
+            
+            <div  class="form-group   ">
+              <label for="description">Description:</label>
+              <textarea id="description" formControlName="description" class="form-control description-input" ></textarea>
+              <div *ngIf="myForm.get('description').touched && myForm.get('description').invalid" class="error-message">
+                <small *ngIf="myForm.get('description').hasError('required')">Description name is required!</small>
+              </div>
+            </div>
+          
           </div>
 
           <div class="form-row button-row">

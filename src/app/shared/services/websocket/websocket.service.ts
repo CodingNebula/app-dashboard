@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { io, Socket } from "socket.io-client";
 
 @Injectable({
@@ -10,7 +11,7 @@ export class WebsocketService {
   private mySubject = new BehaviorSubject<any>(null);
   public message: string | null = null;
   public appLaunchStatus: string | null = null;
-
+  public showAlert = false;
   private reconnectAttempts: number = 0;
   private maxReconnectAttempts: number = 5;
   public testReportsData: any = {
@@ -77,7 +78,11 @@ export class WebsocketService {
     }
    }
    getSubject() {
-    return this.mySubject.asObservable();
+    return this.mySubject.asObservable().pipe(catchError((error) => {
+        console.error('Handled error in getSubject:', error);
+        // Return an empty observable or re-throw the error if needed
+        return new Observable();  // Return an empty observable in case of error
+      }));
   }
 
   saveTestReportData(reportData: any){
@@ -150,6 +155,7 @@ export class WebsocketService {
         room: localStorage.getItem('id') 
       });
     });
+   
     
   }
 
@@ -184,6 +190,10 @@ this.updateValue(response);
         // }
       });
     } else {
+      this.showAlert = true;
+      setTimeout(() => {
+        this.showAlert = false;
+      }, 1000);
       console.error('Socket is not connected.');
     }
   }
