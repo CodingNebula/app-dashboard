@@ -445,6 +445,7 @@ export class AutomateComponent implements OnInit {
 
   onStartTrans(itemData) {
     let count = 0;
+    let individualCount = 0;
     console.log(itemData);
 
     const result = itemData.screens.map(screen => {
@@ -700,15 +701,50 @@ export class AutomateComponent implements OnInit {
       count++;
     }, 1000);
 
+
+    //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
+    let startInterval;
+    function startCounting() {
+      startInterval = setInterval(() => {
+        individualCount = individualCount + 1;
+        console.log('count started:', individualCount);
+      }, 1000);
+    }
+    startCounting();
+    let timeChecked = false;
+
     this.webSocketService.getSubject().subscribe((res) => {
+
+      if (!timeChecked) {
+        const currentDate = new Date();
+
+        // Get year, month, day, hours, minutes, and seconds
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const hours = String(currentDate.getHours()).padStart(2, '0');
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+        res.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
+
       if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+
+        res.timeSpent = individualCount;
+        individualCount = 0;
+        clearInterval(startInterval);
+
+        // Restart the interval by calling the function
+        startCounting();
         if (res?.message?.successMessage !== "End_Instructions") {
+
           this.resultArr.push(res.message);
           this.scrollToBottom();
           console.log(res);
         }
         if (res?.message?.successMessage === "End_Instructions") {
           clearInterval(counterInterval);
+          clearInterval(startInterval)
           this.extras.timeTaken = count;
           const now = new Date();
           const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
@@ -727,6 +763,7 @@ export class AutomateComponent implements OnInit {
 
           // Iterate over the reports to count the number of passed, failed, and untested test cases
           this.resultArr?.map((testCase) => {
+            testCase.completeCount = count;
             if (testCase?.successMessage !== "End_Instructions") {
               console.log(testCase);
               if (testCase.message === 'SUCCESS') {
@@ -760,6 +797,8 @@ export class AutomateComponent implements OnInit {
           })
         }
       }
+    }, (err) => {
+      clearInterval(startInterval);
     })
 
     //   this.router.navigateByUrl('test-reports')

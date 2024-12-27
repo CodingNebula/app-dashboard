@@ -149,13 +149,14 @@ export class TemplateComponent {
                   
                   // this.testCasesArray.push(resp[0]);
                   this.templateId = resp[0]?.id
-                  this.tempTemplate.wt_name = resp[0]?.template_name;
-                  this.tempTemplate.wt_desc = resp[0]?.description;
-                  this.tempTemplate.wt_id = resp[0]?.id;
+                  // this.tempTemplate.wt_name = resp[0]?.template_name;
+                  // this.tempTemplate.wt_desc = resp[0]?.description;
+                  // this.tempTemplate.wt_id = resp[0]?.id;
 
 
 
-                  this.templateArray.push(this.tempTemplate)
+                  // this.templateArray.push(this.tempTemplate)
+                  this.getAllTemplates();
                 }
               })
               this.applicationDataService.setData('testCases', this.testCasesArray);
@@ -193,7 +194,7 @@ export class TemplateComponent {
           });
           
           console.log(screens);
-              
+              console.log(this.templateId,'tempid')
               this.accountService.postTemplates(this.templateId, body).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
@@ -288,11 +289,12 @@ console.log(sortedInstructions);
     const id = localStorage.getItem('app_id');
     this.accountService.getAllTemplates(id).subscribe((resp) => {
         const groupedData = [];
-        
+        console.log(resp,'pop')
 
         resp.forEach((curr) => {
             // Find or create the weight group
             let wtGroup = groupedData.find(group => group.wt_id === curr.wt_id);
+          
             if (!wtGroup) {
                 wtGroup = {
                     wt_id: curr.wt_id,
@@ -302,6 +304,7 @@ console.log(sortedInstructions);
                 };
                 groupedData.push(wtGroup);
             }
+            console.log(wtGroup,'wtgroup')
 
             // Find or create the screen group
             let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
@@ -314,6 +317,7 @@ console.log(sortedInstructions);
                 wtGroup.screens.push(screenGroup);
             }
 
+
             // Check if the instruction is already added to the screenGroup
             const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
             if (!instructionExists) {
@@ -322,7 +326,7 @@ console.log(sortedInstructions);
         });
         
         this.templateArray = groupedData;
-        console.log(groupedData);
+        console.log(groupedData,'groupeddarta');
     });
 }
 

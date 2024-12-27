@@ -45,6 +45,7 @@
             <th>App Name</th>
             <th>App Version</th>
             <th>Test performed</th>
+            <th>Date</th>
             <th>Download</th>
           </tr>
         </thead>
@@ -59,7 +60,9 @@
               </div>
             </td>
             <td>{{reportData.application_version}}</td>
+           
             <td>{{reportData.testcase_performed}}</td>
+            <td>{{reportData.extra.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</td>
             <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>
           </tr>
         </tbody>
