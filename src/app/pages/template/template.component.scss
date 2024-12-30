@@ -25,10 +25,10 @@
     font-size: 3em;
     cursor: pointer;
 
-    position: fixed; 
-    bottom: 0px; 
-    left: 60%; 
-    transform: translateX(-50%); 
+    position: fixed;
+    bottom: 0px;
+    left: 60%;
+    transform: translateX(-50%);
     z-index: 1000;
 }
 .no-app-div{
@@ -189,7 +189,7 @@ nb-accordion-item-body .item-body{
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  
+
   .template-description > span {
     color: #000000;
     display: block;
@@ -198,7 +198,7 @@ nb-accordion-item-body .item-body{
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  
+
   .nb-tooltip {
     white-space: normal; /* Ensures that the tooltip content wraps correctly */
     max-width: none; /* Prevent the tooltip from truncating the text */
@@ -214,9 +214,9 @@ nb-accordion-item-body .item-body{
     color: #00A3AB;
     font-size: 1em;
     cursor: pointer;
-    // position: fixed; 
-    // bottom: 1%; 
-    // right: 1%; 
+    // position: fixed;
+    // bottom: 1%;
+    // right: 1%;
     z-index: 1000;
     border: 1px solid #00A3AB;
     border-radius: 25px;
@@ -228,4 +228,29 @@ nb-accordion-item-body .item-body{
     justify-content: center;
     align-items: center;
 }
-  
+
+
+@media screen and (min-width:1240px ) and (max-width:1394px ){
+  .template-div-container{
+    height: 28vh;
+    overflow-y: auto;
+  }
+
+}
+
+
+@media screen and (min-width:1394px ) and (max-width:1594px ){
+  .template-div-container{
+    height: 32vh;
+    overflow-y: auto;
+  }
+
+}
+
+@media screen and (min-width:911px ) and (max-width:1094px ){
+  .template-div-container{
+    height: 22vh;
+    overflow-y: auto;
+  }
+
+}

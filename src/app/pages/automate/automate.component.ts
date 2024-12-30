@@ -306,6 +306,11 @@ ngOnDestroy(){
   clearInterval(this.startInterval)
 }
   ngOnInit() {
+    this.webSocketService.getSocketFailure().subscribe((res)=>{
+      if(this.startInterval){
+        clearInterval(this.startInterval);
+      }
+    })
     const state = window.history.state;
 
     if (state && state.templateArr) {
@@ -314,7 +319,7 @@ ngOnDestroy(){
 
     // Call getCapabilities() and subscribe to it
     this.getCapabilities().subscribe((appCapabilities) => {
-      console.log(appCapabilities);  // This will log the data once it's available
+      console.log(appCapabilities,"completeAppData");  // This will log the data once it's available
       this.completeAppData = appCapabilities
     });
 
@@ -457,6 +462,13 @@ ngOnDestroy(){
 
   }
 
+  startCounting(individualCount) {
+    this.startInterval = setInterval(() => {
+      individualCount = individualCount + 1;
+      console.log('count started:', individualCount);
+    }, 1000);
+  }
+
   onStartTrans(itemData) {
     let count = 0;
     let individualCount = 0;
@@ -482,6 +494,9 @@ ngOnDestroy(){
         roomId: localStorage.getItem("id"),
       }
     );
+
+
+
 
     if (this.showEnd){
 
@@ -529,581 +544,578 @@ ngOnDestroy(){
           }, 1000)
         }
       })
-    }
-    console.log(itemData);
 
 
+    }else{
 
+      console.log(itemData);
 
+      const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
 
-    const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
-
-    // let item = [
-    //   {
-    //     "id": "0",
-    //     "screenName": "Welcome",
-    //     "btnName": "Welcome"
-    //   },
-    //   {
-    //     "id": "8",
-    //     "screenName": "Click_Image", // image
-    //     "btnName": "left_arrow"
-    //   },
-    //   {
-    //     "id": "1",
-    //     "screenName": "Permissions"
-    //   },
-    //   {
-    //     "id": "8",
-    //     "screenName": "Click_Image", // image
-    //     "btnName": "left_arrow"
-    //   },
-    //   {
-    //     "id": "2",
-    //     "screenName": "Permissions_list"
-    //   },
-    //   {
-    //     "id": "3",
-    //     "screenName": "Allow_PhoneCalls",
-    //     "btnName": "Allow"
-    //   },
-    //   {
-    //     "id": "4",
-    //     "screenName": "Allow_DeviceLocation",
-    //     "btnName": "ALLOW"
-    //   },
-    //   {
-    //     "id": "5",
-    //     "screenName": "Allow_BluetoothConnection",
-    //     "btnName": "ALLOW"
-    //   },
-    //   {
-    //     "id": "6",
-    //     "screenName": "Click_Button",
-    //     "btnName": "Continue"
-    //   },
-    //   {
-    //     "id": "7",
-    //     "screenName": "Terminal Setup"
-    //   },
-    //   {
-    //     "id": "8",
-    //     "screenName": "Click_Image" // image
-    //   },
-    //   {
-    //     "id": "9",
-    //     "screenName": "Select_Options",
-    //     "options": "Testing"
-    //   },
-    //   {
-    //     "id": "6",
-    //     "screenName": "Click_Button",
-    //     "btnName": "PROCEED"
-    //   },
-    //   {
-    //     "id": "1",
-    //     "screenName": "Enter_Terminal_ID",
-    //     "terminal_id": ["2994001"]
-
-    //   },
-    //   {
-    //     "id": "6",
-    //     "screenName": "Click_Button",
-    //     "btnName": "Next"
-    //   },
-    //   {
-    //     "id": "10",
-    //     "screenName": "Enter_Terminal_ID",
-    //     "terminal_id": ["2994001"]
-
-    //   },
-    //   {
-    //     "id": "6",
-    //     "screenName": "Click_Button",
-    //     "btnName": "Submit"
-    //   },
-
-    //   {
-    //     "id": "11",
-    //     "screenName": "Profile_Login",
-    //     "pin": ["9", "2", "0", "4"]
-    //   },
-    //   {
-    //     "id": "6",
-    //     "screenName": "Click_Button",
-    //     "btnName": "Confirm"
-    //   },
-    //   {
-    //     "id": "6",
-    //     "screenName": "Click_Button",
-    //     "btnName": "GO"
-    //   },
-    //   {
-    //     "id": 9,
-    //     "screenName": "Click_Text",
-    //     "btnName": "Skip >"
-    //   },
-    //   {
-    //     "id": 9,
-    //     "screenName": "homePage",
-    //     "action": "Transaction"
-    //   },
-
-    //   // connect reader steps start
-    //   {
-    //     "id": 10,
-    //     "screenName": "Click_View",
-    //     "btnName": "Device"
-    //   },
-
-
-    //   {
-    //     "id": 12,
-    //     "screenName": "Click_Button",
-    //     "btnName": "CONNECT TO READER"
-    //   },
-    //   {
-    //     "id": 13,
-    //     "screenName": "Wait_For_Text",
-    //     // "btnName":"WPS323247002051"
-    //     "btnName": "WPC323951000219"
-    //     //   "btnName":"CHB2A6132009935"
-    //     // "btnName":"CHB204650000480"
-    //   },
-    //   {
-    //     "id": 13,
-    //     "screenName": "Click_Text",
-    //     // "btnName":"WPS323247002051"
-    //     "btnName": "WPC323951000219"
-    //     // "btnName":"CHB2A6132009935"
-    //     // "btnName":"CHB204650000480"
-    //   },
-    //   {
-    //     "id": 14,
-    //     "screenName": "Find_Button",
-    //     "btnName": "Disconnect"
-    //   },
-    //   {
-    //     "id": "8",
-    //     "screenName": "Click_Image" // image
-    //   },
-
-    //   {
-    //     "id": "8",
-    //     "screenName": "Click_Image", // image
-    //     "btnName": "Sale"
-    //   },
-    //   {
-    //     "id": 14,
-    //     "screenName": "Enter_Amount",
-    //     "amount": "200.00"
-    //   },
-    //   {
-    //     "id": 9,
-    //     "screenName": "Click_Text",
-    //     "btnName": "Clear"
-    //   },
-    //   {
-    //     "id": 14,
-    //     "screenName": "Enter_Amount",
-    //     "amount": "50.00"
-    //   },
-    //   {
-    //     "id": 10,
-    //     "screenName": "Click_View",
-    //     "btnName": "2 / 4"
-    //   },
-    //   {
-    //     "id": 9,
-    //     "screenName": "Click_Text",
-    //     "btnName": "Go"
-    //   },
-
-    //   {
-    //     "id": 9,
-    //     "screenName": "Click_Text",
-    //     "btnName": "10%"
-    //   },
-    //   {
-    //     "id": 12,
-    //     "screenName": "Click_Button",
-    //     "btnName": "Continue"
-    //   },
-    //   {
-    //     "id": 13,
-    //     "screenName": "Wait_For_Text",
-    //     "btnName": "Transaction ID"
-    //   },
-    //   {
-    //     "id": "14",
-    //     "screenName": "Element_Avail", // image
-    //     "elementName": ["Transaction FAILED", "Transaction Approved"]
-    //   },
-
-    //   {
-    //     "id": "12",
-    //     "screenName": "Click_Button",
-    //     "btnName": "See Details"
-    //   },
-
-    //   {
-    //     "id": "8",
-    //     "screenName": "Click_Image" // image
-
-    //   },
-
-
-    // ]
-
-    let item = [
-      {
-        "id":"0",
-        "screenName":"Welcome",
-        "btnName":"Welcome"
-      },
-      {
-        "id":"8",
-        "screenName":"Click_Image", // image
-        "btnName":"left_arrow"
-      },
-      {
-        "id":"1",
-        "screenName":"Permissions"
-      },
-      {
-        "id":"8",
-        "screenName":"Click_Image", // image
-        "btnName":"left_arrow"
-      },
-      {
-        "id":"2",
-        "screenName":"Permissions_list"
-      },
-      {
-        "id":"3",
-        "screenName":"Allow_PhoneCalls",
-        "btnName":"Allow"
-      },
-      {
-        "id": "4",
-        "screenName": "Allow_DeviceLocation",
-        "btnName": "ALLOW"
-      },
-      {
-        "id": "5",
-        "screenName": "Allow_BluetoothConnection",
-        "btnName": "ALLOW"
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Continue"
-      },
-      {
-        "id": "7",
-        "screenName": "Terminal Setup"
-      },
-      {
-        "id": "8",
-        "screenName": "Click_Image" // image
-      },
-      {
-        "id": "9",
-        "screenName": "Select_Options",
-        "options": "Testing"
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "PROCEED"
-      },
-      {
-        "id": "1",
-        "screenName": "Enter_Terminal_ID",
-        "terminal_id": ["2994001"]
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Next"
-      },
-      {
-        "id": "10",
-        "screenName": "Enter_Terminal_ID",
-        "terminal_id": ["2994001"]
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Submit"
-      },
-      {
-        "id": "11",
-        "screenName": "Profile_Login",
-        "pin": ["9", "2", "0", "4"]
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Confirm"
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "GO"
-      },
-      {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "Skip >"
-      },
-      {
-        "id": 9,
-        "screenName": "homePage",
-        "action": "Transaction"
-      },
-      // {
-      //     "id":20
-      // },
-      // connect reader steps start
-      {
-        "id": 10,
-        "screenName": "Click_View",
-        "btnName": "Device"
-      },
-      {
-        "id":12,
-        "screenName":"Click_Button",
-        "btnName":"CONNECT TO READER"
-      },
-      {
-        "id":13,
-        "screenName":"Wait_For_Text",
-        "btnName":"WPC323951000219"
-        // "btnName":"WPS323247002051"
-        // "btnName":"WPS323129001477"
-        //   "btnName":"CHB2A6132009935"
-        // "btnName":"CHB204650000480"
-      },
-      {
-        "id":13,
-        "screenName":"Click_Text",
-        "btnName":"WPC323951000219"
-        // "btnName":"WPS323247002051"
-        // "btnName":"WPS323129001477"
-        // "btnName":"CHB2A6132009935"
-        // "btnName":"CHB204650000480"
-      },
-      {
-        "id":14,
-        "screenName":"Find_Button",
-        "btnName":"Disconnect"
-      },
-      {
-        "id":"8",
-        "screenName":"Click_Image" // image
-      },
-      // connect reader steps ends
-      // transaction step starts
-      {
-        "id":"8",
-        "screenName":"Click_Image", // image
-        "btnName":"Sale"
-      },
-      {
-        "id":14,
-        "screenName":"Enter_Amount",
-        "btnName":"200.00"
-      },
-      {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"Clear"
-      },
-      {
-        "id":14,
-        "screenName":"Enter_Amount",
-        "btnName":"50.00"
-      },
-      {
-        "id":10,
-        "screenName":"Click_View",
-        "btnName":"2 / 4"
-      },
-      {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"Go"
-      },
-      //custom tip
-      //     {
-      //     "id":9,
-      //     "screenName":"Click_Text",
-      //     "btnName":"Custom"
-      // },
+      // let item = [
       //   {
-      //     "id":14,
-      //     "screenName":"Enter_Amount",
-      //     "amount":"500.00"
-      // },
-      // fix tip
-      {
-        "id":9,
-        "screenName":"Click_Text",
-        "btnName":"10%"
-      },
-      {
-        "id":12,
-        "screenName":"Click_Button",
-        "btnName":"Continue"
-      },
-      {
-        "id":13,
-        "screenName":"Wait_For_Text",
-        "btnName":"Transaction ID"
-      },
-      {
-        "id": "14",
-        "screenName": "Element_Avail", // image
-        "elementName": ["Transaction FAILED", "Transaction Approved"]
-      },
-      {
-        "id": "12",
-        "screenName": "Click_Button",
-        "btnName": "See Details"
-      },
-      {
-        "id": "8",
-        "screenName": "Click_Image" // image
-      },
-      // refund steps starts from dashboard
-      {
-        "id":"8",
-        "screenName":"Click_Image", // image
-        "btnName":"Refund"
-      },
-      {
-        "id":"0",
-        "screenName":"Find_Screen_Elements"
-      }
-    ]
+      //     "id": "0",
+      //     "screenName": "Welcome",
+      //     "btnName": "Welcome"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image", // image
+      //     "btnName": "left_arrow"
+      //   },
+      //   {
+      //     "id": "1",
+      //     "screenName": "Permissions"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image", // image
+      //     "btnName": "left_arrow"
+      //   },
+      //   {
+      //     "id": "2",
+      //     "screenName": "Permissions_list"
+      //   },
+      //   {
+      //     "id": "3",
+      //     "screenName": "Allow_PhoneCalls",
+      //     "btnName": "Allow"
+      //   },
+      //   {
+      //     "id": "4",
+      //     "screenName": "Allow_DeviceLocation",
+      //     "btnName": "ALLOW"
+      //   },
+      //   {
+      //     "id": "5",
+      //     "screenName": "Allow_BluetoothConnection",
+      //     "btnName": "ALLOW"
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Continue"
+      //   },
+      //   {
+      //     "id": "7",
+      //     "screenName": "Terminal Setup"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image" // image
+      //   },
+      //   {
+      //     "id": "9",
+      //     "screenName": "Select_Options",
+      //     "options": "Testing"
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "PROCEED"
+      //   },
+      //   {
+      //     "id": "1",
+      //     "screenName": "Enter_Terminal_ID",
+      //     "terminal_id": ["2994001"]
 
-    item.push(obj);
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Next"
+      //   },
+      //   {
+      //     "id": "10",
+      //     "screenName": "Enter_Terminal_ID",
+      //     "terminal_id": ["2994001"]
 
-    // Output the modified item array
-    console.log(item);
-    this.showResult = true;
-    console.log(result);
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Submit"
+      //   },
 
-    this.webSocketService.sendTestCaseRequest(item);
+      //   {
+      //     "id": "11",
+      //     "screenName": "Profile_Login",
+      //     "pin": ["9", "2", "0", "4"]
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Confirm"
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "GO"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "Skip >"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "homePage",
+      //     "action": "Transaction"
+      //   },
 
-    let counterInterval = setInterval(() => {
-      count++;
-    }, 1000);
+      //   // connect reader steps start
+      //   {
+      //     "id": 10,
+      //     "screenName": "Click_View",
+      //     "btnName": "Device"
+      //   },
 
 
-    //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
-    let startInterval;
-    function startCounting() {
-      this.startInterval = setInterval(() => {
-        individualCount = individualCount + 1;
-        console.log('count started:', individualCount);
+      //   {
+      //     "id": 12,
+      //     "screenName": "Click_Button",
+      //     "btnName": "CONNECT TO READER"
+      //   },
+      //   {
+      //     "id": 13,
+      //     "screenName": "Wait_For_Text",
+      //     // "btnName":"WPS323247002051"
+      //     "btnName": "WPC323951000219"
+      //     //   "btnName":"CHB2A6132009935"
+      //     // "btnName":"CHB204650000480"
+      //   },
+      //   {
+      //     "id": 13,
+      //     "screenName": "Click_Text",
+      //     // "btnName":"WPS323247002051"
+      //     "btnName": "WPC323951000219"
+      //     // "btnName":"CHB2A6132009935"
+      //     // "btnName":"CHB204650000480"
+      //   },
+      //   {
+      //     "id": 14,
+      //     "screenName": "Find_Button",
+      //     "btnName": "Disconnect"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image" // image
+      //   },
+
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image", // image
+      //     "btnName": "Sale"
+      //   },
+      //   {
+      //     "id": 14,
+      //     "screenName": "Enter_Amount",
+      //     "amount": "200.00"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "Clear"
+      //   },
+      //   {
+      //     "id": 14,
+      //     "screenName": "Enter_Amount",
+      //     "amount": "50.00"
+      //   },
+      //   {
+      //     "id": 10,
+      //     "screenName": "Click_View",
+      //     "btnName": "2 / 4"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "Go"
+      //   },
+
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "10%"
+      //   },
+      //   {
+      //     "id": 12,
+      //     "screenName": "Click_Button",
+      //     "btnName": "Continue"
+      //   },
+      //   {
+      //     "id": 13,
+      //     "screenName": "Wait_For_Text",
+      //     "btnName": "Transaction ID"
+      //   },
+      //   {
+      //     "id": "14",
+      //     "screenName": "Element_Avail", // image
+      //     "elementName": ["Transaction FAILED", "Transaction Approved"]
+      //   },
+
+      //   {
+      //     "id": "12",
+      //     "screenName": "Click_Button",
+      //     "btnName": "See Details"
+      //   },
+
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image" // image
+
+      //   },
+
+
+      // ]
+
+      let item = [
+        {
+          "id":"0",
+          "screenName":"Welcome",
+          "btnName":"Welcome"
+        },
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"left_arrow"
+        },
+        {
+          "id":"1",
+          "screenName":"Permissions"
+        },
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"left_arrow"
+        },
+        {
+          "id":"2",
+          "screenName":"Permissions_list"
+        },
+        {
+          "id":"3",
+          "screenName":"Allow_PhoneCalls",
+          "btnName":"Allow"
+        },
+        {
+          "id": "4",
+          "screenName": "Allow_DeviceLocation",
+          "btnName": "ALLOW"
+        },
+        {
+          "id": "5",
+          "screenName": "Allow_BluetoothConnection",
+          "btnName": "ALLOW"
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Continue"
+        },
+        {
+          "id": "7",
+          "screenName": "Terminal Setup"
+        },
+        {
+          "id": "8",
+          "screenName": "Click_Image" // image
+        },
+        {
+          "id": "9",
+          "screenName": "Select_Options",
+          "options": "Testing"
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "PROCEED"
+        },
+        {
+          "id": "1",
+          "screenName": "Enter_Terminal_ID",
+          "terminal_id": ["2994001"]
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Next"
+        },
+        {
+          "id": "10",
+          "screenName": "Enter_Terminal_ID",
+          "terminal_id": ["2994001"]
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Submit"
+        },
+        {
+          "id": "11",
+          "screenName": "Profile_Login",
+          "pin": ["9", "2", "0", "4"]
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Confirm"
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "GO"
+        },
+        {
+          "id": 9,
+          "screenName": "Click_Text",
+          "btnName": "Skip >"
+        },
+        {
+          "id": 9,
+          "screenName": "homePage",
+          "action": "Transaction"
+        },
+        // {
+        //     "id":20
+        // },
+        // connect reader steps start
+        {
+          "id": 10,
+          "screenName": "Click_View",
+          "btnName": "Device"
+        },
+        {
+          "id":12,
+          "screenName":"Click_Button",
+          "btnName":"CONNECT TO READER"
+        },
+        {
+          "id":13,
+          "screenName":"Wait_For_Text",
+          "btnName":"WPC323951000219"
+          // "btnName":"WPS323247002051"
+          // "btnName":"WPS323129001477"
+          //   "btnName":"CHB2A6132009935"
+          // "btnName":"CHB204650000480"
+        },
+        {
+          "id":13,
+          "screenName":"Click_Text",
+          "btnName":"WPC323951000219"
+          // "btnName":"WPS323247002051"
+          // "btnName":"WPS323129001477"
+          // "btnName":"CHB2A6132009935"
+          // "btnName":"CHB204650000480"
+        },
+        {
+          "id":14,
+          "screenName":"Find_Button",
+          "btnName":"Disconnect"
+        },
+        {
+          "id":"8",
+          "screenName":"Click_Image" // image
+        },
+        // connect reader steps ends
+        // transaction step starts
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"Sale"
+        },
+        {
+          "id":14,
+          "screenName":"Enter_Amount",
+          "btnName":"200.00"
+        },
+        {
+          "id":9,
+          "screenName":"Click_Text",
+          "btnName":"Clear"
+        },
+        {
+          "id":14,
+          "screenName":"Enter_Amount",
+          "btnName":"50.00"
+        },
+        {
+          "id":10,
+          "screenName":"Click_View",
+          "btnName":"2 / 4"
+        },
+        {
+          "id":9,
+          "screenName":"Click_Text",
+          "btnName":"Go"
+        },
+        //custom tip
+        //     {
+        //     "id":9,
+        //     "screenName":"Click_Text",
+        //     "btnName":"Custom"
+        // },
+        //   {
+        //     "id":14,
+        //     "screenName":"Enter_Amount",
+        //     "amount":"500.00"
+        // },
+        // fix tip
+        {
+          "id":9,
+          "screenName":"Click_Text",
+          "btnName":"10%"
+        },
+        {
+          "id":12,
+          "screenName":"Click_Button",
+          "btnName":"Continue"
+        },
+        {
+          "id":13,
+          "screenName":"Wait_For_Text",
+          "btnName":"Transaction ID"
+        },
+        {
+          "id": "14",
+          "screenName": "Element_Avail", // image
+          "elementName": ["Transaction FAILED", "Transaction Approved"]
+        },
+        {
+          "id": "12",
+          "screenName": "Click_Button",
+          "btnName": "See Details"
+        },
+        {
+          "id": "8",
+          "screenName": "Click_Image" // image
+        },
+        // refund steps starts from dashboard
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"Refund"
+        },
+        {
+          "id":"0",
+          "screenName":"Find_Screen_Elements"
+        }
+      ]
+
+      item.push(obj);
+
+      // Output the modified item array
+      console.log(item);
+      this.showResult = true;
+      console.log(result);
+
+      this.webSocketService.sendTestCaseRequest(item);
+
+      let counterInterval = setInterval(() => {
+        count++;
       }, 1000);
-    }
-    startCounting();
-    let timeChecked = false;
-    this.showEnd = true
-    this.webSocketService.getSubject().subscribe((res) => {
 
-      if (!timeChecked) {
-        const currentDate = new Date();
 
-        // Get year, month, day, hours, minutes, and seconds
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        const hours = String(currentDate.getHours()).padStart(2, '0');
-        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-        res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      }
+      //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
+      let startInterval;
 
-      if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+      this.startCounting(individualCount);
+      let timeChecked = false;
+      this.showEnd = true
+      this.webSocketService.getSubject().subscribe((res) => {
 
-        res.extra.timeSpent = individualCount;
-        individualCount = 0;
-        clearInterval(this.startInterval);
+        if (!timeChecked) {
+          const currentDate = new Date();
 
-        // Restart the interval by calling the function
-        startCounting();
-        if (res?.message?.successMessage !== "End_Instructions") {
-
-          this.resultArr.push(res.message);
-          this.scrollToBottom();
-          console.log(res);
+          // Get year, month, day, hours, minutes, and seconds
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+          const day = String(currentDate.getDate()).padStart(2, '0');
+          const hours = String(currentDate.getHours()).padStart(2, '0');
+          const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+          const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+          res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
-        if (res?.message?.successMessage === "End_Instructions") {
-          clearInterval(counterInterval);
-          clearInterval(startInterval)
-          res.extra.timeTaken = count;
 
-          const now = new Date();
-          const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-          this.extras.startedTime = formattedTime;
-          res.extra.startedTime=formattedTime;
-          const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-          this.extras.createdAt = formattedDate;
-          const socketReport = {
-            capabilities: this.completeAppData,
-            resultArr: this.resultArr,
-            extras: this.extras,
+        if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+
+          res.extra.timeSpent = individualCount;
+          individualCount = 0;
+          clearInterval(this.startInterval);
+
+          // Restart the interval by calling the function
+          this.startCounting(individualCount)
+          if (res?.message?.successMessage !== "End_Instructions") {
+
+            this.resultArr.push(res.message);
+            this.scrollToBottom();
+            console.log(res);
           }
+          if (res?.message?.successMessage === "End_Instructions") {
+            clearInterval(counterInterval);
+            clearInterval(startInterval)
+            res.extra.timeTaken = count;
 
-          let passedCount = 0;
-          let failedCount = 0;
-          let untestedCount = 0;
+            const now = new Date();
+            const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            this.extras.startedTime = formattedTime;
+            res.extra.startedTime=formattedTime;
+            const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            this.extras.createdAt = formattedDate;
+            const socketReport = {
+              capabilities: this.completeAppData,
+              resultArr: this.resultArr,
+              extras: this.extras,
+            }
 
-          // Iterate over the reports to count the number of passed, failed, and untested test cases
-          this.resultArr?.map((testCase) => {
-            testCase.completeCount = count;
-            if (testCase?.successMessage !== "End_Instructions") {
-              console.log(testCase);
-              if (testCase.message === 'SUCCESS') {
-                passedCount++;
-              } else if (testCase.message === 'FAILED') {
-                failedCount++;
-              } else if (testCase.message === 'Untested') {
-                untestedCount++;
+            let passedCount = 0;
+            let failedCount = 0;
+            let untestedCount = 0;
+
+            // Iterate over the reports to count the number of passed, failed, and untested test cases
+            this.resultArr?.map((testCase) => {
+              testCase.completeCount = count;
+              if (testCase?.successMessage !== "End_Instructions") {
+                console.log(testCase);
+                if (testCase.message === 'SUCCESS') {
+                  passedCount++;
+                } else if (testCase.message === 'FAILED') {
+                  failedCount++;
+                } else if (testCase.message === 'Untested') {
+                  untestedCount++;
+                }
               }
-            }
-          });
+            });
 
-          const body = {
-            applicationId: localStorage.getItem('app_id'),
-            filename: itemData?.wt_desc,
-            app_version: "2.1",
-            totalTestCase: result?.length - 1,
-            passed: passedCount,
-            failed: failedCount,
-            crash_count: untestedCount,
-            extra: socketReport,
+            const body = {
+              applicationId: localStorage.getItem('app_id'),
+              filename: itemData?.wt_desc,
+              app_version: "2.1",
+              totalTestCase: result?.length - 1,
+              passed: passedCount,
+              failed: failedCount,
+              crash_count: untestedCount,
+              extra: socketReport,
+            }
+            this.accountService.postReportData(body).subscribe((resp) => {
+              if (resp) {
+                console.log(resp);
+                setTimeout(() => {
+                  this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+                }, 1000)
+
+              }
+            })
           }
-          this.accountService.postReportData(body).subscribe((resp) => {
-            if (resp) {
-              console.log(resp);
-              setTimeout(() => {
-                this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
-              }, 1000)
-
-            }
-          })
         }
-      }
-    }, (err) => {
-      console.log(err,'err')
+      }, (err) => {
+        console.log(err,'err')
 
-      clearInterval(this.startInterval);
-    })
+        clearInterval(this.startInterval);
+      })
+
+
+    }
 
     //   this.router.navigateByUrl('test-reports')
 

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AutomateComponent } from './automate.component';
-import { NbSpinnerModule } from '@nebular/theme';
+import {NbAccordionModule, NbOptionModule, NbSelectModule, NbSpinnerModule} from '@nebular/theme';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -11,7 +12,11 @@ import { NbSpinnerModule } from '@nebular/theme';
   ],
   imports: [
     CommonModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    NbOptionModule,
+    NbSelectModule,
+    ReactiveFormsModule,
+    NbAccordionModule
   ]
 })
 export class AutomateModule { }

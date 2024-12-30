@@ -3,10 +3,10 @@
     font-size: 3em;
     cursor: pointer;
 
-    position: fixed; 
-    bottom: 0px; 
-    left: 60%; 
-    transform: translateX(-50%); 
+    position: fixed;
+    bottom: 0px;
+    left: 60%;
+    transform: translateX(-50%);
     z-index: 1000;
 }
 .no-app-div{
@@ -73,6 +73,7 @@ td{
 .application-div{
     margin: 1em;
     padding: 1em;
+    max-height: 33vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
