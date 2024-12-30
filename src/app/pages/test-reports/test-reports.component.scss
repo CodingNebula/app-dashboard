@@ -130,6 +130,12 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     margin-bottom: .5em;
 }
 
+.header-title{
+  left: 50%;
+  position: absolute;
+  top:40%;
+  transform: translateX(-50%) translateY(-50%);
+}
 .dividerDiv {
     border-bottom: 2px solid #eee;
     width: 100%;
@@ -165,6 +171,7 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     justify-content: space-between;
     align-items: center;
     position: relative;
+
 }
 
 .date-label {

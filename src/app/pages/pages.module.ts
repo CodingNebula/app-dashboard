@@ -1,5 +1,17 @@
 import { NgModule } from '@angular/core';
-import { NbAccordionModule, NbAlertModule, NbCardModule, NbDialogModule, NbIconModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbSpinnerModule, NbTooltipModule } from '@nebular/theme';
+import {
+  NbAccordionModule,
+  NbAlertModule,
+  NbButtonModule,
+  NbCardModule,
+  NbDialogModule,
+  NbIconModule, NbListModule,
+  NbMenuModule,
+  NbPopoverModule,
+  NbSelectModule,
+  NbSpinnerModule,
+  NbTooltipModule
+} from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -21,6 +33,7 @@ import { CapabilitiesComponent } from './component/capabilities/capabilities.com
 import { InstructionsComponent } from './component/instructions/instructions.component';
 import { InstructionsDialogComponent } from './component/instructions-dialog/instructions-dialog.component';
 import { TemplateDialogComponent } from './template/template-dialog/template-dialog.component';
+import { DeleteDialogComponent } from './component/delete-dialog/delete-dialog.component';
 
 @NgModule({
   imports: [
@@ -39,7 +52,9 @@ import { TemplateDialogComponent } from './template/template-dialog/template-dia
     NgxEchartsModule,
     NbSpinnerModule,
     NbTooltipModule,
-    NbAlertModule
+    NbAlertModule,
+    NbButtonModule,
+    NbListModule
   ],
   declarations: [
     PagesComponent,
@@ -56,6 +71,7 @@ import { TemplateDialogComponent } from './template/template-dialog/template-dia
     InstructionsComponent,
     InstructionsDialogComponent,
     TemplateDialogComponent,
+    DeleteDialogComponent,
   ],
 })
 export class PagesModule {

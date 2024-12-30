@@ -1,16 +1,27 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { InstructionsDialogComponent } from '../instructions-dialog/instructions-dialog.component';
-import { NbDialogService } from '@nebular/theme';
+import {NbDialogRef, NbDialogService} from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../../shared/services/account/account.service';
+import { AfterViewInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { NbPopoverDirective } from '@nebular/theme';
+import {FilterModelComponent} from "../../signout/filter-model/filter-model.component";
+import {DeleteDialogComponent} from "../delete-dialog/delete-dialog.component";
+
 
 @Component({
   selector: 'ngx-instructions',
   templateUrl: './instructions.component.html',
   styleUrls: ['./instructions.component.scss']
 })
-export class InstructionsComponent {
+export class InstructionsComponent implements OnDestroy, AfterViewInit {
+
+
+  @ViewChild(NbPopoverDirective) popover: NbPopoverDirective;
+
+  @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
+  public dialog:NbDialogRef<any>;
   public applicationDataArr: any[] = [];
   public appDetails: any;
   public appName: any;
@@ -25,6 +36,60 @@ export class InstructionsComponent {
 
   }
 
+
+
+
+
+
+
+  textContent = 'Hello World';
+
+  items = [];
+
+  interval: any;
+
+  stopRuntimeChange() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+  }
+
+  changeComponent(component) {
+    this.popover.content = component;
+    this.popover.rebuild();
+  }
+
+  changeTrigger(trigger) {
+    this.popover.trigger = trigger;
+    this.popover.rebuild();
+  }
+
+  changePlacement(placement) {
+    this.popover.position = placement;
+    this.popover.rebuild();
+  }
+
+  startRuntimeChange() {
+    if (!this.interval) {
+      this.interval = setInterval(() => {
+        const random = this.items[Math.floor(Math.random() * this.items.length)];
+        this.changeComponent(random);
+      }, 2000);
+    }
+  }
+
+  ngAfterViewInit() {
+    this.items = [
+      this.templateList,
+      this.textContent,
+    ];
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval);
+  }
+
   ngOnInit() {
     this.appDetails = this.applicationDataService.getData();
 
@@ -33,7 +98,23 @@ export class InstructionsComponent {
     this.appName = localStorage.getItem('app_name');
   }
 
-  openDialog() {
+
+
+
+
+  openDeleteDailog(){
+
+
+
+    this.dialog = this.dialogService.open(DeleteDialogComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+    });
+
+  }
+
+  openDialog(item ?:any) {
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(InstructionsDialogComponent, {});
 

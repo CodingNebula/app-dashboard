@@ -85,7 +85,7 @@ export class ReportsComponent {
   }
   openReportDetail(item, $event) {
     $event.stopPropagation();
-    console.log(item);
+    console.log(item,"item");
 
     this.router.navigateByUrl('pages/test-reports', { state: { reportData: item } });
   }
@@ -201,7 +201,7 @@ export class ReportsComponent {
         fontSize: 7,  // Adjust the font size of the label here
         fontFamily: 'Arial',  // Optional: specify font family
         color: '#333',  // Optional: set color of label text
-        fontWeight: 'bold',  // Optional: set font weight 
+        fontWeight: 'bold',  // Optional: set font weight
 
         overflow: 'none',
         bleedMargin: 40
@@ -269,15 +269,15 @@ this.chartData.forEach((ele:any,ind)=>{
       this.extras = item?.extra?.extras;
       console.log(this.extras);
       console.log(item);
-  
+
       const doc = new jsPDF();
-  
+
       // Add report header
       doc.setFontSize(16);
       doc.text(item?.app_name || 'App Name', 14, 20);
       doc.setFontSize(12);
       doc.text(`Created At: ${this.reportData?.startTime || 'N/A'}`, 14, 30);
-  
+
       // Add device and platform information
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
@@ -294,7 +294,7 @@ this.chartData.forEach((ele:any,ind)=>{
         const pageWidth = doc.internal.pageSize.width;
         const xPosition = pageWidth - 120;
         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
-  
+
       }
       doc.setFontSize(12);
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
@@ -303,16 +303,16 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Started Time: ${this.reportData?.startedTime || 'N/A'}`, 14, 80);
       doc.text(`Total Time Taken: ${this.reportData?.completeCount || 'N/A'} Sec`, 14, 90);
       doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
-  
+
       // Add a line break
       doc.text('', 14, 110);
-  
+
       // Add test cases
       doc.setFontSize(14);
       doc.text('Test Cases', 14, 120);
-  
+
       console.log(this.testCases);
-  
+
       // Prepare data for the table
       const testCaseData = this.testCases.map(testCase => ({
         info: testCase.info,
@@ -321,7 +321,7 @@ this.chartData.forEach((ele:any,ind)=>{
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
         timeSpent: this.convertMilliseconds(testCase.time_spent)
       }));
-  
+
       // Create the table
       autoTable(doc, {
         head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
@@ -350,16 +350,16 @@ this.chartData.forEach((ele:any,ind)=>{
         },
         margin: { top: 20 },
       });
-  
-  
-  
+
+
+
       // Save the PDF
-  
+
       doc.save('report.pdf');
-  
-  
+
+
     },500)
-   
+
 
   }
   generatePieData(chartData = []) {
@@ -374,7 +374,7 @@ this.chartData.forEach((ele:any,ind)=>{
           fontSize: 7,  // Adjust the font size of the label here
           fontFamily: 'Arial',  // Optional: specify font family
           color: '#333',  // Optional: set color of label text
-          fontWeight: 'bold',  // Optional: set font weight 
+          fontWeight: 'bold',  // Optional: set font weight
 
           overflow: 'none',
           bleedMargin: 40
