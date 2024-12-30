@@ -76,16 +76,16 @@ export class WebsocketService {
         time_taken: 12000,
       }
     }
-   }
-   getSubject() {
+  }
+  getSubject() {
     return this.mySubject.asObservable().pipe(catchError((error) => {
-        console.error('Handled error in getSubject:', error);
-        // Return an empty observable or re-throw the error if needed
-        return new Observable();  // Return an empty observable in case of error
-      }));
+      console.error('Handled error in getSubject:', error);
+      // Return an empty observable or re-throw the error if needed
+      return new Observable();  // Return an empty observable in case of error
+    }));
   }
 
-  saveTestReportData(reportData: any){
+  saveTestReportData(reportData: any) {
     this.testReportsData = reportData
   }
   connectWithAccessToken(): void {
@@ -155,6 +155,10 @@ export class WebsocketService {
         room: localStorage.getItem('id')
       });
     });
+    // Listen for custom error events from the server
+    this.socket.on("error", (error) => {
+      console.error("Received error from server:", error);
+    });
 
 
   }
@@ -182,7 +186,7 @@ export class WebsocketService {
 
       // Listen for the response from the server
       this.socket.on('message', (response: any) => {
-this.updateValue(response);
+        this.updateValue(response);
         // Test case name and status
         // if (response.success) {
         // } else {
@@ -190,15 +194,15 @@ this.updateValue(response);
         // }
       });
     } else {
-      this.showAlert = true
-      setTimeout(()=>{
+      this.showAlert = true;
+      setTimeout(() => {
         this.showAlert = false;
-      },1000)
+      }, 1000);
       console.error('Socket is not connected.');
     }
   }
 
- updateValue(newValue: any) {
+  updateValue(newValue: any) {
     this.mySubject.next(newValue);
   }
   sendAppLaunchRequest(item: any): void {

@@ -1,7 +1,7 @@
 <div class="header-div">
   <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">DownloadPDF</label>
   <label class="heading">{{ this.reportData?.app_name }}</label>
-  <label class="date-label">Created At: <span>{{this.extras?.createdAt}}</span></label>
+  <label class="date-label">Created At: <span>{{reportData.extra.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</span></label>
 </div>
 <div class="parentDiv">
 
@@ -54,13 +54,7 @@
           </nb-accordion-item-header>
           <nb-accordion-item-body>
             <div class="row">
-              <div class="col-4">
-                <nb-card>
-                  <nb-card-body>
-                    <div> <span class="descriptionLabel">Expected Result -</span> {{testCase?.expected_result}}</div>
-                  </nb-card-body>
-                </nb-card>
-              </div>
+         
               <div class="col-4" *ngIf="testCase.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
@@ -71,7 +65,7 @@
               <div class="col-4">
                 <nb-card>
                   <nb-card-body>
-                    <div><span class="descriptionLabel">Time Spend -</span> - </div>
+                    <div><span class="descriptionLabel">Time Spend -</span> {{reportData?.extra?.timeSpent}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>

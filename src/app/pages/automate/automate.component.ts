@@ -340,6 +340,7 @@ ngOnDestroy(){
     //     "ignoreHiddenApiPolicyError": true,
     //     "newCommandTimeout": 1200000
     // }
+
     this.myForm = this.fb.group({
       platform: [this.appCapabilities?.platformName, [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
@@ -349,8 +350,8 @@ ngOnDestroy(){
       noReset: [this.appCapabilities?.noReset, [Validators.required]],
       hiddenApp: [this.appCapabilities?.ignoreHiddenApiPolicyError, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
-      description:[this.appCapabilities?.description, [Validators.required]],
-      buildNo:[this.appCapabilities?.buildNo, [Validators.required]],
+      description:[this.appCapabilities?.description, []],
+      buildNo:[this.appCapabilities?.buildNo, []],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -377,6 +378,8 @@ ngOnDestroy(){
       this.appLaunchLoading = true;
 
       const app_id = localStorage.getItem('app_id');
+     delete this.myForm.value.description;
+     delete this.myForm.value.buildNo;
 
       console.log(this.myForm.value);
 
@@ -384,7 +387,9 @@ ngOnDestroy(){
         {
           extra: {
             capabilities: this.myForm.value
-          }
+
+          },
+          name:'Ionic Anypay'
         }
       ).subscribe((response) => {
         console.log(response);
@@ -427,12 +432,12 @@ ngOnDestroy(){
   }
 
   scrollToBottom() {
-    setTimeout(()=>{
-      const parentDiv = document.getElementsByClassName('test-case-container')[0]
-      if (parentDiv) {
-        parentDiv.scrollTop = parentDiv.scrollHeight
-      }
-    },500)
+    // setTimeout(()=>{
+    //   const parentDiv = document.getElementsByClassName('test-case-container')[0]
+    //   if (parentDiv) {
+    //     parentDiv.scrollTop = parentDiv.scrollHeight
+    //   }
+    // },500)
   }
 
   // noResetValidator(control) {
@@ -453,7 +458,8 @@ ngOnDestroy(){
   }
 
   onStartTrans(itemData) {
-
+    let count = 0;
+    let individualCount = 0;
     console.log(itemData);
 
     const result = itemData.screens.map(screen => {
@@ -524,8 +530,6 @@ ngOnDestroy(){
         }
       })
     }
-    let count = 0;
-    let individualCount = 0;
     console.log(itemData);
 
 
@@ -600,7 +604,7 @@ ngOnDestroy(){
     //     "id": "1",
     //     "screenName": "Enter_Terminal_ID",
     //     "terminal_id": ["2994001"]
-    //
+
     //   },
     //   {
     //     "id": "6",
@@ -611,14 +615,14 @@ ngOnDestroy(){
     //     "id": "10",
     //     "screenName": "Enter_Terminal_ID",
     //     "terminal_id": ["2994001"]
-    //
+
     //   },
     //   {
     //     "id": "6",
     //     "screenName": "Click_Button",
     //     "btnName": "Submit"
     //   },
-    //
+
     //   {
     //     "id": "11",
     //     "screenName": "Profile_Login",
@@ -644,15 +648,15 @@ ngOnDestroy(){
     //     "screenName": "homePage",
     //     "action": "Transaction"
     //   },
-    //
+
     //   // connect reader steps start
     //   {
     //     "id": 10,
     //     "screenName": "Click_View",
     //     "btnName": "Device"
     //   },
-    //
-    //
+
+
     //   {
     //     "id": 12,
     //     "screenName": "Click_Button",
@@ -683,7 +687,7 @@ ngOnDestroy(){
     //     "id": "8",
     //     "screenName": "Click_Image" // image
     //   },
-    //
+
     //   {
     //     "id": "8",
     //     "screenName": "Click_Image", // image
@@ -714,7 +718,7 @@ ngOnDestroy(){
     //     "screenName": "Click_Text",
     //     "btnName": "Go"
     //   },
-    //
+
     //   {
     //     "id": 9,
     //     "screenName": "Click_Text",
@@ -735,20 +739,20 @@ ngOnDestroy(){
     //     "screenName": "Element_Avail", // image
     //     "elementName": ["Transaction FAILED", "Transaction Approved"]
     //   },
-    //
+
     //   {
     //     "id": "12",
     //     "screenName": "Click_Button",
     //     "btnName": "See Details"
     //   },
-    //
+
     //   {
     //     "id": "8",
     //     "screenName": "Click_Image" // image
-    //
+
     //   },
-    //
-    //
+
+
     // ]
 
     let item = [
@@ -817,7 +821,6 @@ ngOnDestroy(){
         "id": "1",
         "screenName": "Enter_Terminal_ID",
         "terminal_id": ["2994001"]
-
       },
       {
         "id": "6",
@@ -828,14 +831,12 @@ ngOnDestroy(){
         "id": "10",
         "screenName": "Enter_Terminal_ID",
         "terminal_id": ["2994001"]
-
       },
       {
         "id": "6",
         "screenName": "Click_Button",
         "btnName": "Submit"
       },
-
       {
         "id": "11",
         "screenName": "Profile_Login",
@@ -864,15 +865,12 @@ ngOnDestroy(){
       // {
       //     "id":20
       // },
-
       // connect reader steps start
       {
         "id": 10,
         "screenName": "Click_View",
         "btnName": "Device"
       },
-
-
       {
         "id":12,
         "screenName":"Click_Button",
@@ -969,29 +967,21 @@ ngOnDestroy(){
         "screenName": "Element_Avail", // image
         "elementName": ["Transaction FAILED", "Transaction Approved"]
       },
-
       {
         "id": "12",
         "screenName": "Click_Button",
         "btnName": "See Details"
       },
-
       {
         "id": "8",
         "screenName": "Click_Image" // image
-
       },
-
       // refund steps starts from dashboard
       {
         "id":"8",
         "screenName":"Click_Image", // image
         "btnName":"Refund"
-
       },
-
-
-
       {
         "id":"0",
         "screenName":"Find_Screen_Elements"
@@ -1035,9 +1025,7 @@ ngOnDestroy(){
         const hours = String(currentDate.getHours()).padStart(2, '0');
         const minutes = String(currentDate.getMinutes()).padStart(2, '0');
         const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-        if (res) {
-          res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
+        res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       }
 
       if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
