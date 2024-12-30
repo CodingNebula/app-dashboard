@@ -349,8 +349,8 @@ ngOnDestroy(){
       noReset: [this.appCapabilities?.noReset, [Validators.required]],
       hiddenApp: [this.appCapabilities?.ignoreHiddenApiPolicyError, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
-      description:[this.appCapabilities?.description, [Validators.required]],
-      buildNo:[this.appCapabilities?.buildNo, [Validators.required]],
+      description:[this.appCapabilities?.description, []],
+      buildNo:[this.appCapabilities?.buildNo, []],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -377,14 +377,18 @@ ngOnDestroy(){
       this.appLaunchLoading = true;
 
       const app_id = localStorage.getItem('app_id');
-
+     delete this.myForm.value.description;
+     delete this.myForm.value.buildNo;
+ 
       console.log(this.myForm.value);
 
       this.accountService.updateCapabilities(app_id,
         {
           extra: {
             capabilities: this.myForm.value
-          }
+  
+          },
+          name:'Ionic Anypay'
         }
       ).subscribe((response) => {
         console.log(response);
@@ -427,12 +431,12 @@ ngOnDestroy(){
   }
 
   scrollToBottom() {
-    setTimeout(()=>{
-      const parentDiv = document.getElementsByClassName('test-case-container')[0]
-      if (parentDiv) {
-        parentDiv.scrollTop = parentDiv.scrollHeight
-      }
-    },500)
+    // setTimeout(()=>{
+    //   const parentDiv = document.getElementsByClassName('test-case-container')[0]
+    //   if (parentDiv) {
+    //     parentDiv.scrollTop = parentDiv.scrollHeight
+    //   }
+    // },500)
   }
 
   // noResetValidator(control) {
@@ -480,34 +484,251 @@ ngOnDestroy(){
 
     const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
 
+    // let item = [
+    //   {
+    //     "id": "0",
+    //     "screenName": "Welcome",
+    //     "btnName": "Welcome"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image", // image 
+    //     "btnName": "left_arrow"
+    //   },
+    //   {
+    //     "id": "1",
+    //     "screenName": "Permissions"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image", // image 
+    //     "btnName": "left_arrow"
+    //   },
+    //   {
+    //     "id": "2",
+    //     "screenName": "Permissions_list"
+    //   },
+    //   {
+    //     "id": "3",
+    //     "screenName": "Allow_PhoneCalls",
+    //     "btnName": "Allow"
+    //   },
+    //   {
+    //     "id": "4",
+    //     "screenName": "Allow_DeviceLocation",
+    //     "btnName": "ALLOW"
+    //   },
+    //   {
+    //     "id": "5",
+    //     "screenName": "Allow_BluetoothConnection",
+    //     "btnName": "ALLOW"
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Continue"
+    //   },
+    //   {
+    //     "id": "7",
+    //     "screenName": "Terminal Setup"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image" // image 
+    //   },
+    //   {
+    //     "id": "9",
+    //     "screenName": "Select_Options",
+    //     "options": "Testing"
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "PROCEED"
+    //   },
+    //   {
+    //     "id": "1",
+    //     "screenName": "Enter_Terminal_ID",
+    //     "terminal_id": ["2994001"]
+
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Next"
+    //   },
+    //   {
+    //     "id": "10",
+    //     "screenName": "Enter_Terminal_ID",
+    //     "terminal_id": ["2994001"]
+
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Submit"
+    //   },
+
+    //   {
+    //     "id": "11",
+    //     "screenName": "Profile_Login",
+    //     "pin": ["9", "2", "0", "4"]
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Confirm"
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "GO"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "Skip >"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "homePage",
+    //     "action": "Transaction"
+    //   },
+
+    //   // connect reader steps start
+    //   {
+    //     "id": 10,
+    //     "screenName": "Click_View",
+    //     "btnName": "Device"
+    //   },
+
+
+    //   {
+    //     "id": 12,
+    //     "screenName": "Click_Button",
+    //     "btnName": "CONNECT TO READER"
+    //   },
+    //   {
+    //     "id": 13,
+    //     "screenName": "Wait_For_Text",
+    //     // "btnName":"WPS323247002051"
+    //     "btnName": "WPC323951000219"
+    //     //   "btnName":"CHB2A6132009935"
+    //     // "btnName":"CHB204650000480"
+    //   },
+    //   {
+    //     "id": 13,
+    //     "screenName": "Click_Text",
+    //     // "btnName":"WPS323247002051"
+    //     "btnName": "WPC323951000219"
+    //     // "btnName":"CHB2A6132009935"
+    //     // "btnName":"CHB204650000480"
+    //   },
+    //   {
+    //     "id": 14,
+    //     "screenName": "Find_Button",
+    //     "btnName": "Disconnect"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image" // image 
+    //   },
+
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image", // image 
+    //     "btnName": "Sale"
+    //   },
+    //   {
+    //     "id": 14,
+    //     "screenName": "Enter_Amount",
+    //     "amount": "200.00"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "Clear"
+    //   },
+    //   {
+    //     "id": 14,
+    //     "screenName": "Enter_Amount",
+    //     "amount": "50.00"
+    //   },
+    //   {
+    //     "id": 10,
+    //     "screenName": "Click_View",
+    //     "btnName": "2 / 4"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "Go"
+    //   },
+
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "10%"
+    //   },
+    //   {
+    //     "id": 12,
+    //     "screenName": "Click_Button",
+    //     "btnName": "Continue"
+    //   },
+    //   {
+    //     "id": 13,
+    //     "screenName": "Wait_For_Text",
+    //     "btnName": "Transaction ID"
+    //   },
+    //   {
+    //     "id": "14",
+    //     "screenName": "Element_Avail", // image 
+    //     "elementName": ["Transaction FAILED", "Transaction Approved"]
+    //   },
+
+    //   {
+    //     "id": "12",
+    //     "screenName": "Click_Button",
+    //     "btnName": "See Details"
+    //   },
+
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image" // image 
+
+    //   },
+
+
+    // ]
+
     let item = [
       {
-        "id": "0",
-        "screenName": "Welcome",
-        "btnName": "Welcome"
+        "id":"0",
+        "screenName":"Welcome",
+        "btnName":"Welcome"
       },
       {
-        "id": "8",
-        "screenName": "Click_Image", // image 
-        "btnName": "left_arrow"
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"left_arrow"
       },
       {
-        "id": "1",
-        "screenName": "Permissions"
+        "id":"1",
+        "screenName":"Permissions"
       },
       {
-        "id": "8",
-        "screenName": "Click_Image", // image 
-        "btnName": "left_arrow"
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"left_arrow"
       },
       {
-        "id": "2",
-        "screenName": "Permissions_list"
+        "id":"2",
+        "screenName":"Permissions_list"
       },
       {
-        "id": "3",
-        "screenName": "Allow_PhoneCalls",
-        "btnName": "Allow"
+        "id":"3",
+        "screenName":"Allow_PhoneCalls",
+        "btnName":"Allow"
       },
       {
         "id": "4",
@@ -530,7 +751,7 @@ ngOnDestroy(){
       },
       {
         "id": "8",
-        "screenName": "Click_Image" // image 
+        "screenName": "Click_Image" // image
       },
       {
         "id": "9",
@@ -546,7 +767,6 @@ ngOnDestroy(){
         "id": "1",
         "screenName": "Enter_Terminal_ID",
         "terminal_id": ["2994001"]
-
       },
       {
         "id": "6",
@@ -557,14 +777,12 @@ ngOnDestroy(){
         "id": "10",
         "screenName": "Enter_Terminal_ID",
         "terminal_id": ["2994001"]
-
       },
       {
         "id": "6",
         "screenName": "Click_Button",
         "btnName": "Submit"
       },
-
       {
         "id": "11",
         "screenName": "Profile_Login",
@@ -590,111 +808,130 @@ ngOnDestroy(){
         "screenName": "homePage",
         "action": "Transaction"
       },
-
+      // {
+      //     "id":20
+      // },
       // connect reader steps start
       {
         "id": 10,
         "screenName": "Click_View",
         "btnName": "Device"
       },
-
-
       {
-        "id": 12,
-        "screenName": "Click_Button",
-        "btnName": "CONNECT TO READER"
+        "id":12,
+        "screenName":"Click_Button",
+        "btnName":"CONNECT TO READER"
       },
       {
-        "id": 13,
-        "screenName": "Wait_For_Text",
+        "id":13,
+        "screenName":"Wait_For_Text",
+        "btnName":"WPC323951000219"
         // "btnName":"WPS323247002051"
-        "btnName": "WPC323951000219"
+        // "btnName":"WPS323129001477"
         //   "btnName":"CHB2A6132009935"
         // "btnName":"CHB204650000480"
       },
       {
-        "id": 13,
-        "screenName": "Click_Text",
+        "id":13,
+        "screenName":"Click_Text",
+        "btnName":"WPC323951000219"
         // "btnName":"WPS323247002051"
-        "btnName": "WPC323951000219"
+        // "btnName":"WPS323129001477"
         // "btnName":"CHB2A6132009935"
         // "btnName":"CHB204650000480"
       },
       {
-        "id": 14,
-        "screenName": "Find_Button",
-        "btnName": "Disconnect"
+        "id":14,
+        "screenName":"Find_Button",
+        "btnName":"Disconnect"
       },
       {
-        "id": "8",
-        "screenName": "Click_Image" // image 
+        "id":"8",
+        "screenName":"Click_Image" // image
       },
-
+      // connect reader steps ends
+      // transaction step starts
       {
-        "id": "8",
-        "screenName": "Click_Image", // image 
-        "btnName": "Sale"
-      },
-      {
-        "id": 14,
-        "screenName": "Enter_Amount",
-        "amount": "200.00"
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"Sale"
       },
       {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "Clear"
+        "id":14,
+        "screenName":"Enter_Amount",
+        "btnName":"200.00"
       },
       {
-        "id": 14,
-        "screenName": "Enter_Amount",
-        "amount": "50.00"
+        "id":9,
+        "screenName":"Click_Text",
+        "btnName":"Clear"
       },
       {
-        "id": 10,
-        "screenName": "Click_View",
-        "btnName": "2 / 4"
+        "id":14,
+        "screenName":"Enter_Amount",
+        "btnName":"50.00"
       },
       {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "Go"
-      },
-
-      {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "10%"
+        "id":10,
+        "screenName":"Click_View",
+        "btnName":"2 / 4"
       },
       {
-        "id": 12,
-        "screenName": "Click_Button",
-        "btnName": "Continue"
+        "id":9,
+        "screenName":"Click_Text",
+        "btnName":"Go"
+      },
+      //custom tip
+      //     {
+      //     "id":9,
+      //     "screenName":"Click_Text",
+      //     "btnName":"Custom"
+      // },
+      //   {
+      //     "id":14,
+      //     "screenName":"Enter_Amount",
+      //     "amount":"500.00"
+      // },
+      // fix tip
+      {
+        "id":9,
+        "screenName":"Click_Text",
+        "btnName":"10%"
       },
       {
-        "id": 13,
-        "screenName": "Wait_For_Text",
-        "btnName": "Transaction ID"
+        "id":12,
+        "screenName":"Click_Button",
+        "btnName":"Continue"
+      },
+      {
+        "id":13,
+        "screenName":"Wait_For_Text",
+        "btnName":"Transaction ID"
       },
       {
         "id": "14",
-        "screenName": "Element_Avail", // image 
+        "screenName": "Element_Avail", // image
         "elementName": ["Transaction FAILED", "Transaction Approved"]
       },
-
       {
         "id": "12",
         "screenName": "Click_Button",
         "btnName": "See Details"
       },
-
       {
         "id": "8",
-        "screenName": "Click_Image" // image 
-
+        "screenName": "Click_Image" // image
       },
-
-
+      // refund steps starts from dashboard
+      {
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"Refund"
+      },
+      {
+        "id":"0",
+        "screenName":"Find_Screen_Elements"
+      }
     ]
 
     item.push(obj);
@@ -704,7 +941,7 @@ ngOnDestroy(){
     this.showResult = true;
     console.log(result);
 
-    this.webSocketService.sendTestCaseRequest(result);
+    this.webSocketService.sendTestCaseRequest(item);
 
     let counterInterval = setInterval(() => {
       count++;
@@ -1233,8 +1470,8 @@ ngOnDestroy(){
       this.myForm.get('timeout').enable();
       this.myForm.get('noReset').enable();
       this.myForm.get('hiddenApp').enable();
-      this.myForm.get('description').enable();
-      this.myForm.get('buildNo').enable();
+      // this.myForm.get('description').enable();
+      // this.myForm.get('buildNo').enable();
   
     }
     else {
@@ -1246,8 +1483,8 @@ ngOnDestroy(){
       this.myForm.get('timeout').disable();
       this.myForm.get('noReset').disable();
       this.myForm.get('hiddenApp').disable();
-      this.myForm.get('description').enable();
-      this.myForm.get('buildNo').enable();
+      // this.myForm.get('description').enable();
+      // this.myForm.get('buildNo').enable();
     }
   }
 
