@@ -69,8 +69,8 @@
             <div class="form-group">
               <label for="noReset">No Reset:</label>
               <nb-select id="noReset" [formControlName]="'noReset'" placeholder="Select" class="custom-select-dropdown">
-                <nb-option value="True">True</nb-option>
-                <nb-option value="False">False</nb-option>
+                <nb-option value="true">True</nb-option>
+                <nb-option value="false">False</nb-option>
               </nb-select>
 
               <div *ngIf="myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
@@ -82,10 +82,10 @@
 
             <div class="form-group">
               <label for="hiddenApp">Ignore hidden app policy:</label>
-              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" 
+              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select"
                 class="custom-select-dropdown">
-                <nb-option value="True">True</nb-option>
-                <nb-option value="False">False</nb-option>
+                <nb-option value="true">True</nb-option>
+                <nb-option value="false">False</nb-option>
               </nb-select>
               <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
                 <small *ngIf="myForm.get('hiddenApp').hasError('required')">Hidden App is required!</small>
@@ -93,6 +93,29 @@
                   <!-- Hidden App!</small> -->
               </div>
             </div>
+          </div>
+
+
+          <div class="form-row">
+
+
+
+            <div class="form-group">
+              <label for="buildNo">Build No:</label>
+              <input id="buildNo" formControlName="buildNo" class="form-control" />
+              <div *ngIf="myForm.get('buildNo').touched && myForm.get('buildNo').invalid" class="error-message">
+                <small *ngIf="myForm.get('buildNo').hasError('required')">Build Name is required!</small>
+              </div>
+            </div>
+            
+            <div  class="form-group   ">
+              <label for="description">Description:</label>
+              <textarea id="description" formControlName="description" class="form-control description-input" ></textarea>
+              <div *ngIf="myForm.get('description').touched && myForm.get('description').invalid" class="error-message">
+                <small *ngIf="myForm.get('description').hasError('required')">Description name is required!</small>
+              </div>
+            </div>
+          
           </div>
 
           <div class="form-row button-row">
@@ -110,38 +133,39 @@
 
     <div class="test-case-div">
       <h5>{{templateData?.wt_name}}</h5>
-      
+
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button class="start-button" (click)="onStartTrans(templateData)">Start All</button>
+      <button class="start-button" (click)="onStartTrans(templateData)">{{showEnd?'End Test':'Start All'}}</button>
 
 
     </div>
     <!-- <div  class="test-case-div">
       <h5>Do a Transaction</h5>
   <button class="start-button" (click)="onStartTrans()">Start</button>
-   
+
     </div> -->
 
 
-    <div class="test-case-status-container">
+    <div *ngIf="!showResult" class="test-case-status-container">
     <div *ngFor="let item of testCases" class="test-case-div">
-      <h6>{{item?.ins_set_screen_name}}</h6><button class="start-button" (click)="onStart(item)">Start</button>
+      <h6>{{item?.ins_set_screen_name}}</h6>
+      <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
     </div>
 
   </div>
 
 
-  <!-- <div *ngIf="resultArr.length > 0" class="test-case-status-container">
+  <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container" #resultContainer>
     <div *ngFor="let item of resultArr" class="test-case-div">
-      <h6>{{item?.ins_set_screen_name}}</h6>
-      <span *ngIf="!item.loading && item.status" class="status-message"
-        [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
+      <h6>{{item?.successMessage || item?.failedMessage}}</h6>
+      <span *ngIf=" item.message" class="status-message"
+        [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>
         <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
       <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
       <!-- </div> -->
-    <!-- </div>
+    </div>
 
-  </div> -->
+  </div>
 </div>
 
 </div>

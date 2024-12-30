@@ -14,27 +14,7 @@
       <!-- <button (click)="buildReport()" class="build-report-btn">Build Report <ion-icon
           name="add-circle-outline"></ion-icon></button> -->
     </header>
-    <div class="segment" *ngIf="reports?.length>0">
-      <button (click)="btnHandler('All')" [ngClass]="{'active':activeBtn==='All'}" class="segment-button ">All
-        (40)</button>
-      <button (click)="btnHandler('pdf')" [ngClass]="{'active':activeBtn==='pdf'}" class="segment-button">pdf
-        (5)</button>
-      <button (click)="btnHandler('xls')" [ngClass]="{'active':activeBtn==='xls'}" class="segment-button">xls
-        (33)</button>
-      <button (click)="btnHandler('doc')" [ngClass]="{'active':activeBtn==='doc'}" class="segment-button">doc
-        (2)</button>
-      <button (click)="btnHandler('csv')" [ngClass]="{'active':activeBtn==='csv'}" class="segment-button">csv
-        (1)</button>
-    </div>
-    <div class="filters-info" *ngIf="reports?.length>0">
-      <div class="selected-filters">
-        <span>Finance</span>
-        <span>October</span>
-        <span>Year2024</span>
-      </div>
-      <a href="#" class="reset-filters">Reset Filters</a>
-      <input type="search" placeholder="Search" class="search-bar" />
-    </div>
+
 
     <!-- Scrollable Table -->
     <div class="table-container">
@@ -45,11 +25,12 @@
             <th>App Name</th>
             <th>App Version</th>
             <th>Test performed</th>
+            <th>Date</th>
             <th>Download</th>
           </tr>
         </thead>
         <tbody>
-          <tr (click)="openReportDetail($event)" *ngFor="let reportData of reports; let j = index">
+          <tr *ngFor="let reportData of reports; let j = index" (click)="openReportDetail(reportData, $event)">
             <!-- <td><input type="checkbox"></td> -->
              <td>{{j+1}}</td>
             <td>
@@ -59,17 +40,22 @@
               </div>
             </td>
             <td>{{reportData.application_version}}</td>
+
             <td>{{reportData.testcase_performed}}</td>
-            <td><button class="downloadbtn" (click)="downloadPDF($event)">Download</button></td>
+            <td>{{reportData.extra.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</td>
+            <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>
           </tr>
         </tbody>
       </table>
+      <div class='testSpecification' style="display: none;">
+        <div echarts style="height: 240px;width: 390px;" [options]="CompletionChart" #chartElement (chartInit)="onChartInit($event)"></div>
+      </div>
       <div *ngIf="reports?.length === 0" class="noDataDiv">
         <h5>No Data Available...</h5>
       </div>
     </div>
 
-    <footer class="pagination-footer" *ngIf="reports?.length>0">
+    <!-- <footer class="pagination-footer" *ngIf="reports?.length>0">
       <span>1-10 of 460</span>
       <div class="pagination-controls">
         <div class="row-per-page-div">
@@ -80,5 +66,5 @@
 
         <button>&gt;</button>
       </div>
-    </footer>
+    </footer> -->
   </div>

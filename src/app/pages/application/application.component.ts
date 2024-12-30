@@ -14,6 +14,8 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class ApplicationComponent implements OnInit {
   public applicationDataArr: any[] = [];
+  public instructionsArr: any[] = [];
+  public appCapabilities: any;
 
   constructor(
     private dialogService: NbDialogService,
@@ -26,6 +28,7 @@ export class ApplicationComponent implements OnInit {
 
   ngOnInit() {
     this.getApplication();
+    this.getCapabilities();
   }
 
   openDialog() {
@@ -103,35 +106,47 @@ export class ApplicationComponent implements OnInit {
     // Initialize instructionsArr
     const app_id = item.id;
   
-    // Fetch instructions asynchronously using the app_id
-    this.accountService.getInstruction(app_id).subscribe((data) => {
-      let instructionsArr = [];
-      if (data && data.length > 0) {
-        instructionsArr = data;
-        console.log(instructionsArr);
+    // First API call to get instructions
+    this.accountService.getInstruction(app_id).subscribe((instructionData) => {
+      this.instructionsArr = [];
+      if (instructionData && instructionData.length > 0) {
+        this.instructionsArr = instructionData;
+        console.log(this.instructionsArr);
       }
   
-      // Now that we have the instructions, check the conditions
-      if (parsedAppCapa && parsedAppCapa.app_id === item.id && instructionsArr.length === 0) {
-        // Navigate to instructions page if app_id matches and no instructions
-        this.router.navigateByUrl('pages/instructions');
-      } else if (parsedAppCapa && parsedAppCapa.app_id === item.id && instructionsArr.length > 0) {
-        // Navigate to template page if app_id matches and there are instructions
-        this.router.navigateByUrl('pages/template');
-      } else {
-        // Navigate to capabilities page if no conditions are met
-        this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
+      // Now, fetch capabilities after instructions API response
+      this.accountService.getCapabilites(app_id).subscribe((capabilitiesData) => {
+        console.log(capabilitiesData);
+        this.appCapabilities = capabilitiesData;
+        console.log(this.appCapabilities);
   
-        // Log item and store data
-        console.log(item);
-        this.applicationDataService.setData('app_details', item);
+        // Now that both API responses are received, check the conditions
+        if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length === 0) {
+          // Navigate to instructions page if app_id matches and no instructions
+          this.router.navigateByUrl('pages/instructions');
+        } else if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length > 0) {
+          // Navigate to template page if app_id matches and there are instructions
+          this.router.navigateByUrl('pages/template');
+        } else {
+          // Navigate to capabilities page if no conditions are met
+          this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
   
-        // Store app_id and app_name again in localStorage (optional redundancy)
-        localStorage.setItem('app_id', item?.id);
-        localStorage.setItem('app_name', item?.app_name);
-      }
+          // Log item and store data
+          console.log(item);
+          this.applicationDataService.setData('app_details', item);
+  
+          // Store app_id and app_name again in localStorage (optional redundancy)
+          localStorage.setItem('app_id', item?.id);
+          localStorage.setItem('app_name', item?.app_name);
+        }
+      }, (error) => {
+        console.error('Error fetching capabilities:', error);
+      });
+    }, (error) => {
+      console.error('Error fetching instructions:', error);
     });
   }
+  
   
 
   getInstructions(){
@@ -141,6 +156,14 @@ export class ApplicationComponent implements OnInit {
         this.applicationDataArr = data;
         this.applicationDataService.setData('instructions', data)
       }
+    })
+  }
+
+  getCapabilities(){
+    const app_id = localStorage.getItem('app_id');
+    this.accountService.getCapabilites(app_id).subscribe((data) => {
+      console.log(data);
+      
     })
   }
 }

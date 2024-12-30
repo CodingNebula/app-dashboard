@@ -1,5 +1,5 @@
 <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'name'">
-    <nb-card-header>Anypay 2.0 Test Case</nb-card-header>
+    <nb-card-header>{{appName}} Test Case</nb-card-header>
     <nb-card-body>
         <form [formGroup]="testCaseName"  class="custom-form">
             <div class="form-row">
@@ -22,7 +22,7 @@
   </nb-card>
 
   <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'instruction'">
-    <nb-card-header>Anypay 2.0 Test Case</nb-card-header>
+    <nb-card-header>{{appName}}Test Case</nb-card-header>
     <nb-card-body>
         <form [formGroup]="instruction"  class="custom-form">
               <div class="form-row">
@@ -51,7 +51,7 @@
 
 
   <nb-card *ngIf="selectedAction === 'template' && selectedType === 'name'">
-    <nb-card-header>Anypay 2.0 Templates</nb-card-header>
+    <nb-card-header>{{appName}} Templates</nb-card-header>
     <nb-card-body>
         <form [formGroup]="templateForm"  class="custom-form">
             <div class="form-row">
@@ -97,7 +97,7 @@
   </nb-card>
 
   <nb-card *ngIf="selectedAction === 'template' && selectedType === 'testCase'">
-    <nb-card-header>Anypay 2.0 Templates</nb-card-header>
+    <nb-card-header>{{appName}}  Templates</nb-card-header>
     <nb-card-body>
         <form [formGroup]="testCases"  class="custom-form">
               <div class="form-row">

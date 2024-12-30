@@ -36,7 +36,7 @@ export class TemplateComponent {
 
   ngOnInit(){
     this.getAllPages();
-    this.getAllTempates();
+    this.getAllTemplates();
     this.getInstructions();
 
     this.appName = localStorage.getItem('app_name');
@@ -53,7 +53,7 @@ export class TemplateComponent {
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
-        if (result.confirmed) {
+        if (result?.confirmed) {
           if (result.selectedAction === 'testCase') {
             if(result.selectedType === 'name'){
               console.log(result.data);
@@ -87,7 +87,7 @@ export class TemplateComponent {
               console.log(result.data);
               
               let body = {
-                instruction_set_id: this.screenNameId,  // This value can be dynamic
+                instruction_set_id: id,  // This value can be dynamic
                 instruction_id: result?.data?.instructionArr?.map((instruction, index) => {
                     return {
                         id: instruction.id,  // Mapping the dynamic id from instructionsArray
@@ -106,9 +106,9 @@ export class TemplateComponent {
                   console.log(resp);
                   
                   // this.testCasesArray.push(resp[0]);
-                  if (this.testCasesArray.length > 0) {
-                    this.testCasesArray.pop();
-                }
+                //   if (this.testCasesArray.length > 0) {
+                //     this.testCasesArray.pop();
+                // }
                   this.tempTestCase.instructions = result.data.instructionArr;
                   this.testCasesArray.push(this.tempTestCase);
                   console.log(this.tempTestCase);
@@ -123,7 +123,7 @@ export class TemplateComponent {
           }
           else if (result.selectedAction === 'template') {
             if(result.selectedType === 'name'){
-              console.log(result.data);
+              console.log(result.data,'datum');
               
             //   const details = {
             //     screenName: result.data.test_case_name,
@@ -148,14 +148,15 @@ export class TemplateComponent {
                   console.log(resp);
                   
                   // this.testCasesArray.push(resp[0]);
-                  this.templateId = resp[0]?.id
-                  this.tempTemplate.wt_name = resp[0]?.template_name;
-                  this.tempTemplate.wt_desc = resp[0]?.description;
-                  this.tempTemplate.wt_id = resp[0]?.id;
+                  this.templateId = resp[0]?.wt_id
+                  // this.tempTemplate.wt_name = resp[0]?.template_name;
+                  // this.tempTemplate.wt_desc = resp[0]?.description;
+                  // this.tempTemplate.wt_id = resp[0]?.id;
 
 
 
-                  this.templateArray.push(this.tempTemplate)
+                  // this.templateArray.push(this.tempTemplate)
+                  this.getAllTemplates();
                 }
               })
               this.applicationDataService.setData('testCases', this.testCasesArray);
@@ -167,6 +168,7 @@ export class TemplateComponent {
               
               let body = {
                 application_id: localStorage.getItem('app_id'),  // This value can be dynamic
+                wt_id:id,
                 instructions_set: result?.data?.templates?.map((instruction, index) => {
                     return {
                         id: instruction?.instruction_set_id,  // Mapping the dynamic id from instructionsArray
@@ -176,32 +178,40 @@ export class TemplateComponent {
                 })
             };
 
-            console.log(body);
-            
+            console.log(body,'body');
+            console.log(result,'sult')
             let screens = result?.data?.templates?.map((screen, index) => {
               return {
+                wt_id:screen?.wt_id,
+                ins_set_id: screen?.instruction_set_id,
                 ins_set_screen_name: screen?.screen_name,  // Setting the screen name dynamically from result.data.screen_name
                   instructions: screen?.instructions?.map((instruction) => {
                       return {
-                        ins_element_name: instruction?.instruction_name  // Mapping each instruction's inst_name dynamically
+                        ins_name: instruction?.instruction_name,
+                        ins_back_name: instruction?.server_name,
+                        ins_element_name: instruction?.element_name,  // Mapping each instruction's inst_name dynamically
                       };
                   })
               };
           });
           
           console.log(screens);
-              
-              this.accountService.postTemplates(this.templateId, body).subscribe((resp) => {
+              console.log(this.templateId,'tempid');
+              let appId=localStorage.getItem('app_id');
+              console.log(result,'res')
+              this.accountService.postTemplates(id, body).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
 
-                  if (this.templateArray.length > 0) {
-                    this.templateArray.pop();
-                }
+                //   if (this.templateArray.length > 0) {
+                //     this.templateArray.pop();
+                // }
                   
                   this.tempTemplate.screens = screens;
 
                   this.templateArray.push(this.tempTemplate);
+                  console.log(this.templateArray);
+                  
                   
                 }
               })
@@ -233,7 +243,7 @@ export class TemplateComponent {
   getAllPages(){
     const id = localStorage.getItem('app_id');
     this.accountService.getAllPages(id).subscribe((resp) => {
-      console.log(resp);
+      console.log(resp,'lodi');
       const groupedInstructions = resp.reduce((acc, curr) => {
         const { instruction_set_id, screen_name } = curr;
         
@@ -253,57 +263,76 @@ export class TemplateComponent {
     }, {});
     
     // Convert the grouped object to an array
-    const result = Object.values(groupedInstructions);
-  
+    const result = Object.values(groupedInstructions); // assuming groupedInstructions is an object
+console.log(result);
+
+// Flatten and sort the instructions by 'instruction_order'
+const sortedInstructions = result
+  .map((item: any) => {
+    // Sort the instructions in each item by instruction_order
+    item.instructions.sort((a: any, b: any) => {
+      return parseInt(a.instruction_order) - parseInt(b.instruction_order);
+    });
+    return item;
+  })
+console.log(sortedInstructions);
+
+// sortedInstructions.forEach((instruction: any) => {
+//   console.log(instruction);
+// });
+
+    
+    
     this.testCasesArray = result;
     console.log(result);
     })
   }
 
 
-  getAllTempates(){
+  getAllTemplates() {
     const id = localStorage.getItem('app_id');
     this.accountService.getAllTemplates(id).subscribe((resp) => {
-      // console.log(resp);
+        const groupedData = [];
+        console.log(resp,'pop')
 
-      const groupedData = resp.reduce((acc, curr) => {
-        let wtGroup = acc.find(group => group.wt_id === curr.wt_id);
-      
-        if (!wtGroup) {
-          wtGroup = {
-            wt_id: curr.wt_id,
-            wt_name: curr.wt_name,
-            wt_desc: curr.wt_desc,
-            screens: [],
-          };
-          acc.push(wtGroup);
-        }
-      
-        let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
-      
-        if (!screenGroup) {
-          screenGroup = {
-            ins_set_id: curr.ins_set_id,
-            ins_set_screen_name: curr.ins_set_screen_name,
-            instructions: [],
-          };
-          wtGroup.screens.push(screenGroup);
-        }
-      
-        // Check if the instruction is already added to the screenGroup
-        const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
-        if (!instructionExists) {
-          screenGroup.instructions.push(curr);
-        }
-      
-        return acc;
-      }, []);
-      
-      this.templateArray = groupedData
-      console.log(groupedData);
-      
-    })
-  }
+        resp.forEach((curr) => {
+            // Find or create the weight group
+            let wtGroup = groupedData.find(group => group.wt_id === curr.wt_id);
+          
+            if (!wtGroup) {
+                wtGroup = {
+                    wt_id: curr.wt_id,
+                    wt_name: curr.wt_name,
+                    wt_desc: curr.wt_desc,
+                    screens: [],
+                };
+                groupedData.push(wtGroup);
+            }
+            console.log(wtGroup,'wtgroup')
+
+            // Find or create the screen group
+            let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
+            if (!screenGroup) {
+                screenGroup = {
+                    ins_set_id: curr.ins_set_id,
+                    ins_set_screen_name: curr.ins_set_screen_name,
+                    instructions: [],
+                };
+                wtGroup.screens.push(screenGroup);
+            }
+
+
+            // Check if the instruction is already added to the screenGroup
+            const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
+            if (!instructionExists) {
+                screenGroup.instructions.push(curr);
+            }
+        });
+        
+        this.templateArray = groupedData;
+        console.log(groupedData,'groupeddarta');
+    });
+}
 
   getInstructions(){
     const app_id = localStorage.getItem('app_id');

@@ -10,7 +10,7 @@ export class AccountService {
 
   constructor(private apiService: ApiService) { }
 
-  postCapabilities(payload: any) {
+  launchApp(payload: any, id) {
     const endpoint = 'v1/run'
     return this.apiService.postWithoutModelCapabilities(endpoint, payload)
   }
@@ -229,6 +229,24 @@ export class AccountService {
     )
   }
 
+  postReportData(request: any){
+    return this.apiService.postWithoutModel(`save_report`, request).pipe(
+      map(resp => {
+        if(resp){
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
   getInstruction(id: string){
     return this.apiService.getWithoutModal(`instruction/${id}`).pipe(
       map(applicationResponse => {
@@ -287,6 +305,42 @@ export class AccountService {
         return throwError(() => new Error('Failed to submit application. Please try again.'));
       })
     );
+  }
+
+  updateCapabilities(id, payload){
+    return this.apiService.updateWithoutModal(`app_details/${id}`, payload).pipe(
+      map(applicationData => {
+        if(applicationData){
+          return applicationData;
+        }
+        else{
+          throw new Error('Invalid Response');
+        }
+      })
+      ,
+    catchError(error => {
+      console.error('Error during updating the App Capabilities', error);
+      return throwError(() => new Error('Failed to update Capabilities'));
+    })
+    )
+  }
+
+  getCapabilites(id){
+    return this.apiService.getWithoutModal(`app_details/${id}`).pipe(
+      map(applicationRes => {
+        if(applicationRes){
+          return applicationRes;
+        }
+        else{
+          throw new Error('Invalid response');
+        }
+      }
+    ),
+    catchError(error => {
+      console.error('Error during getting the application data', error);
+      return throwError(() => new Error('Failed to get application data'));
+    })
+  )
   }
   
 }

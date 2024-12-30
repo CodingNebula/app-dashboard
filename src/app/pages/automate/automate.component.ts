@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AccountService } from '../../shared/services/account/account.service';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
@@ -12,6 +12,8 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
   styleUrls: ['./automate.component.scss']
 })
 export class AutomateComponent implements OnInit {
+  @ViewChild('resultContainer') resultContainer: ElementRef;
+  public showEnd = false;
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -23,6 +25,7 @@ export class AutomateComponent implements OnInit {
   public appLaunchLoading: boolean = false;
   public totalTimeTaken: number;
   public resultArr: any[] = [];
+  public startInterval:any;
   public reportData: any = {
     general: {}
   };
@@ -32,6 +35,9 @@ export class AutomateComponent implements OnInit {
   public isEditMode: boolean = false;
   public appData: any;
   public appCapabilities: any;
+  public showResult: boolean = false;
+  public completeAppData: any;
+  public extras: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -50,7 +56,7 @@ export class AutomateComponent implements OnInit {
       },
       {
         "id": "8",
-        "screenName": "Click_Image", // image 
+        "screenName": "Click_Image", // image
         "btnName": "left_arrow",
         "title": "Welcome_Next_Button"
       },
@@ -216,7 +222,7 @@ export class AutomateComponent implements OnInit {
       //      "id":13,
       //      "screenName":"Wait_For_Text",
       //       "btnName":"WPC323951000219"
-      //  }, 
+      //  },
       //  {
       //      "id":13,
       //      "screenName":"Click_Text",
@@ -229,11 +235,11 @@ export class AutomateComponent implements OnInit {
       //  },
       //   {
       //      "id":"8",
-      //      "screenName":"Click_Image" // image 
+      //      "screenName":"Click_Image" // image
       //  },
       //  {
       //      "id":"8",
-      //      "screenName":"Click_Image", // image 
+      //      "screenName":"Click_Image", // image
       //      "btnName":"Sale"
       //  },
       //  {
@@ -242,7 +248,7 @@ export class AutomateComponent implements OnInit {
       //      "amount":"200.00"
       //  },
       //    {
-      //      "id":9,
+      //      "id":9,get
       //      "screenName":"Click_Text",
       //      "btnName":"Clear"
       //  },
@@ -278,7 +284,7 @@ export class AutomateComponent implements OnInit {
       //  },
       //   {
       //      "id":"14",
-      //      "screenName":"Element_Avail", // image 
+      //      "screenName":"Element_Avail", // image
       //      "elementName":["Transaction FAILED", "Transaction Approved"]
       //  },
 
@@ -296,34 +302,50 @@ export class AutomateComponent implements OnInit {
     this.applicationData = this.automateDataService.selectedApplication;
 
   }
-
+ngOnDestroy(){
+  clearInterval(this.startInterval)
+}
   ngOnInit() {
+    this.webSocketService.getSocketFailure().subscribe((res)=>{
+      if(this.startInterval){
+        clearInterval(this.startInterval);
+      }
+    })
     const state = window.history.state;
 
-    if(state && state.templateArr){
+    if (state && state.templateArr) {
       this.templateData = state.templateArr
     }
 
-    if(state && state.capabilities){
+    // Call getCapabilities() and subscribe to it
+    this.getCapabilities().subscribe((appCapabilities) => {
+      console.log(appCapabilities,"completeAppData");  // This will log the data once it's available
+      this.completeAppData = appCapabilities
+    });
+
+
+
+    if (state && state.capabilities) {
       this.appCapabilities = state.capabilities;
     }
 
     console.log(this.appCapabilities);
-    
+
     this.appData = this.applicationDataService.getData();
 
     console.log(this.appData);
-    
-  //   {
-  //     "platformName": "Android",
-  //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
-  //     "appPackage": "com.example.app",
-  //     "automationName": "UIAutomator2",
-  //     "deviceName": "Samsung",
-  //     "noReset": true,
-  //     "ignoreHiddenApiPolicyError": true,
-  //     "newCommandTimeout": 1200000
-  // }
+
+    //   {
+    //     "platformName": "Android",
+    //     "app": "/home/codingnebula/Downloads/app-debug-v12.apk",
+    //     "appPackage": "com.example.app",
+    //     "automationName": "UIAutomator2",
+    //     "deviceName": "Samsung",
+    //     "noReset": true,
+    //     "ignoreHiddenApiPolicyError": true,
+    //     "newCommandTimeout": 1200000
+    // }
+
     this.myForm = this.fb.group({
       platform: [this.appCapabilities?.platformName, [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
@@ -333,6 +355,8 @@ export class AutomateComponent implements OnInit {
       noReset: [this.appCapabilities?.noReset, [Validators.required]],
       hiddenApp: [this.appCapabilities?.ignoreHiddenApiPolicyError, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
+      description:[this.appCapabilities?.description, []],
+      buildNo:[this.appCapabilities?.buildNo, []],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -344,45 +368,81 @@ export class AutomateComponent implements OnInit {
       }
     })
 
-    
-    
+
+
     this.formatTestCaseData();
   }
 
   onSubmit() {
     if (this.myForm.valid) {
       this.isAccordionExpanded = false;
-      
+
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
 
       this.appLaunchLoading = true;
 
-    this.accountService.postCapabilities({
-      capabilities: {
-        platformName: "Android",
-        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-        appPackage: "com.example.app",
-        automationName: "UIAutomator2",
-        deviceName: "Samsung",
-        noReset: true,
-        ignoreHiddenApiPolicyError: true,
-        newCommandTimeout: 1200000
-      }
-    }).subscribe(
-      (response) => {
-      
-        this.appLaunchLoading = false;
-        this.appLaunchStatus = 'SUCCESS'
-      },
-      (error) => {
-        console.error('API Error:', error);
-        this.appLaunchLoading = false;
-        this.appLaunchStatus = 'FAILED'
-      }
-    );
+      const app_id = localStorage.getItem('app_id');
+     delete this.myForm.value.description;
+     delete this.myForm.value.buildNo;
+
+      console.log(this.myForm.value);
+
+      this.accountService.updateCapabilities(app_id,
+        {
+          extra: {
+            capabilities: this.myForm.value
+
+          },
+          name:'Ionic Anypay'
+        }
+      ).subscribe((response) => {
+        console.log(response);
+        this.appLaunch(app_id);
+
+      }, (error) => {
+        console.log(error);
+
+      })
+
+      // this.accountService.launchApp({
+      //   capabilities: {
+      //     platformName: "Android",
+      //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+      //     appPackage: "com.example.app",
+      //     automationName: "UIAutomator2",
+      //     deviceName: "Samsung",
+      //     noReset: true,
+      //     ignoreHiddenApiPolicPUSyError: true,
+      //     newCommandTimeout: 1200000
+      //   }
+      // }, app_id).subscribe(
+      //   (response) => {
+
+      //     this.appLaunchLoading = false;
+      //     this.appLaunchStatus = 'SUCCESS'
+      //   },
+      //   (error) => {
+      //     console.error('API Error:', error);
+      //     this.appLaunchLoading = false;
+      //     this.appLaunchStatus = 'FAILED'
+      //   }
+      // );
       this.myForm.reset();
     }
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    // setTimeout(()=>{
+    //   const parentDiv = document.getElementsByClassName('test-case-container')[0]
+    //   if (parentDiv) {
+    //     parentDiv.scrollTop = parentDiv.scrollHeight
+    //   }
+    // },500)
   }
 
   // noResetValidator(control) {
@@ -398,294 +458,709 @@ export class AutomateComponent implements OnInit {
   //   }
   //   return null;
   // }
-  onSaveDescription(){
-    
+  onSaveDescription() {
+
+  }
+
+  startCounting(individualCount) {
+    this.startInterval = setInterval(() => {
+      individualCount = individualCount + 1;
+      console.log('count started:', individualCount);
+    }, 1000);
   }
 
   onStartTrans(itemData) {
-  //   console.log(itemData);
+    let count = 0;
+    let individualCount = 0;
+    console.log(itemData);
 
     const result = itemData.screens.map(screen => {
-      return screen.instructions.map(instruction => {
-          return {
-              screenName: instruction.ins_back_name,
-              btnName: instruction.ins_element_name
-          };
+      return screen.instructions.map((instruction, index) => {
+        return {
+          id: index,
+          screenName: instruction.ins_back_name,
+          btnName: instruction.ins_element_name,
+          successMessage: `${instruction.ins_name} Passed`,
+          failedMessage: `${instruction.ins_name} Failed`,
+          roomId: localStorage.getItem("id"),
+        };
       });
-  }).flat();
-  
-  console.log(result);
+    }).flat();
 
-    
-    let item = [{
-      "id": "1",
-      "screenName": "Welcome",
-    "btnName": ""
-    },
-    {
-      "id": "2",
-      "screenName": "Click_Image", // image 
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "3",
-      "screenName": "Permissions"
-    },
-    {
-      "id": "4",
-      "screenName": "Click_Image", // image 
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "5",
-      "screenName": "Permissions_list"
-    },
-    {
-      "id": "6",
-      "screenName": "Allow_PhoneCalls",
-      "action": "Allow"
-    },
-    {
-      "id": "7",
-      "screenName": "Allow_DeviceLocation",
-      "action": "ALLOW"
-    },
-    {
-      "id": "8",
-      "screenName": "Allow_BluetoothConnection",
-      "action": "ALLOW"
-    },
-    {
-      "id": "9",
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": "10",
-      "screenName": "Terminal Setup"
-    },
-    {
-      "id": "11",
-      "screenName": "Click_Image" // image 
-    },
-    {
-      "id": "12",
-      "screenName": "Select_Options",
-      "options": "Testing"
-    },
-    {
-      "id": "13",
-      "screenName": "Click_Button",
-      "btnName": "PROCEED"
-    },
-    {
-      "id": "14",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
-
-    },
-    {
-      "id": "15",
-      "screenName": "Click_Button",
-      "btnName": "Next"
-    },
-    {
-      "id": "16",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
-
-    },
-    {
-      "id": "17",
-      "screenName": "Click_Button",
-      "btnName": "Submit"
-    },
-
-    {
-      "id": "18",
-      "screenName": "Profile_Login",
-      "pin": ["9", "2", "0", "4"]
-    },
-    {
-      "id": "19",
-      "screenName": "Verify_Details",
-    },
-    // {
-    //   "id": "19",
-    //   "screenName": "Click_Button",
-    //   "btnName": "Confirm"
-    // },
-    {
-      "id": "20",
-      "screenName": "Click_Button",
-      "btnName": "GO"
-    },
-    {
-      "id": "21",
-      "screenName": "Click_Text",
-      "btnName": "Skip >"
-    },
-    {
-      "id": "22",
-      "screenName": "Click_Image",
-      "btnName": "gear-icon"
-    },
-
-
-    // connect reader steps start
-    {
-      "id": "23",
-      "screenName": "Click_View",
-      "btnName": "Device"
-    },
-
-
-    {
-      "id": "24",
-      "screenName": "Click_Button",
-      "btnName": "CONNECT TO READER"
-    },
-    {
-      "id": "25",
-      "screenName": "Wait_For_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      //   "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": "26",
-      "screenName": "Click_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      // "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": "27",
-      "screenName": "Find_Button",
-      "btnName": "Disconnect"
-    },
-    {
-      "id": "28",
-      "screenName": "Click_Image" // image 
-    },
-    // connect reader steps ends
-    // transaction step starts  
-    {
-      "id": "29",
-      "screenName": "Click_Image", // image 
-      "btnName": "Sale"
-
-    },
-    {
-      "id": "30",
-      "screenName": "Enter_Amount",
-      "amount": "200.00"
-    },
-    {
-      "id": "31",
-      "screenName": "Click_Text",
-      "btnName": "Clear"
-    },
-    {
-      "id": "32",
-      "screenName": "Enter_Amount",
-      "amount": "50.00"
-    },
-    {
-      "id": "33",
-      "screenName": "Click_View",
-      "btnName": "2 / 4"
-    },
-    // {
-    //   "id": "34",
-    //   "screenName": "Click_Text",
-    //   "btnName": "Go"
-    // },
-    // //custom tip
-    // //     {
-    // //     "id":9,
-    // //     "screenName":"Click_Text",
-    // //     "btnName":"Custom"
-    // // },
-    // //   {
-    // //     "id":14,
-    // //     "screenName":"Enter_Amount",
-    // //     "amount":"500.00"
-    // // },
-    // // fix tip
-    // {
-    //   "id": "35",
-    //   "screenName": "Click_Text",
-    //   "btnName": "10%"
-    // },
-    // {
-    //   "id": "36",
-    //   "screenName": "Click_Button",
-    //   "btnName": "Continue"
-    // },
-    // {
-    //   "id": "37",
-    //   "screenName": "Wait_For_Text",
-    //   "btnName": "Transaction ID"
-    // },
-    // {
-    //   "id": "38",
-    //   "screenName": "Element_Avail", // image 
-    //   "elementName": ["Transaction FAILED", "Transaction Approved"]
-    // },
-
-    // {
-    //   "id": "39",
-    //   "screenName": "Click_Button",
-    //   "btnName": "See Details"
-    // }
-    ];
-    this.webSocketService.sendTestCaseRequest(itemData);
-    this.webSocketService.getSubject().subscribe((res) => {
-      if (res?.message && res?.message?.info) {
-        this.resultArr.push(res.message);
-        console.log(res);
-        
+    result.push(
+      {
+        screenName: "End_Instructions",
+        successMessage: "End_Instructions",
+        roomId: localStorage.getItem("id"),
       }
-    })
+    );
+
+
+
+
+    if (this.showEnd){
+
+
+
+      const socketReport = {
+        capabilities: this.completeAppData,
+        resultArr: this.resultArr,
+        extras: this.extras,
+      }
+
+      let passedCount = 0;
+      let failedCount = 0;
+      let untestedCount = 0;
+
+      // Iterate over the reports to count the number of passed, failed, and untested test cases
+      this.resultArr?.map((testCase) => {
+        if (testCase?.successMessage !== "End_Instructions") {
+          console.log(testCase);
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
+
+      const body = {
+        applicationId: localStorage.getItem('app_id'),
+        filename: itemData?.wt_desc,
+        app_version: "2.1",
+        totalTestCase: result?.length - 1,
+        passed: passedCount,
+        failed: failedCount,
+        crash_count: untestedCount,
+        extra: socketReport,
+      }
+      this.accountService.postReportData(body).subscribe((resp) => {
+        if (resp) {
+          console.log(resp);
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+          }, 1000)
+        }
+      })
+
+
+    }else{
+
+      console.log(itemData);
+
+      const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
+
+      // let item = [
+      //   {
+      //     "id": "0",
+      //     "screenName": "Welcome",
+      //     "btnName": "Welcome"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image", // image
+      //     "btnName": "left_arrow"
+      //   },
+      //   {
+      //     "id": "1",
+      //     "screenName": "Permissions"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image", // image
+      //     "btnName": "left_arrow"
+      //   },
+      //   {
+      //     "id": "2",
+      //     "screenName": "Permissions_list"
+      //   },
+      //   {
+      //     "id": "3",
+      //     "screenName": "Allow_PhoneCalls",
+      //     "btnName": "Allow"
+      //   },
+      //   {
+      //     "id": "4",
+      //     "screenName": "Allow_DeviceLocation",
+      //     "btnName": "ALLOW"
+      //   },
+      //   {
+      //     "id": "5",
+      //     "screenName": "Allow_BluetoothConnection",
+      //     "btnName": "ALLOW"
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Continue"
+      //   },
+      //   {
+      //     "id": "7",
+      //     "screenName": "Terminal Setup"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image" // image
+      //   },
+      //   {
+      //     "id": "9",
+      //     "screenName": "Select_Options",
+      //     "options": "Testing"
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "PROCEED"
+      //   },
+      //   {
+      //     "id": "1",
+      //     "screenName": "Enter_Terminal_ID",
+      //     "terminal_id": ["2994001"]
+
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Next"
+      //   },
+      //   {
+      //     "id": "10",
+      //     "screenName": "Enter_Terminal_ID",
+      //     "terminal_id": ["2994001"]
+
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Submit"
+      //   },
+
+      //   {
+      //     "id": "11",
+      //     "screenName": "Profile_Login",
+      //     "pin": ["9", "2", "0", "4"]
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "Confirm"
+      //   },
+      //   {
+      //     "id": "6",
+      //     "screenName": "Click_Button",
+      //     "btnName": "GO"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "Skip >"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "homePage",
+      //     "action": "Transaction"
+      //   },
+
+      //   // connect reader steps start
+      //   {
+      //     "id": 10,
+      //     "screenName": "Click_View",
+      //     "btnName": "Device"
+      //   },
+
+
+      //   {
+      //     "id": 12,
+      //     "screenName": "Click_Button",
+      //     "btnName": "CONNECT TO READER"
+      //   },
+      //   {
+      //     "id": 13,
+      //     "screenName": "Wait_For_Text",
+      //     // "btnName":"WPS323247002051"
+      //     "btnName": "WPC323951000219"
+      //     //   "btnName":"CHB2A6132009935"
+      //     // "btnName":"CHB204650000480"
+      //   },
+      //   {
+      //     "id": 13,
+      //     "screenName": "Click_Text",
+      //     // "btnName":"WPS323247002051"
+      //     "btnName": "WPC323951000219"
+      //     // "btnName":"CHB2A6132009935"
+      //     // "btnName":"CHB204650000480"
+      //   },
+      //   {
+      //     "id": 14,
+      //     "screenName": "Find_Button",
+      //     "btnName": "Disconnect"
+      //   },
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image" // image
+      //   },
+
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image", // image
+      //     "btnName": "Sale"
+      //   },
+      //   {
+      //     "id": 14,
+      //     "screenName": "Enter_Amount",
+      //     "amount": "200.00"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "Clear"
+      //   },
+      //   {
+      //     "id": 14,
+      //     "screenName": "Enter_Amount",
+      //     "amount": "50.00"
+      //   },
+      //   {
+      //     "id": 10,
+      //     "screenName": "Click_View",
+      //     "btnName": "2 / 4"
+      //   },
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "Go"
+      //   },
+
+      //   {
+      //     "id": 9,
+      //     "screenName": "Click_Text",
+      //     "btnName": "10%"
+      //   },
+      //   {
+      //     "id": 12,
+      //     "screenName": "Click_Button",
+      //     "btnName": "Continue"
+      //   },
+      //   {
+      //     "id": 13,
+      //     "screenName": "Wait_For_Text",
+      //     "btnName": "Transaction ID"
+      //   },
+      //   {
+      //     "id": "14",
+      //     "screenName": "Element_Avail", // image
+      //     "elementName": ["Transaction FAILED", "Transaction Approved"]
+      //   },
+
+      //   {
+      //     "id": "12",
+      //     "screenName": "Click_Button",
+      //     "btnName": "See Details"
+      //   },
+
+      //   {
+      //     "id": "8",
+      //     "screenName": "Click_Image" // image
+
+      //   },
+
+
+      // ]
+
+      let item = [
+        {
+          "id":"0",
+          "screenName":"Welcome",
+          "btnName":"Welcome"
+        },
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"left_arrow"
+        },
+        {
+          "id":"1",
+          "screenName":"Permissions"
+        },
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"left_arrow"
+        },
+        {
+          "id":"2",
+          "screenName":"Permissions_list"
+        },
+        {
+          "id":"3",
+          "screenName":"Allow_PhoneCalls",
+          "btnName":"Allow"
+        },
+        {
+          "id": "4",
+          "screenName": "Allow_DeviceLocation",
+          "btnName": "ALLOW"
+        },
+        {
+          "id": "5",
+          "screenName": "Allow_BluetoothConnection",
+          "btnName": "ALLOW"
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Continue"
+        },
+        {
+          "id": "7",
+          "screenName": "Terminal Setup"
+        },
+        {
+          "id": "8",
+          "screenName": "Click_Image" // image
+        },
+        {
+          "id": "9",
+          "screenName": "Select_Options",
+          "options": "Testing"
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "PROCEED"
+        },
+        {
+          "id": "1",
+          "screenName": "Enter_Terminal_ID",
+          "terminal_id": ["2994001"]
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Next"
+        },
+        {
+          "id": "10",
+          "screenName": "Enter_Terminal_ID",
+          "terminal_id": ["2994001"]
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Submit"
+        },
+        {
+          "id": "11",
+          "screenName": "Profile_Login",
+          "pin": ["9", "2", "0", "4"]
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Confirm"
+        },
+        {
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "GO"
+        },
+        {
+          "id": 9,
+          "screenName": "Click_Text",
+          "btnName": "Skip >"
+        },
+        {
+          "id": 9,
+          "screenName": "homePage",
+          "action": "Transaction"
+        },
+        // {
+        //     "id":20
+        // },
+        // connect reader steps start
+        {
+          "id": 10,
+          "screenName": "Click_View",
+          "btnName": "Device"
+        },
+        {
+          "id":12,
+          "screenName":"Click_Button",
+          "btnName":"CONNECT TO READER"
+        },
+        {
+          "id":13,
+          "screenName":"Wait_For_Text",
+          "btnName":"WPC323951000219"
+          // "btnName":"WPS323247002051"
+          // "btnName":"WPS323129001477"
+          //   "btnName":"CHB2A6132009935"
+          // "btnName":"CHB204650000480"
+        },
+        {
+          "id":13,
+          "screenName":"Click_Text",
+          "btnName":"WPC323951000219"
+          // "btnName":"WPS323247002051"
+          // "btnName":"WPS323129001477"
+          // "btnName":"CHB2A6132009935"
+          // "btnName":"CHB204650000480"
+        },
+        {
+          "id":14,
+          "screenName":"Find_Button",
+          "btnName":"Disconnect"
+        },
+        {
+          "id":"8",
+          "screenName":"Click_Image" // image
+        },
+        // connect reader steps ends
+        // transaction step starts
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"Sale"
+        },
+        {
+          "id":14,
+          "screenName":"Enter_Amount",
+          "btnName":"200.00"
+        },
+        {
+          "id":9,
+          "screenName":"Click_Text",
+          "btnName":"Clear"
+        },
+        {
+          "id":14,
+          "screenName":"Enter_Amount",
+          "btnName":"50.00"
+        },
+        {
+          "id":10,
+          "screenName":"Click_View",
+          "btnName":"2 / 4"
+        },
+        {
+          "id":9,
+          "screenName":"Click_Text",
+          "btnName":"Go"
+        },
+        //custom tip
+        //     {
+        //     "id":9,
+        //     "screenName":"Click_Text",
+        //     "btnName":"Custom"
+        // },
+        //   {
+        //     "id":14,
+        //     "screenName":"Enter_Amount",
+        //     "amount":"500.00"
+        // },
+        // fix tip
+        {
+          "id":9,
+          "screenName":"Click_Text",
+          "btnName":"10%"
+        },
+        {
+          "id":12,
+          "screenName":"Click_Button",
+          "btnName":"Continue"
+        },
+        {
+          "id":13,
+          "screenName":"Wait_For_Text",
+          "btnName":"Transaction ID"
+        },
+        {
+          "id": "14",
+          "screenName": "Element_Avail", // image
+          "elementName": ["Transaction FAILED", "Transaction Approved"]
+        },
+        {
+          "id": "12",
+          "screenName": "Click_Button",
+          "btnName": "See Details"
+        },
+        {
+          "id": "8",
+          "screenName": "Click_Image" // image
+        },
+        // refund steps starts from dashboard
+        {
+          "id":"8",
+          "screenName":"Click_Image", // image
+          "btnName":"Refund"
+        },
+        {
+          "id":"0",
+          "screenName":"Find_Screen_Elements"
+        }
+      ]
+
+      item.push(obj);
+
+      // Output the modified item array
+      console.log(item);
+      this.showResult = true;
+      console.log(result);
+
+      this.webSocketService.sendTestCaseRequest(item);
+
+      let counterInterval = setInterval(() => {
+        count++;
+      }, 1000);
+
+
+      //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
+      let startInterval;
+
+      this.startCounting(individualCount);
+      let timeChecked = false;
+      this.showEnd = true
+      this.webSocketService.getSubject().subscribe((res) => {
+
+        if (!timeChecked) {
+          const currentDate = new Date();
+
+          // Get year, month, day, hours, minutes, and seconds
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+          const day = String(currentDate.getDate()).padStart(2, '0');
+          const hours = String(currentDate.getHours()).padStart(2, '0');
+          const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+          const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+          res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+
+          res.extra.timeSpent = individualCount;
+          individualCount = 0;
+          clearInterval(this.startInterval);
+
+          // Restart the interval by calling the function
+          this.startCounting(individualCount)
+          if (res?.message?.successMessage !== "End_Instructions") {
+
+            this.resultArr.push(res.message);
+            this.scrollToBottom();
+            console.log(res);
+          }
+          if (res?.message?.successMessage === "End_Instructions") {
+            clearInterval(counterInterval);
+            clearInterval(startInterval)
+            res.extra.timeTaken = count;
+
+            const now = new Date();
+            const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            this.extras.startedTime = formattedTime;
+            res.extra.startedTime=formattedTime;
+            const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            this.extras.createdAt = formattedDate;
+            const socketReport = {
+              capabilities: this.completeAppData,
+              resultArr: this.resultArr,
+              extras: this.extras,
+            }
+
+            let passedCount = 0;
+            let failedCount = 0;
+            let untestedCount = 0;
+
+            // Iterate over the reports to count the number of passed, failed, and untested test cases
+            this.resultArr?.map((testCase) => {
+              testCase.completeCount = count;
+              if (testCase?.successMessage !== "End_Instructions") {
+                console.log(testCase);
+                if (testCase.message === 'SUCCESS') {
+                  passedCount++;
+                } else if (testCase.message === 'FAILED') {
+                  failedCount++;
+                } else if (testCase.message === 'Untested') {
+                  untestedCount++;
+                }
+              }
+            });
+
+            const body = {
+              applicationId: localStorage.getItem('app_id'),
+              filename: itemData?.wt_desc,
+              app_version: "2.1",
+              totalTestCase: result?.length - 1,
+              passed: passedCount,
+              failed: failedCount,
+              crash_count: untestedCount,
+              extra: socketReport,
+            }
+            this.accountService.postReportData(body).subscribe((resp) => {
+              if (resp) {
+                console.log(resp);
+                setTimeout(() => {
+                  this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+                }, 1000)
+
+              }
+            })
+          }
+        }
+      }, (err) => {
+        console.log(err,'err')
+
+        clearInterval(this.startInterval);
+      })
+
+
+    }
 
     //   this.router.navigateByUrl('test-reports')
 
   }
 
-  onStart(item){
+  onStart(item) {
     console.log(item);
 
     const res = item.testCase.map((item) => {
       return {
         screenName: item.ins_back_name,
-              btnName: item.ins_element_name
+        btnName: item.ins_element_name
       }
     })
 
     console.log(res);
-    
+
+    //   {
+    //     "sender": "e6135615-48a5-4b5d-a121-af82670e0a92",
+    //     "message": {
+    //         "message": "SUCCESS",
+    //         "info": "Continue Button Clicked on Screen",
+    //         "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
+    //         "successMessage": "Permission list Continue button Passed"
+    //     }
+    // }
     this.webSocketService.sendTestCaseRequest(res);
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
         console.log(res);
-        
+
       }
     })
-    
+
     // const obj = {
     //   screenName: item?.ins_back_name,
     //   btnName: item?.ins_element_name
     // }
 
     // console.log(obj);
-    
+
   }
 
-  generateReport(){
+  generateReport() {
     this.webSocketService.saveTestReportData({
       id: 0,
       capabilities: {
@@ -752,7 +1227,7 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "left_arrow"
     },
     {
@@ -761,7 +1236,7 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "left_arrow"
     },
     {
@@ -794,7 +1269,7 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "8",
-      "screenName": "Click_Image" // image 
+      "screenName": "Click_Image" // image
     },
     {
       "id": "9",
@@ -887,13 +1362,13 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "8",
-      "screenName": "Click_Image" // image 
+      "screenName": "Click_Image" // image
     },
     // connect reader steps ends
-    // transaction step starts  
+    // transaction step starts
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -951,7 +1426,7 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "14",
-      "screenName": "Element_Avail", // image 
+      "screenName": "Element_Avail", // image
       "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
 
@@ -963,7 +1438,7 @@ export class AutomateComponent implements OnInit {
     //     // 2nd transaction starts
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -990,7 +1465,7 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "14",
-      "screenName": "Element_Avail", // image 
+      "screenName": "Element_Avail", // image
       "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
     {
@@ -1000,7 +1475,7 @@ export class AutomateComponent implements OnInit {
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1015,43 +1490,44 @@ export class AutomateComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-    const day = ("0" + date.getDate()).slice(-2); 
-    const month = ("0" + (date.getMonth() + 1)).slice(-2); 
-    const year = date.getFullYear(); 
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
 
 
   formatTestCaseData() {
     console.log(this.templateData);
-    
+
     this.templateData?.screens.map((item) => {
-        item?.instructions?.map((testCase) => {
-            // Check if testCase with the same ins_set_id is already present
-            const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === testCase.ins_set_id);
+      item?.instructions?.map((testCase) => {
+        // Check if testCase with the same ins_set_id is already present in testCases array
+        // Check if the current ins_set_id exists in this.testCases
+        const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
 
-            if (!exists) {
-              this.testCases.push({
-                ins_set_id: testCase.ins_set_id,
-                ins_set_screen_name: testCase.ins_set_screen_name, // Include ins_set_id to keep track of uniqueness
-                testCase: item.instructions  // Add the entire instructions array as a nested property named testCase
-            });
-                
-            }
-        });
+        if (!exists) {
+          this.testCases.push({
+            ins_set_id: item.ins_set_id,
+            ins_set_screen_name: item.ins_set_screen_name, // Include ins_set_screen_name for reference
+            testCase: item.instructions  // Add the entire instructions array as a nested property
+          });
+        }
+      });
     });
-    
+
     console.log(this.testCases);
-}
+  }
 
 
-  onEdit(){
+
+  onEdit() {
     this.isEditMode = true;
     this.enableFields(true);
   }
 
-  enableFields(enable: boolean){
-    if(enable){
+  enableFields(enable: boolean) {
+    if (enable) {
       this.myForm.get('platform').enable();
       this.myForm.get('app').enable();
       this.myForm.get('package').enable();
@@ -1060,8 +1536,11 @@ export class AutomateComponent implements OnInit {
       this.myForm.get('timeout').enable();
       this.myForm.get('noReset').enable();
       this.myForm.get('hiddenApp').enable();
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
+
     }
-    else{
+    else {
       this.myForm.get('platform').disable();
       this.myForm.get('app').disable();
       this.myForm.get('package').disable();
@@ -1070,9 +1549,41 @@ export class AutomateComponent implements OnInit {
       this.myForm.get('timeout').disable();
       this.myForm.get('noReset').disable();
       this.myForm.get('hiddenApp').disable();
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
     }
   }
 
+  appLaunch(id) {
+    this.accountService.launchApp({
+      capabilities: {
+        platformName: "Android",
+        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        appPackage: "com.example.app",
+        automationName: "UIAutomator2",
+        deviceName: "Samsung",
+        noReset: true,
+        ignoreHiddenApiPolicyError: true,
+        newCommandTimeout: 1200000
+      }
+    }, id).subscribe(
+      (response) => {
+
+        this.appLaunchLoading = false;
+        this.appLaunchStatus = 'SUCCESS'
+      },
+      (error) => {
+        console.error('API Error:', error);
+        this.appLaunchLoading = false;
+        this.appLaunchStatus = 'FAILED'
+      }
+    );
+  }
+
+  getCapabilities() {
+    const app_id = localStorage.getItem('app_id');
+    return this.accountService.getCapabilites(app_id);
+  }
 
 
 }
