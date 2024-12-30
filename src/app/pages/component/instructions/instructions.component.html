@@ -7,6 +7,7 @@
     <h4>No Instructions Added Yet</h4>
   </div>
       <div *ngIf="applicationDataArr.length > 0">
+
       <div class="container">
         <div class="row table-header-div">
           <div class="col-1 s-no-div">S.No</div>
@@ -17,13 +18,27 @@
       </div>
       <div class="container data-div">
         <div class="row table-data-div" *ngFor="let item of applicationDataArr; let i = index">
+          <ng-template #list>
+            <nb-card class="margin-bottom-0">
+              <nb-list>
+                <nb-list-item  (click)="openDialog(item)" >Edit</nb-list-item>
+                <nb-list-item  (click)="openDeleteDailog()" >Delete</nb-list-item>
+              </nb-list>
+            </nb-card>
+          </ng-template>
           <div class="col-1">{{i + 1}}</div>
           <div class="col-3 table-data">{{item.back_name}}</div>
           <div class="col-4 table-data">{{item.element_name}}</div>
           <div class="col-4 table-data">{{item.instruction_name}}</div>
+<!--          <div class="col-2"> <nb-icon [nbPopover]="list"  icon="edit-outline"></nb-icon></div>-->
         </div>
       </div>
+
     </div>
+
     <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon>
     <button class="done-btn" (click)="toTemplate()">Done</button>
+
+
+
   </div>

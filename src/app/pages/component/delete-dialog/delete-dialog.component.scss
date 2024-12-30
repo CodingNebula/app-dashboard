@@ -15,6 +15,7 @@
   }
   .cancel {
     margin-right: 1rem;
+    width: 50%;
   }
   .button-center {
     text-align:center;
@@ -29,11 +30,13 @@
     .submit {
       background-color: #16a3ad;
       color:#FFFFFF;
+      width: 50%;
     }
   }
-   //.signout-main{
-   //  background-color: #FFFFFF;
-   //  width: 50vw;
-   //  height: 24vh;
-   //}
+  .signout-main{
+    background-color: #FFFFFF;
+    width: 26vw;
+    height: 24vh;
+    padding: 0 1rem;
+  }
 }

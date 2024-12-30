@@ -11,6 +11,30 @@
   // border-right: 1px solid black;
 }
 
+.main-div{
+  height: 86vh;
+  overflow-y: scroll;
+}
+
+.main-div::-webkit-scrollbar {
+  width: 5px;
+}
+
+.main-div::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.main-div::-webkit-scrollbar-thumb {
+  background-color: #00a3ab;
+  border-radius: 10px;
+}
+
+.main-div::-webkit-scrollbar-thumb:hover {
+  background-color: #00a3ab;
+}
+
+
+
 .automate-right {
   width: 30%;
   display: flex;
@@ -220,7 +244,7 @@ label {
   color: red;
   font-size: 1em;
   margin-right: 0.6em;
-} 
+}
 
 
 .loader {
@@ -279,7 +303,7 @@ label {
 .test-case-status-container {
   overflow: auto;
   // height: 54%;
-  
+
 }
 
   .test-case-status-container::-webkit-scrollbar {

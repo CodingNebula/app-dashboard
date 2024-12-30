@@ -1,4 +1,4 @@
-<div>
+<div class="main-div">
   <nb-accordion>
     <nb-accordion-item [expanded]="isAccordionExpanded">
       <nb-accordion-item-header>Application Details</nb-accordion-item-header>
@@ -107,7 +107,7 @@
                 <small *ngIf="myForm.get('buildNo').hasError('required')">Build Name is required!</small>
               </div>
             </div>
-            
+
             <div  class="form-group   ">
               <label for="description">Description:</label>
               <textarea id="description" formControlName="description" class="form-control description-input" ></textarea>
@@ -115,7 +115,7 @@
                 <small *ngIf="myForm.get('description').hasError('required')">Description name is required!</small>
               </div>
             </div>
-          
+
           </div>
 
           <div class="form-row button-row">

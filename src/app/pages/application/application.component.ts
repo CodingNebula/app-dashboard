@@ -72,7 +72,7 @@ export class ApplicationComponent implements OnInit {
     this.accountService.postApplication(data).subscribe((response) => {
       if (response) {
         // After successful post, update applicationDataArr
-        console.log(response);
+
 
         this.applicationDataArr.push(response); // Assuming the response contains the newly saved item
         this.applicationDataService.setData('app_details', response);
@@ -96,16 +96,16 @@ export class ApplicationComponent implements OnInit {
     // Store app_id and app_name in localStorage
     localStorage.setItem('app_id', item?.id);
     localStorage.setItem('app_name', item?.app_name);
-  
+
     // Retrieve and parse the app_capa from localStorage
     const app_capa = localStorage.getItem("app_capa");
     const parsedAppCapa = app_capa ? JSON.parse(app_capa) : null;
-  
+
     console.log(parsedAppCapa);
-  
+
     // Initialize instructionsArr
     const app_id = item.id;
-  
+
     // First API call to get instructions
     this.accountService.getInstruction(app_id).subscribe((instructionData) => {
       this.instructionsArr = [];
@@ -113,13 +113,13 @@ export class ApplicationComponent implements OnInit {
         this.instructionsArr = instructionData;
         console.log(this.instructionsArr);
       }
-  
+
       // Now, fetch capabilities after instructions API response
       this.accountService.getCapabilites(app_id).subscribe((capabilitiesData) => {
         console.log(capabilitiesData);
         this.appCapabilities = capabilitiesData;
         console.log(this.appCapabilities);
-  
+
         // Now that both API responses are received, check the conditions
         if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length === 0) {
           // Navigate to instructions page if app_id matches and no instructions
@@ -130,11 +130,11 @@ export class ApplicationComponent implements OnInit {
         } else {
           // Navigate to capabilities page if no conditions are met
           this.router.navigateByUrl('pages/capabilities', { state: { id: item.id,appName:item?.app_name } });
-  
+
           // Log item and store data
           console.log(item);
           this.applicationDataService.setData('app_details', item);
-  
+
           // Store app_id and app_name again in localStorage (optional redundancy)
           localStorage.setItem('app_id', item?.id);
           localStorage.setItem('app_name', item?.app_name);
@@ -146,8 +146,8 @@ export class ApplicationComponent implements OnInit {
       console.error('Error fetching instructions:', error);
     });
   }
-  
-  
+
+
 
   getInstructions(){
     const app_id = localStorage.getItem('app_id');
@@ -163,7 +163,7 @@ export class ApplicationComponent implements OnInit {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getCapabilites(app_id).subscribe((data) => {
       console.log(data);
-      
+
     })
   }
 }

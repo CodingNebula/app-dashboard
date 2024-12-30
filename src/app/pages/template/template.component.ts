@@ -145,7 +145,7 @@ export class TemplateComponent {
               // this.saveApplicationData(appDetails);
               this.accountService.postTemplateName(details).subscribe((resp) => {
                 if(resp){
-                  console.log(resp);
+
 
                   // this.testCasesArray.push(resp[0]);
                   this.templateId = resp[0]?.wt_id
@@ -164,7 +164,6 @@ export class TemplateComponent {
             }
 
             if(result.selectedType === 'testCase'){
-              console.log(result.data);
 
               let body = {
                 application_id: localStorage.getItem('app_id'),  // This value can be dynamic
@@ -178,8 +177,7 @@ export class TemplateComponent {
                 })
             };
 
-            console.log(body,'body');
-            console.log(result,'sult')
+
             let screens = result?.data?.templates?.map((screen, index) => {
               return {
                 wt_id:screen?.wt_id,

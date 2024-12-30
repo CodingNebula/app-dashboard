@@ -1074,7 +1074,7 @@ ngOnDestroy(){
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
             const socketReport = {
-              capabilities: this.completeAppData,
+              capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
               resultArr: this.resultArr,
               extras: this.extras,
               totalTimeElapsed: count,

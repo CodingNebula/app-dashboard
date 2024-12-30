@@ -17,7 +17,7 @@ export interface TestCase {
   templateUrl: './test-reports.component.html',
   styleUrls: ['./test-reports.component.scss']
 })
-export class TestReportsComponent {
+export class TestReportsComponent implements OnInit  {
   @ViewChild('chartElement', { static: false }) chartElement: any;
   private echartsInstance: EChartsInstance | null = null;
 public chartData:any=[];
@@ -30,6 +30,7 @@ public chartData:any=[];
   public reportHeading : string;
   public platform :any;
   public capabilities: any;
+  public timeCreated:string;
   public searchTerm: string = '';
   public testCases: any;
   public extras: any = {};
@@ -47,14 +48,21 @@ public chartData:any=[];
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
     this.extras = state?.reportData?.extra?.extras;
-    console.log(this.extras);
-    console.log(state);
+    console.log(this.reportData,"reportData");
+
 
     this.generatePie();
   }
 
   onChartInit(instance: EChartsInstance): void {
     this.echartsInstance = instance; // Capture the ECharts instance
+  }
+
+  ngOnInit() {
+    const state = history.state.reportData
+    console.log(state,"time crathe")
+    this.timeCreated= state.extra.extras.createdAt
+
   }
 
   generatePie() {
@@ -66,9 +74,10 @@ public chartData:any=[];
     let failedCount = this.reportData?.testcase_failed;
     let untestedCount = this.reportData?.testcase_performed;
 
-    console.log(this.reportData);
+
+    console.log(passedCount,failedCount,untestedCount,"testcase");
     dataArr.push({ name: 'SUCCESS', value: passedCount });
-    dataArr.push({ name: 'FAILED', value: 1 });
+    dataArr.push({ name: 'FAILED', value: failedCount });
     dataArr.push({ name: 'UNTESTED', value: untestedCount - (failedCount+passedCount)});
 
     this.pieData = dataArr

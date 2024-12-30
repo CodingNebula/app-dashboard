@@ -30,6 +30,7 @@ export class CapabilitiesComponent {
     // Create the form with FormBuilder
 
 
+
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
       app: ['', [Validators.required]],
@@ -92,17 +93,19 @@ export class CapabilitiesComponent {
           },
           name:this.appDetails?.app_details?.app_name
         }).subscribe(
-          (response) => {
-            console.log(response);
-            
-            setTimeout(() => {
-              this.router.navigateByUrl('pages/instructions')
-            }, 1000)
-          },
-          (error) => {
-            console.error('API Error:', error);
-          }
-        );
+        (response) => {
+          console.log(response);
+
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/instructions')
+          }, 1000)
+        },
+        (error) => {
+          console.error('API Error:', error);
+        }
+
+
+      );
       // this.myForm.reset();
       this.applicationDataService.setData('capabilities', this.myForm.value);
     }
