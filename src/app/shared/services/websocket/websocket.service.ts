@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { io, Socket } from "socket.io-client";
 
@@ -14,6 +14,7 @@ export class WebsocketService {
   public showAlert = false;
   private reconnectAttempts: number = 0;
   private maxReconnectAttempts: number = 5;
+  public socketFailure:any=new Subject();
   public testReportsData: any = {
     reports: [],
   };
@@ -158,9 +159,13 @@ export class WebsocketService {
     // Listen for custom error events from the server
     this.socket.on("error", (error) => {
       console.error("Received error from server:", error);
+      this.socketFailure.next();
     });
 
 
+  }
+  getSocketFailure(){
+    return this.socketFailure.asObservable();
   }
 
   private handleReconnect(): void {

@@ -305,6 +305,11 @@ ngOnDestroy(){
   clearInterval(this.startInterval)
 }
   ngOnInit() {
+    this.webSocketService.getSocketFailure().subscribe((res)=>{
+      if(this.startInterval){
+        clearInterval(this.startInterval);
+      }
+    })
     const state = window.history.state;
 
     if (state && state.templateArr) {
