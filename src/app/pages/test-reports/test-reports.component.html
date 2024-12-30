@@ -1,5 +1,5 @@
 <div class="header-div">
-  <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">DownloadPDF</label>
+  <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download PDF</label>
   <label class="heading">{{ this.reportData?.app_name }}</label>
   <label class="date-label">Created At: <span>{{reportData.extra.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</span></label>
 </div>
@@ -54,7 +54,7 @@
           </nb-accordion-item-header>
           <nb-accordion-item-body>
             <div class="row">
-         
+
               <div class="col-4" *ngIf="testCase.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
