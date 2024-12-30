@@ -503,7 +503,7 @@ ngOnDestroy(){
 
 
       const socketReport = {
-        capabilities: this.completeAppData,
+        capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
         resultArr: this.resultArr,
         extras: this.extras,
       }

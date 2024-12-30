@@ -22,12 +22,12 @@ export class CapabilitiesComponent {
     private router: Router,
     private accountService: AccountService,
   ) {
+    console.log(this.router.getCurrentNavigation()?.extras?.state,'------>shared data');
 
   }
 
   ngOnInit() {
     // Create the form with FormBuilder
-
 
 
     this.myForm = this.fb.group({
@@ -74,6 +74,7 @@ export class CapabilitiesComponent {
 
 
   onSubmit() {
+    console.log(this.appDetails,'sda')
     if (this.myForm.valid) {
       this.showSuccessAlert = true
 
@@ -88,7 +89,8 @@ export class CapabilitiesComponent {
         {
           extra: {
             capabilities: this.myForm.value
-          }
+          },
+          name:this.appDetails?.app_details?.app_name
         }).subscribe(
           (response) => {
             console.log(response);
