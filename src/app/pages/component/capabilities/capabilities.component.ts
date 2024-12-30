@@ -74,6 +74,7 @@ export class CapabilitiesComponent {
 
 
   onSubmit() {
+    console.log(this.appDetails,'sda')
     if (this.myForm.valid) {
       this.showSuccessAlert = true
 
@@ -88,19 +89,22 @@ export class CapabilitiesComponent {
         {
           extra: {
             capabilities: this.myForm.value
-          }
-        }).subscribe(
-          (response) => {
-            console.log(response);
-            
-            setTimeout(() => {
-              this.router.navigateByUrl('pages/instructions')
-            }, 1000)
           },
-          (error) => {
-            console.error('API Error:', error);
-          }
-        );
+          name:this.appDetails?.app_details?.app_name
+        }).subscribe(
+        (response) => {
+          console.log(response);
+
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/instructions')
+          }, 1000)
+        },
+        (error) => {
+          console.error('API Error:', error);
+        }
+
+
+      );
       // this.myForm.reset();
       this.applicationDataService.setData('capabilities', this.myForm.value);
     }

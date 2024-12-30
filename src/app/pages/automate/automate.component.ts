@@ -319,7 +319,11 @@ ngOnDestroy(){
 
     // Call getCapabilities() and subscribe to it
     this.getCapabilities().subscribe((appCapabilities) => {
+
       console.log(appCapabilities,"completeAppData");  // This will log the data once it's available
+
+      console.log(appCapabilities);  // This will log the data once it's available
+
       this.completeAppData = appCapabilities
     });
 
@@ -467,6 +471,7 @@ ngOnDestroy(){
       individualCount = individualCount + 1;
       console.log('count started:', individualCount);
     }, 1000);
+
   }
 
   onStartTrans(itemData) {
@@ -500,6 +505,53 @@ ngOnDestroy(){
 
     if (this.showEnd){
 
+
+
+      const socketReport = {
+        capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
+        resultArr: this.resultArr,
+        extras: this.extras,
+      }
+
+      let passedCount = 0;
+      let failedCount = 0;
+      let untestedCount = 0;
+
+      // Iterate over the reports to count the number of passed, failed, and untested test cases
+      this.resultArr?.map((testCase) => {
+        if (testCase?.successMessage !== "End_Instructions") {
+          console.log(testCase);
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
+
+
+      const body = {
+        applicationId: localStorage.getItem('app_id'),
+        filename: itemData?.wt_desc,
+        app_version: "2.1",
+        totalTestCase: result?.length - 1,
+        passed: passedCount,
+        failed: failedCount,
+        crash_count: untestedCount,
+        extra: socketReport,
+      }
+      this.accountService.postReportData(body).subscribe((resp) => {
+        if (resp) {
+          console.log(resp);
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+          }, 1000)
+        }
+      })
+    }
+    console.log(itemData);
 
 
       const socketReport = {

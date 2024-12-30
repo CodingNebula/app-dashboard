@@ -4,7 +4,7 @@
 }
 
 .parentDiv {
-    height: 34.5em;
+    height: 31.5em;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -179,4 +179,13 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
         color: #00A3AB;
         text-decoration: underline;
     }
+}
+
+
+@media screen and (min-width:1093px )  and (max-width:1242px ){
+  .parentDiv {
+    height: 29.5em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
 }

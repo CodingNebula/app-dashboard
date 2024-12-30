@@ -130,7 +130,10 @@ export class ApplicationComponent implements OnInit {
         } else {
           // Navigate to capabilities page if no conditions are met
           this.router.navigateByUrl('pages/capabilities', { state: { id: item.id } });
-  
+
+          this.router.navigateByUrl('pages/capabilities', { state: { id: item.id,appName:item?.app_name } });
+
+
           // Log item and store data
           console.log(item);
           this.applicationDataService.setData('app_details', item);
