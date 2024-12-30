@@ -152,7 +152,7 @@ export class WebsocketService {
     // });
 
     this.socket.on('connect', () => {
-      alert('socket is connected.')
+
       this.socket.emit('join', {
         room: localStorage.getItem('id')
       });
