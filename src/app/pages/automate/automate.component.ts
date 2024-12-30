@@ -319,11 +319,7 @@ ngOnDestroy(){
 
     // Call getCapabilities() and subscribe to it
     this.getCapabilities().subscribe((appCapabilities) => {
-
-      console.log(appCapabilities,"completeAppData");  // This will log the data once it's available
-
-      console.log(appCapabilities);  // This will log the data once it's available
-
+   // This will log the data once it's available
       this.completeAppData = appCapabilities
     });
 
@@ -333,11 +329,10 @@ ngOnDestroy(){
       this.appCapabilities = state.capabilities;
     }
 
-    console.log(this.appCapabilities);
 
     this.appData = this.applicationDataService.getData();
 
-    console.log(this.appData);
+
 
     //   {
     //     "platformName": "Android",
@@ -401,7 +396,7 @@ ngOnDestroy(){
           name:'Ionic Anypay'
         }
       ).subscribe((response) => {
-        console.log(response);
+
         this.appLaunch(app_id);
 
       }, (error) => {
@@ -471,7 +466,6 @@ ngOnDestroy(){
       individualCount = individualCount + 1;
       console.log('count started:', individualCount);
     }, 1000);
-
   }
 
   onStartTrans(itemData) {
@@ -509,53 +503,6 @@ ngOnDestroy(){
 
       const socketReport = {
         capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
-        resultArr: this.resultArr,
-        extras: this.extras,
-      }
-
-      let passedCount = 0;
-      let failedCount = 0;
-      let untestedCount = 0;
-
-      // Iterate over the reports to count the number of passed, failed, and untested test cases
-      this.resultArr?.map((testCase) => {
-        if (testCase?.successMessage !== "End_Instructions") {
-          console.log(testCase);
-          if (testCase.message === 'SUCCESS') {
-            passedCount++;
-          } else if (testCase.message === 'FAILED') {
-            failedCount++;
-          } else if (testCase.message === 'Untested') {
-            untestedCount++;
-          }
-        }
-      });
-
-
-      const body = {
-        applicationId: localStorage.getItem('app_id'),
-        filename: itemData?.wt_desc,
-        app_version: "2.1",
-        totalTestCase: result?.length - 1,
-        passed: passedCount,
-        failed: failedCount,
-        crash_count: untestedCount,
-        extra: socketReport,
-      }
-      this.accountService.postReportData(body).subscribe((resp) => {
-        if (resp) {
-          console.log(resp);
-          setTimeout(() => {
-            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
-          }, 1000)
-        }
-      })
-    }
-    console.log(itemData);
-
-
-      const socketReport = {
-        capabilities: this.completeAppData,
         resultArr: this.resultArr,
         extras: this.extras,
       }
@@ -1057,9 +1004,9 @@ ngOnDestroy(){
       item.push(obj);
 
       // Output the modified item array
-      console.log(item);
+      console.log(item,"item");
       this.showResult = true;
-      console.log(result);
+      console.log(result,"result");
 
       this.webSocketService.sendTestCaseRequest(item);
 
@@ -1101,7 +1048,7 @@ ngOnDestroy(){
 
             this.resultArr.push(res.message);
             this.scrollToBottom();
-            console.log(res);
+            console.log(res,"res end instrction");
           }
           if (res?.message?.successMessage === "End_Instructions") {
             clearInterval(counterInterval);
@@ -1115,7 +1062,7 @@ ngOnDestroy(){
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
             const socketReport = {
-              capabilities: this.completeAppData,
+              capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
               resultArr: this.resultArr,
               extras: this.extras,
             }
@@ -1174,7 +1121,7 @@ ngOnDestroy(){
   }
 
   onStart(item) {
-    console.log(item);
+
 
     const res = item.testCase.map((item) => {
       return {
@@ -1183,7 +1130,7 @@ ngOnDestroy(){
       }
     })
 
-    console.log(res);
+
 
     //   {
     //     "sender": "e6135615-48a5-4b5d-a121-af82670e0a92",

@@ -22,6 +22,7 @@ export class CapabilitiesComponent {
     private router: Router,
     private accountService: AccountService,
   ) {
+    console.log(this.router.getCurrentNavigation()?.extras?.state,'------>shared data');
 
   }
 

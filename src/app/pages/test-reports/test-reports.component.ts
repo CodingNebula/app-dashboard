@@ -36,7 +36,7 @@ public chartData:any=[];
 
 
   constructor(private webSocketService: WebsocketService) {
-    
+
     this.reportHeading = localStorage.getItem('app_name')
     let plaformdata = localStorage.getItem('app_capa')
     this.platform = JSON.parse(plaformdata);
@@ -44,7 +44,7 @@ public chartData:any=[];
     const state = window.history.state;
     this.capabilities = state?.reportData?.extra?.capabilities;
     console.log(this.capabilities);
-    this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");   
+    this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
     this.extras = state?.reportData?.extra?.extras;
     console.log(this.extras);
@@ -69,7 +69,7 @@ public chartData:any=[];
     console.log(this.reportData);
     dataArr.push({ name: 'SUCCESS', value: passedCount });
     dataArr.push({ name: 'FAILED', value: 1 });
-    dataArr.push({ name: 'Untested', value: untestedCount - (failedCount+passedCount)});
+    dataArr.push({ name: 'UNTESTED', value: untestedCount - (failedCount+passedCount)});
 
     this.pieData = dataArr
 
@@ -89,7 +89,7 @@ public chartData:any=[];
           fontSize: 7,  // Adjust the font size of the label here
           fontFamily: 'Arial',  // Optional: specify font family
           color: '#333',  // Optional: set color of label text
-          fontWeight: 'bold',  // Optional: set font weight 
+          fontWeight: 'bold',  // Optional: set font weight
 
           overflow: 'none',
           bleedMargin: 40
@@ -145,7 +145,7 @@ public chartData:any=[];
         fontSize: 7,  // Adjust the font size of the label here
         fontFamily: 'Arial',  // Optional: specify font family
         color: '#333',  // Optional: set color of label text
-        fontWeight: 'bold',  // Optional: set font weight 
+        fontWeight: 'bold',  // Optional: set font weight
 
         overflow: 'none',
         bleedMargin: 40
@@ -213,15 +213,15 @@ this.chartData.forEach((ele:any,ind)=>{
       this.extras = item?.extra?.extras;
       console.log(this.extras);
       console.log(item);
-  
+
       const doc = new jsPDF();
-  
+
       // Add report header
       doc.setFontSize(16);
       doc.text(item?.app_name || 'App Name', 14, 20);
       doc.setFontSize(12);
       doc.text(`Created At: ${this.extras?.createdAt || 'N/A'}`, 14, 30);
-  
+
       // Add device and platform information
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
@@ -238,7 +238,7 @@ this.chartData.forEach((ele:any,ind)=>{
         const pageWidth = doc.internal.pageSize.width;
         const xPosition = pageWidth - 120;
         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
-  
+
       }
       doc.setFontSize(12);
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
@@ -247,16 +247,16 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Started Time: ${this.reportData.extra?.startedTime || 'N/A'}`, 14, 80);
       doc.text(`Total Time Taken: ${this.reportData.extra?.timeTaken || 'N/A'} Sec`, 14, 90);
       doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
-  
+
       // Add a line break
       doc.text('', 14, 110);
-  
+
       // Add test cases
       doc.setFontSize(14);
       doc.text('Test Cases', 14, 120);
-  
+
       console.log(this.testCases);
-  
+
       // Prepare data for the table
       const testCaseData = this.testCases.map(testCase => ({
         info: testCase.info,
@@ -265,7 +265,7 @@ this.chartData.forEach((ele:any,ind)=>{
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
         timeSpent: this.convertMilliseconds(testCase.time_spent)
       }));
-  
+
       // Create the table
       autoTable(doc, {
         head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
@@ -294,16 +294,16 @@ this.chartData.forEach((ele:any,ind)=>{
         },
         margin: { top: 20 },
       });
-  
-  
-  
+
+
+
       // Save the PDF
-  
+
       doc.save('report.pdf');
-  
-  
+
+
     },500)
-   
+
 
   }
 
