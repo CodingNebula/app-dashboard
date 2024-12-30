@@ -151,12 +151,12 @@ export class WebsocketService {
     // });
 
     this.socket.on('connect', () => {
-      this.socket.emit('join', { 
-        room: localStorage.getItem('id') 
+      this.socket.emit('join', {
+        room: localStorage.getItem('id')
       });
     });
-   
-    
+
+
   }
 
   private handleReconnect(): void {
@@ -173,7 +173,7 @@ export class WebsocketService {
 
   sendTestCaseRequest(item?: any): void {
     console.log(item);
-    
+
     this.testReportsData.reports.push(item);
 
     // Check if the socket is connected before emitting
@@ -190,10 +190,10 @@ this.updateValue(response);
         // }
       });
     } else {
-      this.showAlert = true;
-      setTimeout(() => {
+      this.showAlert = true
+      setTimeout(()=>{
         this.showAlert = false;
-      }, 1000);
+      },1000)
       console.error('Socket is not connected.');
     }
   }
@@ -221,7 +221,7 @@ this.updateValue(response);
       // this.socket.emit("message", {
       //   room: localStorage.getItem('id'),
       //   message: JSON.stringify(item.capabilities),
-      // });   
+      // });
     } else {
       console.error('Socket is not connected.');
     }

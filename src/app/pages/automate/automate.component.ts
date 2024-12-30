@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public showEnd = false;
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -55,7 +56,7 @@ export class AutomateComponent implements OnInit {
       },
       {
         "id": "8",
-        "screenName": "Click_Image", // image 
+        "screenName": "Click_Image", // image
         "btnName": "left_arrow",
         "title": "Welcome_Next_Button"
       },
@@ -221,7 +222,7 @@ export class AutomateComponent implements OnInit {
       //      "id":13,
       //      "screenName":"Wait_For_Text",
       //       "btnName":"WPC323951000219"
-      //  }, 
+      //  },
       //  {
       //      "id":13,
       //      "screenName":"Click_Text",
@@ -234,11 +235,11 @@ export class AutomateComponent implements OnInit {
       //  },
       //   {
       //      "id":"8",
-      //      "screenName":"Click_Image" // image 
+      //      "screenName":"Click_Image" // image
       //  },
       //  {
       //      "id":"8",
-      //      "screenName":"Click_Image", // image 
+      //      "screenName":"Click_Image", // image
       //      "btnName":"Sale"
       //  },
       //  {
@@ -283,7 +284,7 @@ export class AutomateComponent implements OnInit {
       //  },
       //   {
       //      "id":"14",
-      //      "screenName":"Element_Avail", // image 
+      //      "screenName":"Element_Avail", // image
       //      "elementName":["Transaction FAILED", "Transaction Approved"]
       //  },
 
@@ -339,7 +340,6 @@ ngOnDestroy(){
     //     "ignoreHiddenApiPolicyError": true,
     //     "newCommandTimeout": 1200000
     // }
-
     this.myForm = this.fb.group({
       platform: [this.appCapabilities?.platformName, [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
@@ -453,8 +453,7 @@ ngOnDestroy(){
   }
 
   onStartTrans(itemData) {
-    let count = 0;
-    let individualCount = 0;
+
     console.log(itemData);
 
     const result = itemData.screens.map(screen => {
@@ -478,36 +477,308 @@ ngOnDestroy(){
       }
     );
 
+    if (this.showEnd){
+
+
+
+      const socketReport = {
+        capabilities: this.completeAppData,
+        resultArr: this.resultArr,
+        extras: this.extras,
+      }
+
+      let passedCount = 0;
+      let failedCount = 0;
+      let untestedCount = 0;
+
+      // Iterate over the reports to count the number of passed, failed, and untested test cases
+      this.resultArr?.map((testCase) => {
+        if (testCase?.successMessage !== "End_Instructions") {
+          console.log(testCase);
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
+
+      const body = {
+        applicationId: localStorage.getItem('app_id'),
+        filename: itemData?.wt_desc,
+        app_version: "2.1",
+        totalTestCase: result?.length - 1,
+        passed: passedCount,
+        failed: failedCount,
+        crash_count: untestedCount,
+        extra: socketReport,
+      }
+      this.accountService.postReportData(body).subscribe((resp) => {
+        if (resp) {
+          console.log(resp);
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+          }, 1000)
+        }
+      })
+    }
+    let count = 0;
+    let individualCount = 0;
+    console.log(itemData);
+
+
+
+
+
     const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
+
+    // let item = [
+    //   {
+    //     "id": "0",
+    //     "screenName": "Welcome",
+    //     "btnName": "Welcome"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image", // image
+    //     "btnName": "left_arrow"
+    //   },
+    //   {
+    //     "id": "1",
+    //     "screenName": "Permissions"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image", // image
+    //     "btnName": "left_arrow"
+    //   },
+    //   {
+    //     "id": "2",
+    //     "screenName": "Permissions_list"
+    //   },
+    //   {
+    //     "id": "3",
+    //     "screenName": "Allow_PhoneCalls",
+    //     "btnName": "Allow"
+    //   },
+    //   {
+    //     "id": "4",
+    //     "screenName": "Allow_DeviceLocation",
+    //     "btnName": "ALLOW"
+    //   },
+    //   {
+    //     "id": "5",
+    //     "screenName": "Allow_BluetoothConnection",
+    //     "btnName": "ALLOW"
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Continue"
+    //   },
+    //   {
+    //     "id": "7",
+    //     "screenName": "Terminal Setup"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image" // image
+    //   },
+    //   {
+    //     "id": "9",
+    //     "screenName": "Select_Options",
+    //     "options": "Testing"
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "PROCEED"
+    //   },
+    //   {
+    //     "id": "1",
+    //     "screenName": "Enter_Terminal_ID",
+    //     "terminal_id": ["2994001"]
+    //
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Next"
+    //   },
+    //   {
+    //     "id": "10",
+    //     "screenName": "Enter_Terminal_ID",
+    //     "terminal_id": ["2994001"]
+    //
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Submit"
+    //   },
+    //
+    //   {
+    //     "id": "11",
+    //     "screenName": "Profile_Login",
+    //     "pin": ["9", "2", "0", "4"]
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "Confirm"
+    //   },
+    //   {
+    //     "id": "6",
+    //     "screenName": "Click_Button",
+    //     "btnName": "GO"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "Skip >"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "homePage",
+    //     "action": "Transaction"
+    //   },
+    //
+    //   // connect reader steps start
+    //   {
+    //     "id": 10,
+    //     "screenName": "Click_View",
+    //     "btnName": "Device"
+    //   },
+    //
+    //
+    //   {
+    //     "id": 12,
+    //     "screenName": "Click_Button",
+    //     "btnName": "CONNECT TO READER"
+    //   },
+    //   {
+    //     "id": 13,
+    //     "screenName": "Wait_For_Text",
+    //     // "btnName":"WPS323247002051"
+    //     "btnName": "WPC323951000219"
+    //     //   "btnName":"CHB2A6132009935"
+    //     // "btnName":"CHB204650000480"
+    //   },
+    //   {
+    //     "id": 13,
+    //     "screenName": "Click_Text",
+    //     // "btnName":"WPS323247002051"
+    //     "btnName": "WPC323951000219"
+    //     // "btnName":"CHB2A6132009935"
+    //     // "btnName":"CHB204650000480"
+    //   },
+    //   {
+    //     "id": 14,
+    //     "screenName": "Find_Button",
+    //     "btnName": "Disconnect"
+    //   },
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image" // image
+    //   },
+    //
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image", // image
+    //     "btnName": "Sale"
+    //   },
+    //   {
+    //     "id": 14,
+    //     "screenName": "Enter_Amount",
+    //     "amount": "200.00"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "Clear"
+    //   },
+    //   {
+    //     "id": 14,
+    //     "screenName": "Enter_Amount",
+    //     "amount": "50.00"
+    //   },
+    //   {
+    //     "id": 10,
+    //     "screenName": "Click_View",
+    //     "btnName": "2 / 4"
+    //   },
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "Go"
+    //   },
+    //
+    //   {
+    //     "id": 9,
+    //     "screenName": "Click_Text",
+    //     "btnName": "10%"
+    //   },
+    //   {
+    //     "id": 12,
+    //     "screenName": "Click_Button",
+    //     "btnName": "Continue"
+    //   },
+    //   {
+    //     "id": 13,
+    //     "screenName": "Wait_For_Text",
+    //     "btnName": "Transaction ID"
+    //   },
+    //   {
+    //     "id": "14",
+    //     "screenName": "Element_Avail", // image
+    //     "elementName": ["Transaction FAILED", "Transaction Approved"]
+    //   },
+    //
+    //   {
+    //     "id": "12",
+    //     "screenName": "Click_Button",
+    //     "btnName": "See Details"
+    //   },
+    //
+    //   {
+    //     "id": "8",
+    //     "screenName": "Click_Image" // image
+    //
+    //   },
+    //
+    //
+    // ]
 
     let item = [
       {
-        "id": "0",
-        "screenName": "Welcome",
-        "btnName": "Welcome"
+        "id":"0",
+        "screenName":"Welcome",
+        "btnName":"Welcome"
       },
       {
-        "id": "8",
-        "screenName": "Click_Image", // image 
-        "btnName": "left_arrow"
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"left_arrow"
       },
       {
-        "id": "1",
-        "screenName": "Permissions"
+        "id":"1",
+        "screenName":"Permissions"
       },
       {
-        "id": "8",
-        "screenName": "Click_Image", // image 
-        "btnName": "left_arrow"
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"left_arrow"
       },
       {
-        "id": "2",
-        "screenName": "Permissions_list"
+        "id":"2",
+        "screenName":"Permissions_list"
       },
       {
-        "id": "3",
-        "screenName": "Allow_PhoneCalls",
-        "btnName": "Allow"
+        "id":"3",
+        "screenName":"Allow_PhoneCalls",
+        "btnName":"Allow"
       },
       {
         "id": "4",
@@ -530,7 +801,7 @@ ngOnDestroy(){
       },
       {
         "id": "8",
-        "screenName": "Click_Image" // image 
+        "screenName": "Click_Image" // image
       },
       {
         "id": "9",
@@ -590,6 +861,9 @@ ngOnDestroy(){
         "screenName": "homePage",
         "action": "Transaction"
       },
+      // {
+      //     "id":20
+      // },
 
       // connect reader steps start
       {
@@ -600,85 +874,99 @@ ngOnDestroy(){
 
 
       {
-        "id": 12,
-        "screenName": "Click_Button",
-        "btnName": "CONNECT TO READER"
+        "id":12,
+        "screenName":"Click_Button",
+        "btnName":"CONNECT TO READER"
       },
       {
-        "id": 13,
-        "screenName": "Wait_For_Text",
+        "id":13,
+        "screenName":"Wait_For_Text",
+        "btnName":"WPC323951000219"
         // "btnName":"WPS323247002051"
-        "btnName": "WPC323951000219"
+        // "btnName":"WPS323129001477"
         //   "btnName":"CHB2A6132009935"
         // "btnName":"CHB204650000480"
       },
       {
-        "id": 13,
-        "screenName": "Click_Text",
+        "id":13,
+        "screenName":"Click_Text",
+        "btnName":"WPC323951000219"
         // "btnName":"WPS323247002051"
-        "btnName": "WPC323951000219"
+        // "btnName":"WPS323129001477"
         // "btnName":"CHB2A6132009935"
         // "btnName":"CHB204650000480"
       },
       {
-        "id": 14,
-        "screenName": "Find_Button",
-        "btnName": "Disconnect"
+        "id":14,
+        "screenName":"Find_Button",
+        "btnName":"Disconnect"
       },
       {
-        "id": "8",
-        "screenName": "Click_Image" // image 
+        "id":"8",
+        "screenName":"Click_Image" // image
       },
-
+      // connect reader steps ends
+      // transaction step starts
       {
-        "id": "8",
-        "screenName": "Click_Image", // image 
-        "btnName": "Sale"
-      },
-      {
-        "id": 14,
-        "screenName": "Enter_Amount",
-        "amount": "200.00"
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"Sale"
       },
       {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "Clear"
+        "id":14,
+        "screenName":"Enter_Amount",
+        "btnName":"200.00"
       },
       {
-        "id": 14,
-        "screenName": "Enter_Amount",
-        "amount": "50.00"
+        "id":9,
+        "screenName":"Click_Text",
+        "btnName":"Clear"
       },
       {
-        "id": 10,
-        "screenName": "Click_View",
-        "btnName": "2 / 4"
+        "id":14,
+        "screenName":"Enter_Amount",
+        "btnName":"50.00"
       },
       {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "Go"
-      },
-
-      {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "10%"
+        "id":10,
+        "screenName":"Click_View",
+        "btnName":"2 / 4"
       },
       {
-        "id": 12,
-        "screenName": "Click_Button",
-        "btnName": "Continue"
+        "id":9,
+        "screenName":"Click_Text",
+        "btnName":"Go"
+      },
+      //custom tip
+      //     {
+      //     "id":9,
+      //     "screenName":"Click_Text",
+      //     "btnName":"Custom"
+      // },
+      //   {
+      //     "id":14,
+      //     "screenName":"Enter_Amount",
+      //     "amount":"500.00"
+      // },
+      // fix tip
+      {
+        "id":9,
+        "screenName":"Click_Text",
+        "btnName":"10%"
       },
       {
-        "id": 13,
-        "screenName": "Wait_For_Text",
-        "btnName": "Transaction ID"
+        "id":12,
+        "screenName":"Click_Button",
+        "btnName":"Continue"
+      },
+      {
+        "id":13,
+        "screenName":"Wait_For_Text",
+        "btnName":"Transaction ID"
       },
       {
         "id": "14",
-        "screenName": "Element_Avail", // image 
+        "screenName": "Element_Avail", // image
         "elementName": ["Transaction FAILED", "Transaction Approved"]
       },
 
@@ -690,11 +978,24 @@ ngOnDestroy(){
 
       {
         "id": "8",
-        "screenName": "Click_Image" // image 
+        "screenName": "Click_Image" // image
+
+      },
+
+      // refund steps starts from dashboard
+      {
+        "id":"8",
+        "screenName":"Click_Image", // image
+        "btnName":"Refund"
 
       },
 
 
+
+      {
+        "id":"0",
+        "screenName":"Find_Screen_Elements"
+      }
     ]
 
     item.push(obj);
@@ -704,7 +1005,7 @@ ngOnDestroy(){
     this.showResult = true;
     console.log(result);
 
-    this.webSocketService.sendTestCaseRequest(result);
+    this.webSocketService.sendTestCaseRequest(item);
 
     let counterInterval = setInterval(() => {
       count++;
@@ -721,7 +1022,7 @@ ngOnDestroy(){
     }
     startCounting();
     let timeChecked = false;
-
+    this.showEnd = true
     this.webSocketService.getSubject().subscribe((res) => {
 
       if (!timeChecked) {
@@ -734,7 +1035,9 @@ ngOnDestroy(){
         const hours = String(currentDate.getHours()).padStart(2, '0');
         const minutes = String(currentDate.getMinutes()).padStart(2, '0');
         const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-        res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        if (res) {
+          res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
       }
 
       if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
@@ -755,7 +1058,7 @@ ngOnDestroy(){
           clearInterval(counterInterval);
           clearInterval(startInterval)
           res.extra.timeTaken = count;
-     
+
           const now = new Date();
           const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
           this.extras.startedTime = formattedTime;
@@ -924,7 +1227,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "left_arrow"
     },
     {
@@ -933,7 +1236,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "left_arrow"
     },
     {
@@ -966,7 +1269,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image" // image 
+      "screenName": "Click_Image" // image
     },
     {
       "id": "9",
@@ -1059,13 +1362,13 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image" // image 
+      "screenName": "Click_Image" // image
     },
     // connect reader steps ends
-    // transaction step starts  
+    // transaction step starts
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1123,7 +1426,7 @@ ngOnDestroy(){
     },
     {
       "id": "14",
-      "screenName": "Element_Avail", // image 
+      "screenName": "Element_Avail", // image
       "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
 
@@ -1135,7 +1438,7 @@ ngOnDestroy(){
     //     // 2nd transaction starts
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1162,7 +1465,7 @@ ngOnDestroy(){
     },
     {
       "id": "14",
-      "screenName": "Element_Avail", // image 
+      "screenName": "Element_Avail", // image
       "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
     {
@@ -1172,7 +1475,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1199,7 +1502,7 @@ ngOnDestroy(){
 
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((testCase) => {
-        // Check if testCase with the same ins_set_id is already present in testCases array 
+        // Check if testCase with the same ins_set_id is already present in testCases array
         // Check if the current ins_set_id exists in this.testCases
         const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
 
@@ -1235,7 +1538,7 @@ ngOnDestroy(){
       this.myForm.get('hiddenApp').enable();
       this.myForm.get('description').enable();
       this.myForm.get('buildNo').enable();
-  
+
     }
     else {
       this.myForm.get('platform').disable();

@@ -16,23 +16,23 @@
     </header>
     <div class="segment" *ngIf="reports?.length>0">
       <button (click)="btnHandler('All')" [ngClass]="{'active':activeBtn==='All'}" class="segment-button ">All
-        (40)</button>
-      <button (click)="btnHandler('pdf')" [ngClass]="{'active':activeBtn==='pdf'}" class="segment-button">pdf
-        (5)</button>
-      <button (click)="btnHandler('xls')" [ngClass]="{'active':activeBtn==='xls'}" class="segment-button">xls
-        (33)</button>
-      <button (click)="btnHandler('doc')" [ngClass]="{'active':activeBtn==='doc'}" class="segment-button">doc
-        (2)</button>
-      <button (click)="btnHandler('csv')" [ngClass]="{'active':activeBtn==='csv'}" class="segment-button">csv
-        (1)</button>
+        ({{reports?.length}})</button>
+<!--      <button (click)="btnHandler('pdf')" [ngClass]="{'active':activeBtn==='pdf'}" class="segment-button">pdf-->
+<!--        (5)</button>-->
+<!--      <button (click)="btnHandler('xls')" [ngClass]="{'active':activeBtn==='xls'}" class="segment-button">xls-->
+<!--        (33)</button>-->
+<!--      <button (click)="btnHandler('doc')" [ngClass]="{'active':activeBtn==='doc'}" class="segment-button">doc-->
+<!--        (2)</button>-->
+<!--      <button (click)="btnHandler('csv')" [ngClass]="{'active':activeBtn==='csv'}" class="segment-button">csv-->
+<!--        (1)</button>-->
     </div>
     <div class="filters-info" *ngIf="reports?.length>0">
       <div class="selected-filters">
-        <span>Finance</span>
-        <span>October</span>
-        <span>Year2024</span>
+<!--        <span>Finance</span>-->
+<!--        <span>October</span>-->
+<!--        <span>Year2024</span>-->
       </div>
-      <a href="#" class="reset-filters">Reset Filters</a>
+<!--      <a href="#" class="reset-filters">Reset Filters</a>-->
       <input type="search" placeholder="Search" class="search-bar" />
     </div>
 
@@ -60,7 +60,7 @@
               </div>
             </td>
             <td>{{reportData.application_version}}</td>
-           
+
             <td>{{reportData.testcase_performed}}</td>
             <td>{{reportData.extra.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</td>
             <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>
@@ -76,15 +76,15 @@
     </div>
 
     <footer class="pagination-footer" *ngIf="reports?.length>0">
-      <span>1-10 of 460</span>
+<!--      <span>1-10 of 460</span>-->
       <div class="pagination-controls">
-        <div class="row-per-page-div">
-          <label class="row-per-page-label">Rows per page</label>
-          <input class="row-per-page-input" type="number" value="1" min="1" max="46">
-        </div>
-        <button>&lt;</button>
+<!--        <div class="row-per-page-div">-->
+<!--          <label class="row-per-page-label">Rows per page</label>-->
+<!--          <input class="row-per-page-input" type="number" value="1" min="1" max="46">-->
+<!--        </div>-->
+<!--        <button>&lt;</button>-->
 
-        <button>&gt;</button>
+<!--        <button>&gt;</button>-->
       </div>
     </footer>
   </div>

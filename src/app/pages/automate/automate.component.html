@@ -82,7 +82,7 @@
 
             <div class="form-group">
               <label for="hiddenApp">Ignore hidden app policy:</label>
-              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" 
+              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select"
                 class="custom-select-dropdown">
                 <nb-option value="true">True</nb-option>
                 <nb-option value="false">False</nb-option>
@@ -133,16 +133,16 @@
 
     <div class="test-case-div">
       <h5>{{templateData?.wt_name}}</h5>
-      
+
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button class="start-button" (click)="onStartTrans(templateData)">Start All</button>
+      <button class="start-button" (click)="onStartTrans(templateData)">{{showEnd?'End Test':'Start All'}}</button>
 
 
     </div>
     <!-- <div  class="test-case-div">
       <h5>Do a Transaction</h5>
   <button class="start-button" (click)="onStartTrans()">Start</button>
-   
+
     </div> -->
 
 
