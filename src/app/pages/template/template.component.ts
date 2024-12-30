@@ -29,9 +29,9 @@ export class TemplateComponent {
     private applicationDataService: ApplicationDataService) {
       const appDetails = this.applicationDataService.getData();
     console.log(appDetails);
-    
-      
-    
+
+
+
   }
 
   ngOnInit(){
@@ -45,7 +45,7 @@ export class TemplateComponent {
   openDialog(action: string, type: string, id?: string) {
     // Open the dialog and pass data to it using 'context'
     console.log(id);
-    
+
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
       context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr },
     });
@@ -57,7 +57,7 @@ export class TemplateComponent {
           if (result.selectedAction === 'testCase') {
             if(result.selectedType === 'name'){
               console.log(result.data);
-              
+
               const details = {
                 screenName: result.data.test_case_name,
                 applicationId: localStorage.getItem('app_id'),
@@ -66,17 +66,17 @@ export class TemplateComponent {
               console.log(result.data);
 
 
-              
+
               // this.saveApplicationData(appDetails);
               this.accountService.postPageName(details).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
-                  
+
                   this.testCasesArray.push(resp[0]);
                   this.screenNameId = resp[0]?.id
                   this.tempTestCase.screen_name = result.data.test_case_name;
                   this.tempTestCase.instruction_set_id = resp[0]?.id;
-                  
+
                 }
               })
               this.applicationDataService.setData('testCases', this.testCasesArray);
@@ -85,7 +85,7 @@ export class TemplateComponent {
 
             if(result.selectedType === 'instruction'){
               console.log(result.data);
-              
+
               let body = {
                 instruction_set_id: id,  // This value can be dynamic
                 instruction_id: result?.data?.instructionArr?.map((instruction, index) => {
@@ -98,13 +98,13 @@ export class TemplateComponent {
             };
 
             console.log(body);
-            
 
-              
+
+
               this.accountService.postPageInstructions(body).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
-                  
+
                   // this.testCasesArray.push(resp[0]);
                 //   if (this.testCasesArray.length > 0) {
                 //     this.testCasesArray.pop();
@@ -112,9 +112,9 @@ export class TemplateComponent {
                   this.tempTestCase.instructions = result.data.instructionArr;
                   this.testCasesArray.push(this.tempTestCase);
                   console.log(this.tempTestCase);
-                  
+
                   console.log(this.testCasesArray);
-                  
+
                 }
               })
               this.applicationDataService.setData('testCases', this.testCasesArray);
@@ -124,7 +124,7 @@ export class TemplateComponent {
           else if (result.selectedAction === 'template') {
             if(result.selectedType === 'name'){
               console.log(result.data,'datum');
-              
+
             //   const details = {
             //     screenName: result.data.test_case_name,
             //     applicationId: localStorage.getItem('app_id'),
@@ -138,15 +138,15 @@ export class TemplateComponent {
               extra: {},
           }
 
-          
+
               console.log(result.data);
 
-              
+
               // this.saveApplicationData(appDetails);
               this.accountService.postTemplateName(details).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
-                  
+
                   // this.testCasesArray.push(resp[0]);
                   this.templateId = resp[0]?.wt_id
                   // this.tempTemplate.wt_name = resp[0]?.template_name;
@@ -165,7 +165,7 @@ export class TemplateComponent {
 
             if(result.selectedType === 'testCase'){
               console.log(result.data);
-              
+
               let body = {
                 application_id: localStorage.getItem('app_id'),  // This value can be dynamic
                 wt_id:id,
@@ -194,7 +194,7 @@ export class TemplateComponent {
                   })
               };
           });
-          
+
           console.log(screens);
               console.log(this.templateId,'tempid');
               let appId=localStorage.getItem('app_id');
@@ -206,13 +206,13 @@ export class TemplateComponent {
                 //   if (this.templateArray.length > 0) {
                 //     this.templateArray.pop();
                 // }
-                  
-                  this.tempTemplate.screens = screens;
 
-                  this.templateArray.push(this.tempTemplate);
-                  console.log(this.templateArray);
-                  
-                  
+                  // this.tempTemplate.screens = screens;
+                  //
+                  // this.templateArray.push(this.tempTemplate);
+                  // console.log(this.templateArray);
+                  this.getAllTemplates();
+
                 }
               })
             }
@@ -225,7 +225,7 @@ export class TemplateComponent {
 
   automateTemplate(template: any) {
     console.log(template);
-    
+
     const capabilities = {
       platformName: "Android",
       app: "/home/codingnebula/Downloads/app-debug-v12.apk",
@@ -243,10 +243,10 @@ export class TemplateComponent {
   getAllPages(){
     const id = localStorage.getItem('app_id');
     this.accountService.getAllPages(id).subscribe((resp) => {
-      console.log(resp,'lodi');
+
       const groupedInstructions = resp.reduce((acc, curr) => {
         const { instruction_set_id, screen_name } = curr;
-        
+
         // Check if this instruction_set_id already exists in the accumulator
         if (!acc[instruction_set_id]) {
             acc[instruction_set_id] = {
@@ -255,16 +255,16 @@ export class TemplateComponent {
                 instructions: []
             };
         }
-    
+
         // Add current instruction to the appropriate group
         acc[instruction_set_id].instructions.push(curr);
-    
+
         return acc;
     }, {});
-    
+
     // Convert the grouped object to an array
     const result = Object.values(groupedInstructions); // assuming groupedInstructions is an object
-console.log(result);
+
 
 // Flatten and sort the instructions by 'instruction_order'
 const sortedInstructions = result
@@ -275,16 +275,14 @@ const sortedInstructions = result
     });
     return item;
   })
-console.log(sortedInstructions);
 
 // sortedInstructions.forEach((instruction: any) => {
 //   console.log(instruction);
 // });
 
-    
-    
+
+
     this.testCasesArray = result;
-    console.log(result);
     })
   }
 
@@ -293,12 +291,12 @@ console.log(sortedInstructions);
     const id = localStorage.getItem('app_id');
     this.accountService.getAllTemplates(id).subscribe((resp) => {
         const groupedData = [];
-        console.log(resp,'pop')
+
 
         resp.forEach((curr) => {
             // Find or create the weight group
             let wtGroup = groupedData.find(group => group.wt_id === curr.wt_id);
-          
+
             if (!wtGroup) {
                 wtGroup = {
                     wt_id: curr.wt_id,
@@ -308,7 +306,7 @@ console.log(sortedInstructions);
                 };
                 groupedData.push(wtGroup);
             }
-            console.log(wtGroup,'wtgroup')
+
 
             // Find or create the screen group
             let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
@@ -328,9 +326,9 @@ console.log(sortedInstructions);
                 screenGroup.instructions.push(curr);
             }
         });
-        
+
         this.templateArray = groupedData;
-        console.log(groupedData,'groupeddarta');
+
     });
 }
 
@@ -339,7 +337,6 @@ console.log(sortedInstructions);
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
         this.instructionsArr = data;
-        console.log(this.instructionsArr);
       }
     })
   }
@@ -347,6 +344,6 @@ console.log(sortedInstructions);
   toInstructions(){
     this.router.navigateByUrl('pages/instructions');
   }
-  
+
 }
 

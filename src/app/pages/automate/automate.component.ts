@@ -14,6 +14,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
   public showEnd = false;
+  public individualCount = 0;
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -319,7 +320,7 @@ ngOnDestroy(){
 
     // Call getCapabilities() and subscribe to it
     this.getCapabilities().subscribe((appCapabilities) => {
-      console.log(appCapabilities,"completeAppData");  // This will log the data once it's available
+
       this.completeAppData = appCapabilities
     });
 
@@ -329,11 +330,9 @@ ngOnDestroy(){
       this.appCapabilities = state.capabilities;
     }
 
-    console.log(this.appCapabilities);
 
     this.appData = this.applicationDataService.getData();
 
-    console.log(this.appData);
 
     //   {
     //     "platformName": "Android",
@@ -386,7 +385,6 @@ ngOnDestroy(){
      delete this.myForm.value.description;
      delete this.myForm.value.buildNo;
 
-      console.log(this.myForm.value);
 
       this.accountService.updateCapabilities(app_id,
         {
@@ -397,7 +395,7 @@ ngOnDestroy(){
           name:'Ionic Anypay'
         }
       ).subscribe((response) => {
-        console.log(response);
+
         this.appLaunch(app_id);
 
       }, (error) => {
@@ -464,15 +462,14 @@ ngOnDestroy(){
 
   startCounting(individualCount) {
     this.startInterval = setInterval(() => {
-      individualCount = individualCount + 1;
-      console.log('count started:', individualCount);
+      this.individualCount = this.individualCount + 1;
+
+      // console.log('count started:', this.individualCount);
     }, 1000);
   }
 
   onStartTrans(itemData) {
     let count = 0;
-    let individualCount = 0;
-    console.log(itemData);
 
     const result = itemData.screens.map(screen => {
       return screen.instructions.map((instruction, index) => {
@@ -503,7 +500,10 @@ ngOnDestroy(){
 
 
       const socketReport = {
-        capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
+        capabilities: {
+          description: this.myForm.value.description,
+          buildInfo: this.myForm.value.buildNo, ...this.completeAppData
+        },
         resultArr: this.resultArr,
         extras: this.extras,
       }
@@ -515,7 +515,7 @@ ngOnDestroy(){
       // Iterate over the reports to count the number of passed, failed, and untested test cases
       this.resultArr?.map((testCase) => {
         if (testCase?.successMessage !== "End_Instructions") {
-          console.log(testCase);
+
           if (testCase.message === 'SUCCESS') {
             passedCount++;
           } else if (testCase.message === 'FAILED') {
@@ -538,7 +538,7 @@ ngOnDestroy(){
       }
       this.accountService.postReportData(body).subscribe((resp) => {
         if (resp) {
-          console.log(resp);
+
           setTimeout(() => {
             this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
           }, 1000)
@@ -548,7 +548,6 @@ ngOnDestroy(){
 
     }else{
 
-      console.log(itemData);
 
       const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
 
@@ -1005,11 +1004,11 @@ ngOnDestroy(){
       item.push(obj);
 
       // Output the modified item array
-      console.log(item);
-      this.showResult = true;
-      console.log(result);
 
-      this.webSocketService.sendTestCaseRequest(item);
+      this.showResult = true;
+
+
+      this.webSocketService.sendTestCaseRequest(result);
 
       let counterInterval = setInterval(() => {
         count++;
@@ -1019,7 +1018,7 @@ ngOnDestroy(){
       //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
       let startInterval;
 
-      this.startCounting(individualCount);
+      this.startCounting(this.individualCount);
       let timeChecked = false;
       this.showEnd = true
       this.webSocketService.getSubject().subscribe((res) => {
@@ -1034,22 +1033,34 @@ ngOnDestroy(){
           const hours = String(currentDate.getHours()).padStart(2, '0');
           const minutes = String(currentDate.getMinutes()).padStart(2, '0');
           const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-          res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+          //
+          // if(res && !res?.extra){
+          //   res.extra={};
+          //   res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+          //
+          // }
+
+
         }
 
         if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+          if (!res?.extra) {
+            res.extra = {};
+          }
+          console.log(res, 'lpos');
+          console.log(this.individualCount, 'indc')
+          res.extra.timeSpent = this.individualCount;
 
-          res.extra.timeSpent = individualCount;
-          individualCount = 0;
+
           clearInterval(this.startInterval);
-
+          this.individualCount = 0;
           // Restart the interval by calling the function
-          this.startCounting(individualCount)
+          this.startCounting(this.individualCount)
           if (res?.message?.successMessage !== "End_Instructions") {
 
             this.resultArr.push(res.message);
             this.scrollToBottom();
-            console.log(res);
+
           }
           if (res?.message?.successMessage === "End_Instructions") {
             clearInterval(counterInterval);
@@ -1066,6 +1077,8 @@ ngOnDestroy(){
               capabilities: this.completeAppData,
               resultArr: this.resultArr,
               extras: this.extras,
+              totalTimeElapsed: count,
+
             }
 
             let passedCount = 0;
@@ -1076,7 +1089,7 @@ ngOnDestroy(){
             this.resultArr?.map((testCase) => {
               testCase.completeCount = count;
               if (testCase?.successMessage !== "End_Instructions") {
-                console.log(testCase);
+
                 if (testCase.message === 'SUCCESS') {
                   passedCount++;
                 } else if (testCase.message === 'FAILED') {
@@ -1099,7 +1112,7 @@ ngOnDestroy(){
             }
             this.accountService.postReportData(body).subscribe((resp) => {
               if (resp) {
-                console.log(resp);
+
                 setTimeout(() => {
                   this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
                 }, 1000)
@@ -1122,7 +1135,7 @@ ngOnDestroy(){
   }
 
   onStart(item) {
-    console.log(item);
+
 
     const res = item.testCase.map((item) => {
       return {
@@ -1131,7 +1144,6 @@ ngOnDestroy(){
       }
     })
 
-    console.log(res);
 
     //   {
     //     "sender": "e6135615-48a5-4b5d-a121-af82670e0a92",
@@ -1146,7 +1158,7 @@ ngOnDestroy(){
     this.webSocketService.getSubject().subscribe((res) => {
       if (res?.message && res?.message?.info) {
         this.resultArr.push(res.message);
-        console.log(res);
+
 
       }
     })
@@ -1498,7 +1510,7 @@ ngOnDestroy(){
 
 
   formatTestCaseData() {
-    console.log(this.templateData);
+
 
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((testCase) => {
@@ -1539,8 +1551,7 @@ ngOnDestroy(){
       this.myForm.get('description').enable();
       this.myForm.get('buildNo').enable();
 
-    }
-    else {
+    } else {
       this.myForm.get('platform').disable();
       this.myForm.get('app').disable();
       this.myForm.get('package').disable();
