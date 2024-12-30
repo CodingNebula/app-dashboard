@@ -230,7 +230,7 @@ export class WebsocketService {
       // this.socket.emit("message", {
       //   room: localStorage.getItem('id'),
       //   message: JSON.stringify(item.capabilities),
-      // });   
+      // });
     } else {
       console.error('Socket is not connected.');
     }

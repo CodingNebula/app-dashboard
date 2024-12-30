@@ -14,7 +14,7 @@
       <!-- <button (click)="buildReport()" class="build-report-btn">Build Report <ion-icon
           name="add-circle-outline"></ion-icon></button> -->
     </header>
- 
+
 
     <!-- Scrollable Table -->
     <div class="table-container">
@@ -40,7 +40,7 @@
               </div>
             </td>
             <td>{{reportData.application_version}}</td>
-           
+
             <td>{{reportData.testcase_performed}}</td>
             <td>{{reportData.extra.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</td>
             <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>

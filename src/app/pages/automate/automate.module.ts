@@ -7,7 +7,7 @@ import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   declarations: [
-    AutomateComponent
+    // AutomateComponent
   ],
   imports: [
     CommonModule,

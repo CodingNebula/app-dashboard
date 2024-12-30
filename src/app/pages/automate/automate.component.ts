@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public showEnd = false;
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -55,7 +56,7 @@ export class AutomateComponent implements OnInit {
       },
       {
         "id": "8",
-        "screenName": "Click_Image", // image 
+        "screenName": "Click_Image", // image
         "btnName": "left_arrow",
         "title": "Welcome_Next_Button"
       },
@@ -221,7 +222,7 @@ export class AutomateComponent implements OnInit {
       //      "id":13,
       //      "screenName":"Wait_For_Text",
       //       "btnName":"WPC323951000219"
-      //  }, 
+      //  },
       //  {
       //      "id":13,
       //      "screenName":"Click_Text",
@@ -234,11 +235,11 @@ export class AutomateComponent implements OnInit {
       //  },
       //   {
       //      "id":"8",
-      //      "screenName":"Click_Image" // image 
+      //      "screenName":"Click_Image" // image
       //  },
       //  {
       //      "id":"8",
-      //      "screenName":"Click_Image", // image 
+      //      "screenName":"Click_Image", // image
       //      "btnName":"Sale"
       //  },
       //  {
@@ -283,7 +284,7 @@ export class AutomateComponent implements OnInit {
       //  },
       //   {
       //      "id":"14",
-      //      "screenName":"Element_Avail", // image 
+      //      "screenName":"Element_Avail", // image
       //      "elementName":["Transaction FAILED", "Transaction Approved"]
       //  },
 
@@ -384,14 +385,14 @@ ngOnDestroy(){
       const app_id = localStorage.getItem('app_id');
      delete this.myForm.value.description;
      delete this.myForm.value.buildNo;
- 
+
       console.log(this.myForm.value);
 
       this.accountService.updateCapabilities(app_id,
         {
           extra: {
             capabilities: this.myForm.value
-  
+
           },
           name:'Ionic Anypay'
         }
@@ -487,6 +488,59 @@ ngOnDestroy(){
       }
     );
 
+    if (this.showEnd){
+
+
+
+      const socketReport = {
+        capabilities: this.completeAppData,
+        resultArr: this.resultArr,
+        extras: this.extras,
+      }
+
+      let passedCount = 0;
+      let failedCount = 0;
+      let untestedCount = 0;
+
+      // Iterate over the reports to count the number of passed, failed, and untested test cases
+      this.resultArr?.map((testCase) => {
+        if (testCase?.successMessage !== "End_Instructions") {
+          console.log(testCase);
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
+
+      const body = {
+        applicationId: localStorage.getItem('app_id'),
+        filename: itemData?.wt_desc,
+        app_version: "2.1",
+        totalTestCase: result?.length - 1,
+        passed: passedCount,
+        failed: failedCount,
+        crash_count: untestedCount,
+        extra: socketReport,
+      }
+      this.accountService.postReportData(body).subscribe((resp) => {
+        if (resp) {
+          console.log(resp);
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+          }, 1000)
+        }
+      })
+    }
+    console.log(itemData);
+
+
+
+
+
     const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
 
     // let item = [
@@ -497,7 +551,7 @@ ngOnDestroy(){
     //   },
     //   {
     //     "id": "8",
-    //     "screenName": "Click_Image", // image 
+    //     "screenName": "Click_Image", // image
     //     "btnName": "left_arrow"
     //   },
     //   {
@@ -506,7 +560,7 @@ ngOnDestroy(){
     //   },
     //   {
     //     "id": "8",
-    //     "screenName": "Click_Image", // image 
+    //     "screenName": "Click_Image", // image
     //     "btnName": "left_arrow"
     //   },
     //   {
@@ -539,7 +593,7 @@ ngOnDestroy(){
     //   },
     //   {
     //     "id": "8",
-    //     "screenName": "Click_Image" // image 
+    //     "screenName": "Click_Image" // image
     //   },
     //   {
     //     "id": "9",
@@ -636,12 +690,12 @@ ngOnDestroy(){
     //   },
     //   {
     //     "id": "8",
-    //     "screenName": "Click_Image" // image 
+    //     "screenName": "Click_Image" // image
     //   },
 
     //   {
     //     "id": "8",
-    //     "screenName": "Click_Image", // image 
+    //     "screenName": "Click_Image", // image
     //     "btnName": "Sale"
     //   },
     //   {
@@ -687,7 +741,7 @@ ngOnDestroy(){
     //   },
     //   {
     //     "id": "14",
-    //     "screenName": "Element_Avail", // image 
+    //     "screenName": "Element_Avail", // image
     //     "elementName": ["Transaction FAILED", "Transaction Approved"]
     //   },
 
@@ -699,7 +753,7 @@ ngOnDestroy(){
 
     //   {
     //     "id": "8",
-    //     "screenName": "Click_Image" // image 
+    //     "screenName": "Click_Image" // image
 
     //   },
 
@@ -963,7 +1017,7 @@ ngOnDestroy(){
     }
     startCounting();
     let timeChecked = false;
-
+    this.showEnd = true
     this.webSocketService.getSubject().subscribe((res) => {
 
       if (!timeChecked) {
@@ -997,7 +1051,7 @@ ngOnDestroy(){
           clearInterval(counterInterval);
           clearInterval(startInterval)
           res.extra.timeTaken = count;
-     
+
           const now = new Date();
           const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
           this.extras.startedTime = formattedTime;
@@ -1166,7 +1220,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "left_arrow"
     },
     {
@@ -1175,7 +1229,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "left_arrow"
     },
     {
@@ -1208,7 +1262,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image" // image 
+      "screenName": "Click_Image" // image
     },
     {
       "id": "9",
@@ -1301,13 +1355,13 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image" // image 
+      "screenName": "Click_Image" // image
     },
     // connect reader steps ends
-    // transaction step starts  
+    // transaction step starts
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1365,7 +1419,7 @@ ngOnDestroy(){
     },
     {
       "id": "14",
-      "screenName": "Element_Avail", // image 
+      "screenName": "Element_Avail", // image
       "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
 
@@ -1377,7 +1431,7 @@ ngOnDestroy(){
     //     // 2nd transaction starts
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1404,7 +1458,7 @@ ngOnDestroy(){
     },
     {
       "id": "14",
-      "screenName": "Element_Avail", // image 
+      "screenName": "Element_Avail", // image
       "elementName": ["Transaction FAILED", "Transaction Approved"]
     },
     {
@@ -1414,7 +1468,7 @@ ngOnDestroy(){
     },
     {
       "id": "8",
-      "screenName": "Click_Image", // image 
+      "screenName": "Click_Image", // image
       "btnName": "Sale"
 
     },
@@ -1441,7 +1495,7 @@ ngOnDestroy(){
 
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((testCase) => {
-        // Check if testCase with the same ins_set_id is already present in testCases array 
+        // Check if testCase with the same ins_set_id is already present in testCases array
         // Check if the current ins_set_id exists in this.testCases
         const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
 
@@ -1475,9 +1529,9 @@ ngOnDestroy(){
       this.myForm.get('timeout').enable();
       this.myForm.get('noReset').enable();
       this.myForm.get('hiddenApp').enable();
-      // this.myForm.get('description').enable();
-      // this.myForm.get('buildNo').enable();
-  
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
+
     }
     else {
       this.myForm.get('platform').disable();
@@ -1488,8 +1542,8 @@ ngOnDestroy(){
       this.myForm.get('timeout').disable();
       this.myForm.get('noReset').disable();
       this.myForm.get('hiddenApp').disable();
-      // this.myForm.get('description').enable();
-      // this.myForm.get('buildNo').enable();
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
     }
   }
 
