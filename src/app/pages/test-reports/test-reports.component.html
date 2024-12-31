@@ -26,7 +26,7 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Total Time taken</label>
-          <label class="subLabel">{{reportData?.completedCount}} Sec</label>
+          <label class="subLabel">{{testCases[0]?.completeCount}} Sec</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
@@ -65,7 +65,7 @@
               <div class="col-4">
                 <nb-card>
                   <nb-card-body>
-                    <div><span class="descriptionLabel">Time Spend -</span> {{reportData?.extra?.timeSpent}}</div>
+                    <div><span class="descriptionLabel">Time Spend -</span> {{testCase?.timeSpent}} sec</div>
                   </nb-card-body>
                 </nb-card>
               </div>

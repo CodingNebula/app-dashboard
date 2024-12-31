@@ -14,6 +14,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
   public showEnd = false;
+  public counterInterval;
   public individualCount = 0;
   public myForm: FormGroup;
   public selectedItem: '';
@@ -497,7 +498,19 @@ ngOnDestroy(){
 
     if (this.showEnd){
 
+      this.resultArr?.map((testCase) => {
+        testCase.completeCount = count;
+        if (testCase?.successMessage !== "End_Instructions") {
 
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
 
       const socketReport = {
         capabilities: {
@@ -1010,7 +1023,7 @@ ngOnDestroy(){
 
       this.webSocketService.sendTestCaseRequest(result);
 
-      let counterInterval = setInterval(() => {
+      this.counterInterval = setInterval(() => {
         count++;
       }, 1000);
 
@@ -1049,8 +1062,8 @@ ngOnDestroy(){
           }
           console.log(res, 'lpos');
           console.log(this.individualCount, 'indc')
-          res.extra.timeSpent = this.individualCount;
-
+          res.message.timeSpent = this.individualCount;
+          res.message.totalTimeTaken = count;
 
           clearInterval(this.startInterval);
           this.individualCount = 0;
@@ -1063,14 +1076,14 @@ ngOnDestroy(){
 
           }
           if (res?.message?.successMessage === "End_Instructions") {
-            clearInterval(counterInterval);
+            clearInterval(this.counterInterval);
             clearInterval(startInterval)
             res.extra.timeTaken = count;
-
+            res.message.totalTimeTaken = count;
             const now = new Date();
             const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
             this.extras.startedTime = formattedTime;
-            res.extra.startedTime=formattedTime;
+            res.startedTime=formattedTime;
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
             const socketReport = {
