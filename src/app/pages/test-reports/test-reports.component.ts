@@ -49,8 +49,8 @@ public chartData:any=[];
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
     this.extras = state?.reportData?.extra?.extras;
-    console.log(this.extras,"extras");
-    console.log(state);
+    console.log(this.reportData,"reportData");
+    // console.log(state);
 
     this.generatePie();
   }
@@ -63,10 +63,15 @@ public chartData:any=[];
     const state = history.state.reportData
     console.log(state.extra.capabilities.extra.capabilities,"time crathe")
     this.timeCreated = state.extra.extras.createdAt
-    this.convertMilliseconds(state.extra.capabilities.extra.capabilities.timeout);
+    this.timeTaken = this.convertToSeconds(state?.extra?.capabilities?.extra?.capabilities?.timeout);
+    console.log(this.timeTaken,"timetakens")
 
   }
-
+   convertToSeconds(ms) {
+    const minutes = Math.floor(ms / 600000); // 1 minute = 60000 milliseconds
+    const seconds = ((ms % 60000) / 1000).toFixed(0); // remainder of milliseconds for seconds
+    return `${minutes} minutes and ${seconds} seconds`;
+  }
 
 
   generatePie() {

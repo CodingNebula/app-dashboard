@@ -23,11 +23,11 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started Time</label>
-          <label class="subLabel">{{reportData?.extra?.capabilities.created_at | date:'dd-MM-yy hh:mm:ss a'}}</label>
+          <label class="subLabel">{{reportData?.extra?.extras.createdAt | date:'dd-MM-yy'}} {{reportData.extra.extras?.startedTime }} </label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Total Time taken</label>
-          <label class="subLabel">{{this.timeTaken}} Sec</label>
+          <label class="subLabel">{{this.timeTaken}}  </label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
