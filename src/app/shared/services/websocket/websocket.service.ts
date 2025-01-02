@@ -190,8 +190,8 @@ export class WebsocketService {
     // Check if the socket is connected before emitting
     if (this.socket && this.socket.connected) {
       this.socket.emit("message", { room: localStorage.getItem('id'), message: item });
-      debugger;
-      window.alert('socket is connected')
+
+
       // Listen for the response from the server
       this.socket.on('message', (response: any) => {
         this.updateValue(response);

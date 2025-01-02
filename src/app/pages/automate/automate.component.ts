@@ -545,7 +545,7 @@ ngOnDestroy(){
 
       this.resultArr?.map((testCase) => {
         testCase.completeCount = count;
-        debugger;
+
         if (testCase?.successMessage !== "End_Instructions") {
 
           if (testCase.message === 'SUCCESS') {
@@ -1070,7 +1070,6 @@ ngOnDestroy(){
         count++;
       }, 1000);
 
-      debugger;
       //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
       let startInterval;
 
@@ -1093,7 +1092,7 @@ ngOnDestroy(){
 
         }
 
-        debugger;
+
         if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
           if (!res?.extra) {
             res.extra = {};
@@ -1152,7 +1151,6 @@ ngOnDestroy(){
               }
             });
 
-            debugger;
 
             const body = {
               applicationId: localStorage.getItem('app_id'),

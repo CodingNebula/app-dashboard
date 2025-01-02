@@ -48,6 +48,8 @@ public chartData:any=[];
     console.log(this.capabilities);
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
+
+
     this.extras = state?.reportData?.extra?.extras;
     console.log(this.testCases,"testcase");
     // console.log(state);
@@ -286,7 +288,7 @@ public chartData:any=[];
         message: testCase.message,
         expectedResult: testCase.expected_result,
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-        timeSpent: this.testCases.map(test=>test.timeSpent)
+        timeSpent: (`${testCase.timeSpent} sec`)
       }));
 
       // Create the table
