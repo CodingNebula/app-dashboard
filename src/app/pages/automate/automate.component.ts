@@ -876,8 +876,7 @@ this.singleInstructionWebsocket(result)
           if (res?.message?.successMessage !== "End_Instructions") {
 
             this.resultArr.push(res.message);
-            this.previousScreen = this.currentScreen;
-            this.currentScreen = res.message.moduleName;
+
             this.scrollToBottom();
 
           }
