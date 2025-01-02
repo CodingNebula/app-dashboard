@@ -1118,7 +1118,7 @@ ngOnDestroy(){
 
             }
 
-
+debugger
 
             let passedCount = 0;
             let failedCount = 0;

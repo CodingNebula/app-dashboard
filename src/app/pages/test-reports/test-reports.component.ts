@@ -49,7 +49,7 @@ public chartData:any=[];
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
     this.extras = state?.reportData?.extra?.extras;
-    console.log(this.reportData,"reportData");
+    console.log(this.testCases,"testcase");
     // console.log(state);
 
     this.generatePie();
@@ -210,16 +210,21 @@ public chartData:any=[];
     }
 
   }
+
+
+
+
   downloadPDF(item, $event: Event) {
+
     console.log(item);
     this.chartData = [];
     this.testCases = this.testCases.filter(test=> test.hasOwnProperty('info'));
 
     this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
-this.chartData.forEach((ele:any,ind)=>{
-  if(ele.value===0){
-    delete this.chartData[ind];
-  }
+    this.chartData.forEach((ele:any,ind)=>{
+    if(ele.value===0){
+      delete this.chartData[ind];
+    }
 })
     // this.updateCharts();
     $event.stopPropagation();
@@ -262,9 +267,9 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${this.reportData.extra?.startedTime || 'N/A'}`, 14, 80);
-      doc.text(`Total Time Taken: ${this.reportData.extra?.timeTaken || 'N/A'} Sec`, 14, 90);
-      doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
+      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData.extra.extras?.startedTime }`, 14, 80);
+      doc.text(`Total Time Taken: ${this.timeTaken || 'N/A'} `, 14, 90);
+      doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
 
       // Add a line break
       doc.text('', 14, 110);
@@ -281,7 +286,7 @@ this.chartData.forEach((ele:any,ind)=>{
         message: testCase.message,
         expectedResult: testCase.expected_result,
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-        timeSpent: this.convertMilliseconds(testCase.time_spent)
+        timeSpent: this.reportData?.extra?.timeSpent
       }));
 
       // Create the table

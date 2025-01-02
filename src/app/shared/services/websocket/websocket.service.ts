@@ -185,7 +185,7 @@ export class WebsocketService {
     console.log(item);
 
     this.testReportsData.reports.push(item);
-
+debugger;
     // Check if the socket is connected before emitting
     if (this.socket && this.socket.connected) {
       this.socket.emit("message", { room: localStorage.getItem('id'), message: item });
