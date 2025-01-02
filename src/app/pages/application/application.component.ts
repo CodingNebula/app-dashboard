@@ -111,14 +111,12 @@ export class ApplicationComponent implements OnInit {
       this.instructionsArr = [];
       if (instructionData && instructionData.length > 0) {
         this.instructionsArr = instructionData;
-        console.log(this.instructionsArr);
       }
 
       // Now, fetch capabilities after instructions API response
       this.accountService.getCapabilites(app_id).subscribe((capabilitiesData) => {
         console.log(capabilitiesData);
         this.appCapabilities = capabilitiesData;
-        console.log(this.appCapabilities);
 
         // Now that both API responses are received, check the conditions
         if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length === 0) {
@@ -132,7 +130,6 @@ export class ApplicationComponent implements OnInit {
           this.router.navigateByUrl('pages/capabilities', { state: { id: item.id,appName:item?.app_name } });
 
           // Log item and store data
-          console.log(item);
           this.applicationDataService.setData('app_details', item);
 
           // Store app_id and app_name again in localStorage (optional redundancy)

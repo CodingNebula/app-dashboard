@@ -191,6 +191,7 @@ export class WebsocketService {
     if (this.socket && this.socket.connected) {
       this.socket.emit("message", { room: localStorage.getItem('id'), message: item });
 
+
       // Listen for the response from the server
       this.socket.on('message', (response: any) => {
         this.updateValue(response);
