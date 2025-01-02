@@ -13,7 +13,9 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public currentScreen = '';
   public showEnd = false;
+  public counterInterval;
   public individualCount = 0;
   public myForm: FormGroup;
   public selectedItem: '';
@@ -322,8 +324,8 @@ ngOnDestroy(){
 
     // Call getCapabilities() and subscribe to it
     this.getCapabilities().subscribe((appCapabilities) => {
-      this.completeAppData = appCapabilities
-      console.log(this.completeAppData,"completeAppData")
+
+      this.completeAppData = appCapabilities;
     });
 
 
@@ -507,22 +509,24 @@ ngOnDestroy(){
           successMessage: `${instruction.ins_name} Passed`,
           failedMessage: `${instruction.ins_name} Failed`,
           roomId: localStorage.getItem("id"),
+          moduleName: instruction.ins_set_screen_name
+
         };
       });
     }).flat();
-    //
+
     // result.push(
     //   {
-    //     screenName: "End_Instructions",
-    //     successMessage: "End_Instructions",
+    //     screenName: 'Restart_Application',
+    //     successMessage: 'Application Restarted',
     //     roomId: localStorage.getItem("id"),
     //   }
     // );
 
     result.push(
       {
-        screenName: 'Restart_Application',
-        successMessage: 'Application Restarted',
+        screenName: 'End_Instructions',
+        successMessage: 'End Instructions',
         roomId: localStorage.getItem("id"),
       }
     );
@@ -530,9 +534,29 @@ ngOnDestroy(){
 
 
 
+
+    let passedCount = 0;
+    let failedCount = 0;
+    let untestedCount = 0;
+
+
+
     if (this.showEnd){
 
+      this.resultArr?.map((testCase) => {
+        testCase.completeCount = count;
+        debugger;
+        if (testCase?.successMessage !== "End_Instructions") {
 
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
 
       const socketReport = {
         capabilities: {
@@ -544,10 +568,6 @@ ngOnDestroy(){
       }
 
 
-
-      let passedCount = 0;
-      let failedCount = 0;
-      let untestedCount = 0;
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
       this.resultArr?.map((testCase) => {
@@ -575,7 +595,6 @@ ngOnDestroy(){
       }
       this.accountService.postReportData(body).subscribe((resp) => {
         if (resp) {
-
           setTimeout(() => {
             this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
           }, 1000)
@@ -1040,7 +1059,6 @@ ngOnDestroy(){
 
       item.push(obj);
 
-
       // Output the modified item array
 
       this.showResult = true;
@@ -1048,11 +1066,11 @@ ngOnDestroy(){
 
       this.webSocketService.sendTestCaseRequest(result);
 
-      let counterInterval = setInterval(() => {
+      this.counterInterval = setInterval(() => {
         count++;
       }, 1000);
 
-
+      debugger;
       //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
       let startInterval;
 
@@ -1064,13 +1082,7 @@ ngOnDestroy(){
         if (!timeChecked) {
           const currentDate = new Date();
 
-          // Get year, month, day, hours, minutes, and seconds
-          const year = currentDate.getFullYear();
-          const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-          const day = String(currentDate.getDate()).padStart(2, '0');
-          const hours = String(currentDate.getHours()).padStart(2, '0');
-          const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-          const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
           //
           // if(res && !res?.extra){
           //   res.extra={};
@@ -1081,34 +1093,36 @@ ngOnDestroy(){
 
         }
 
+        debugger;
         if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
           if (!res?.extra) {
             res.extra = {};
           }
           console.log(res, 'lpos');
           console.log(this.individualCount, 'indc')
-          res.extra.timeSpent = this.individualCount;
-
+          res.message.timeSpent = this.individualCount;
+          res.message.totalTimeTaken = count;
 
           clearInterval(this.startInterval);
           this.individualCount = 0;
           // Restart the interval by calling the function
           this.startCounting(this.individualCount)
-          if (res?.message?.successMessage !== "End_Instructions") {
+          if (res?.message?.successMessage !== "End Instructions") {
 
             this.resultArr.push(res.message);
+            this.currentScreen = res.message.moduleName
             this.scrollToBottom();
 
           }
-          if (res?.message?.successMessage === "End_Instructions") {
-            clearInterval(counterInterval);
+          if (res?.message?.successMessage === "End Instructions") {
+            clearInterval(this.counterInterval);
             clearInterval(startInterval)
             res.extra.timeTaken = count;
-
+            res.message.totalTimeTaken = count;
             const now = new Date();
             const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
             this.extras.startedTime = formattedTime;
-            res.extra.startedTime=formattedTime;
+            res.startedTime=formattedTime;
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
             const socketReport = {
@@ -1118,7 +1132,6 @@ ngOnDestroy(){
               totalTimeElapsed: count,
 
             }
-
 
             let passedCount = 0;
             let failedCount = 0;
@@ -1138,6 +1151,8 @@ ngOnDestroy(){
                 }
               }
             });
+
+            debugger;
 
             const body = {
               applicationId: localStorage.getItem('app_id'),
@@ -1173,6 +1188,43 @@ ngOnDestroy(){
 
   }
 
+
+  singleInstructionWebsocket(allInstructions) {
+    let count = 0;
+    this.webSocketService.sendTestCaseRequest(allInstructions);
+    let timeChecked = false;
+    this.showEnd = true
+    this.webSocketService.getSubject().subscribe((res) => {
+
+      if (!timeChecked) {
+        const currentDate = new Date();
+
+
+      }
+
+      if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+        if (!res?.extra) {
+          res.extra = {};
+        }
+        console.log(res, 'lpos');
+        console.log(this.individualCount, 'indc')
+        res.message.timeSpent = this.individualCount;
+        res.message.totalTimeTaken = count;
+
+        clearInterval(this.startInterval);
+        this.individualCount = 0;
+        // Restart the interval by calling the function
+        this.startCounting(this.individualCount)
+
+
+      }
+    }, (err) => {
+      console.log(err,'err')
+
+      clearInterval(this.startInterval);
+    })
+
+  }
   onStart(item) {
 
 

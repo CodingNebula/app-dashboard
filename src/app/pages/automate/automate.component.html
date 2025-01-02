@@ -156,14 +156,21 @@
 
 
   <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container" #resultContainer>
-    <div *ngFor="let item of resultArr" class="test-case-div">
-      <h6>{{item?.successMessage || item?.failedMessage}}</h6>
-      <span *ngIf=" item.message" class="status-message"
-        [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>
+    <ng-container *ngFor="let item of resultArr">
+      <div>{{item.moduleName}}</div>
+      <div>view both- {{item.moduleName}}, , {{currentScreen}}</div>
+      <div class="test-case-div">
+
+
+        <h6>{{item?.successMessage || item?.failedMessage}}</h6>
+        <span *ngIf=" item.message" class="status-message"
+              [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>
         <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
-      <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
-      <!-- </div> -->
-    </div>
+        <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
+        <!-- </div> -->
+      </div>
+    </ng-container>
+
 
   </div>
 </div>

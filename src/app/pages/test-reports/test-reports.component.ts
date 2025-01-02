@@ -267,7 +267,7 @@ public chartData:any=[];
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData.extra.extras?.startedTime }`, 14, 80);
+      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData?.extra?.extras?.startedTime }`, 14, 80);
       doc.text(`Total Time Taken: ${this.timeTaken || 'N/A'} `, 14, 90);
       doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
 
@@ -286,7 +286,7 @@ public chartData:any=[];
         message: testCase.message,
         expectedResult: testCase.expected_result,
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-        timeSpent: this.reportData?.extra?.timeSpent
+        timeSpent: this.testCases.map(test=>test.timeSpent)
       }));
 
       // Create the table

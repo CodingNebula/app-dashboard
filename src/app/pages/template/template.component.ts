@@ -72,10 +72,11 @@ export class TemplateComponent {
                 if(resp){
                   console.log(resp);
 
-                  this.testCasesArray.push(resp[0]);
-                  this.screenNameId = resp[0]?.id
-                  this.tempTestCase.screen_name = result.data.test_case_name;
-                  this.tempTestCase.instruction_set_id = resp[0]?.id;
+                  // this.testCasesArray.push(resp[0]);
+                  // this.screenNameId = resp[0]?.id
+                  // this.tempTestCase.screen_name = result.data.test_case_name;
+                  // this.tempTestCase.instruction_set_id = resp[0]?.id;
+                  this.getAllPages();
 
                 }
               })
@@ -104,16 +105,16 @@ export class TemplateComponent {
               this.accountService.postPageInstructions(body).subscribe((resp) => {
                 if(resp){
                   console.log(resp);
-
+this.getAllPages()
                   // this.testCasesArray.push(resp[0]);
                 //   if (this.testCasesArray.length > 0) {
                 //     this.testCasesArray.pop();
                 // }
-                  this.tempTestCase.instructions = result.data.instructionArr;
-                  this.testCasesArray.push(this.tempTestCase);
-                  console.log(this.tempTestCase);
-
-                  console.log(this.testCasesArray);
+                //   this.tempTestCase.instructions = result.data.instructionArr;
+                //   this.testCasesArray.push(this.tempTestCase);
+                //   console.log(this.tempTestCase);
+                //
+                //   console.log(this.testCasesArray);
 
                 }
               })

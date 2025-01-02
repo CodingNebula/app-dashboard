@@ -152,13 +152,14 @@ export class WebsocketService {
     // });
 
     this.socket.on('connect', () => {
-
+    alert('socket is connected.')
       this.socket.emit('join', {
         room: localStorage.getItem('id')
       });
     });
     // Listen for custom error events from the server
     this.socket.on("error", (error) => {
+      alert(`Got error from socket connection- ${error.message}`)
       console.error("Received error from server:", error);
       this.socketFailure.next();
     });
@@ -189,7 +190,8 @@ export class WebsocketService {
     // Check if the socket is connected before emitting
     if (this.socket && this.socket.connected) {
       this.socket.emit("message", { room: localStorage.getItem('id'), message: item });
-
+      debugger;
+      window.alert('socket is connected')
       // Listen for the response from the server
       this.socket.on('message', (response: any) => {
         this.updateValue(response);
@@ -204,6 +206,7 @@ export class WebsocketService {
       setTimeout(() => {
         this.showAlert = false;
       }, 1000);
+      alert('socket is not connected.');
       console.error('Socket is not connected.');
     }
   }
