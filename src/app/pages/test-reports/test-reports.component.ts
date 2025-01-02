@@ -65,7 +65,7 @@ public chartData:any=[];
     const state = history.state.reportData
     console.log(state.extra.capabilities.extra.capabilities,"time crathe")
     this.timeCreated = state.extra.extras.createdAt
-    this.timeTaken = this.convertToSeconds(state?.extra?.capabilities?.extra?.capabilities?.timeout);
+    this.timeTaken = state.extra.totalTimeElapsed;
     console.log(this.timeTaken,"timetakens")
 
   }

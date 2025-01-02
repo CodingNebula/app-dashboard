@@ -485,11 +485,23 @@ ngOnDestroy(){
 
   }
 
-  startCounting(individualCount) {
-    this.startInterval = setInterval(() => {
-      this.individualCount = this.individualCount + 1;
+  // startCounting(individualCount) {
+  //
+  //   this.startInterval = setInterval(() => {
+  //     this.individualCount = individualCount + 1;
+  //
+  //     // console.log('count started:', this.individualCount);
+  //   }, 1000);
+  // }
 
-      // console.log('count started:', this.individualCount);
+  startCounting(individualCount) {
+    // Reset individualCount to 0 at the start of the count
+    this.individualCount = individualCount;
+
+    // Start the interval to count every second
+    this.startInterval = setInterval(() => {
+      this.individualCount += 1;
+      console.log('Counting: ', this.individualCount); // Logs the incremented count every second
     }, 1000);
   }
 
@@ -499,7 +511,8 @@ ngOnDestroy(){
 
 
   onStartTrans(itemData) {
-    let count = 0;
+    let count =0;
+    let totalTimeApp = Math.floor(Date.now() / 1000)
     const result = itemData.screens.map(screen => {
       return screen.instructions.map((instruction, index) => {
         return {
@@ -1071,8 +1084,7 @@ ngOnDestroy(){
       }, 1000);
 
       //COUNTING TIME SPENT FOR INDIVIDUAL TEST CASES----------------------------------->START
-      let startInterval;
-
+      let startInterval = Date.now() / 1000;
       this.startCounting(this.individualCount);
       let timeChecked = false;
       this.showEnd = true
@@ -1097,11 +1109,12 @@ ngOnDestroy(){
           if (!res?.extra) {
             res.extra = {};
           }
-          console.log(res, 'lpos');
+          const currentTime = Date.now() / 1000;
           console.log(this.individualCount, 'indc')
-          res.message.timeSpent = this.individualCount;
-          res.message.totalTimeTaken = count;
+          res.message.timeSpent = (currentTime- startInterval).toFixed(2);
+          res.message.totalTimeTaken = currentTime - totalTimeApp;
 
+            startInterval = Math.floor(Date.now() / 1000);
           clearInterval(this.startInterval);
           this.individualCount = 0;
           // Restart the interval by calling the function
@@ -1116,8 +1129,9 @@ ngOnDestroy(){
           if (res?.message?.successMessage === "End Instructions") {
             clearInterval(this.counterInterval);
             clearInterval(startInterval)
-            res.extra.timeTaken = count;
-            res.message.totalTimeTaken = count;
+            res.extra.timeTaken = Math.floor(Date.now() / 1000) -  count;
+            res.message.totalTimeTaken =  Math.floor(Date.now() / 1000) -  totalTimeApp;
+
             const now = new Date();
             const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
             this.extras.startedTime = formattedTime;
