@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public currentScreen = '';
   public showEnd = false;
   public counterInterval;
   public individualCount = 0;
@@ -322,7 +323,7 @@ ngOnDestroy(){
     // Call getCapabilities() and subscribe to it
     this.getCapabilities().subscribe((appCapabilities) => {
 
-      this.completeAppData = appCapabilities
+      this.completeAppData = appCapabilities;
     });
 
 
@@ -481,6 +482,8 @@ ngOnDestroy(){
           successMessage: `${instruction.ins_name} Passed`,
           failedMessage: `${instruction.ins_name} Failed`,
           roomId: localStorage.getItem("id"),
+          moduleName: instruction.ins_set_screen_name
+
         };
       });
     }).flat();
@@ -1039,13 +1042,7 @@ ngOnDestroy(){
         if (!timeChecked) {
           const currentDate = new Date();
 
-          // Get year, month, day, hours, minutes, and seconds
-          const year = currentDate.getFullYear();
-          const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-          const day = String(currentDate.getDate()).padStart(2, '0');
-          const hours = String(currentDate.getHours()).padStart(2, '0');
-          const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-          const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
           //
           // if(res && !res?.extra){
           //   res.extra={};
@@ -1072,6 +1069,7 @@ ngOnDestroy(){
           if (res?.message?.successMessage !== "End_Instructions") {
 
             this.resultArr.push(res.message);
+            this.currentScreen = res.message.moduleName
             this.scrollToBottom();
 
           }
@@ -1147,6 +1145,43 @@ ngOnDestroy(){
 
   }
 
+
+  singleInstructionWebsocket(allInstructions) {
+    let count = 0;
+    this.webSocketService.sendTestCaseRequest(allInstructions);
+    let timeChecked = false;
+    this.showEnd = true
+    this.webSocketService.getSubject().subscribe((res) => {
+
+      if (!timeChecked) {
+        const currentDate = new Date();
+
+
+      }
+
+      if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+        if (!res?.extra) {
+          res.extra = {};
+        }
+        console.log(res, 'lpos');
+        console.log(this.individualCount, 'indc')
+        res.message.timeSpent = this.individualCount;
+        res.message.totalTimeTaken = count;
+
+        clearInterval(this.startInterval);
+        this.individualCount = 0;
+        // Restart the interval by calling the function
+        this.startCounting(this.individualCount)
+
+
+      }
+    }, (err) => {
+      console.log(err,'err')
+
+      clearInterval(this.startInterval);
+    })
+
+  }
   onStart(item) {
 
 
