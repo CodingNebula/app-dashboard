@@ -41,6 +41,8 @@ export class AutomateComponent implements OnInit {
   public showResult: boolean = false;
   public completeAppData: any;
   public extras: any = {};
+  public description:any ;
+  public buildNumber:any;
 
   constructor(
     private fb: FormBuilder,
@@ -353,8 +355,8 @@ ngOnDestroy(){
       package: [this.appCapabilities?.appPackage, [Validators.required]],
       automation: [this.appCapabilities?.automationName, [Validators.required]],
       device: [this.appCapabilities?.deviceName, [Validators.required]],
-      noReset: [this.appCapabilities?.noReset, [Validators.required]],
-      hiddenApp: [this.appCapabilities?.ignoreHiddenApiPolicyError, [Validators.required]],
+      noReset: [(this.appCapabilities?.noReset).toString(), [Validators.required]],
+      hiddenApp: [(this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
       description:[this.appCapabilities?.description, []],
       buildNo:[this.appCapabilities?.buildNo, []],
@@ -384,26 +386,44 @@ ngOnDestroy(){
       this.appLaunchLoading = true;
 
       const app_id = localStorage.getItem('app_id');
-     delete this.myForm.value.description;
-     delete this.myForm.value.buildNo;
+
+      this.myForm.get('description').enable();
+      this.myForm.get('buildNo').enable();
+
+      this.description = this.myForm.value.description
+      this.buildNumber =  this.myForm.value.buildNo
+
+      let updatedCapabilities = { ...this.myForm.value };
+
+// Exclude 'description' and 'buildNo' from the object you're sending to the backend
+      delete updatedCapabilities.description;
+      delete updatedCapabilities.buildNo;
+
+// Delete the properties you don't want to send
 
 
-      this.accountService.updateCapabilities(app_id,
-        {
-          extra: {
-            capabilities: this.myForm.value
+      // if form changes
+      if (this.myForm.dirty && !this.myForm.get('buildNo').dirty && !this.myForm.get('description').dirty) {
 
-          },
-          name:'Ionic Anypay'
-        }
-      ).subscribe((response) => {
+        this.accountService.updateCapabilities(app_id,
+          {extra: {
+              capabilities:updatedCapabilities
 
+            },
+            name:'Ionic Anypay'
+          }
+        ).subscribe((response) => {
+          this.appLaunch(app_id);
+        }, (error) => {
+          console.log(error);
+
+        })
+      }else{
         this.appLaunch(app_id);
+      }
 
-      }, (error) => {
-        console.log(error);
 
-      })
+
 
       // this.accountService.launchApp({
       //   capabilities: {
@@ -435,6 +455,9 @@ ngOnDestroy(){
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
+
+
 
   scrollToBottom() {
     // setTimeout(()=>{
@@ -472,7 +495,6 @@ ngOnDestroy(){
 
   onStartTrans(itemData) {
     let count = 0;
-
     const result = itemData.screens.map(screen => {
       return screen.instructions.map((instruction, index) => {
         return {
@@ -490,8 +512,8 @@ ngOnDestroy(){
 
     result.push(
       {
-        screenName: "End_Instructions",
-        successMessage: "End_Instructions",
+        screenName: 'Restart_Application',
+        successMessage: 'Application Restarted',
         roomId: localStorage.getItem("id"),
       }
     );
@@ -517,8 +539,8 @@ ngOnDestroy(){
 
       const socketReport = {
         capabilities: {
-          description: this.myForm.value.description,
-          buildInfo: this.myForm.value.buildNo, ...this.completeAppData
+          description: this.description,
+          buildInfo: this.buildNumber, ...this.completeAppData
         },
         resultArr: this.resultArr,
         extras: this.extras,

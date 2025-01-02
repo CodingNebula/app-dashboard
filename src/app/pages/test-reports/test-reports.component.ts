@@ -26,6 +26,7 @@ public chartData:any=[];
   public allColumns = [this.customColumn, ...this.defaultColumns];
   public CompletionChart: any = null;
   public reportData: any = null;
+  public timeTaken:string;
   public pieData: any[] = [];
   public reportHeading : string;
   public platform :any;
@@ -49,7 +50,7 @@ public chartData:any=[];
     this.reportData = state?.reportData;
     this.extras = state?.reportData?.extra?.extras;
     console.log(this.reportData,"reportData");
-
+    // console.log(state);
 
     this.generatePie();
   }
@@ -60,10 +61,18 @@ public chartData:any=[];
 
   ngOnInit() {
     const state = history.state.reportData
-    console.log(state,"time crathe")
-    this.timeCreated= state.extra.extras.createdAt
+    console.log(state.extra.capabilities.extra.capabilities,"time crathe")
+    this.timeCreated = state.extra.extras.createdAt
+    this.timeTaken = this.convertToSeconds(state?.extra?.capabilities?.extra?.capabilities?.timeout);
+    console.log(this.timeTaken,"timetakens")
 
   }
+   convertToSeconds(ms) {
+    const minutes = Math.floor(ms / 600000); // 1 minute = 60000 milliseconds
+    const seconds = ((ms % 60000) / 1000).toFixed(0); // remainder of milliseconds for seconds
+    return `${minutes} minutes and ${seconds} seconds`;
+  }
+
 
   generatePie() {
     // Initialize the array to hold the pie chart data
@@ -337,7 +346,7 @@ this.chartData.forEach((ele:any,ind)=>{
       if (timeString) timeString += ', '; // Add a comma if hours or minutes were added
       timeString += `${remainingSeconds.toFixed(1)} second${remainingSeconds !== 1 ? 's' : ''}`; // Use fractional seconds
     }
-
+      console.log(timeString);
     return timeString;
   }
 }
