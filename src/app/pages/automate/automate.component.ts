@@ -1040,6 +1040,7 @@ ngOnDestroy(){
 
       item.push(obj);
 
+
       // Output the modified item array
 
       this.showResult = true;
@@ -1118,7 +1119,6 @@ ngOnDestroy(){
 
             }
 
-debugger
 
             let passedCount = 0;
             let failedCount = 0;
