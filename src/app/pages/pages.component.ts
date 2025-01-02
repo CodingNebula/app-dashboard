@@ -18,8 +18,10 @@ import {WebsocketService} from "../shared/services/websocket/websocket.service";
 })
 export class PagesComponent {
   public showAlert = false;
-  constructor(public ws: WebsocketService) {
-  this.showAlert = this.ws.showAlert
+  constructor(public webSocketService: WebsocketService) {
+    let dataToken = localStorage.getItem('token');
+    this.webSocketService.socketConnect(dataToken);
+  this.showAlert = this.webSocketService.showAlert
   }
   menu = MENU_ITEMS;
 }

@@ -34,46 +34,46 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
-  
+
   // ngOnInit(): void {
   // }
-  
-  
+
+
   loginCode(){
-  
+
   }
-  
+
   onSlide(event){
-  
+
   }
-  
+
   toggle(event){
-  
+
   }
   onLoggedin() {
     // Check if the form is invalid
     if (this.loginForm.invalid) {
       return;
     }
-  
+
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
-  
+
     const payload = {
       email: email,
       password: password
     };
-  
+
     // Make the POST request to authenticate the user
     this.http.post<any>(`${environment.api_url}/authenticate`, payload)
       .subscribe(
         (data) => {
           if (data?.token) {
             localStorage.setItem('token', data.token);
-            localStorage.setItem('id', data.id)
+            localStorage.setItem('id', data.id);
 
-            this.webSocketService.socketConnect(data?.token);
-  
+            // this.webSocketService.socketConnect(data?.token);
+
             this.router.navigateByUrl('pages/application');
           } else {
             console.error('No token received');
@@ -85,6 +85,6 @@ export class LoginComponent implements OnInit {
         }
       );
   }
-  
+
 }
 

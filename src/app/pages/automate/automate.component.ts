@@ -494,7 +494,7 @@ ngOnDestroy(){
   }
 
   onStartTrans(itemData) {
-    let count = 0;
+  // this.sendAllInstructionSocket(itemData);
     const result = itemData.screens.map(screen => {
       return screen.instructions.map((instruction, index) => {
         return {
@@ -512,11 +512,20 @@ ngOnDestroy(){
 
     result.push(
       {
-        screenName: 'Restart_Application',
-        successMessage: 'Application Restarted',
+        screenName: 'End_Instructions',
+        successMessage: 'End_Instructions',
         roomId: localStorage.getItem("id"),
       }
     );
+this.singleInstructionWebsocket(result)
+// this.sendAllInstructionSocket(itemData,result)
+
+  }
+
+
+  sendAllInstructionSocket(itemData, result) {
+    let count = 0;
+
 
 
 
@@ -589,222 +598,7 @@ ngOnDestroy(){
 
       const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
 
-      // let item = [
-      //   {
-      //     "id": "0",
-      //     "screenName": "Welcome",
-      //     "btnName": "Welcome"
-      //   },
-      //   {
-      //     "id": "8",
-      //     "screenName": "Click_Image", // image
-      //     "btnName": "left_arrow"
-      //   },
-      //   {
-      //     "id": "1",
-      //     "screenName": "Permissions"
-      //   },
-      //   {
-      //     "id": "8",
-      //     "screenName": "Click_Image", // image
-      //     "btnName": "left_arrow"
-      //   },
-      //   {
-      //     "id": "2",
-      //     "screenName": "Permissions_list"
-      //   },
-      //   {
-      //     "id": "3",
-      //     "screenName": "Allow_PhoneCalls",
-      //     "btnName": "Allow"
-      //   },
-      //   {
-      //     "id": "4",
-      //     "screenName": "Allow_DeviceLocation",
-      //     "btnName": "ALLOW"
-      //   },
-      //   {
-      //     "id": "5",
-      //     "screenName": "Allow_BluetoothConnection",
-      //     "btnName": "ALLOW"
-      //   },
-      //   {
-      //     "id": "6",
-      //     "screenName": "Click_Button",
-      //     "btnName": "Continue"
-      //   },
-      //   {
-      //     "id": "7",
-      //     "screenName": "Terminal Setup"
-      //   },
-      //   {
-      //     "id": "8",
-      //     "screenName": "Click_Image" // image
-      //   },
-      //   {
-      //     "id": "9",
-      //     "screenName": "Select_Options",
-      //     "options": "Testing"
-      //   },
-      //   {
-      //     "id": "6",
-      //     "screenName": "Click_Button",
-      //     "btnName": "PROCEED"
-      //   },
-      //   {
-      //     "id": "1",
-      //     "screenName": "Enter_Terminal_ID",
-      //     "terminal_id": ["2994001"]
 
-      //   },
-      //   {
-      //     "id": "6",
-      //     "screenName": "Click_Button",
-      //     "btnName": "Next"
-      //   },
-      //   {
-      //     "id": "10",
-      //     "screenName": "Enter_Terminal_ID",
-      //     "terminal_id": ["2994001"]
-
-      //   },
-      //   {
-      //     "id": "6",
-      //     "screenName": "Click_Button",
-      //     "btnName": "Submit"
-      //   },
-
-      //   {
-      //     "id": "11",
-      //     "screenName": "Profile_Login",
-      //     "pin": ["9", "2", "0", "4"]
-      //   },
-      //   {
-      //     "id": "6",
-      //     "screenName": "Click_Button",
-      //     "btnName": "Confirm"
-      //   },
-      //   {
-      //     "id": "6",
-      //     "screenName": "Click_Button",
-      //     "btnName": "GO"
-      //   },
-      //   {
-      //     "id": 9,
-      //     "screenName": "Click_Text",
-      //     "btnName": "Skip >"
-      //   },
-      //   {
-      //     "id": 9,
-      //     "screenName": "homePage",
-      //     "action": "Transaction"
-      //   },
-
-      //   // connect reader steps start
-      //   {
-      //     "id": 10,
-      //     "screenName": "Click_View",
-      //     "btnName": "Device"
-      //   },
-
-
-      //   {
-      //     "id": 12,
-      //     "screenName": "Click_Button",
-      //     "btnName": "CONNECT TO READER"
-      //   },
-      //   {
-      //     "id": 13,
-      //     "screenName": "Wait_For_Text",
-      //     // "btnName":"WPS323247002051"
-      //     "btnName": "WPC323951000219"
-      //     //   "btnName":"CHB2A6132009935"
-      //     // "btnName":"CHB204650000480"
-      //   },
-      //   {
-      //     "id": 13,
-      //     "screenName": "Click_Text",
-      //     // "btnName":"WPS323247002051"
-      //     "btnName": "WPC323951000219"
-      //     // "btnName":"CHB2A6132009935"
-      //     // "btnName":"CHB204650000480"
-      //   },
-      //   {
-      //     "id": 14,
-      //     "screenName": "Find_Button",
-      //     "btnName": "Disconnect"
-      //   },
-      //   {
-      //     "id": "8",
-      //     "screenName": "Click_Image" // image
-      //   },
-
-      //   {
-      //     "id": "8",
-      //     "screenName": "Click_Image", // image
-      //     "btnName": "Sale"
-      //   },
-      //   {
-      //     "id": 14,
-      //     "screenName": "Enter_Amount",
-      //     "amount": "200.00"
-      //   },
-      //   {
-      //     "id": 9,
-      //     "screenName": "Click_Text",
-      //     "btnName": "Clear"
-      //   },
-      //   {
-      //     "id": 14,
-      //     "screenName": "Enter_Amount",
-      //     "amount": "50.00"
-      //   },
-      //   {
-      //     "id": 10,
-      //     "screenName": "Click_View",
-      //     "btnName": "2 / 4"
-      //   },
-      //   {
-      //     "id": 9,
-      //     "screenName": "Click_Text",
-      //     "btnName": "Go"
-      //   },
-
-      //   {
-      //     "id": 9,
-      //     "screenName": "Click_Text",
-      //     "btnName": "10%"
-      //   },
-      //   {
-      //     "id": 12,
-      //     "screenName": "Click_Button",
-      //     "btnName": "Continue"
-      //   },
-      //   {
-      //     "id": 13,
-      //     "screenName": "Wait_For_Text",
-      //     "btnName": "Transaction ID"
-      //   },
-      //   {
-      //     "id": "14",
-      //     "screenName": "Element_Avail", // image
-      //     "elementName": ["Transaction FAILED", "Transaction Approved"]
-      //   },
-
-      //   {
-      //     "id": "12",
-      //     "screenName": "Click_Button",
-      //     "btnName": "See Details"
-      //   },
-
-      //   {
-      //     "id": "8",
-      //     "screenName": "Click_Image" // image
-
-      //   },
-
-
-      // ]
 
       let item = [
         {
@@ -1045,7 +839,7 @@ ngOnDestroy(){
 
       this.showResult = true;
 
-
+      console.log(result,'thisissendinginsocket')
       this.webSocketService.sendTestCaseRequest(result);
 
       this.counterInterval = setInterval(() => {
@@ -1063,15 +857,6 @@ ngOnDestroy(){
 
         if (!timeChecked) {
           const currentDate = new Date();
-
-
-          //
-          // if(res && !res?.extra){
-          //   res.extra={};
-          //   res.extra.startTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-          //
-          // }
-
 
         }
 
@@ -1091,7 +876,8 @@ ngOnDestroy(){
           if (res?.message?.successMessage !== "End_Instructions") {
 
             this.resultArr.push(res.message);
-            this.currentScreen = res.message.moduleName
+            this.previousScreen = this.currentScreen;
+            this.currentScreen = res.message.moduleName;
             this.scrollToBottom();
 
           }
@@ -1162,15 +948,15 @@ ngOnDestroy(){
 
 
     }
-
-    //   this.router.navigateByUrl('test-reports')
-
   }
-
 
   singleInstructionWebsocket(allInstructions) {
     let count = 0;
-    this.webSocketService.sendTestCaseRequest(allInstructions);
+    let indexCounter = 0
+
+    this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
+    console.log(allInstructions,'allisnnsdfd');
+    console.log({...allInstructions[indexCounter], singleCase: true},'seewhatwentt');
     let timeChecked = false;
     this.showEnd = true
     this.webSocketService.getSubject().subscribe((res) => {
@@ -1194,6 +980,8 @@ ngOnDestroy(){
         this.individualCount = 0;
         // Restart the interval by calling the function
         this.startCounting(this.individualCount)
+        indexCounter += 1;
+        this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
 
 
       }
@@ -1207,10 +995,15 @@ ngOnDestroy(){
   onStart(item) {
 
 
-    const res = item.testCase.map((item) => {
+    const res = item.testCase.map((item,index) => {
       return {
+        id: index,
         screenName: item.ins_back_name,
-        btnName: item.ins_element_name
+        btnName: item.ins_element_name,
+        successMessage: `${item.ins_name} Passed`,
+        failedMessage: `${item.ins_name} Failed`,
+        roomId: localStorage.getItem("id"),
+        moduleName: item.ins_set_screen_name,
       }
     })
 
@@ -1224,14 +1017,9 @@ ngOnDestroy(){
     //         "successMessage": "Permission list Continue button Passed"
     //     }
     // }
-    this.webSocketService.sendTestCaseRequest(res);
-    this.webSocketService.getSubject().subscribe((res) => {
-      if (res?.message && res?.message?.info) {
-        this.resultArr.push(res.message);
 
 
-      }
-    })
+    this.sendInstructions(res)
 
     // const obj = {
     //   screenName: item?.ins_back_name,
@@ -1239,6 +1027,25 @@ ngOnDestroy(){
     // }
 
     // console.log(obj);
+
+  }
+
+  sendInstructions(res) {
+    let indexCounter = 0;
+      this.webSocketService.sendTestCaseRequest({...res[indexCounter], singleCase: true});
+      console.log(res,'particularscreenRessfd')
+      console.log({...res[indexCounter], singleCase: true},'Seeewehatsentt')
+      this.webSocketService.getSubject().subscribe((res) => {
+        if (res?.message && res?.message?.info) {
+          this.resultArr.push(res.message);
+          if (indexCounter<=res.length) {
+            indexCounter += 1;
+            this.webSocketService.sendTestCaseRequest({...res[indexCounter], singleCase: true});
+          }
+
+
+        }
+      })
 
   }
 
@@ -1654,7 +1461,7 @@ ngOnDestroy(){
         this.appLaunchStatus = 'SUCCESS'
       },
       (error) => {
-        console.error('API Error:', error);
+        // console.error('API Error:', error);
         this.appLaunchLoading = false;
         this.appLaunchStatus = 'FAILED'
       }
