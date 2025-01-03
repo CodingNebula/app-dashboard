@@ -997,7 +997,7 @@ this.sendAllInstructionSocket(itemData,result)
     let count = 0;
     let indexCounter = 0
 
-
+    let totalTimeApp = Math.floor(Date.now() / 1000)
 
     this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
     console.log(allInstructions,'allisnnsdfd');
@@ -1016,6 +1016,8 @@ this.sendAllInstructionSocket(itemData,result)
         if (!res?.extra) {
           res.extra = {};
         }
+        this.startApp = false;
+        this.currentOnGoingScreen = res.message.moduleName;
         console.log(res, 'lpos');
         console.log(this.individualCount, 'indc')
         res.message.timeSpent = this.individualCount;
@@ -1028,6 +1030,72 @@ this.sendAllInstructionSocket(itemData,result)
         indexCounter += 1;
         this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
 
+        if (res?.message?.successMessage !== "End Instructions") {
+
+          this.resultArr.push(res.message);
+
+          this.scrollToBottom();
+
+        }
+        if (res?.message?.successMessage === "End Instructions") {
+          clearInterval(this.counterInterval);
+          res.extra.timeTaken = Math.floor(Date.now() / 1000) -  count;
+          res.message.totalTimeTaken =  Math.floor(Date.now() / 1000) -  totalTimeApp;
+
+          const now = new Date();
+          const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+          this.extras.startedTime = formattedTime;
+          res.startedTime=formattedTime;
+          const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+          this.extras.createdAt = formattedDate;
+          const socketReport = {
+            capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
+            resultArr: this.resultArr,
+            extras: this.extras,
+            totalTimeElapsed: Math.floor(Date.now() / 1000) -  totalTimeApp,
+
+          }
+
+          let passedCount = 0;
+          let failedCount = 0;
+          let untestedCount = 0;
+
+          // Iterate over the reports to count the number of passed, failed, and untested test cases
+          this.resultArr?.map((testCase) => {
+            testCase.completeCount = count;
+            if (testCase?.successMessage !== "End_Instructions") {
+
+              if (testCase.message === 'SUCCESS') {
+                passedCount++;
+              } else if (testCase.message === 'FAILED') {
+                failedCount++;
+              } else if (testCase.message === 'Untested') {
+                untestedCount++;
+              }
+            }
+          });
+
+
+          const body = {
+            applicationId: localStorage.getItem('app_id'),
+            filename: allInstructions?.wt_desc,
+            app_version: "2.1",
+            totalTestCase: allInstructions?.length - 1,
+            passed: passedCount,
+            failed: failedCount,
+            crash_count: untestedCount,
+            extra: socketReport,
+          }
+          this.accountService.postReportData(body).subscribe((resp) => {
+            if (resp) {
+
+              setTimeout(() => {
+                this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+              }, 1000)
+
+            }
+          })
+        }
 
       }
     }, (err) => {
@@ -1083,9 +1151,16 @@ console.log(testCases);
     //     }
     // }
 
-    this.onStartTrans(res,false)
+    res.push(
+      {
+        screenName: 'End_Instructions',
+        successMessage: 'End Instructions',
+        roomId: localStorage.getItem("id"),
+      }
+    );
 
-    // this.sendInstructions(res)
+    // this.onStartTrans(res,false)
+    this.sendInstructions(res)
 
     // const obj = {
     //   screenName: item?.ins_back_name,
