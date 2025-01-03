@@ -337,6 +337,7 @@ ngOnDestroy(){
     }
 
 
+
     this.appData = this.applicationDataService.getData();
 
 
