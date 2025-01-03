@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public startApp:boolean= false;
   public currentOnGoingScreen = null
   public socketSubscription;
   public currentScreen = '';
@@ -517,7 +518,7 @@ ngOnDestroy(){
     let count =0;
     let totalTimeApp = Math.floor(Date.now() / 1000)
     let result = itemData;
-
+    this.startApp = true;
     if(startAll){
        result = itemData.screens.map(screen => {
         return screen.instructions.map((instruction, index) => {
@@ -903,6 +904,7 @@ this.sendAllInstructionSocket(itemData,result)
           }
           const currentTime = Date.now() / 1000;
           console.log(this.individualCount, 'indc')
+          this.startApp = false;
           this.currentOnGoingScreen = res.message.moduleName;
           res.message.timeSpent = (currentTime- startInterval).toFixed(2);
           res.message.totalTimeTaken = currentTime - totalTimeApp;

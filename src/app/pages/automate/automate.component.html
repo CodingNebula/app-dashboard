@@ -133,7 +133,7 @@
 
     <div class="test-case-div">
       <h5>{{templateData?.wt_name}}</h5>
-
+      <div [nbSpinner]="startApp"  class="instuction-loader" ></div>
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
       <button class="start-button" (click)="onStartTrans(templateData,true)">{{showEnd?'End Test':'Start All'}}</button>
 
