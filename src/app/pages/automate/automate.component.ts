@@ -595,7 +595,7 @@ this.sendAllInstructionSocket(itemData,result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
-        totalTimeElapsed: count,
+        totalTimeElapsed:   Math.floor(Date.now() / 1000) - totalTimeApp,
       }
 
 

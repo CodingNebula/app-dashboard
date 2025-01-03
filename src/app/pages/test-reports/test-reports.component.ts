@@ -261,7 +261,7 @@ public chartData:any=[];
           backgroundColor: '#fff' // Optional: Set a background color
         });
         const pageWidth = doc.internal.pageSize.width;
-        const xPosition = pageWidth - 120;
+        const xPosition = pageWidth - 140;
         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
 
       }

@@ -292,7 +292,7 @@ this.chartData.forEach((ele:any,ind)=>{
           backgroundColor: '#fff' // Optional: Set a background color
         });
         const pageWidth = doc.internal.pageSize.width;
-        const xPosition = pageWidth - 120;
+        const xPosition = pageWidth - 140;
         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
 
       }
@@ -369,6 +369,7 @@ this.chartData.forEach((ele:any,ind)=>{
           trigger: 'item',
           formatter: '{b} : {c} ({d}%)'
         },
+
         label: {
           show: true,
           fontSize: 7,  // Adjust the font size of the label here
