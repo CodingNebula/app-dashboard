@@ -1550,7 +1550,10 @@ this.recursiveInstructions(resArr,0)
     }, id).subscribe(
       (response) => {
 
-        this.appLaunchLoading = false;
+        setTimeout(() => {
+          this.appLaunchLoading = false; // After 2 seconds, set it to false to hide the loader
+        }, 2000);
+
         this.appLaunchStatus = 'SUCCESS'
       },
       (error) => {
