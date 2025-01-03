@@ -249,7 +249,7 @@ export class ReportsComponent {
 
   }
   downloadPDF(item, $event: Event) {
-    console.log(item);
+    console.log(item,'item');
     this.chartData = [];
 
 
@@ -300,9 +300,9 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${this.reportData?.startedTime || 'N/A'}`, 14, 80);
-      doc.text(`Total Time Taken: ${this.reportData?.completeCount || 'N/A'} Sec`, 14, 90);
-      doc.text(`Description: ${this.reportData?.filename || 'N/A'}`, 14, 100);
+      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData?.extra?.extras?.startedTime }`, 14, 80);
+      doc.text(`Total Time Taken: ${ item.extra.totalTimeElapsed|| 'N/A'} `, 14, 90);
+      doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
 
       // Add a line break
       doc.text('', 14, 110);
@@ -319,7 +319,7 @@ this.chartData.forEach((ele:any,ind)=>{
         message: testCase.message,
         expectedResult: testCase.expected_result,
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-        timeSpent: this.convertMilliseconds(testCase.time_spent)
+        timeSpent: (`${testCase.timeSpent} sec`)
       }));
 
       // Create the table
