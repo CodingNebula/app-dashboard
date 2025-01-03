@@ -1084,7 +1084,7 @@ console.log(testCases);
 
     // this.onStartTrans(res,false)
 
-    this.sendInstructions(res,false)
+    this.sendInstructions(res)
 
     // const obj = {
     //   screenName: item?.ins_back_name,
