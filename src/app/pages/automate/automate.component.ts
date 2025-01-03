@@ -510,39 +510,46 @@ ngOnDestroy(){
 
 
 
-  onStartTrans(itemData) {
+  onStartTrans(itemData,startAll) {
+
+    console.log(itemData,"itemdat")
+    debugger
     let count =0;
     let totalTimeApp = Math.floor(Date.now() / 1000)
-    const result = itemData.screens.map(screen => {
-      return screen.instructions.map((instruction, index) => {
-        return {
-          id: index,
-          screenName: instruction.ins_back_name,
-          btnName: instruction.ins_element_name,
-          successMessage: `${instruction.ins_name} Passed`,
-          failedMessage: `${instruction.ins_name} Failed`,
+    let result = itemData;
+
+    if(startAll){
+       result = itemData.screens.map(screen => {
+        return screen.instructions.map((instruction, index) => {
+          return {
+            id: index,
+            screenName: instruction.ins_back_name,
+            btnName: instruction.ins_element_name,
+            successMessage: `${instruction.ins_name} Passed`,
+            failedMessage: `${instruction.ins_name} Failed`,
+            roomId: localStorage.getItem("id"),
+            moduleName: instruction.ins_set_screen_name
+
+          };
+        });
+      }).flat();
+
+      // result.push(
+      //   {
+      //     screenName: 'Restart_Application',
+      //     successMessage: 'Application Restarted',
+      //     roomId: localStorage.getItem("id"),
+      //   }
+      // );
+
+      result.push(
+        {
+          screenName: 'End_Instructions',
+          successMessage: 'End Instructions',
           roomId: localStorage.getItem("id"),
-          moduleName: instruction.ins_set_screen_name
-
-        };
-      });
-    }).flat();
-
-    // result.push(
-    //   {
-    //     screenName: 'Restart_Application',
-    //     successMessage: 'Application Restarted',
-    //     roomId: localStorage.getItem("id"),
-    //   }
-    // );
-
-    result.push(
-      {
-        screenName: 'End_Instructions',
-        successMessage: 'End Instructions',
-        roomId: localStorage.getItem("id"),
-      }
-    );
+        }
+      );
+    }
 // this.singleInstructionWebsocket(result)
 this.sendAllInstructionSocket(itemData,result)
 
@@ -586,7 +593,7 @@ this.sendAllInstructionSocket(itemData,result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
-        totalTimeElapsed: count
+        totalTimeElapsed: count,
       }
 
 
@@ -1026,10 +1033,17 @@ this.sendAllInstructionSocket(itemData,result)
     })
 
   }
-  onStart(item) {
+  onStart(item,testCases) {
+
+console.log(testCases);
 
 
-    const res = item.testCase.map((item,index) => {
+
+    // Prepare the list of previous test cases by checking ids
+    const previousTestCases = testCases.filter(testCase => testCase.id <= item.id);
+
+
+    const res = previousTestCases.map(test=> test.testCase.map((item,index) => {
       return {
         id: index,
         screenName: item.ins_back_name,
@@ -1039,7 +1053,20 @@ this.sendAllInstructionSocket(itemData,result)
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
       }
-    })
+    })).reduce((acc,item)=> acc.concat(...item),[])
+
+    // const res =  item.testCase.map((item,index) => {
+    //   return {
+    //     id: index,
+    //     screenName: item.ins_back_name,
+    //     btnName: item.ins_element_name,
+    //     successMessage: `${item.ins_name} Passed`,
+    //     failedMessage: `${item.ins_name} Failed`,
+    //     roomId: localStorage.getItem("id"),
+    //     moduleName: item.ins_set_screen_name,
+    //   }
+    // })
+
 
 
     //   {
@@ -1052,8 +1079,9 @@ this.sendAllInstructionSocket(itemData,result)
     //     }
     // }
 
+    this.onStartTrans(res,false)
 
-    this.sendInstructions(res)
+    // this.sendInstructions(res)
 
     // const obj = {
     //   screenName: item?.ins_back_name,
@@ -1422,7 +1450,7 @@ this.sendAllInstructionSocket(itemData,result)
 
   formatTestCaseData() {
 
-
+    let idCounter = 1;
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((testCase) => {
         // Check if testCase with the same ins_set_id is already present in testCases array
@@ -1431,6 +1459,7 @@ this.sendAllInstructionSocket(itemData,result)
 
         if (!exists) {
           this.testCases.push({
+            id: idCounter++,
             ins_set_id: item.ins_set_id,
             ins_set_screen_name: item.ins_set_screen_name, // Include ins_set_screen_name for reference
             testCase: item.instructions  // Add the entire instructions array as a nested property

@@ -135,7 +135,7 @@
       <h5>{{templateData?.wt_name}}</h5>
 
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button class="start-button" (click)="onStartTrans(templateData)">{{showEnd?'End Test':'Start All'}}</button>
+      <button class="start-button" (click)="onStartTrans(templateData,true)">{{showEnd?'End Test':'Start All'}}</button>
 
 
     </div>
@@ -151,7 +151,7 @@
       <ng-container *ngFor="let testCase of testCases">
         <div class="test-case-div">
           <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
-          <button class="start-button" (click)="onStart(testCase)">Start</button>
+          <button class="start-button" (click)="onStart(testCase,testCases)">Start</button>
         </div>
         <ng-container *ngFor="let item of resultArr">
 

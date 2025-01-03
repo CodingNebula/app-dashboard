@@ -66,7 +66,7 @@ public chartData:any=[];
     console.log(state.extra.capabilities.extra.capabilities,"time crathe")
     this.timeCreated = state.extra.extras.createdAt
     this.timeTaken = state.extra.totalTimeElapsed;
-    debugger
+
     console.log(this.timeTaken,"timetakens")
 
   }
