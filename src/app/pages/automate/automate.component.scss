@@ -1,3 +1,8 @@
+.instuction-loader{
+  height: 25px;
+  width: 25px;
+}
+
 .automate-container {
   display: flex;
   justify-content: space-between;
@@ -33,7 +38,10 @@
   background-color: #00a3ab;
 }
 
-
+.testCase-header{
+  font-size: 1rem !important;
+  font-weight: bold !important;
+}
 
 .automate-right {
   width: 30%;
@@ -194,6 +202,14 @@ label {
   justify-content: end;
 }
 
+
+.test-case-body-data{
+  border-bottom: none !important;
+  padding-left: 15px !important;
+  font-size: 15px !important;
+}
+
+
 .test-case-div {
   display: flex;
   align-items: center;
@@ -217,7 +233,7 @@ label {
   margin-top: 2em;
   padding: 1em;
   overflow: auto;
-  height: 69vh;
+  //height: 69vh;
 }
 
 .start-button {
@@ -307,6 +323,8 @@ label {
 .test-case-status-container {
   overflow: auto;
   // height: 54%;
+  height: 55vh
+
 
 }
 

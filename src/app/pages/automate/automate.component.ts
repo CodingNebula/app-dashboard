@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public currentOnGoingScreen = null
   public socketSubscription;
   public currentScreen = '';
   public showEnd = false;
@@ -502,7 +503,7 @@ ngOnDestroy(){
     // Start the interval to count every second
     this.startInterval = setInterval(() => {
       this.individualCount += 1;
-      console.log('Counting: ', this.individualCount); // Logs the incremented count every second
+
     }, 1000);
   }
 
@@ -511,41 +512,46 @@ ngOnDestroy(){
 
 
 
-  onStartTrans(itemData) {
+  onStartTrans(itemData,startAll) {
+
     let count =0;
     let totalTimeApp = Math.floor(Date.now() / 1000)
-    const result = itemData.screens.map(screen => {
-      return screen.instructions.map((instruction, index) => {
-        return {
-          id: index,
-          screenName: instruction.ins_back_name,
-          btnName: instruction.ins_element_name,
-          successMessage: `${instruction.ins_name} Passed`,
-          failedMessage: `${instruction.ins_name} Failed`,
+    let result = itemData;
+
+    if(startAll){
+       result = itemData.screens.map(screen => {
+        return screen.instructions.map((instruction, index) => {
+          return {
+            id: index,
+            screenName: instruction.ins_back_name,
+            btnName: instruction.ins_element_name,
+            successMessage: `${instruction.ins_name} Passed`,
+            failedMessage: `${instruction.ins_name} Failed`,
+            roomId: localStorage.getItem("id"),
+            moduleName: instruction.ins_set_screen_name
+
+          };
+        });
+      }).flat();
+
+      // result.push(
+      //   {
+      //     screenName: 'Restart_Application',
+      //     successMessage: 'Application Restarted',
+      //     roomId: localStorage.getItem("id"),
+      //   }
+      // );
+
+      result.push(
+        {
+          screenName: 'End_Instructions',
+          successMessage: 'End Instructions',
           roomId: localStorage.getItem("id"),
-          moduleName: instruction.ins_set_screen_name
-
-        };
-      });
-    }).flat();
-
-    // result.push(
-    //   {
-    //     screenName: 'Restart_Application',
-    //     successMessage: 'Application Restarted',
-    //     roomId: localStorage.getItem("id"),
-    //   }
-    // );
-
-    result.push(
-      {
-        screenName: 'End_Instructions',
-        successMessage: 'End Instructions',
-        roomId: localStorage.getItem("id"),
-      }
-    );
-this.singleInstructionWebsocket(result)
-// this.sendAllInstructionSocket(itemData,result)
+        }
+      );
+    }
+// this.singleInstructionWebsocket(result)
+this.sendAllInstructionSocket(itemData,result)
 
   }
 
@@ -554,7 +560,6 @@ this.singleInstructionWebsocket(result)
     let count = 0;
 
     let totalTimeApp = Math.floor(Date.now() / 1000)
-
 
 
 
@@ -588,6 +593,7 @@ this.singleInstructionWebsocket(result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
+        totalTimeElapsed: count,
       }
 
 
@@ -897,6 +903,7 @@ this.singleInstructionWebsocket(result)
           }
           const currentTime = Date.now() / 1000;
           console.log(this.individualCount, 'indc')
+          this.currentOnGoingScreen = res.message.moduleName;
           res.message.timeSpent = (currentTime- startInterval).toFixed(2);
           res.message.totalTimeTaken = currentTime - totalTimeApp;
 
@@ -928,7 +935,7 @@ this.singleInstructionWebsocket(result)
               capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
               resultArr: this.resultArr,
               extras: this.extras,
-              totalTimeElapsed: count,
+              totalTimeElapsed: Math.floor(Date.now() / 1000) -  totalTimeApp,
 
             }
 
@@ -987,6 +994,8 @@ this.singleInstructionWebsocket(result)
     let count = 0;
     let indexCounter = 0
 
+
+
     this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
     console.log(allInstructions,'allisnnsdfd');
     console.log({...allInstructions[indexCounter], singleCase: true},'seewhatwentt');
@@ -1025,10 +1034,17 @@ this.singleInstructionWebsocket(result)
     })
 
   }
-  onStart(item) {
+  onStart(item,testCases) {
+
+console.log(testCases);
 
 
-    const res = item.testCase.map((item,index) => {
+
+    // Prepare the list of previous test cases by checking ids
+    const previousTestCases = testCases.filter(testCase => testCase.id <= item.id);
+
+
+    const res = previousTestCases.map(test=> test.testCase.map((item,index) => {
       return {
         id: index,
         screenName: item.ins_back_name,
@@ -1038,7 +1054,20 @@ this.singleInstructionWebsocket(result)
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
       }
-    })
+    })).reduce((acc,item)=> acc.concat(...item),[])
+
+    // const res =  item.testCase.map((item,index) => {
+    //   return {
+    //     id: index,
+    //     screenName: item.ins_back_name,
+    //     btnName: item.ins_element_name,
+    //     successMessage: `${item.ins_name} Passed`,
+    //     failedMessage: `${item.ins_name} Failed`,
+    //     roomId: localStorage.getItem("id"),
+    //     moduleName: item.ins_set_screen_name,
+    //   }
+    // })
+
 
 
     //   {
@@ -1051,8 +1080,9 @@ this.singleInstructionWebsocket(result)
     //     }
     // }
 
+    this.onStartTrans(res,false)
 
-    this.sendInstructions(res)
+    // this.sendInstructions(res)
 
     // const obj = {
     //   screenName: item?.ins_back_name,
@@ -1449,7 +1479,7 @@ this.recursiveInstructions(resArr,0)
 
   formatTestCaseData() {
 
-
+    let idCounter = 1;
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((testCase) => {
         // Check if testCase with the same ins_set_id is already present in testCases array
@@ -1458,6 +1488,7 @@ this.recursiveInstructions(resArr,0)
 
         if (!exists) {
           this.testCases.push({
+            id: idCounter++,
             ins_set_id: item.ins_set_id,
             ins_set_screen_name: item.ins_set_screen_name, // Include ins_set_screen_name for reference
             testCase: item.instructions  // Add the entire instructions array as a nested property
