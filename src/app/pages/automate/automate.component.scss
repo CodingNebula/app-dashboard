@@ -33,7 +33,10 @@
   background-color: #00a3ab;
 }
 
-
+.testCase-header{
+  font-size: 1rem !important;
+  font-weight: bold !important;
+}
 
 .automate-right {
   width: 30%;
@@ -193,6 +196,14 @@ label {
 .button-row {
   justify-content: end;
 }
+
+
+.test-case-body-data{
+  border-bottom: none !important;
+  padding-left: 15px !important;
+  font-size: 15px !important;
+}
+
 
 .test-case-div {
   display: flex;

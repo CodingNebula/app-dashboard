@@ -150,12 +150,12 @@
 
       <ng-container *ngFor="let testCase of testCases">
         <div class="test-case-div">
-          <h6>{{testCase?.ins_set_screen_name}}</h6>
+          <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
           <button class="start-button" (click)="onStart(testCase)">Start</button>
         </div>
         <ng-container *ngFor="let item of resultArr">
 
-          <div *ngIf="item.moduleName === testCase.ins_set_screen_name" class="test-case-div">
+          <div *ngIf="item.moduleName === testCase.ins_set_screen_name" class="test-case-div test-case-body-data">
 
             <h6>{{item?.successMessage || item?.failedMessage}}</h6>
 <!--            <div>{{item.moduleName}}</div>-->

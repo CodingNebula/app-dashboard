@@ -543,8 +543,8 @@ ngOnDestroy(){
         roomId: localStorage.getItem("id"),
       }
     );
-this.singleInstructionWebsocket(result)
-// this.sendAllInstructionSocket(itemData,result)
+// this.singleInstructionWebsocket(result)
+this.sendAllInstructionSocket(itemData,result)
 
   }
 
@@ -552,8 +552,7 @@ this.singleInstructionWebsocket(result)
   sendAllInstructionSocket(itemData, result) {
     let count = 0;
 
-
-
+    let totalTimeApp = Math.floor(Date.now() / 1000)
 
 
 
@@ -587,6 +586,7 @@ this.singleInstructionWebsocket(result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
+        totalTimeElapsed: count
       }
 
 
@@ -927,7 +927,7 @@ this.singleInstructionWebsocket(result)
               capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
               resultArr: this.resultArr,
               extras: this.extras,
-              totalTimeElapsed: count,
+              totalTimeElapsed: Math.floor(Date.now() / 1000) -  totalTimeApp,
 
             }
 
@@ -985,6 +985,8 @@ this.singleInstructionWebsocket(result)
   singleInstructionWebsocket(allInstructions) {
     let count = 0;
     let indexCounter = 0
+
+
 
     this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
     console.log(allInstructions,'allisnnsdfd');
