@@ -8,7 +8,7 @@ import { io, Socket } from "socket.io-client";
 })
 export class WebsocketService {
   public socket: Socket;
-  private mySubject = new BehaviorSubject<any>(null);
+  private mySubject = new Subject<any>();
   public message: string | null = null;
   public appLaunchStatus: string | null = null;
   public showAlert = false;
@@ -79,11 +79,13 @@ export class WebsocketService {
     }
   }
   getSubject() {
-    return this.mySubject.asObservable().pipe(catchError((error) => {
-      console.error('Handled error in getSubject:', error);
-      // Return an empty observable or re-throw the error if needed
-      return new Observable();  // Return an empty observable in case of error
-    }));
+    // return this.mySubject.asObservable().pipe(catchError((error) => {
+    //   console.error('Handled error in getSubject:', error);
+    //   // Return an empty observable or re-throw the error if needed
+    //   return new Observable();  // Return an empty observable in case of error
+    // }));
+
+    return this.mySubject
   }
 
   saveTestReportData(reportData: any) {
@@ -164,6 +166,16 @@ export class WebsocketService {
       this.socketFailure.next();
     });
 
+    this.socket.on('message', (response: any) => {
+
+      this.updateValue(response);
+      // Test case name and status
+      // if (response.success) {
+      // } else {
+      //   console.error('Test case request failed:', response.error);
+      // }
+    });
+
 
   }
   getSocketFailure(){
@@ -193,14 +205,7 @@ export class WebsocketService {
 
 
       // Listen for the response from the server
-      this.socket.on('message', (response: any) => {
-        this.updateValue(response);
-        // Test case name and status
-        // if (response.success) {
-        // } else {
-        //   console.error('Test case request failed:', response.error);
-        // }
-      });
+
     } else {
       this.showAlert = true;
       setTimeout(() => {

@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public socketSubscription;
   public currentScreen = '';
   public showEnd = false;
   public counterInterval;
@@ -552,7 +553,7 @@ this.singleInstructionWebsocket(result)
   sendAllInstructionSocket(itemData, result) {
     let count = 0;
 
-
+    let totalTimeApp = Math.floor(Date.now() / 1000)
 
 
 
@@ -1062,22 +1063,50 @@ this.singleInstructionWebsocket(result)
 
   }
 
-  sendInstructions(res) {
-    let indexCounter = 0;
-      this.webSocketService.sendTestCaseRequest({...res[indexCounter], singleCase: true});
-      console.log(res,'particularscreenRessfd')
-      console.log({...res[indexCounter], singleCase: true},'Seeewehatsentt')
-      this.webSocketService.getSubject().subscribe((res) => {
+  sendInstructions(resArr) {
+this.recursiveInstructions(resArr,0)
+
+    // if (this.socketSubscription) {
+    //   this.socketSubscription.unsubscribe();
+    //
+    // }
+    // this.webSocketService.sendTestCaseRequest({...resArr[indexCounter], singleCase: true});
+    // this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+    //   if (res?.message && res?.message?.info) {
+    //     this.resultArr.push(res.message);
+    //
+    //
+    //   }
+    //
+    //
+    //
+    // })
+  }
+
+  recursiveInstructions(instructionsArr, indexCounter) {
+
+    if (indexCounter<instructionsArr.length) {
+      if (this.socketSubscription) {
+        this.socketSubscription.unsubscribe();
+
+      }
+      this.webSocketService.sendTestCaseRequest({...instructionsArr[indexCounter], singleCase: true});
+      this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
         if (res?.message && res?.message?.info) {
           this.resultArr.push(res.message);
-          if (indexCounter<=res.length) {
-            indexCounter += 1;
-            this.webSocketService.sendTestCaseRequest({...res[indexCounter], singleCase: true});
-          }
-
+          indexCounter += 1;
+          this.recursiveInstructions(instructionsArr,indexCounter);
 
         }
+
+
+
       })
+    }
+
+    else {
+      return
+    }
 
   }
 
