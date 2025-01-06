@@ -45,7 +45,7 @@ public chartData:any=[];
 
     const state = window.history.state;
     this.capabilities = state?.reportData?.extra?.capabilities;
-    console.log(this.capabilities);
+    console.log(state,'state');
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
 

@@ -20,6 +20,7 @@ export class AutomateComponent implements OnInit {
   public showEnd = false;
   public counterInterval;
   public individualCount = 0;
+  public singleInstructionTimeTotal:number =0
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -1108,7 +1109,8 @@ this.sendAllInstructionSocket(itemData,result)
   onStart(item,testCases) {
     this.showEnd = true
 
-console.log(testCases);
+    // this.singleInstructionTimeTotal = Math.floor(Date.now() / 1000)
+    console.log(testCases);
 
 
 
@@ -1192,11 +1194,27 @@ this.recursiveInstructions(resArr,0)
         this.socketSubscription.unsubscribe();
 
       }
+      let startInterval = Date.now() / 1000;
       this.webSocketService.sendTestCaseRequest({...instructionsArr[indexCounter], singleCase: true});
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
         if (res?.message && res?.message?.info) {
           this.currentOnGoingScreen = res.message.moduleName;
+          let currentTime = Date.now() / 1000;
+          const now = new Date();
+          const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+          this.extras.createdAt = formatdate;
+          const hours = String(now.getHours()).padStart(2, '0'); // Get the hours, ensure two digits
+          const minutes = String(now.getMinutes()).padStart(2, '0'); // Get the minutes, ensure two digits
+          const seconds = String(now.getSeconds()).padStart(2, '0'); // Get the seconds, ensure two digits
+
+          res.startedTime = `${hours}:${minutes}:${seconds}`;
+          res.createdAt=formatdate;
+          res.message.timeSpent = (currentTime- startInterval).toFixed(2);
+
+          startInterval = Date.now() / 1000;
+          this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent) ;
           this.resultArr.push(res.message);
+          debugger;
           indexCounter += 1;
           this.recursiveInstructions(instructionsArr,indexCounter);
 
@@ -1211,6 +1229,68 @@ this.recursiveInstructions(resArr,0)
       this.currentOnGoingScreen = null;
       return
     }
+
+  }
+
+  endSingleInstruction(){
+    let count = 0;
+
+    let passedCount = 0;
+    let failedCount = 0;
+    let untestedCount = 0;
+    this.socketSubscription.unsubscribe();
+
+      this.resultArr?.map((testCase) => {
+        testCase.completeCount = count;
+
+        if (testCase?.successMessage !== "End_Instructions") {
+
+          if (testCase.message === 'SUCCESS') {
+            passedCount++;
+          } else if (testCase.message === 'FAILED') {
+            failedCount++;
+          } else if (testCase.message === 'Untested') {
+            untestedCount++;
+          }
+        }
+      });
+
+      const socketReport = {
+        capabilities: {
+          description: this.description,
+          buildInfo: this.buildNumber, ...this.completeAppData
+        },
+        resultArr: this.resultArr,
+        extras: this.extras,
+        totalTimeElapsed:  this.singleInstructionTimeTotal,
+      }
+
+      debugger;
+
+
+
+      // Iterate over the reports to count the number of passed, failed, and untested test cases
+
+
+      const body = {
+        applicationId: localStorage.getItem('app_id'),
+        app_version: "2.1",
+        totalTestCase: this.resultArr?.length ,
+        passed: passedCount,
+        failed: failedCount,
+        crash_count: untestedCount,
+        extra: socketReport,
+      }
+      debugger;
+      this.accountService.postReportData(body).subscribe((resp) => {
+        if (resp) {
+          setTimeout(() => {
+            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+          }, 1000)
+        }
+      })
+
+
 
   }
 
