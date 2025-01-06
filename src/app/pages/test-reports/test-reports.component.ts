@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild  } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -17,21 +17,22 @@ export interface TestCase {
   templateUrl: './test-reports.component.html',
   styleUrls: ['./test-reports.component.scss']
 })
-export class TestReportsComponent implements OnInit  {
+export class TestReportsComponent implements OnInit {
   @ViewChild('chartElement', { static: false }) chartElement: any;
   private echartsInstance: EChartsInstance | null = null;
-public chartData:any=[];
+  public chartData: any = [];
   public customColumn = 'name';
+  groupedData:any;
   public defaultColumns = ['size', 'kind', 'items'];
   public allColumns = [this.customColumn, ...this.defaultColumns];
   public CompletionChart: any = null;
   public reportData: any = null;
-  public timeTaken:string;
+  public timeTaken: string;
   public pieData: any[] = [];
-  public reportHeading : string;
-  public platform :any;
+  public reportHeading: string;
+  public platform: any;
   public capabilities: any;
-  public timeCreated:string;
+  public timeCreated: string;
   public searchTerm: string = '';
   public testCases: any;
   public extras: any = {};
@@ -48,14 +49,40 @@ public chartData:any=[];
     console.log(this.capabilities);
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
-
-
+    console.log(this.testCases, 'testCases')
+    this.addScreenNameToTestCases();
     this.extras = state?.reportData?.extra?.extras;
-    console.log(this.testCases,"testcase");
+    console.log(this.testCases, "testcase");
     // console.log(state);
 
     this.generatePie();
   }
+  addScreenNameToTestCases() {
+  let storeFirstData:any=null;
+  // for(let i=0;i<this.testCases.length;i++){
+  //   if(storeFirstData?.moduleName===this.testCases[i].moduleName){
+  //     this.testCases[i].continue=true;
+  //   }
+  //   else{
+  //     storeFirstData=this.testCases[i];
+  //   }
+  //   if(!storeFirstData?.screens){
+  //     storeFirstData.screens=[];
+  //   }
+  //   storeFirstData.screens.push(this.testCases[i]);
+  // }
+   this.groupedData=this.testCases.reduce((acc,ele)=>{
+    if(!acc[ele?.moduleName]){
+      acc[ele?.moduleName]=[];
+    }
+    acc[ele?.moduleName].push(ele);
+    return acc;
+  },{})
+
+  }
+  keepOrder = (a: any, b: any) => {
+    return a;
+}
 
   onChartInit(instance: EChartsInstance): void {
     this.echartsInstance = instance; // Capture the ECharts instance
@@ -63,13 +90,13 @@ public chartData:any=[];
 
   ngOnInit() {
     const state = history.state.reportData
-    console.log(state.extra.capabilities.extra.capabilities,"time crathe")
+    console.log(state.extra.capabilities.extra.capabilities, "time crathe")
     this.timeCreated = state.extra.extras.createdAt
     this.timeTaken = state.extra.totalTimeElapsed;
-    console.log(this.timeTaken,"timetakens")
+    console.log(this.timeTaken, "timetakens")
 
   }
-   convertToSeconds(ms) {
+  convertToSeconds(ms) {
     const minutes = Math.floor(ms / 600000); // 1 minute = 60000 milliseconds
     const seconds = ((ms % 60000) / 1000).toFixed(0); // remainder of milliseconds for seconds
     return `${minutes} minutes and ${seconds} seconds`;
@@ -86,17 +113,17 @@ public chartData:any=[];
     let untestedCount = this.reportData?.testcase_performed;
 
 
-    console.log(passedCount,failedCount,untestedCount,"testcase");
+    console.log(passedCount, failedCount, untestedCount, "testcase");
     dataArr.push({ name: 'SUCCESS', value: passedCount });
     dataArr.push({ name: 'FAILED', value: failedCount });
-    dataArr.push({ name: 'UNTESTED', value: untestedCount - (failedCount+passedCount)});
+    dataArr.push({ name: 'UNTESTED', value: untestedCount - (failedCount + passedCount) });
 
     this.pieData = dataArr
 
     this.generatePieData();
   }
 
-  generatePieData(){
+  generatePieData() {
 
     setTimeout(() => {
       this.CompletionChart = {
@@ -220,17 +247,17 @@ public chartData:any=[];
 
     console.log(item);
     this.chartData = [];
-    this.testCases = this.testCases.filter(test=> test.hasOwnProperty('info'));
+    this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
 
-    this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
-    this.chartData.forEach((ele:any,ind)=>{
-    if(ele.value===0){
-      delete this.chartData[ind];
-    }
-})
+    this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) === 0 ? 1 : 0 }, { name: 'UNTESTED', value: Number(item.testcase_performed) - (Number(item.testcase_passed) + Number(item.testcase_failed + 1)) })
+    this.chartData.forEach((ele: any, ind) => {
+      if (ele.value === 0) {
+        delete this.chartData[ind];
+      }
+    })
     // this.updateCharts();
     $event.stopPropagation();
-    setTimeout(()=>{
+    setTimeout(() => {
       this.capabilities = item?.extra?.capabilities;
       console.log(this.capabilities);
       // this.testCases = item?.extra?.resultArr;
@@ -269,7 +296,7 @@ public chartData:any=[];
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData?.extra?.extras?.startedTime }`, 14, 80);
+      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
       doc.text(`Total Time Taken: ${this.timeTaken ? this.timeTaken + ' sec' : 'N/A'}`, 14, 90);
       doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
 
@@ -327,7 +354,7 @@ public chartData:any=[];
       doc.save('report.pdf');
 
 
-    },500)
+    }, 500)
 
 
   }
@@ -353,7 +380,7 @@ public chartData:any=[];
       if (timeString) timeString += ', '; // Add a comma if hours or minutes were added
       timeString += `${remainingSeconds.toFixed(1)} second${remainingSeconds !== 1 ? 's' : ''}`; // Use fractional seconds
     }
-      console.log(timeString);
+    console.log(timeString);
     return timeString;
   }
 }

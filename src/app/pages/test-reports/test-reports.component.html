@@ -43,30 +43,38 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <nb-accordion>
-        <nb-accordion-item *ngFor="let testCase of this.testCases">
+      <nb-accordion *ngFor="let testCase of groupedData|keyvalue:keepOrder">
+   
+        <nb-accordion-item >
+    
           <nb-accordion-item-header style="position: relative;"
-            [ngClass]="testCase.message === 'SUCCESS' ? 'passed' : 'failed'">
-            <nb-icon [icon]="testCase.message === 'SUCCESS' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
-            <span style="margin-left: 1em;">{{ testCase?.successMessage || testCase?.failedMessage}}</span>
-            <span style="position: absolute;right: 3em;">
-              <div>{{ testCase?.message }} </div>
+           >
+       
+            <!-- <nb-icon [icon]="testCase.message === 'SUCCESS' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
+            <span style="margin-left: 1em;">{{ testCase?.successMessage || testCase?.failedMessage}}</span> -->
+            <span >
+              <div>{{ testCase?.key }} </div>
             </span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="row">
+            <div class="row" *ngFor="let instructions of testCase.value" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
 
-              <div class="col-4" *ngIf="testCase.status ==='Failed'">
+              <div class="col-4" *ngIf="instructions.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
-                    <div> <span class="descriptionLabel">Defect -</span> {{testCase?.defect}}</div>
+                    <div> <span class="descriptionLabel">Defect -</span> {{instructions?.defect}}</div>
                   </nb-card-body>
                 </nb-card>
               </div>
-              <div class="col-4">
+              <div class="col-4" class="flex-col">
+                <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
+                <div>{{instructions?.successMessage?'SUCCESS':'FAILED'}}</div>
+
                 <nb-card>
+                 
                   <nb-card-body>
-                    <div><span class="descriptionLabel">Time Spend -</span> {{testCase?.timeSpent}} sec</div>
+                 
+                    <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
                   </nb-card-body>
                 </nb-card>
               </div>
