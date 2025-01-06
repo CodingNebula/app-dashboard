@@ -518,6 +518,7 @@ ngOnDestroy(){
 
   onStartTrans(itemData,startAll) {
 
+    debugger
     let count =0;
     let totalTimeApp = Math.floor(Date.now() / 1000)
     let result = itemData;
@@ -556,7 +557,7 @@ ngOnDestroy(){
     }
 // this.singleInstructionWebsocket(result)
 this.sendAllInstructionSocket(itemData,result)
-
+    debugger
   }
 
 
@@ -564,8 +565,6 @@ this.sendAllInstructionSocket(itemData,result)
     let count = 0;
 
     let totalTimeApp = Math.floor(Date.now() / 1000)
-
-
 
     let passedCount = 0;
     let failedCount = 0;
@@ -575,9 +574,17 @@ this.sendAllInstructionSocket(itemData,result)
 
     if (this.showEnd){
 
+      // this.socketSubscription.unsubscribe();
+      const now = new Date();
+      const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+      this.extras.startedTime=formattedTime;
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      this.extras.createdAt = formattedDate;
+
       this.resultArr?.map((testCase) => {
         testCase.completeCount = count;
-
+        debugger
         if (testCase?.successMessage !== "End_Instructions") {
 
           if (testCase.message === 'SUCCESS') {
@@ -597,35 +604,28 @@ this.sendAllInstructionSocket(itemData,result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
-        totalTimeElapsed:   Math.floor(Date.now() / 1000) - totalTimeApp,
+        totalTimeElapsed: Math.floor(Date.now() / 1000) -   this.totalTimeTaken,
       }
 
 
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
-      this.resultArr?.map((testCase) => {
-        if (testCase?.successMessage !== "End_Instructions") {
 
-          if (testCase.message === 'SUCCESS') {
-            passedCount++;
-          } else if (testCase.message === 'FAILED') {
-            failedCount++;
-          } else if (testCase.message === 'Untested') {
-            untestedCount++;
-          }
-        }
-      });
+debugger
+
+      let intsCount = itemData?.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
       const body = {
         applicationId: localStorage.getItem('app_id'),
         filename: itemData?.wt_desc,
         app_version: "2.1",
-        totalTestCase: result?.length - 1,
+        totalTestCase:intsCount,
         passed: passedCount,
         failed: failedCount,
-        crash_count: untestedCount,
+        crash_count:intsCount - passedCount - failedCount,
         extra: socketReport,
       }
+      debugger;
       this.accountService.postReportData(body).subscribe((resp) => {
         if (resp) {
           setTimeout(() => {
@@ -893,6 +893,9 @@ this.sendAllInstructionSocket(itemData,result)
       this.startCounting(this.individualCount);
       let timeChecked = false;
       this.showEnd = true
+
+      this.totalTimeTaken =  Math.floor(Date.now() / 1000)  ;
+
       this.webSocketService.getSubject().subscribe((res) => {
 
         if (!timeChecked) {
