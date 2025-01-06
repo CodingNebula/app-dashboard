@@ -223,7 +223,7 @@ this.getAllPages()
   }
 
   automateTemplate(template: any) {
-    console.log(template);
+    console.log(template,"templeate");
 
     const capabilities = {
       platformName: "Android",

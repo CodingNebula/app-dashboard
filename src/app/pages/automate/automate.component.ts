@@ -931,8 +931,8 @@ this.sendAllInstructionSocket(itemData,result)
 
             const now = new Date();
             const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-            this.extras.startedTime = formattedTime;
-            res.startedTime=formattedTime;
+
+            this.extras.startedTime=formattedTime;
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
             const socketReport = {
@@ -1116,8 +1116,8 @@ this.sendAllInstructionSocket(itemData,result)
 
     // Prepare the list of previous test cases by checking ids
     // const previousTestCases = testCases.filter(testCase => testCase.id <= item.id);
-
-
+    //
+    //
     // const res = previousTestCases.map(test=> test.testCase.map((item,index) => {
     //   return {
     //     id: index,
@@ -1158,6 +1158,7 @@ this.sendAllInstructionSocket(itemData,result)
 
     this.sendInstructions(res)
 
+    debugger;
     // const obj = {
     //   screenName: item?.ins_back_name,
     //   btnName: item?.ins_element_name
@@ -1203,10 +1204,11 @@ this.recursiveInstructions(resArr,0)
           const now = new Date();
           const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
           this.extras.createdAt = formatdate;
+
           const hours = String(now.getHours()).padStart(2, '0'); // Get the hours, ensure two digits
           const minutes = String(now.getMinutes()).padStart(2, '0'); // Get the minutes, ensure two digits
           const seconds = String(now.getSeconds()).padStart(2, '0'); // Get the seconds, ensure two digits
-
+          this.extras.startedTime = `${hours}:${minutes}:${seconds}`;
           res.startedTime = `${hours}:${minutes}:${seconds}`;
           res.createdAt=formatdate;
           res.message.timeSpent = (currentTime- startInterval).toFixed(2);
@@ -1265,20 +1267,22 @@ this.recursiveInstructions(resArr,0)
         totalTimeElapsed:  this.singleInstructionTimeTotal,
       }
 
-      debugger;
+
 
 
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
 
+let totalCount =this.templateData.reduce((acc, item) => acc + item.testCase.length, 0);
 
+    debugger;
       const body = {
         applicationId: localStorage.getItem('app_id'),
         app_version: "2.1",
-        totalTestCase: this.resultArr?.length ,
+        totalTestCase: totalCount,
         passed: passedCount,
         failed: failedCount,
-        crash_count: untestedCount,
+        crash_count:  totalCount - passedCount - failedCount,
         extra: socketReport,
       }
       debugger;
