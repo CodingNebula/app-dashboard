@@ -1158,7 +1158,7 @@ this.sendAllInstructionSocket(itemData,result)
 
     this.sendInstructions(res)
 
-    debugger;
+
     // const obj = {
     //   screenName: item?.ins_back_name,
     //   btnName: item?.ins_element_name
@@ -1216,7 +1216,7 @@ this.recursiveInstructions(resArr,0)
           startInterval = Date.now() / 1000;
           this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent) ;
           this.resultArr.push(res.message);
-          debugger;
+
           indexCounter += 1;
           this.recursiveInstructions(instructionsArr,indexCounter);
 
@@ -1273,9 +1273,9 @@ this.recursiveInstructions(resArr,0)
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
 
-let totalCount =this.templateData.reduce((acc, item) => acc + item.testCase.length, 0);
+    let totalCount =this.templateData.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
-    debugger;
+
       const body = {
         applicationId: localStorage.getItem('app_id'),
         app_version: "2.1",
@@ -1285,7 +1285,7 @@ let totalCount =this.templateData.reduce((acc, item) => acc + item.testCase.leng
         crash_count:  totalCount - passedCount - failedCount,
         extra: socketReport,
       }
-      debugger;
+
       this.accountService.postReportData(body).subscribe((resp) => {
         if (resp) {
           setTimeout(() => {
