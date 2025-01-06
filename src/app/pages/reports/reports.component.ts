@@ -305,7 +305,7 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
       doc.text(`Started Time: ${item.extra.extras.createdAt  || 'N/A'} ${item.extra.extras.startedTime}`, 14, 80);
-      doc.text(`Total Time Taken: ${ item.extra.totalTimeElapsed|| 'N/A'} `, 14, 90);
+      doc.text(`Total Time Taken: ${ item.extra.totalTimeElapsed ? item.extra.totalTimeElapsed + ' sec' : 'N/A'} `, 14, 90);
       doc.text(`Description: ${item?.extra?.capabilities.description || 'N/A'}`, 14, 100);
 
       // Add a line break
