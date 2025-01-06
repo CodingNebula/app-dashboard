@@ -1243,7 +1243,7 @@ this.recursiveInstructions(resArr,0)
     let passedCount = 0;
     let failedCount = 0;
     let untestedCount = 0;
-    this.socketSubscription.unsubscribe();
+    // this.socketSubscription.unsubscribe();
 
       this.resultArr?.map((testCase) => {
         testCase.completeCount = count;
