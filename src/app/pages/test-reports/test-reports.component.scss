@@ -66,7 +66,7 @@ nb-accordion-item-header {
 }
 
 nb-accordion-item-body {
-    max-height: 100px;
+    //max-height: 190px;
     overflow-y: hidden;
 
 
@@ -123,7 +123,15 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     height: 100%;
 
 }
+.flex-col{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    // padding:0 2% 0 5%;
+    margin-left: 3%;
 
+}
 .heading {
     font-weight: 800;
     font-size: 1.7em;
@@ -195,4 +203,15 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     overflow-y: scroll;
     overflow-x: hidden;
   }
+}
+.custom-div {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+.testcase-status{
+    font-size: 0.8rem;
+    //font-weight: bold;
+  width: 41%;
 }

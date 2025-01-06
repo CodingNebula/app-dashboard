@@ -190,7 +190,7 @@ export class ReportsComponent {
   updateCharts() {
 
     // Update the chart options with the new data
-console.log(this.chartData)
+
 
     this.CompletionChart = {
       tooltip: {
@@ -254,13 +254,14 @@ console.log(this.chartData)
     this.chartData = [];
 console.log(this.reportData)
 
+debugger;
     this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
 this.chartData.forEach((ele:any,ind)=>{
   if(ele.value===0){
     delete this.chartData[ind];
   }
   console.log(this.chartData,"chart")
-
+  debugger
 })
     this.updateCharts();
     $event.stopPropagation();

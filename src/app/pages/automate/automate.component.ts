@@ -13,6 +13,7 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 })
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
+  public showIndividualEnd = false;
   public startApp:boolean= false;
   public currentOnGoingScreen = null
   public socketSubscription;
@@ -1108,7 +1109,7 @@ this.sendAllInstructionSocket(itemData,result)
   }
   onStart(item,testCases) {
     this.showEnd = true
-
+    this.showIndividualEnd = true;
     // this.singleInstructionTimeTotal = Math.floor(Date.now() / 1000)
     console.log(testCases);
 
@@ -1116,8 +1117,8 @@ this.sendAllInstructionSocket(itemData,result)
 
     // Prepare the list of previous test cases by checking ids
     // const previousTestCases = testCases.filter(testCase => testCase.id <= item.id);
-    //
-    //
+
+
     // const res = previousTestCases.map(test=> test.testCase.map((item,index) => {
     //   return {
     //     id: index,
@@ -1216,7 +1217,6 @@ this.recursiveInstructions(resArr,0)
           startInterval = Date.now() / 1000;
           this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent) ;
           this.resultArr.push(res.message);
-
           indexCounter += 1;
           this.recursiveInstructions(instructionsArr,indexCounter);
 
