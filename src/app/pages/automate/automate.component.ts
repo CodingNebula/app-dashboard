@@ -1106,28 +1106,17 @@ this.sendAllInstructionSocket(itemData,result)
 
   }
   onStart(item,testCases) {
+    this.showEnd = true
 
 console.log(testCases);
 
 
 
     // Prepare the list of previous test cases by checking ids
-    const previousTestCases = testCases.filter(testCase => testCase.id <= item.id);
+    // const previousTestCases = testCases.filter(testCase => testCase.id <= item.id);
 
 
-    const res = previousTestCases.map(test=> test.testCase.map((item,index) => {
-      return {
-        id: index,
-        screenName: item.ins_back_name,
-        btnName: item.ins_element_name,
-        successMessage: `${item.ins_name} Passed`,
-        failedMessage: `${item.ins_name} Failed`,
-        roomId: localStorage.getItem("id"),
-        moduleName: item.ins_set_screen_name,
-      }
-    })).reduce((acc,item)=> acc.concat(...item),[])
-
-    // const res =  item.testCase.map((item,index) => {
+    // const res = previousTestCases.map(test=> test.testCase.map((item,index) => {
     //   return {
     //     id: index,
     //     screenName: item.ins_back_name,
@@ -1137,7 +1126,19 @@ console.log(testCases);
     //     roomId: localStorage.getItem("id"),
     //     moduleName: item.ins_set_screen_name,
     //   }
-    // })
+    // })).reduce((acc,item)=> acc.concat(...item),[])
+
+    const res =  item.testCase.map((item,index) => {
+      return {
+        id: index,
+        screenName: item.ins_back_name,
+        btnName: item.ins_element_name,
+        successMessage: `${item.ins_name} Passed`,
+        failedMessage: `${item.ins_name} Failed`,
+        roomId: localStorage.getItem("id"),
+        moduleName: item.ins_set_screen_name,
+      }
+    })
 
 
 
@@ -1151,15 +1152,8 @@ console.log(testCases);
     //     }
     // }
 
-    res.push(
-      {
-        screenName: 'End_Instructions',
-        successMessage: 'End Instructions',
-        roomId: localStorage.getItem("id"),
-      }
-    );
-
     // this.onStartTrans(res,false)
+
     this.sendInstructions(res)
 
     // const obj = {
@@ -1201,6 +1195,7 @@ this.recursiveInstructions(resArr,0)
       this.webSocketService.sendTestCaseRequest({...instructionsArr[indexCounter], singleCase: true});
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
         if (res?.message && res?.message?.info) {
+          this.currentOnGoingScreen = res.message.moduleName;
           this.resultArr.push(res.message);
           indexCounter += 1;
           this.recursiveInstructions(instructionsArr,indexCounter);
@@ -1213,6 +1208,7 @@ this.recursiveInstructions(resArr,0)
     }
 
     else {
+      this.currentOnGoingScreen = null;
       return
     }
 

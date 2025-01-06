@@ -249,7 +249,7 @@ export class ReportsComponent {
 
   }
   downloadPDF(item, $event: Event) {
-    console.log(item,'item');
+    console.log(item);
     this.chartData = [];
 
 
