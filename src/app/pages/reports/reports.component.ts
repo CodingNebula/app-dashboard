@@ -191,6 +191,7 @@ export class ReportsComponent {
 
     // Update the chart options with the new data
 
+
     this.CompletionChart = {
       tooltip: {
         trigger: 'item',
@@ -258,6 +259,8 @@ this.chartData.forEach((ele:any,ind)=>{
   if(ele.value===0){
     delete this.chartData[ind];
   }
+
+
 })
     this.updateCharts();
     $event.stopPropagation();
@@ -292,7 +295,7 @@ this.chartData.forEach((ele:any,ind)=>{
           backgroundColor: '#fff' // Optional: Set a background color
         });
         const pageWidth = doc.internal.pageSize.width;
-        const xPosition = pageWidth - 120;
+        const xPosition = pageWidth - 140;
         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
 
       }
@@ -306,7 +309,6 @@ this.chartData.forEach((ele:any,ind)=>{
 
       // Add a line break
       doc.text('', 14, 110);
-
       // Add test cases
       doc.setFontSize(14);
       doc.text('Test Cases', 14, 120);
@@ -369,6 +371,7 @@ this.chartData.forEach((ele:any,ind)=>{
           trigger: 'item',
           formatter: '{b} : {c} ({d}%)'
         },
+
         label: {
           show: true,
           fontSize: 7,  // Adjust the font size of the label here

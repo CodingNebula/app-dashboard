@@ -46,7 +46,7 @@ export class TestReportsComponent implements OnInit {
 
     const state = window.history.state;
     this.capabilities = state?.reportData?.extra?.capabilities;
-    console.log(this.capabilities);
+    console.log(state,'state');
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
     console.log(this.testCases, 'testCases')
@@ -288,7 +288,7 @@ export class TestReportsComponent implements OnInit {
           backgroundColor: '#fff' // Optional: Set a background color
         });
         const pageWidth = doc.internal.pageSize.width;
-        const xPosition = pageWidth - 120;
+        const xPosition = pageWidth - 140;
         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
 
       }

@@ -135,7 +135,8 @@
       <h5>{{templateData?.wt_name}}</h5>
       <div [nbSpinner]="startApp"  class="instuction-loader" ></div>
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button class="start-button" (click)="onStartTrans(templateData,true)">{{showEnd?'End Test':'Start All'}}</button>
+      <button *ngIf="!showIndividualEnd" class="start-button" (click)="onStartTrans(templateData,true)">{{showEnd?'End Test':'Start All'}}</button>
+      <button *ngIf="showIndividualEnd" class="start-button" (click)="endSingleInstruction()">Finish Test</button>
 
 
     </div>
@@ -152,7 +153,7 @@
         <div class="test-case-div">
           <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
           <div [nbSpinner]="testCase?.ins_set_screen_name === currentOnGoingScreen"  class="instuction-loader" ></div>
-          <button class="start-button" (click)="onStart(testCase,testCases)">Start</button>
+          <button       class="start-button" (click)="onStart(testCase,testCases)">Start</button>
         </div>
         <ng-container *ngFor="let item of resultArr">
 
