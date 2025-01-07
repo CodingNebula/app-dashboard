@@ -254,14 +254,14 @@ console.log(this.chartData)
     this.chartData = [];
 console.log(this.reportData)
 
-debugger;
+    // this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
     this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed  )) })
 this.chartData.forEach((ele:any,ind)=>{
   if(ele.value===0){
     delete this.chartData[ind];
   }
   console.log(this.chartData,"chart")
-
+  debugger
 })
     this.updateCharts();
     $event.stopPropagation();
@@ -308,7 +308,7 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Started Time: ${item.extra.extras.createdAt  || 'N/A'} ${item.extra.extras.startedTime}`, 14, 80);
       doc.text(`Total Time Taken: ${ item.extra.totalTimeElapsed ? item.extra.totalTimeElapsed + ' sec' : 'N/A'} `, 14, 90);
       doc.text(`Description: ${item?.extra?.capabilities.description || 'N/A'}`, 14, 100);
-
+      doc.text(`Build Number: ${item?.extra?.capabilities.buildNumber || 'N/A'}`, 14, 110);
       // Add a line break
       doc.text('', 14, 110);
       // Add test cases
@@ -319,7 +319,7 @@ this.chartData.forEach((ele:any,ind)=>{
 
       // Prepare data for the table
       const testCaseData = this.testCases.map(testCase => ({
-        info: testCase.info,
+        info: testCase.successMessage,
         message: testCase.message,
         expectedResult: testCase.expected_result,
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',

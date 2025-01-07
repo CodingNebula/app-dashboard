@@ -50,7 +50,7 @@
   color: #d03140;
 }
 
-.discription-label {
+.description-label {
     word-break: break-word;
 }
 
@@ -59,6 +59,7 @@
     color: #00A3AB;
     font-weight: 800;
     cursor: pointer;
+  text-decoration: underline;
 }
 
 nb-accordion-item-header {
@@ -193,9 +194,9 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     font-size: 1.1em;
 
     span {
-        font-size: 0.7em !important;
+        font-size: 0.9em !important;
         color: #00A3AB;
-        text-decoration: underline;
+        //text-decoration: underline;
     }
 }
 

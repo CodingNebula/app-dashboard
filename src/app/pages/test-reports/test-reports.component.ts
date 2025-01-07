@@ -299,7 +299,7 @@ export class TestReportsComponent implements OnInit {
       doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
       doc.text(`Total Time Taken: ${this.timeTaken ? this.timeTaken + ' sec' : 'N/A'}`, 14, 90);
       doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
-
+      doc.text(`Build Number: ${item?.extra?.capabilities.buildNumber || 'N/A'}`, 14, 110);
       // Add a line break
       doc.text('', 14, 110);
 
@@ -311,7 +311,7 @@ export class TestReportsComponent implements OnInit {
 
       // Prepare data for the table
       const testCaseData = this.testCases.map(testCase => ({
-        info: testCase.info,
+        info: testCase.successMessage,
         message: testCase.message,
         expectedResult: testCase.expected_result,
         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',

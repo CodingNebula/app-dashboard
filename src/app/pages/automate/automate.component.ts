@@ -356,13 +356,13 @@ ngOnDestroy(){
     // }
 
     this.myForm = this.fb.group({
-      platform: [this.appCapabilities?.platformName, [Validators.required]],
+      platform: [{value:this.appCapabilities?.platformName, disabled:true} , [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
       package: [this.appCapabilities?.appPackage, [Validators.required]],
       automation: [this.appCapabilities?.automationName, [Validators.required]],
       device: [this.appCapabilities?.deviceName, [Validators.required]],
-      noReset: [(this.appCapabilities?.noReset).toString(), [Validators.required]],
-      hiddenApp: [(this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), [Validators.required]],
+      noReset: [{value:(this.appCapabilities?.noReset).toString(), disabled:true}, [Validators.required]],
+      hiddenApp: [{value:(this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), disabled:true}, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
       description:[this.appCapabilities?.description, []],
       buildNo:[this.appCapabilities?.buildNo, []],
@@ -518,7 +518,6 @@ ngOnDestroy(){
 
   onStartTrans(itemData,startAll) {
 
-    debugger
     let count =0;
     let totalTimeApp = Math.floor(Date.now() / 1000)
     let result = itemData;
@@ -530,8 +529,8 @@ ngOnDestroy(){
             id: index,
             screenName: instruction.ins_back_name,
             btnName: instruction.ins_element_name,
-            successMessage: `${instruction.ins_name} Passed`,
-            failedMessage: `${instruction.ins_name} Failed`,
+            successMessage: `${instruction.ins_name}`,
+            failedMessage: `${instruction.ins_name}`,
             roomId: localStorage.getItem("id"),
             moduleName: instruction.ins_set_screen_name
 
@@ -557,7 +556,7 @@ ngOnDestroy(){
     }
 // this.singleInstructionWebsocket(result)
 this.sendAllInstructionSocket(itemData,result)
-    debugger
+
   }
 
 
@@ -565,6 +564,8 @@ this.sendAllInstructionSocket(itemData,result)
     let count = 0;
 
     let totalTimeApp = Math.floor(Date.now() / 1000)
+
+
 
     let passedCount = 0;
     let failedCount = 0;
@@ -584,7 +585,7 @@ this.sendAllInstructionSocket(itemData,result)
 
       this.resultArr?.map((testCase) => {
         testCase.completeCount = count;
-        debugger
+
         if (testCase?.successMessage !== "End_Instructions") {
 
           if (testCase.message === 'SUCCESS') {
@@ -611,7 +612,7 @@ this.sendAllInstructionSocket(itemData,result)
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
 
-debugger
+
 
       let intsCount = itemData?.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
@@ -625,7 +626,6 @@ debugger
         crash_count:intsCount - passedCount - failedCount,
         extra: socketReport,
       }
-      debugger;
       this.accountService.postReportData(body).subscribe((resp) => {
         if (resp) {
           setTimeout(() => {
@@ -1139,8 +1139,8 @@ debugger
         id: index,
         screenName: item.ins_back_name,
         btnName: item.ins_element_name,
-        successMessage: `${item.ins_name} Passed`,
-        failedMessage: `${item.ins_name} Failed`,
+        successMessage: `${item.ins_name}`,
+        failedMessage: `${item.ins_name}`,
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
       }
