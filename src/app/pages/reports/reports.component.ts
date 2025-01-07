@@ -47,6 +47,15 @@ export class ReportsComponent {
   }
   ngOnInit() {
     this.apiService.getAllReports().subscribe((res: any) => {
+
+
+      res.sort((a, b) => {
+        const aDateTime = new Date(`${a.extra.extras?.createdAt}T${a.extra.extras?.startedTime}`);
+        const bDateTime = new Date(`${b.extra.extras?.createdAt}T${b.extra.extras?.startedTime}`);
+
+        return bDateTime.getTime() - aDateTime.getTime(); // Sort in ascending order
+      });
+      console.log(res, 'reports');
       this.reports = res;
       console.log(this.reports, 'reports');
       this.calculatePieChartData();
@@ -261,11 +270,30 @@ this.chartData.forEach((ele:any,ind)=>{
     delete this.chartData[ind];
   }
   console.log(this.chartData,"chart")
-  debugger
+
 })
     this.updateCharts();
     $event.stopPropagation();
     setTimeout(()=>{
+
+
+
+
+      const dates = new Date(item.extra?.extras.createdAt || 'N/A');
+
+// Check if 'dates' is a valid Date object
+      const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
+        ? dates.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }).replace(/\//g, ' ') // Replace slashes with a space
+        : 'N/A';
+
+
+
+
+
       this.capabilities = item?.extra?.capabilities;
       console.log(this.capabilities);
       this.testCases = item?.extra?.resultArr;
@@ -280,7 +308,7 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.setFontSize(16);
       doc.text(item?.app_name || 'App Name', 14, 20);
       doc.setFontSize(12);
-      doc.text(`Created At: ${item.extra.extras.createdAt || 'N/A'} `, 14, 30);
+      doc.text(`Created At: ${formattedDate} `, 14, 30);
 
       // Add device and platform information
       // Add device and platform information
@@ -305,10 +333,10 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${item.extra.extras.createdAt  || 'N/A'} ${item.extra.extras.startedTime}`, 14, 80);
+      doc.text(`Started Time: ${formattedDate}, ${item.extra.extras.startedTime}`, 14, 80);
       doc.text(`Total Time Taken: ${ item.extra.totalTimeElapsed ? item.extra.totalTimeElapsed + ' sec' : 'N/A'} `, 14, 90);
       doc.text(`Description: ${item?.extra?.capabilities.description || 'N/A'}`, 14, 100);
-      doc.text(`Build Number: ${item?.extra?.capabilities.buildNumber || 'N/A'}`, 14, 110);
+      doc.text(`Build Number: ${item?.extra?.capabilities.buildInfo || 'N/A'}`, 14, 110);
       // Add a line break
       doc.text('', 14, 110);
       // Add test cases

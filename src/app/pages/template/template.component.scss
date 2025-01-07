@@ -185,12 +185,25 @@ td{
 .accordian-container{
     width: 100%;
 }
+.accordian-body-div{
+display: flex;
+  justify-content: center;
+}
 .accordian-header{
     padding: 0.5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
+
+.empty-btn{
+  position: absolute;
+  left: 50%;
+  top:10%
+
+}
+
 .add-new{
     border: none;
     background-color: #00A3AB;
