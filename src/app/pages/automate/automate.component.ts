@@ -356,13 +356,13 @@ ngOnDestroy(){
     // }
 
     this.myForm = this.fb.group({
-      platform: [this.appCapabilities?.platformName, [Validators.required]],
+      platform: [{value:this.appCapabilities?.platformName, disabled:true} , [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
       package: [this.appCapabilities?.appPackage, [Validators.required]],
       automation: [this.appCapabilities?.automationName, [Validators.required]],
       device: [this.appCapabilities?.deviceName, [Validators.required]],
-      noReset: [(this.appCapabilities?.noReset).toString(), [Validators.required]],
-      hiddenApp: [(this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), [Validators.required]],
+      noReset: [{value:(this.appCapabilities?.noReset).toString(), disabled:true}, [Validators.required]],
+      hiddenApp: [{value:(this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), disabled:true}, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
       description:[this.appCapabilities?.description, []],
       buildNo:[this.appCapabilities?.buildNo, []],
@@ -529,8 +529,8 @@ ngOnDestroy(){
             id: index,
             screenName: instruction.ins_back_name,
             btnName: instruction.ins_element_name,
-            successMessage: `${instruction.ins_name} Passed`,
-            failedMessage: `${instruction.ins_name} Failed`,
+            successMessage: `${instruction.ins_name}`,
+            failedMessage: `${instruction.ins_name}`,
             roomId: localStorage.getItem("id"),
             moduleName: instruction.ins_set_screen_name
 
@@ -575,6 +575,14 @@ this.sendAllInstructionSocket(itemData,result)
 
     if (this.showEnd){
 
+      // this.socketSubscription.unsubscribe();
+      const now = new Date();
+      const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+      this.extras.startedTime=formattedTime;
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      this.extras.createdAt = formattedDate;
+
       this.resultArr?.map((testCase) => {
         testCase.completeCount = count;
 
@@ -597,33 +605,25 @@ this.sendAllInstructionSocket(itemData,result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
-        totalTimeElapsed:   Math.floor(Date.now() / 1000) - totalTimeApp,
+        totalTimeElapsed: Math.floor(Date.now() / 1000) -   this.totalTimeTaken,
       }
 
 
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
-      this.resultArr?.map((testCase) => {
-        if (testCase?.successMessage !== "End_Instructions") {
 
-          if (testCase.message === 'SUCCESS') {
-            passedCount++;
-          } else if (testCase.message === 'FAILED') {
-            failedCount++;
-          } else if (testCase.message === 'Untested') {
-            untestedCount++;
-          }
-        }
-      });
+
+
+      let intsCount = itemData?.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
       const body = {
         applicationId: localStorage.getItem('app_id'),
         filename: itemData?.wt_desc,
         app_version: "2.1",
-        totalTestCase: result?.length - 1,
+        totalTestCase:intsCount,
         passed: passedCount,
         failed: failedCount,
-        crash_count: untestedCount,
+        crash_count:intsCount - passedCount - failedCount,
         extra: socketReport,
       }
       this.accountService.postReportData(body).subscribe((resp) => {
@@ -893,6 +893,9 @@ this.sendAllInstructionSocket(itemData,result)
       this.startCounting(this.individualCount);
       let timeChecked = false;
       this.showEnd = true
+
+      this.totalTimeTaken =  Math.floor(Date.now() / 1000)  ;
+
       this.webSocketService.getSubject().subscribe((res) => {
 
         if (!timeChecked) {
@@ -1136,8 +1139,8 @@ this.sendAllInstructionSocket(itemData,result)
         id: index,
         screenName: item.ins_back_name,
         btnName: item.ins_element_name,
-        successMessage: `${item.ins_name} Passed`,
-        failedMessage: `${item.ins_name} Failed`,
+        successMessage: `${item.ins_name}`,
+        failedMessage: `${item.ins_name}`,
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
       }
@@ -1159,7 +1162,7 @@ this.sendAllInstructionSocket(itemData,result)
 
     this.sendInstructions(res)
 
-    debugger;
+
     // const obj = {
     //   screenName: item?.ins_back_name,
     //   btnName: item?.ins_element_name
@@ -1240,7 +1243,7 @@ this.recursiveInstructions(resArr,0)
     let passedCount = 0;
     let failedCount = 0;
     let untestedCount = 0;
-    this.socketSubscription.unsubscribe();
+    // this.socketSubscription.unsubscribe();
 
       this.resultArr?.map((testCase) => {
         testCase.completeCount = count;
@@ -1273,9 +1276,9 @@ this.recursiveInstructions(resArr,0)
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
 
-let totalCount =this.templateData.reduce((acc, item) => acc + item.testCase.length, 0);
+    let totalCount =this.templateData.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
-    debugger;
+
       const body = {
         applicationId: localStorage.getItem('app_id'),
         app_version: "2.1",
