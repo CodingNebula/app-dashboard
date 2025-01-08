@@ -32,9 +32,6 @@ export class TemplateDialogComponent {
 
   ngOnInit() {
     this.appDetails = this.applicationDataService.getData();
-    console.log(this.appDetails?.instructions);
-
-    console.log(this.selectedType);
     this.appName = localStorage.getItem('app_name');
     
 
@@ -56,7 +53,6 @@ export class TemplateDialogComponent {
       templates: [[], Validators.required],
     })
 
-    console.log(this.testCaseArr);
     
 
   }

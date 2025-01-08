@@ -28,7 +28,6 @@ export class TemplateComponent {
     private accountService: AccountService,
     private applicationDataService: ApplicationDataService) {
       const appDetails = this.applicationDataService.getData();
-    console.log(appDetails);
 
 
 
@@ -44,7 +43,6 @@ export class TemplateComponent {
 
   openDialog(action: string, type: string, id?: string) {
     // Open the dialog and pass data to it using 'context'
-    console.log(id);
 
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
       context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr },
@@ -56,21 +54,18 @@ export class TemplateComponent {
         if (result?.confirmed) {
           if (result.selectedAction === 'testCase') {
             if(result.selectedType === 'name'){
-              console.log(result.data);
 
               const details = {
                 screenName: result.data.test_case_name,
                 applicationId: localStorage.getItem('app_id'),
                 extra: {},
             }
-              console.log(result.data);
 
 
 
               // this.saveApplicationData(appDetails);
               this.accountService.postPageName(details).subscribe((resp) => {
                 if(resp){
-                  console.log(resp);
 
                   // this.testCasesArray.push(resp[0]);
                   // this.screenNameId = resp[0]?.id
@@ -85,7 +80,6 @@ export class TemplateComponent {
             }
 
             if(result.selectedType === 'instruction'){
-              console.log(result.data);
 
               let body = {
                 instruction_set_id: id,  // This value can be dynamic
@@ -98,13 +92,11 @@ export class TemplateComponent {
                 })
             };
 
-            console.log(body);
 
 
 
               this.accountService.postPageInstructions(body).subscribe((resp) => {
                 if(resp){
-                  console.log(resp);
 this.getAllPages()
                   // this.testCasesArray.push(resp[0]);
                 //   if (this.testCasesArray.length > 0) {
@@ -112,9 +104,6 @@ this.getAllPages()
                 // }
                 //   this.tempTestCase.instructions = result.data.instructionArr;
                 //   this.testCasesArray.push(this.tempTestCase);
-                //   console.log(this.tempTestCase);
-                //
-                //   console.log(this.testCasesArray);
 
                 }
               })
@@ -124,7 +113,6 @@ this.getAllPages()
           }
           else if (result.selectedAction === 'template') {
             if(result.selectedType === 'name'){
-              console.log(result.data,'datum');
 
             //   const details = {
             //     screenName: result.data.test_case_name,
@@ -138,9 +126,6 @@ this.getAllPages()
               description: result.data.description,
               extra: {},
           }
-
-
-              console.log(result.data);
 
 
               // this.saveApplicationData(appDetails);
@@ -194,13 +179,9 @@ this.getAllPages()
               };
           });
 
-          console.log(screens);
-              console.log(this.templateId,'tempid');
               let appId=localStorage.getItem('app_id');
-              console.log(result,'res')
               this.accountService.postTemplates(id, body).subscribe((resp) => {
                 if(resp){
-                  console.log(resp);
 
                 //   if (this.templateArray.length > 0) {
                 //     this.templateArray.pop();
@@ -209,7 +190,6 @@ this.getAllPages()
                   // this.tempTemplate.screens = screens;
                   //
                   // this.templateArray.push(this.tempTemplate);
-                  // console.log(this.templateArray);
                   this.getAllTemplates();
 
                 }
@@ -223,7 +203,6 @@ this.getAllPages()
   }
 
   automateTemplate(template: any) {
-    console.log(template);
 
     const capabilities = {
       platformName: "Android",
@@ -278,7 +257,6 @@ const sortedInstructions = result
   })
 
 // sortedInstructions.forEach((instruction: any) => {
-//   console.log(instruction);
 // });
 
 

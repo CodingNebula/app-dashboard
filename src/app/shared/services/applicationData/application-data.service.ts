@@ -12,7 +12,6 @@ export class ApplicationDataService {
 
   setData(type: string, data: any): void {
     this.formData[type] = data;
-    console.log(this.formData);
     
   }
 

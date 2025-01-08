@@ -22,7 +22,6 @@ export class CapabilitiesComponent {
     private router: Router,
     private accountService: AccountService,
   ) {
-    console.log(this.router.getCurrentNavigation()?.extras?.state,'------>shared data');
 
   }
 
@@ -53,7 +52,6 @@ export class CapabilitiesComponent {
 
     this.appDetails = this.applicationDataService.getData();
 
-    console.log(this.appDetails);
 
     this.appName = localStorage.getItem('app_name');
 
@@ -75,7 +73,6 @@ export class CapabilitiesComponent {
 
 
   onSubmit() {
-    console.log(this.appDetails,'sda')
     if (this.myForm.valid) {
       this.showSuccessAlert = true
 
@@ -94,7 +91,6 @@ export class CapabilitiesComponent {
           name:this.appDetails?.app_details?.app_name
         }).subscribe(
         (response) => {
-          console.log(response);
 
           setTimeout(() => {
             this.router.navigateByUrl('pages/instructions')

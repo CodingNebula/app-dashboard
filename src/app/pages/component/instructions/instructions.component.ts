@@ -156,7 +156,6 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
             backendName: result.data.formValue.actions, // Server-specific backend name for the instruction
             extra: {}, // Additional metadata or information (optional)
           }
-          console.log(instructionDetails);
 
           // this.saveApplicationData(appDetails);
           let app_id = localStorage.getItem('app_id');
@@ -217,7 +216,6 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
-        console.log(data);
 
         data.forEach(item => {
           if (item.element_name) {
@@ -229,11 +227,9 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
               item.element_name = resp.map(el => el.replace(/["{}]/g, '').trim());
             }
 
-            console.log(item);
           }
         });
 
-        console.log(data);
 
         this.applicationDataArr = data;
         this.applicationDataService.setData('instructions', data);

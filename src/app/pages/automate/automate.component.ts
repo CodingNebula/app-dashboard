@@ -496,7 +496,6 @@ ngOnDestroy(){
   //   this.startInterval = setInterval(() => {
   //     this.individualCount = individualCount + 1;
   //
-  //     // console.log('count started:', this.individualCount);
   //   }, 1000);
   // }
 
@@ -791,7 +790,6 @@ this.sendAllInstructionSocket(itemData,result)
 
         if (!timeChecked) {
           const currentDate = new Date();
-
         }
 
 
@@ -800,7 +798,6 @@ this.sendAllInstructionSocket(itemData,result)
             res.extra = {};
           }
           const currentTime = Date.now() / 1000;
-          console.log(this.individualCount, 'indc')
           this.startApp = false;
           this.currentOnGoingScreen = res.message.moduleName;
           res.message.timeSpent = (currentTime- startInterval).toFixed(2);
@@ -890,122 +887,174 @@ this.sendAllInstructionSocket(itemData,result)
   }
 
   singleInstructionWebsocket(allInstructions) {
-    let count = 0;
-    let indexCounter = 0
+    this.showIndividualEnd = true;
+    
+    
 
-    let totalTimeApp = Math.floor(Date.now() / 1000)
-
-    this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
-    console.log(allInstructions,'allisnnsdfd');
-    console.log({...allInstructions[indexCounter], singleCase: true},'seewhatwentt');
-    let timeChecked = false;
-    this.showEnd = true
-    this.webSocketService.getSubject().subscribe((res) => {
-
-      if (!timeChecked) {
-        const currentDate = new Date();
-
-
+    
+    const res = {
+        id: 0,
+        screenName: allInstructions.ins_back_name,
+        btnName: allInstructions.ins_element_name,
+        successMessage: `${allInstructions.ins_name}`,
+        failedMessage: `${allInstructions.ins_name}`,
+        roomId: localStorage.getItem("id"),
+        moduleName: allInstructions.ins_set_screen_name,
       }
+    
 
-      if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
-        if (!res?.extra) {
-          res.extra = {};
-        }
-        this.startApp = false;
-        this.currentOnGoingScreen = res.message.moduleName;
-        console.log(res, 'lpos');
-        console.log(this.individualCount, 'indc')
-        res.message.timeSpent = this.individualCount;
-        res.message.totalTimeTaken = count;
+      let startInterval = Date.now() / 1000;
+      this.webSocketService.sendTestCaseRequest({...res, singleCase: true});
+      this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+        
+        if (res?.message && res?.message?.info) {
+          this.currentOnGoingScreen = res.message.moduleName;
+          let currentTime = Date.now() / 1000;
+          const now = new Date();
+          const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+          this.extras.createdAt = formatdate;
 
-        clearInterval(this.startInterval);
-        this.individualCount = 0;
-        // Restart the interval by calling the function
-        this.startCounting(this.individualCount)
-        indexCounter += 1;
-        this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
+          const hours = String(now.getHours()).padStart(2, '0'); // Get the hours, ensure two digits
+          const minutes = String(now.getMinutes()).padStart(2, '0'); // Get the minutes, ensure two digits
+          const seconds = String(now.getSeconds()).padStart(2, '0'); // Get the seconds, ensure two digits
+          this.extras.startedTime = `${hours}:${minutes}:${seconds}`;
+          res.startedTime = `${hours}:${minutes}:${seconds}`;
+          res.createdAt=formatdate;
+          res.message.timeSpent = (currentTime- startInterval).toFixed(2);
 
-        if (res?.message?.successMessage !== "End Instructions") {
-
+          startInterval = Date.now() / 1000;
+          this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent) ;
           this.resultArr.push(res.message);
 
-          this.scrollToBottom();
-
-        }
-        if (res?.message?.successMessage === "End Instructions") {
-          clearInterval(this.counterInterval);
-          res.extra.timeTaken = Math.floor(Date.now() / 1000) -  count;
-          res.message.totalTimeTaken =  Math.floor(Date.now() / 1000) -  totalTimeApp;
-
-          const now = new Date();
-          const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-          this.extras.startedTime = formattedTime;
-          res.startedTime=formattedTime;
-          const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-          this.extras.createdAt = formattedDate;
-          const socketReport = {
-            capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
-            resultArr: this.resultArr,
-            extras: this.extras,
-            totalTimeElapsed: Math.floor(Date.now() / 1000) -  totalTimeApp,
-
-          }
-
-          let passedCount = 0;
-          let failedCount = 0;
-          let untestedCount = 0;
-
-          // Iterate over the reports to count the number of passed, failed, and untested test cases
-          this.resultArr?.map((testCase) => {
-            testCase.completeCount = count;
-            if (testCase?.successMessage !== "End_Instructions") {
-
-              if (testCase.message === 'SUCCESS') {
-                passedCount++;
-              } else if (testCase.message === 'FAILED') {
-                failedCount++;
-              } else if (testCase.message === 'Untested') {
-                untestedCount++;
+          this.testCases.map((item) => {
+            item.testCase.map((inst) => {
+              if(inst.ins_id === allInstructions.ins_id){
+                inst.status = res.message.message;
+                return this.testCases;
               }
-            }
-          });
-
-
-          const body = {
-            applicationId: localStorage.getItem('app_id'),
-            filename: allInstructions?.wt_desc,
-            app_version: "2.1",
-            totalTestCase: allInstructions?.length - 1,
-            passed: passedCount,
-            failed: failedCount,
-            crash_count: untestedCount,
-            extra: socketReport,
-          }
-          this.accountService.postReportData(body).subscribe((resp) => {
-            if (resp) {
-
-              setTimeout(() => {
-                this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
-              }, 1000)
-
-            }
+            })
           })
+          // indexCounter += 1;
+          // this.recursiveInstructions(instructionsArr,indexCounter);
+
         }
 
-      }
-    }, (err) => {
-      console.log(err,'err')
 
-      clearInterval(this.startInterval);
-    })
+
+      })
+
+    // let count = 0;
+    // let indexCounter = 0;
+
+    // let totalTimeApp = Math.floor(Date.now() / 1000)
+
+    // this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
+    // let timeChecked = false;
+    // this.showEnd = true
+    // this.webSocketService.getSubject().subscribe((res) => {
+
+    //   if (!timeChecked) {
+    //     const currentDate = new Date();
+
+
+    //   }
+
+    //   if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
+    //     if (!res?.extra) {
+    //       res.extra = {};
+    //     }
+    //     this.startApp = false;
+    //     this.currentOnGoingScreen = res.message.moduleName;
+    //     res.message.timeSpent = this.individualCount;
+    //     res.message.totalTimeTaken = count;
+
+    //     clearInterval(this.startInterval);
+    //     this.individualCount = 0;
+    //     // Restart the interval by calling the function
+    //     this.startCounting(this.individualCount)
+    //     indexCounter += 1;
+    //     this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
+
+    //     if (res?.message?.successMessage !== "End Instructions") {
+
+    //       this.resultArr.push(res.message);
+
+    //       this.scrollToBottom();
+
+    //     }
+    //     if (res?.message?.successMessage === "End Instructions") {
+    //       clearInterval(this.counterInterval);
+    //       res.extra.timeTaken = Math.floor(Date.now() / 1000) -  count;
+    //       res.message.totalTimeTaken =  Math.floor(Date.now() / 1000) -  totalTimeApp;
+
+    //       const now = new Date();
+    //       const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+    //       this.extras.startedTime = formattedTime;
+    //       res.startedTime=formattedTime;
+    //       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    //       this.extras.createdAt = formattedDate;
+    //       const socketReport = {
+    //         capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
+    //         resultArr: this.resultArr,
+    //         extras: this.extras,
+    //         totalTimeElapsed: Math.floor(Date.now() / 1000) -  totalTimeApp,
+
+    //       }
+
+    //       let passedCount = 0;
+    //       let failedCount = 0;
+    //       let untestedCount = 0;
+
+    //       // Iterate over the reports to count the number of passed, failed, and untested test cases
+    //       this.resultArr?.map((testCase) => {
+    //         testCase.completeCount = count;
+    //         if (testCase?.successMessage !== "End_Instructions") {
+
+    //           if (testCase.message === 'SUCCESS') {
+    //             passedCount++;
+    //           } else if (testCase.message === 'FAILED') {
+    //             failedCount++;
+    //           } else if (testCase.message === 'Untested') {
+    //             untestedCount++;
+    //           }
+    //         }
+    //       });
+
+
+    //       const body = {
+    //         applicationId: localStorage.getItem('app_id'),
+    //         filename: allInstructions?.wt_desc,
+    //         app_version: "2.1",
+    //         totalTestCase: allInstructions?.length - 1,
+    //         passed: passedCount,
+    //         failed: failedCount,
+    //         crash_count: untestedCount,
+    //         extra: socketReport,
+    //       }
+    //       this.accountService.postReportData(body).subscribe((resp) => {
+    //         if (resp) {
+
+    //           setTimeout(() => {
+    //             this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+    //           }, 1000)
+
+    //         }
+    //       })
+    //     }
+
+    //   }
+    // }, (err) => {
+    //   console.log(err,'err')
+
+    //   clearInterval(this.startInterval);
+    // })
 
   }
   onStart(item,testCases) {
-    this.showEnd = true
+    // this.showEnd = true
     this.showIndividualEnd = true;
+    item.hideStart = true;
     // this.singleInstructionTimeTotal = Math.floor(Date.now() / 1000)
-    console.log(testCases);
 
 
 
@@ -1059,7 +1108,6 @@ this.sendAllInstructionSocket(itemData,result)
     //   btnName: item?.ins_element_name
     // }
 
-    // console.log(obj);
 
   }
 
@@ -1129,6 +1177,7 @@ this.recursiveInstructions(resArr,0)
   }
 
   endSingleInstruction(){
+    
     let count = 0;
 
     let passedCount = 0;
@@ -1533,9 +1582,15 @@ this.recursiveInstructions(resArr,0)
 
     let idCounter = 1;
     this.templateData?.screens.map((item) => {
-      item?.instructions?.map((testCase) => {
+      item?.instructions?.map((inst) => {
         // Check if testCase with the same ins_set_id is already present in testCases array
         // Check if the current ins_set_id exists in this.testCases
+        
+        inst.showSingleInstruction = false;
+        inst.status = '';
+
+        
+        
         const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
 
         if (!exists) {
@@ -1543,13 +1598,14 @@ this.recursiveInstructions(resArr,0)
             id: idCounter++,
             ins_set_id: item.ins_set_id,
             ins_set_screen_name: item.ins_set_screen_name, // Include ins_set_screen_name for reference
+            hideStart: false,
             testCase: item.instructions  // Add the entire instructions array as a nested property
           });
         }
       });
     });
 
-    console.log(this.testCases);
+    
   }
 
 
