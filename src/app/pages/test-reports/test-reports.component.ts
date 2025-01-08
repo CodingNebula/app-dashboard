@@ -237,6 +237,8 @@ export class TestReportsComponent implements OnInit {
 
 
   downloadPDF(item, $event: Event) {
+    console.log(item);
+    
 
     this.chartData = [];
     this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
@@ -268,20 +270,20 @@ export class TestReportsComponent implements OnInit {
 
       console.log(formattedDate);
 
-      debugger;
-
       const doc = new jsPDF();
 
       // Add report header
       doc.setFontSize(16);
-      doc.text(item?.app_name || 'App Name', 14, 20);
+      doc.setFont("helvetica", "bold");
+      doc.text(this.capabilities?.app_name || 'App Name', 14, 20);
       doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
       doc.text(`Created At: ${formattedDate}`, 14, 30);
 
       // Add device and platform information
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
-      doc.text('Device Information', 14, 40);
+      doc.text('Device Information :- ', 14, 40);
       doc.setFont("helvetica", "normal");
       if (this.echartsInstance) {
         // Get chart as Base64 image
@@ -308,7 +310,7 @@ export class TestReportsComponent implements OnInit {
 
       // Add test cases
       doc.setFontSize(14);
-      doc.text('Test Cases', 14, 120);
+      doc.text('Test Cases', 14, 125);
 
 
       // Prepare data for the table

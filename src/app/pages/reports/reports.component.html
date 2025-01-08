@@ -33,12 +33,7 @@
           <tr *ngFor="let reportData of reports; let j = index" (click)="openReportDetail(reportData, $event)">
             <!-- <td><input type="checkbox"></td> -->
              <td class="report-data">{{j+1}}</td>
-            <td  class="report-data">
-              <div class="pdf-name">
-                <!-- <ion-img class="pdf-icon" src="../../../assets/pdf/Group1231.jpg"></ion-img> -->
-                <label>{{reportData.app_name}}</label>
-              </div>
-            </td>
+            <td  class="report-data">{{reportData.app_name}}</td>
             <td class="report-data">{{reportData.application_version}}</td>
 
             <td class="report-data">{{reportData.testcase_performed}}</td>
