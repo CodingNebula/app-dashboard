@@ -15,9 +15,9 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
-      <div class="form-row button-row">
+
         <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
-        </div>
+
     </nb-card-footer>
   </nb-card>
 
@@ -30,15 +30,15 @@
                 <label for="instructionArr">Instruction:</label>
                 <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
                   <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.instruction_name}}</nb-option>
-                  
+
                 </nb-select>
                 <div *ngIf="instruction.get('instructionArr').touched && instruction.get('instructionArr').invalid" class="error-message">
                   <small *ngIf="instruction.get('instructionArr').hasError('required')">Platform Name is required!</small>
                 </div>
               </div>
             </div>
-          
-            
+
+
           </form>
     </nb-card-body>
     <nb-card-footer>
@@ -77,15 +77,15 @@
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
                   <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.test_case_name}}</nb-option>
-                  
+
                 </nb-select>
                 <div *ngIf="templateForm.get('templates').touched && templateForm.get('templates').invalid" class="error-message">
                   <small *ngIf="templateForm.get('templates').hasError('required')">Platform Name is required!</small>
                 </div>
               </div>
             </div> -->
-          
-            
+
+
           </form>
     </nb-card-body>
     <nb-card-footer>
@@ -105,15 +105,15 @@
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
                   <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.screen_name}}</nb-option>
-                  
+
                 </nb-select>
                 <div *ngIf="testCases.get('templates').touched && testCases.get('templates').invalid" class="error-message">
                   <small *ngIf="testCases.get('templates').hasError('required')">Platform Name is required!</small>
                 </div>
               </div>
             </div>
-          
-            
+
+
           </form>
     </nb-card-body>
     <nb-card-footer>
