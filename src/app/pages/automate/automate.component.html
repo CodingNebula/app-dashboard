@@ -153,21 +153,33 @@
         <div class="test-case-div">
           <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
           <div [nbSpinner]="testCase?.ins_set_screen_name === currentOnGoingScreen"  class="instuction-loader" ></div>
-          <button *ngIf="!showEnd"  class="start-button" (click)="onStart(testCase,testCases)">Start</button>
+          <button *ngIf="!testCase.hideStart"  class="start-button" (click)="onStart(testCase,testCases)">Start</button>
         </div>
-        <ng-container *ngFor="let item of resultArr">
+        <div >
+          <ng-container *ngFor="let item of testCase.testCase">
+            <div *ngIf="item.ins_set_id === testCase.ins_set_id" class="test-case-div test-case-body-data">
+            <h6>{{item?.ins_name}}</h6>
+            <button *ngIf="!testCase.hideStart && !item?.status" class="start-button" (click)="singleInstructionWebsocket(item, testCases)">Run</button>
+            <div *ngIf="item?.status" [ngClass]="item?.status === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.status}}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+        
 
-          <div *ngIf="item.moduleName === testCase.ins_set_screen_name" class="test-case-div test-case-body-data">
+        <!-- <ng-container *ngFor="let item of resultArr">
 
-            <h6>{{item?.successMessage || item?.failedMessage}}</h6>
+          <div *ngIf="item.moduleName === testCase.ins_set_screen_name" class="test-case-div test-case-body-data"> -->
+
+            <!-- <h6>{{item?.successMessage || item?.failedMessage}}</h6> -->
 <!--            <div>{{item.moduleName}}</div>-->
-            <span *ngIf=" item.message" class="status-message"
-                  [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>
+            <!-- <span *ngIf=" item.message" class="status-message"
+                  [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
             <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
             <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
             <!-- </div> -->
-          </div>
-        </ng-container>
+          <!-- </div>
+        </ng-container> -->
       </ng-container>
 
 
