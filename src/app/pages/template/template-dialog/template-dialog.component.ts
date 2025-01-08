@@ -22,6 +22,7 @@ export class TemplateDialogComponent {
   public selectedType: string;
   public testCases: FormGroup;
   public appName: any;
+  public editData:any;
 
   constructor(
     private dialogRef: NbDialogRef<TemplateDialogComponent>,
@@ -53,9 +54,43 @@ export class TemplateDialogComponent {
       templates: [[], Validators.required],
     })
 
-    
+this.patchFormValues()
 
   }
+
+
+  patchFormValues() {
+    if (this.editData) {
+      // Assuming 'screen_name' exists in 'editData'
+      this.testCaseName.patchValue({
+        test_case_name: this.editData.screen_name,
+        elem_name: this.editData.screen_name,
+        normal_name: this.editData.screen_name,
+      });
+
+      // Optionally, you can patch the 'instruction' or 'template' values similarly
+      if (this.editData.instructionArr) {
+        this.instruction.patchValue({
+          instructionArr: this.editData.instructionArr
+        });
+      }
+
+      if (this.editData.templateName) {
+        this.templateForm.patchValue({
+          templateName: this.editData.templateName,
+          description: this.editData.description,
+        });
+      }
+
+      if (this.editData.testCases) {
+        this.testCases.patchValue({
+          templates: this.editData.testCases,
+        });
+      }
+    }
+  }
+
+
 
   onSubmit() {
     if (this.testCaseName.valid) {

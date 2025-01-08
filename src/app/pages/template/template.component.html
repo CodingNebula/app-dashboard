@@ -20,9 +20,23 @@
               <nb-accordion-item>
                 <nb-accordion-item-header class="accordian-header">
                   {{ testCase?.screen_name }}
+
+                  <nb-icon [nbPopover]="list" icon="edit-outline" nbPopoverPlacement="bottom-end" ></nb-icon>
                   <button class="add-new"
                     (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
                     Instructions</button>
+
+
+                  <ng-template #list>
+                    <nb-card class="margin-bottom-0">
+                      <nb-list>
+                        <nb-list-item  (click)="openDialog('testCase', 'name','',testCase)" >Edit</nb-list-item>
+                        <nb-list-item   (click)="openDeleteDailog(testCase)" >Delete</nb-list-item>
+                        <nb-list-item   (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)" >Add Instructions</nb-list-item>
+                      </nb-list>
+                    </nb-card>
+                  </ng-template>
+
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
                   <div  *ngIf="testCase?.instructions.length !== 0" >
@@ -65,6 +79,19 @@
                   <div *ngIf="template?.wt_desc" [nbTooltip]="template?.wt_desc" class="template-description">
                     Description: <span>{{template?.wt_desc}}</span>
                   </div>
+
+                  <nb-icon [nbPopover]="listTemplate" icon="edit-outline" nbPopoverPlacement="bottom-end" ></nb-icon>
+                  <ng-template #listTemplate>
+                    <nb-card class="margin-bottom-0">
+                      <nb-list>
+                        <nb-list-item  (click)="openDialog('template', 'name','',template)" >Edit</nb-list-item>
+                        <nb-list-item   (click)="openDeleteDailog(template)" >Delete</nb-list-item>
+                        <nb-list-item   (click)="openDialog('template', 'testCase',template?.wt_id)" >Add Screens</nb-list-item>
+                      </nb-list>
+                    </nb-card>
+                  </ng-template>
+
+
                   <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button>
                   <nb-icon  *ngIf="template?.screens.length !== 0"   (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
                 </nb-accordion-item-header>
