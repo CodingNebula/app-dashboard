@@ -12,6 +12,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { TemplateComponent } from './template/template.component';
 import { CapabilitiesComponent } from './component/capabilities/capabilities.component';
 import { InstructionsComponent } from './component/instructions/instructions.component';
+import {AuthGuard} from "../shared/services/guard/auth.guard";
 
 const routes: Routes = [{
   path: '',
@@ -19,14 +20,17 @@ const routes: Routes = [{
   children: [
     {
       path: 'application',
+      canActivate: [AuthGuard],
       component: ApplicationComponent
     },
     {
       path: 'test-cases',
+      canActivate: [AuthGuard],
       component: TestCasesComponent,
     },
     {
       path: 'automate',
+      canActivate: [AuthGuard],
       component: AutomateComponent,
     },
     {
@@ -36,14 +40,17 @@ const routes: Routes = [{
     },
     {
       path: 'test-reports',
+      canActivate: [AuthGuard],
       component: TestReportsComponent,
     },
     {
       path:'reports',
+      canActivate: [AuthGuard],
       component:ReportsComponent
     },
     {
       path:'template',
+      canActivate: [AuthGuard],
       component: TemplateComponent
     },
     {
@@ -52,17 +59,19 @@ const routes: Routes = [{
     },
     {
       path: 'capabilities',
+      canActivate: [AuthGuard],
       component: CapabilitiesComponent
     },
     {
       path: 'instructions',
+      canActivate: [AuthGuard],
       component: InstructionsComponent
     },
     {
       path: '**',
       component: NotFoundComponent,
     },
-   
+
   ],
 }];
 

@@ -266,10 +266,6 @@ export class TestReportsComponent implements OnInit {
         }).replace(/\//g, ' ') // Replace slashes with a space
         : 'N/A';
 
-      console.log(formattedDate);
-
-      debugger;
-
       const doc = new jsPDF();
 
       // Add report header
