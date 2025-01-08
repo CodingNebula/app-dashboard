@@ -24,4 +24,5 @@ export class PagesComponent {
   this.showAlert = this.webSocketService.showAlert
   }
   menu = MENU_ITEMS;
+
 }

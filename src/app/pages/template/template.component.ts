@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, TemplateRef, ViewChild} from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { TemplateDialogComponent } from './template-dialog/template-dialog.component';
 import { Router } from '@angular/router';
 import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../shared/services/account/account.service';
+import {DeleteDialogComponent} from "../component/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'ngx-template',
@@ -21,6 +22,9 @@ export class TemplateComponent {
   public tempTestCase: any = {};
   public tempTemplate: any = {};
   public appName : any;
+
+
+  @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
 
   constructor(
     private dialogService: NbDialogService,
@@ -41,11 +45,87 @@ export class TemplateComponent {
     this.appName = localStorage.getItem('app_name');
   }
 
-  openDialog(action: string, type: string, id?: string) {
+  openDeleteDailog(item){
+
+
+    const dialogRef = this.dialogService.open(DeleteDialogComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+      context: {itemToDelete: item}
+    });
+
+
+    dialogRef.onClose.subscribe((result) => {
+
+      if (result) {
+        if (result.confirmed) {
+
+          // this.saveApplicationData(appDetails);
+          let app_id = localStorage.getItem('app_id');
+
+
+          this.deleteTestcase(result.data)
+
+        }
+      }
+    });
+
+  }
+
+
+  deleteTestcase(ins_id) {
+
+    const userId = localStorage.getItem('app_id')
+
+
+    let url
+    if(ins_id.testcase_id !== undefined){
+       url = `${userId}/${ins_id.testcase_id}`
+
+      this.accountService.deleteTestCase(url).subscribe((response) => {
+        if (response) {
+
+          this.getAllPages();
+
+        }
+      }, (error) => {
+        console.error('Error saving test case:', error);
+      });
+
+
+    }else{
+      url =  `${userId}/${ins_id.template_id}`
+      debugger;
+      this.accountService.deleteTemplate(url).subscribe((response) => {
+        if (response) {
+
+          this.getAllTemplates();
+
+        }
+      }, (error) => {
+        console.error('Error saving test case:', error);
+      });
+
+    }
+
+
+
+
+
+
+
+
+
+
+  }
+
+
+  openDialog(action: string, type: string, id?: any, editData?: any) {
     // Open the dialog and pass data to it using 'context'
 
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
-      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr },
+      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr ,editData:editData},
     });
 
 
@@ -97,7 +177,7 @@ export class TemplateComponent {
 
               this.accountService.postPageInstructions(body).subscribe((resp) => {
                 if(resp){
-this.getAllPages()
+                  this.getAllPages()
                   // this.testCasesArray.push(resp[0]);
                 //   if (this.testCasesArray.length > 0) {
                 //     this.testCasesArray.pop();
