@@ -42,7 +42,7 @@
             <td>{{reportData.application_version}}</td>
 
             <td>{{reportData.testcase_performed}}</td>
-            <td>{{reportData?.extra?.extras?.createdAt| date:'dd-MM-yy '}}</td>
+            <td>{{reportData?.extra?.extras?.createdAt| date:'dd-MM-yy '}} {{reportData?.extra?.extras?.startedTime}}</td>
             <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>
           </tr>
         </tbody>

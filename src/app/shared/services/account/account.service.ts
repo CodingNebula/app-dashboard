@@ -153,6 +153,44 @@ export class AccountService {
     )
   }
 
+  putInstruction(id: any, request: any) {
+    return this.apiService.updateWithoutModal(`instruction/${id}`, request).pipe(
+      map(resp => {
+          if (resp) {
+            return resp;
+          }
+          else {
+            throw new Error('Invalid Response');
+          }
+        }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
+  deleteInstruction(id: any, request: any) {
+    return this.apiService.deleteWithoutModal(`instruction/${id}`, request).pipe(
+      map(resp => {
+          if (resp) {
+            return resp;
+          }
+          else {
+            throw new Error('Invalid Response');
+          }
+        }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
   postPageName(request: any) {
     return this.apiService.postWithoutModel(`page`, request).pipe(
       map(resp => {

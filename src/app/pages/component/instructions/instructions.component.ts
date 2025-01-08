@@ -102,21 +102,40 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
 
 
-  openDeleteDailog(){
+  openDeleteDailog(item){
 
 
-
-    this.dialog = this.dialogService.open(DeleteDialogComponent, {
+    const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
       closeOnBackdropClick: true,
       closeOnEsc: true,
+      context: {itemToDelete: item}
+    });
+
+
+    dialogRef.onClose.subscribe((result) => {
+      debugger
+      if (result) {
+        if (result.confirmed) {
+
+          // this.saveApplicationData(appDetails);
+          let app_id = localStorage.getItem('app_id');
+
+
+            this.deleteInstruction(app_id, result.data.insId)
+
+
+        }
+      }
     });
 
   }
 
   openDialog(item ?:any) {
     // Open the dialog and pass data to it using 'context'
-    const dialogRef = this.dialogService.open(InstructionsDialogComponent, {});
+    const dialogRef = this.dialogService.open(InstructionsDialogComponent, {
+      context : {itemToEdit: item}
+    });
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
@@ -131,31 +150,62 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
           //     extra: JSON.stringify(req.body.extra),
           // }
 
-          const instructionDetails = {
-            name: result.data.normal_name, // Name of the instruction provided by the user
-            elementName: result.data.elem_name, // Frontend-specific element name
-            backendName: result.data.actions, // Server-specific backend name for the instruction
+          const instructionDetails: any = {
+            name: result.data.formValue.normal_name, // Name of the instruction provided by the user
+            elementName: result.data.formValue.elem_name, // Frontend-specific element name
+            backendName: result.data.formValue.actions, // Server-specific backend name for the instruction
             extra: {}, // Additional metadata or information (optional)
           }
           console.log(instructionDetails);
 
           // this.saveApplicationData(appDetails);
-          const app_id = localStorage.getItem('app_id');
-          this.accountService.postInstruction(app_id, instructionDetails).subscribe((response) => {
-            if (response) {
-              // After successful post, update applicationDataArr
-              console.log(response[0]);
-
-              this.applicationDataArr.push(response[0]); // Assuming the response contains the newly saved item
-              this.applicationDataService.setData('instructions', response[0]);
-            }
-          }, (error) => {
-            console.error('Error saving test case:', error);
-          });
+          let app_id = localStorage.getItem('app_id');
+          if (result.data.isEdit) {
+            app_id = `${app_id}/${result.data.insId}`;
+            this.putInstruction(app_id, instructionDetails);
+          } else {
+            this.postInstruction(app_id, instructionDetails);
+          }
           this.applicationDataService.setData('instructions', this.applicationDataArr);
           // this.router.navigateByUrl('pages/capabilities');
         }
       }
+    });
+  }
+
+  postInstruction(app_id, instructionDetails) {
+    this.accountService.postInstruction(app_id, instructionDetails).subscribe((response) => {
+      if (response) {
+
+        // this.applicationDataArr.push(response[0]); // Assuming the response contains the newly saved item
+        this.getInstructions();
+        // this.applicationDataService.setData('instructions', response[0]);
+      }
+    }, (error) => {
+      console.error('Error saving test case:', error);
+    });
+  }
+
+  putInstruction(app_id, instructionDetails) {
+    this.accountService.putInstruction(app_id, instructionDetails).subscribe((response) => {
+      if (response) {
+
+    this.getInstructions();
+      }
+    }, (error) => {
+      console.error('Error saving test case:', error);
+    });
+  }
+
+  deleteInstruction(app_id, insId) {
+    debugger
+    this.accountService.deleteInstruction(app_id, insId).subscribe((response) => {
+      if (response) {
+
+        this.getInstructions();
+      }
+    }, (error) => {
+      console.error('Error saving test case:', error);
     });
   }
 

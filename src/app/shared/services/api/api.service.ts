@@ -92,7 +92,7 @@ export class ApiService {
         return throwError(() => new Error('Failed to make request. Please try again.'));
       })
     );
-    
+
     }
 
     updateWithoutModal(endpoint: string, request: any): Observable<any>{

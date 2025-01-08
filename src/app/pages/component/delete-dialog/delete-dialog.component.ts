@@ -8,9 +8,14 @@ import {FilterModelComponent} from "../../signout/filter-model/filter-model.comp
   styleUrls: ['./delete-dialog.component.scss']
 })
 export class DeleteDialogComponent {
+public itemToDelete: any;
 
+  constructor(private ref: NbDialogRef<DeleteDialogComponent>) {
+    console.log(this.itemToDelete,'itemsstoDeletere');
+  }
 
-  constructor(protected ref: NbDialogRef<FilterModelComponent>) {
+  ngOnInit(): void {
+    console.log(this.itemToDelete,'itemsstoDeletere');
   }
 
   cancel() {
@@ -18,6 +23,6 @@ export class DeleteDialogComponent {
   }
 
   submit() {
-    this.ref.close('submit');
+    this.ref.close({confirmed: true, data: {insId:this.itemToDelete.id}});
   }
 }

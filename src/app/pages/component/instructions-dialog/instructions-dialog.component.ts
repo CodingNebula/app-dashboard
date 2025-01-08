@@ -10,6 +10,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 export class InstructionsDialogComponent {
   public myForm: FormGroup;
   public selectedItem: '';
+  public itemToEdit: any;
 
   constructor(private dialogRef: NbDialogRef<InstructionsDialogComponent>, private fb: FormBuilder){
 
@@ -21,19 +22,29 @@ export class InstructionsDialogComponent {
       elem_name: [''],
       normal_name: ['', [Validators.required]]
     });
+
+    this.patchFormValues()
+  }
+
+  patchFormValues() {
+    if (this.itemToEdit) {
+      this.myForm.controls['actions'].setValue(this.itemToEdit.back_name);
+      this.myForm.controls['elem_name'].setValue(this.itemToEdit.element_name);
+      this.myForm.controls['normal_name'].setValue(this.itemToEdit.instruction_name);
+    }
   }
 
   onSubmit() {
     if (this.myForm.valid) {
       console.log(this.myForm.value);
-      
-      this.dialogRef.close({ confirmed: true, data: this.myForm.value });
+
+      this.dialogRef.close({ confirmed: true, data: {formValue: this.myForm.value, isEdit: this.itemToEdit?true: false, insId: this.itemToEdit?this.itemToEdit.id:null} });
     }
   }
-  
+
 
   close() {
-    this.dialogRef.close({confirmed: false});  
+    this.dialogRef.close({confirmed: false});
   }
 
 }

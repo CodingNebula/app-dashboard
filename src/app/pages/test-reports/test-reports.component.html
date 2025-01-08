@@ -2,7 +2,7 @@
   <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download PDF</label>
   <label class="heading header-title">{{ this.reportData?.app_name }}</label>
  <label class="date-label" *ngIf="timeCreated" >Created At: <span>{{ timeCreated
- | date:'dd-MM-yy '}}</span></label>
+ | date:'dd MMM yy '}}</span></label>
 </div>
 <div class="parentDiv">
 
@@ -23,7 +23,7 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started Time</label>
-          <label class="subLabel">{{reportData?.extra?.extras.createdAt | date:'dd-MM-yy'}} {{reportData.extra.extras?.startedTime }} </label>
+          <label class="subLabel">{{reportData?.extra?.extras.createdAt | date:'dd MMM yy'}}, {{reportData.extra.extras?.startedTime }} </label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Total Time taken</label>
@@ -31,7 +31,11 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
-          <label class="subLabel discription-label"> {{this.reportData?.extra?.capabilities.description}}</label>
+          <label class="subLabel description-label"> {{this.reportData?.extra?.capabilities.description}}</label>
+        </div>
+        <div class="dividerDiv">
+          <label class="labelHeading">Build Number</label>
+          <label class="subLabel description-label"> {{this.reportData?.extra?.capabilities?.buildNumber}}</label>
         </div>
       </div>
     </div>
@@ -44,12 +48,12 @@
   <div class="row">
     <div class="col-12">
       <nb-accordion *ngFor="let testCase of groupedData|keyvalue:keepOrder">
-   
+
         <nb-accordion-item >
-    
+
           <nb-accordion-item-header style="position: relative;"
            >
-       
+
             <!-- <nb-icon [icon]="testCase.message === 'SUCCESS' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
             <span style="margin-left: 1em;">{{ testCase?.successMessage || testCase?.failedMessage}}</span> -->
             <span >
@@ -57,7 +61,7 @@
             </span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="row" *ngFor="let instructions of testCase.value" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
+            <div class="row" *ngFor="let instructions of testCase.value" >
 
               <div class="col-4" *ngIf="instructions.status ==='Failed'">
                 <nb-card>
@@ -68,15 +72,15 @@
               </div>
               <div class="col-4" class="flex-col">
                 <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
-                <div>{{instructions?.successMessage?'SUCCESS':'FAILED'}}</div>
+                <div style="width: 7%" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">{{instructions?.successMessage?'SUCCESS':'FAILED'}}</div>
 
-                <nb-card>
-                 
-                  <nb-card-body>
-                 
-                    <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
-                  </nb-card-body>
-                </nb-card>
+<!--                <nb-card>-->
+
+<!--                  <nb-card-body>-->
+
+                    <div><span  class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
+<!--                  </nb-card-body>-->
+<!--                </nb-card>-->
               </div>
             </div>
 
