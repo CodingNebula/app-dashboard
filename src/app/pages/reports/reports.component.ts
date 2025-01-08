@@ -56,7 +56,7 @@ export class ReportsComponent {
         return bDateTime.getTime() - aDateTime.getTime(); // Sort in ascending order
       });
       console.log(res, 'reports');
-      this.reports = res;
+      this.reports = res;      
       this.calculatePieChartData();
       this.generatePieData()
 
@@ -255,10 +255,12 @@ export class ReportsComponent {
 
   }
   downloadPDF(item, $event: Event) {
+    console.log(item);
+    
     this.chartData = [];
 
     // this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
-    this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed  )) })
+    this.chartData.push({ name: 'SUCCESS', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed  )) })
 this.chartData.forEach((ele:any,ind)=>{
   if(ele.value===0){
     delete this.chartData[ind];
@@ -297,14 +299,16 @@ this.chartData.forEach((ele:any,ind)=>{
 
       // Add report header
       doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
       doc.text(item?.app_name || 'App Name', 14, 20);
       doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
       doc.text(`Created At: ${formattedDate} `, 14, 30);
 
       // Add device and platform information
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
-      doc.text('Device Information', 14, 40);
+      doc.text('Device Information :- ', 14, 40);
       doc.setFont("helvetica", "normal");
       if (this.echartsInstance) {
         // Get chart as Base64 image
@@ -330,7 +334,7 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text('', 14, 110);
       // Add test cases
       doc.setFontSize(14);
-      doc.text('Test Cases', 14, 120);
+      doc.text('Test Cases', 14, 125);
 
 
       // Prepare data for the table

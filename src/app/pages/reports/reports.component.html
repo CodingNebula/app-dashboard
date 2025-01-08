@@ -1,8 +1,8 @@
 <div class="reports-container">
     <header class="reports-header">
 
-      <h2 class="reports-subheader"> <img width="13" height="20" src="../../../assets/newDesign/BackButton.jpg" (click)="goBack()">
-        <div>Reports</div>
+      <h2 class="reports-subheader">
+        <div class="report-heading-div">Reports <span class="report-length">({{reports?.length}})</span></div>
       </h2>
       <!-- <div class="filters">
         <button>All (40)</button>
@@ -21,29 +21,26 @@
       <table class="reports-table" *ngIf="reports?.length>0">
         <thead>
           <tr>
-            <th>S.No</th>
-            <th>App Name</th>
-            <th>App Version</th>
-            <th>Test performed</th>
-            <th>Date</th>
-            <th>Download</th>
+            <th class="report-data">S.No</th>
+            <th class="report-data">App Name</th>
+            <th class="report-data">App Version</th>
+            <th class="report-data">Test performed</th>
+            <th class="report-data">Date</th>
+            <th class="report-data">Download</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let reportData of reports; let j = index" (click)="openReportDetail(reportData, $event)">
             <!-- <td><input type="checkbox"></td> -->
-             <td>{{j+1}}</td>
-            <td>
-              <div class="pdf-name">
-                <!-- <ion-img class="pdf-icon" src="../../../assets/pdf/Group1231.jpg"></ion-img> -->
-                <label>{{reportData.app_name}}</label>
-              </div>
-            </td>
-            <td>{{reportData.application_version}}</td>
+             <td class="report-data">{{j+1}}</td>
+            <td  class="report-data">{{reportData.app_name}}</td>
+            <td class="report-data">{{reportData.application_version}}</td>
 
-            <td>{{reportData.testcase_performed}}</td>
-            <td>{{reportData?.extra?.extras?.createdAt| date:'dd-MM-yy '}} {{reportData?.extra?.extras?.startedTime}}</td>
-            <td><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download</button></td>
+            <td class="report-data">{{reportData.testcase_performed}}</td>
+            <td  class="report-data">{{reportData?.extra?.extras?.createdAt| date:'dd-MM-yy '}} {{reportData?.extra?.extras?.startedTime}}</td>
+            <td class="report-data"><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">
+              <nb-icon icon="download-outline"></nb-icon>
+            </button></td>
           </tr>
         </tbody>
       </table>

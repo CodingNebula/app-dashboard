@@ -129,8 +129,10 @@
     </nb-accordion-item>
   </nb-accordion>
 
-  <div class="test-case-container" *ngIf="templateData?.screens?.length > 0">
+  <div *ngIf="isAppLaunched">
 
+    <div class="test-case-container" *ngIf="templateData?.screens?.length > 0">
+      
     <div class="test-case-div">
       <h5>{{templateData?.wt_name}}</h5>
       <div [nbSpinner]="startApp"  class="instuction-loader" ></div>
@@ -150,7 +152,7 @@
     <div  class="test-case-status-container">
 
       <ng-container *ngFor="let testCase of testCases">
-        <div class="test-case-div">
+        <div class="test-case-div test-case-border">
           <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
           <div [nbSpinner]="testCase?.ins_set_screen_name === currentOnGoingScreen"  class="instuction-loader" ></div>
           <button *ngIf="!testCase.hideStart"  class="start-button" (click)="onStart(testCase,testCases)">Start</button>
@@ -197,12 +199,13 @@
 <!--              [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>-->
 <!--        &lt;!&ndash; <button class="start-button" (click)="onStart(item)">Start</button> &ndash;&gt;-->
 <!--        &lt;!&ndash; <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} &ndash;&gt;-->
-<!--        &lt;!&ndash; </div> &ndash;&gt;-->
+  <!--        &lt;!&ndash; </div> &ndash;&gt;-->
 <!--      </div>-->
 <!--    </ng-container>-->
 
 
 <!--  </div>-->
+</div>
 </div>
 
 </div>
@@ -212,5 +215,11 @@
     <div>App Launching</div>
     <div [nbSpinner]="appLaunchLoading" nbSpinnerStatus="info" class="spinner-div"></div>
     <div>Please Wait...</div>
+  </div>
+</div>
+
+<div *ngIf="showAppLaunchError" class="loader-container">
+  <div class="loader-div">
+    <div>{{appLaunchStatus}}</div>
   </div>
 </div>

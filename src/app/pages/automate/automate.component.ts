@@ -14,14 +14,14 @@ import { ApplicationDataService } from '../../shared/services/applicationData/ap
 export class AutomateComponent implements OnInit {
   @ViewChild('resultContainer') resultContainer: ElementRef;
   public showIndividualEnd = false;
-  public startApp:boolean= false;
+  public startApp: boolean = false;
   public currentOnGoingScreen = null
   public socketSubscription;
   public currentScreen = '';
   public showEnd = false;
   public counterInterval;
   public individualCount = 0;
-  public singleInstructionTimeTotal:number =0
+  public singleInstructionTimeTotal: number = 0
   public myForm: FormGroup;
   public selectedItem: '';
   public noReset: '';
@@ -33,7 +33,7 @@ export class AutomateComponent implements OnInit {
   public appLaunchLoading: boolean = false;
   public totalTimeTaken: number;
   public resultArr: any[] = [];
-  public startInterval:any;
+  public startInterval: any;
   public reportData: any = {
     general: {}
   };
@@ -46,8 +46,10 @@ export class AutomateComponent implements OnInit {
   public showResult: boolean = false;
   public completeAppData: any;
   public extras: any = {};
-  public description:any ;
-  public buildNumber:any;
+  public description: any;
+  public buildNumber: any;
+  public showAppLaunchError: boolean = false;
+  public isAppLaunched: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -312,12 +314,12 @@ export class AutomateComponent implements OnInit {
     this.applicationData = this.automateDataService.selectedApplication;
 
   }
-ngOnDestroy(){
-  clearInterval(this.startInterval)
-}
+  ngOnDestroy() {
+    clearInterval(this.startInterval)
+  }
   ngOnInit() {
-    this.webSocketService.getSocketFailure().subscribe((res)=>{
-      if(this.startInterval){
+    this.webSocketService.getSocketFailure().subscribe((res) => {
+      if (this.startInterval) {
         clearInterval(this.startInterval);
       }
     })
@@ -356,16 +358,16 @@ ngOnDestroy(){
     // }
 
     this.myForm = this.fb.group({
-      platform: [{value:this.appCapabilities?.platformName, disabled:true} , [Validators.required]],
+      platform: [{ value: this.appCapabilities?.platformName, disabled: true }, [Validators.required]],
       app: [this.appCapabilities?.app, [Validators.required]],
       package: [this.appCapabilities?.appPackage, [Validators.required]],
       automation: [this.appCapabilities?.automationName, [Validators.required]],
       device: [this.appCapabilities?.deviceName, [Validators.required]],
-      noReset: [{value:(this.appCapabilities?.noReset).toString(), disabled:true}, [Validators.required]],
-      hiddenApp: [{value:(this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), disabled:true}, [Validators.required]],
+      noReset: [{ value: (this.appCapabilities?.noReset).toString(), disabled: true }, [Validators.required]],
+      hiddenApp: [{ value: (this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), disabled: true }, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
-      description:[this.appCapabilities?.description, []],
-      buildNo:[this.appCapabilities?.buildNo, []],
+      description: [this.appCapabilities?.description, []],
+      buildNo: [this.appCapabilities?.buildNo, []],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -384,7 +386,7 @@ ngOnDestroy(){
 
   onSubmit() {
     if (this.myForm.valid) {
-      this.isAccordionExpanded = false;
+      
 
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
@@ -397,26 +399,27 @@ ngOnDestroy(){
       this.myForm.get('buildNo').enable();
 
       this.description = this.myForm.value.description
-      this.buildNumber =  this.myForm.value.buildNo
+      this.buildNumber = this.myForm.value.buildNo
 
       let updatedCapabilities = { ...this.myForm.value };
 
-// Exclude 'description' and 'buildNo' from the object you're sending to the backend
+      // Exclude 'description' and 'buildNo' from the object you're sending to the backend
       delete updatedCapabilities.description;
       delete updatedCapabilities.buildNo;
 
-// Delete the properties you don't want to send
+      // Delete the properties you don't want to send
 
 
       // if form changes
       if (this.myForm.dirty && !this.myForm.get('buildNo').dirty && !this.myForm.get('description').dirty) {
 
         this.accountService.updateCapabilities(app_id,
-          {extra: {
-              capabilities:updatedCapabilities
+          {
+            extra: {
+              capabilities: updatedCapabilities
 
             },
-            name:'Ionic Anypay'
+            name: 'Ionic Anypay'
           }
         ).subscribe((response) => {
           this.appLaunch(app_id);
@@ -424,7 +427,7 @@ ngOnDestroy(){
           console.log(error);
 
         })
-      }else{
+      } else {
         this.appLaunch(app_id);
       }
 
@@ -515,15 +518,16 @@ ngOnDestroy(){
 
 
 
-  onStartTrans(itemData,startAll) {
+  onStartTrans(itemData, startAll) {
 
-    let count =0;
+    let count = 0;
     let totalTimeApp = Math.floor(Date.now() / 1000)
     let result = itemData;
     this.startApp = true;
-    if(startAll){
-       result = itemData.screens.map(screen => {
+    if (startAll) {
+      result = itemData.screens.map(screen => {
         return screen.instructions.map((instruction, index) => {
+          
           return {
             id: index,
             screenName: instruction.ins_back_name,
@@ -531,8 +535,8 @@ ngOnDestroy(){
             successMessage: `${instruction.ins_name}`,
             failedMessage: `${instruction.ins_name}`,
             roomId: localStorage.getItem("id"),
-            moduleName: instruction.ins_set_screen_name
-
+            moduleName: instruction.ins_set_screen_name,
+            ins_id: instruction.ins_id,
           };
         });
       }).flat();
@@ -544,17 +548,19 @@ ngOnDestroy(){
       //     roomId: localStorage.getItem("id"),
       //   }
       // );
+      
 
       result.push(
         {
           screenName: 'End_Instructions',
           successMessage: 'End Instructions',
           roomId: localStorage.getItem("id"),
+          ins_id: '12345',
         }
       );
     }
-// this.singleInstructionWebsocket(result)
-this.sendAllInstructionSocket(itemData,result)
+    // this.singleInstructionWebsocket(result)
+    this.sendAllInstructionSocket(itemData, result)
 
   }
 
@@ -572,13 +578,13 @@ this.sendAllInstructionSocket(itemData,result)
 
 
 
-    if (this.showEnd){
+    if (this.showEnd) {
 
       // this.socketSubscription.unsubscribe();
       const now = new Date();
       const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-      this.extras.startedTime=formattedTime;
+      this.extras.startedTime = formattedTime;
       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
       this.extras.createdAt = formattedDate;
 
@@ -604,7 +610,7 @@ this.sendAllInstructionSocket(itemData,result)
         },
         resultArr: this.resultArr,
         extras: this.extras,
-        totalTimeElapsed: Math.floor(Date.now() / 1000) -   this.totalTimeTaken,
+        totalTimeElapsed: Math.floor(Date.now() / 1000) - this.totalTimeTaken,
       }
 
 
@@ -619,10 +625,10 @@ this.sendAllInstructionSocket(itemData,result)
         applicationId: localStorage.getItem('app_id'),
         filename: itemData?.wt_desc,
         app_version: "2.1",
-        totalTestCase:intsCount,
+        totalTestCase: intsCount,
         passed: passedCount,
         failed: failedCount,
-        crash_count:intsCount - passedCount - failedCount,
+        crash_count: intsCount - passedCount - failedCount,
         extra: socketReport,
       }
       this.accountService.postReportData(body).subscribe((resp) => {
@@ -634,7 +640,7 @@ this.sendAllInstructionSocket(itemData,result)
       })
 
 
-    }else{
+    } else {
 
 
       const obj = { "id": "111", "screenName": "End_Instructions", roomId: localStorage.getItem("id"), };
@@ -643,125 +649,125 @@ this.sendAllInstructionSocket(itemData,result)
 
       let item = [
         {
-          "id":"0",
-          "screenName":"Welcome",
-          "btnName":"Welcome"
+          "id": "0",
+          "screenName": "Welcome",
+          "btnName": "Welcome"
         },
         {
-          "id":"8",
-          "screenName":"Click_Image", // image
-          "btnName":"left_arrow"
+          "id": "8",
+          "screenName": "Click_Image", // image
+          "btnName": "left_arrow"
         },
         {
-          "id":"1",
-          "screenName":"Permissions"
+          "id": "1",
+          "screenName": "Permissions"
         },
         {
-          "id":"8",
-          "screenName":"Click_Image",
-          "btnName":"left_arrow"
+          "id": "8",
+          "screenName": "Click_Image",
+          "btnName": "left_arrow"
         },
         {
-          "id":"2",
-          "screenName":"Permissions_list"
+          "id": "2",
+          "screenName": "Permissions_list"
         },
         {
-          "id":"3",
-          "screenName":"Allow_PhoneCalls",
-          "btnName":"Allow"
+          "id": "3",
+          "screenName": "Allow_PhoneCalls",
+          "btnName": "Allow"
         },
         {
-          "id":"4",
-          "screenName":"Allow_DeviceLocation",
-          "btnName":"ALLOW"
+          "id": "4",
+          "screenName": "Allow_DeviceLocation",
+          "btnName": "ALLOW"
         },
         {
-          "id":"5",
-          "screenName":"Allow_BluetoothConnection",
-          "btnName":"ALLOW"
+          "id": "5",
+          "screenName": "Allow_BluetoothConnection",
+          "btnName": "ALLOW"
         },
         {
-          "id":"6",
-          "screenName":"Click_Button",
-          "btnName":"Continue"
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Continue"
         },
         {
-          "id":"7",
-          "screenName":"Terminal Setup"
+          "id": "7",
+          "screenName": "Terminal Setup"
         },
         {
-          "id":"8",
-          "screenName":"Click_Image"
+          "id": "8",
+          "screenName": "Click_Image"
         },
         {
-          "id":"9",
-          "screenName":"Select_Options",
-          "btnName":"Testing"
+          "id": "9",
+          "screenName": "Select_Options",
+          "btnName": "Testing"
         },
         {
-          "id":"6",
-          "screenName":"Click_Button",
-          "btnName":"PROCEED"
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "PROCEED"
         },
         {
-          "id":"1",
-          "screenName":"Enter_Terminal_ID",
-          "btnName":"2994001"
+          "id": "1",
+          "screenName": "Enter_Terminal_ID",
+          "btnName": "2994001"
         },
         {
-          "id":"6",
-          "screenName":"Click_Button",
-          "btnName":"Next"
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Next"
         },
         {
-          "id":"10",
-          "screenName":"Enter_Terminal_ID",
-          "btnName":"2994001"
+          "id": "10",
+          "screenName": "Enter_Terminal_ID",
+          "btnName": "2994001"
         },
         {
-          "id":"6",
-          "screenName":"Click_Button",
-          "btnName":"Submit"
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Submit"
         },
         {
-          "id":"11",
-          "screenName":"Profile_Login",
-          "btnName":"9204"
+          "id": "11",
+          "screenName": "Profile_Login",
+          "btnName": "9204"
         },
         {
-          "id":"6",
-          "screenName":"Click_Button",
-          "btnName":"Confirm"
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "Confirm"
         },
         {
-          "id":"6",
-          "screenName":"Click_Button",
-          "btnName":"GO"
+          "id": "6",
+          "screenName": "Click_Button",
+          "btnName": "GO"
         },
         {
-          "id":9,
-          "screenName":"Click_Text",
-          "btnName":"Skip >"
+          "id": 9,
+          "screenName": "Click_Text",
+          "btnName": "Skip >"
         },
         {
-          "id":9,
-          "screenName":"homePage",
-          "btnName":"This is Homepage"
+          "id": 9,
+          "screenName": "homePage",
+          "btnName": "This is Homepage"
         },
         {
-          "id":"8",
-          "screenName":"Click_Image",
-          "btnName":"Refund"
+          "id": "8",
+          "screenName": "Click_Image",
+          "btnName": "Refund"
         },
         {
-          "id":"8",
-          "screenName":"Click_View",
-          "btnName":"Last 7 Days",
+          "id": "8",
+          "screenName": "Click_View",
+          "btnName": "Last 7 Days",
         },
         // refund steps starts from dashboard
         {
-          "id":"0",
-          "screenName":"Find_Screen_Elements"
+          "id": "0",
+          "screenName": "Find_Screen_Elements"
         }
       ]
 
@@ -772,7 +778,8 @@ this.sendAllInstructionSocket(itemData,result)
       this.showResult = true;
 
 
-      this.webSocketService.sendTestCaseRequest(item);
+      this.webSocketService.sendTestCaseRequest(result);
+      
 
       this.counterInterval = setInterval(() => {
         count++;
@@ -784,10 +791,15 @@ this.sendAllInstructionSocket(itemData,result)
       let timeChecked = false;
       this.showEnd = true
 
-      this.totalTimeTaken =  Math.floor(Date.now() / 1000)  ;
+      this.totalTimeTaken = Math.floor(Date.now() / 1000);
+
+      if (this.socketSubscription) {
+        this.socketSubscription.unsubscribe();
+
+      }
 
       this.webSocketService.getSubject().subscribe((res) => {
-
+        
         if (!timeChecked) {
           const currentDate = new Date();
         }
@@ -797,17 +809,28 @@ this.sendAllInstructionSocket(itemData,result)
           if (!res?.extra) {
             res.extra = {};
           }
+          this.testCases.map((item) => {
+            item.testCase.map((inst) => {
+              
+              if (inst.ins_id === res.message.ins_id) {
+                
+                inst.status = res.message.message;
+                return this.testCases;
+              }
+            })
+          })
           const currentTime = Date.now() / 1000;
           this.startApp = false;
           this.currentOnGoingScreen = res.message.moduleName;
-          res.message.timeSpent = (currentTime- startInterval).toFixed(2);
+          res.message.timeSpent = (currentTime - startInterval).toFixed(2);
           res.message.totalTimeTaken = currentTime - totalTimeApp;
 
-            startInterval = Math.floor(Date.now() / 1000);
+          startInterval = Math.floor(Date.now() / 1000);
           clearInterval(this.startInterval);
           this.individualCount = 0;
           // Restart the interval by calling the function
-          this.startCounting(this.individualCount)
+          this.startCounting(this.individualCount);
+
           if (res?.message?.successMessage !== "End Instructions") {
 
             this.resultArr.push(res.message);
@@ -818,20 +841,20 @@ this.sendAllInstructionSocket(itemData,result)
           if (res?.message?.successMessage === "End Instructions") {
             clearInterval(this.counterInterval);
             clearInterval(startInterval)
-            res.extra.timeTaken = Math.floor(Date.now() / 1000) -  count;
-            res.message.totalTimeTaken =  Math.floor(Date.now() / 1000) -  totalTimeApp;
+            res.extra.timeTaken = Math.floor(Date.now() / 1000) - count;
+            res.message.totalTimeTaken = Math.floor(Date.now() / 1000) - totalTimeApp;
 
             const now = new Date();
             const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-            this.extras.startedTime=formattedTime;
+            this.extras.startedTime = formattedTime;
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
             const socketReport = {
-              capabilities: {description:this.myForm.value.description , buildInfo: this.myForm.value.buildNo ,...this.completeAppData},
+              capabilities: { description: this.myForm.value.description, buildInfo: this.myForm.value.buildNo, ...this.completeAppData },
               resultArr: this.resultArr,
               extras: this.extras,
-              totalTimeElapsed: Math.floor(Date.now() / 1000) -  totalTimeApp,
+              totalTimeElapsed: Math.floor(Date.now() / 1000) - totalTimeApp,
 
             }
 
@@ -877,7 +900,7 @@ this.sendAllInstructionSocket(itemData,result)
           }
         }
       }, (err) => {
-        console.log(err,'err')
+        console.log(err, 'err')
 
         clearInterval(this.startInterval);
       })
@@ -888,60 +911,77 @@ this.sendAllInstructionSocket(itemData,result)
 
   singleInstructionWebsocket(allInstructions) {
     this.showIndividualEnd = true;
-    
-    
 
-    
+
+
+
     const res = {
-        id: 0,
-        screenName: allInstructions.ins_back_name,
-        btnName: allInstructions.ins_element_name,
-        successMessage: `${allInstructions.ins_name}`,
-        failedMessage: `${allInstructions.ins_name}`,
-        roomId: localStorage.getItem("id"),
-        moduleName: allInstructions.ins_set_screen_name,
+      id: 0,
+      screenName: allInstructions.ins_back_name,
+      btnName: allInstructions.ins_element_name,
+      successMessage: `${allInstructions.ins_name}`,
+      failedMessage: `${allInstructions.ins_name}`,
+      roomId: localStorage.getItem("id"),
+      moduleName: allInstructions.ins_set_screen_name,
+      ins_id: allInstructions.ins_id,
+    }
+
+
+    let startInterval = Date.now() / 1000;
+    if (this.socketSubscription) {
+      this.socketSubscription.unsubscribe();
+
+    }
+    this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
+    this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+      console.log(res);
+      
+      if(res.message.message === "Appium Not Available"){
+        this.showIndividualEnd = false; 
+        this.showAppLaunchError = true;
+      this.appLaunchStatus = res.message.message;
+
+      setTimeout(() => {
+        this.showAppLaunchError = false; 
+      }, 2000);
       }
-    
 
-      let startInterval = Date.now() / 1000;
-      this.webSocketService.sendTestCaseRequest({...res, singleCase: true});
-      this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
-        
-        if (res?.message && res?.message?.info) {
-          this.currentOnGoingScreen = res.message.moduleName;
-          let currentTime = Date.now() / 1000;
-          const now = new Date();
-          const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-          this.extras.createdAt = formatdate;
+      if (res?.message && res?.message?.info) {
 
-          const hours = String(now.getHours()).padStart(2, '0'); // Get the hours, ensure two digits
-          const minutes = String(now.getMinutes()).padStart(2, '0'); // Get the minutes, ensure two digits
-          const seconds = String(now.getSeconds()).padStart(2, '0'); // Get the seconds, ensure two digits
-          this.extras.startedTime = `${hours}:${minutes}:${seconds}`;
-          res.startedTime = `${hours}:${minutes}:${seconds}`;
-          res.createdAt=formatdate;
-          res.message.timeSpent = (currentTime- startInterval).toFixed(2);
+        this.currentOnGoingScreen = res.message.moduleName;
+        let currentTime = Date.now() / 1000;
+        const now = new Date();
+        const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        this.extras.createdAt = formatdate;
 
-          startInterval = Date.now() / 1000;
-          this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent) ;
-          this.resultArr.push(res.message);
+        const hours = String(now.getHours()).padStart(2, '0'); // Get the hours, ensure two digits
+        const minutes = String(now.getMinutes()).padStart(2, '0'); // Get the minutes, ensure two digits
+        const seconds = String(now.getSeconds()).padStart(2, '0'); // Get the seconds, ensure two digits
+        this.extras.startedTime = `${hours}:${minutes}:${seconds}`;
+        res.startedTime = `${hours}:${minutes}:${seconds}`;
+        res.createdAt = formatdate;
+        res.message.timeSpent = (currentTime - startInterval).toFixed(2);
 
-          this.testCases.map((item) => {
-            item.testCase.map((inst) => {
-              if(inst.ins_id === allInstructions.ins_id){
-                inst.status = res.message.message;
-                return this.testCases;
-              }
-            })
+        startInterval = Date.now() / 1000;
+        this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent);
+        this.resultArr.push(res.message);
+
+        this.testCases.map((item) => {
+          item.testCase.map((inst) => {
+            if (inst.ins_id === allInstructions.ins_id) {
+              inst.status = res.message.message;
+              return this.testCases;
+            }
           })
-          // indexCounter += 1;
-          // this.recursiveInstructions(instructionsArr,indexCounter);
+        })
+        // indexCounter += 1;
+        // this.recursiveInstructions(instructionsArr,indexCounter);
 
-        }
+      }
 
 
 
-      })
+    })
 
     // let count = 0;
     // let indexCounter = 0;
@@ -1050,7 +1090,8 @@ this.sendAllInstructionSocket(itemData,result)
     // })
 
   }
-  onStart(item,testCases) {
+  onStart(item, testCases) {
+
     // this.showEnd = true
     this.showIndividualEnd = true;
     item.hideStart = true;
@@ -1074,7 +1115,7 @@ this.sendAllInstructionSocket(itemData,result)
     //   }
     // })).reduce((acc,item)=> acc.concat(...item),[])
 
-    const res =  item.testCase.map((item,index) => {
+    const res = item.testCase.map((item, index) => {
       return {
         id: index,
         screenName: item.ins_back_name,
@@ -1083,6 +1124,7 @@ this.sendAllInstructionSocket(itemData,result)
         failedMessage: `${item.ins_name}`,
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
+        ins_id: item.ins_id,
       }
     })
 
@@ -1112,7 +1154,7 @@ this.sendAllInstructionSocket(itemData,result)
   }
 
   sendInstructions(resArr) {
-this.recursiveInstructions(resArr,0)
+    this.recursiveInstructions(resArr, 0)
 
     // if (this.socketSubscription) {
     //   this.socketSubscription.unsubscribe();
@@ -1132,17 +1174,18 @@ this.recursiveInstructions(resArr,0)
   }
 
   recursiveInstructions(instructionsArr, indexCounter) {
-
-    if (indexCounter<instructionsArr.length) {
+    if (indexCounter < instructionsArr.length) {
       if (this.socketSubscription) {
         this.socketSubscription.unsubscribe();
 
       }
       let startInterval = Date.now() / 1000;
-      this.webSocketService.sendTestCaseRequest({...instructionsArr[indexCounter], singleCase: true});
+
+      this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
+      this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+        
         if (res?.message && res?.message?.info) {
-          this.currentOnGoingScreen = res.message.moduleName;
           let currentTime = Date.now() / 1000;
           const now = new Date();
           const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -1153,14 +1196,22 @@ this.recursiveInstructions(resArr,0)
           const seconds = String(now.getSeconds()).padStart(2, '0'); // Get the seconds, ensure two digits
           this.extras.startedTime = `${hours}:${minutes}:${seconds}`;
           res.startedTime = `${hours}:${minutes}:${seconds}`;
-          res.createdAt=formatdate;
-          res.message.timeSpent = (currentTime- startInterval).toFixed(2);
+          res.createdAt = formatdate;
+          res.message.timeSpent = (currentTime - startInterval).toFixed(2);
 
           startInterval = Date.now() / 1000;
-          this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent) ;
+          this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent);
           this.resultArr.push(res.message);
+          this.testCases.map((item) => {
+            item.testCase.map((inst) => {
+              if (inst.ins_id === instructionsArr[indexCounter].ins_id) {
+                inst.status = res.message.message;
+                return this.testCases;
+              }
+            })
+          })
           indexCounter += 1;
-          this.recursiveInstructions(instructionsArr,indexCounter);
+          this.recursiveInstructions(instructionsArr, indexCounter);
 
         }
 
@@ -1176,8 +1227,8 @@ this.recursiveInstructions(resArr,0)
 
   }
 
-  endSingleInstruction(){
-    
+  endSingleInstruction() {
+
     let count = 0;
 
     let passedCount = 0;
@@ -1185,57 +1236,58 @@ this.recursiveInstructions(resArr,0)
     let untestedCount = 0;
     // this.socketSubscription.unsubscribe();
 
-      this.resultArr?.map((testCase) => {
-        testCase.completeCount = count;
 
-        if (testCase?.successMessage !== "End_Instructions") {
+    this.resultArr?.map((testCase) => {
+      testCase.completeCount = count;
 
-          if (testCase.message === 'SUCCESS') {
-            passedCount++;
-          } else if (testCase.message === 'FAILED') {
-            failedCount++;
-          } else if (testCase.message === 'Untested') {
-            untestedCount++;
-          }
+      if (testCase?.successMessage !== "End_Instructions") {
+
+        if (testCase.message === 'SUCCESS') {
+          passedCount++;
+        } else if (testCase.message === 'FAILED') {
+          failedCount++;
+        } else if (testCase.message === 'Untested') {
+          untestedCount++;
         }
-      });
-
-      const socketReport = {
-        capabilities: {
-          description: this.description,
-          buildInfo: this.buildNumber, ...this.completeAppData
-        },
-        resultArr: this.resultArr,
-        extras: this.extras,
-        totalTimeElapsed:  this.singleInstructionTimeTotal,
       }
+    });
+
+    const socketReport = {
+      capabilities: {
+        description: this.description,
+        buildInfo: this.buildNumber, ...this.completeAppData
+      },
+      resultArr: this.resultArr,
+      extras: this.extras,
+      totalTimeElapsed: this.singleInstructionTimeTotal,
+    }
 
 
 
 
 
-      // Iterate over the reports to count the number of passed, failed, and untested test cases
+    // Iterate over the reports to count the number of passed, failed, and untested test cases
 
-    let totalCount =this.templateData.screens.reduce((acc, item) => acc + item.instructions.length, 0);
+    let totalCount = this.templateData.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
 
-      const body = {
-        applicationId: localStorage.getItem('app_id'),
-        app_version: "2.1",
-        totalTestCase: totalCount,
-        passed: passedCount,
-        failed: failedCount,
-        crash_count:  totalCount - passedCount - failedCount,
-        extra: socketReport,
+    const body = {
+      applicationId: localStorage.getItem('app_id'),
+      app_version: "2.1",
+      totalTestCase: totalCount,
+      passed: passedCount,
+      failed: failedCount,
+      crash_count: totalCount - passedCount - failedCount,
+      extra: socketReport,
+    }
+
+    this.accountService.postReportData(body).subscribe((resp) => {
+      if (resp) {
+        setTimeout(() => {
+          this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+        }, 1000)
       }
-
-      this.accountService.postReportData(body).subscribe((resp) => {
-        if (resp) {
-          setTimeout(() => {
-            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
-          }, 1000)
-        }
-      })
+    })
 
 
 
@@ -1585,12 +1637,12 @@ this.recursiveInstructions(resArr,0)
       item?.instructions?.map((inst) => {
         // Check if testCase with the same ins_set_id is already present in testCases array
         // Check if the current ins_set_id exists in this.testCases
-        
+
         inst.showSingleInstruction = false;
         inst.status = '';
 
-        
-        
+
+
         const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
 
         if (!exists) {
@@ -1605,7 +1657,7 @@ this.recursiveInstructions(resArr,0)
       });
     });
 
-    
+
   }
 
 
@@ -1661,12 +1713,22 @@ this.recursiveInstructions(resArr,0)
           this.appLaunchLoading = false; // After 2 seconds, set it to false to hide the loader
         }, 2000);
 
-        this.appLaunchStatus = 'SUCCESS'
+        this.appLaunchStatus = 'SUCCESS';
+        this.showAppLaunchError = false;
+        this.isAppLaunched = true;
+        this.isAccordionExpanded = false;
       },
       (error) => {
-        // console.error('API Error:', error);
+        console.error('API Error:', error);
+        
         this.appLaunchLoading = false;
-        this.appLaunchStatus = 'FAILED'
+        this.showAppLaunchError = true;
+        this.appLaunchStatus = error.error.message;
+
+        setTimeout(() => {
+          this.showAppLaunchError = false; 
+          this.isAccordionExpanded = true;
+        }, 2000);
       }
     );
   }

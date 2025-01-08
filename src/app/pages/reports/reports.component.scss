@@ -16,6 +16,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    margin-left: 13px;
 
     .reports-subheader {
         display: flex;
@@ -57,6 +58,7 @@
 .pdf-name {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .pdf-icon {
@@ -208,10 +210,25 @@ tr {
     color: #c1c1c1;
 }
 
+.report-heading-div{
+    display: flex;
+    gap: 0.5rem;
+}
+
 .downloadbtn {
     border: none;
     color: #00A3AB;
     font-weight: 800;
+    padding: 0;
+}
+
+.report-length{
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+
+.report-data{
+    text-align: center !important;
 }
 
 .table-container::-webkit-scrollbar {
