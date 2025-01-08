@@ -152,7 +152,7 @@
     <div  class="test-case-status-container">
 
       <ng-container *ngFor="let testCase of testCases">
-        <div class="test-case-div">
+        <div class="test-case-div test-case-border">
           <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
           <div [nbSpinner]="testCase?.ins_set_screen_name === currentOnGoingScreen"  class="instuction-loader" ></div>
           <button *ngIf="!testCase.hideStart"  class="start-button" (click)="onStart(testCase,testCases)">Start</button>

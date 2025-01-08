@@ -923,6 +923,7 @@ export class AutomateComponent implements OnInit {
       failedMessage: `${allInstructions.ins_name}`,
       roomId: localStorage.getItem("id"),
       moduleName: allInstructions.ins_set_screen_name,
+      ins_id: allInstructions.ins_id,
     }
 
 
@@ -1180,11 +1181,11 @@ export class AutomateComponent implements OnInit {
       }
       let startInterval = Date.now() / 1000;
 
+      this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
       this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
         
         if (res?.message && res?.message?.info) {
-          this.currentOnGoingScreen = res.message.moduleName;
           let currentTime = Date.now() / 1000;
           const now = new Date();
           const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;

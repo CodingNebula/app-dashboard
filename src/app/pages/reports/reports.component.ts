@@ -56,7 +56,7 @@ export class ReportsComponent {
         return bDateTime.getTime() - aDateTime.getTime(); // Sort in ascending order
       });
       console.log(res, 'reports');
-      this.reports = res;
+      this.reports = res;      
       this.calculatePieChartData();
       this.generatePieData()
 
