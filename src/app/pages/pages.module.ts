@@ -34,6 +34,7 @@ import { InstructionsComponent } from './component/instructions/instructions.com
 import { InstructionsDialogComponent } from './component/instructions-dialog/instructions-dialog.component';
 import { TemplateDialogComponent } from './template/template-dialog/template-dialog.component';
 import { DeleteDialogComponent } from './component/delete-dialog/delete-dialog.component';
+import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 
 @NgModule({
   imports: [
@@ -54,7 +55,9 @@ import { DeleteDialogComponent } from './component/delete-dialog/delete-dialog.c
     NbTooltipModule,
     NbAlertModule,
     NbButtonModule,
-    NbListModule
+    NbListModule,
+    CdkDropList,
+    CdkDrag
   ],
   declarations: [
     PagesComponent,

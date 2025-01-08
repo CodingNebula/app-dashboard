@@ -34,6 +34,11 @@ export class InstructionsDialogComponent {
     }
   }
 
+
+  deleteInstruction(instId){
+    debugger
+  }
+
   onSubmit() {
     if (this.myForm.valid) {
       console.log(this.myForm.value);

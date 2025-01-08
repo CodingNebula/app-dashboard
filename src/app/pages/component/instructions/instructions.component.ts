@@ -114,6 +114,7 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
 
     dialogRef.onClose.subscribe((result) => {
+      debugger
       if (result) {
         if (result.confirmed) {
 
@@ -198,7 +199,6 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
   deleteInstruction(app_id, insId) {
     this.accountService.deleteInstruction(app_id, insId).subscribe((response) => {
       if (response) {
-
         this.getInstructions();
       }
     }, (error) => {

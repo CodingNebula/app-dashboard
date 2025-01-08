@@ -6,6 +6,7 @@
     <div class="test-case-head">
       <h5>{{appName}} Test Cases</h5>
       <button class="add-test-case-btn" (click)="openDialog('testCase', 'name')">Add Test Case</button>
+
     </div>
     <div class="test-case-main">
       <div *ngIf="testCasesArray.length === 0" class="no-app-div">
@@ -42,6 +43,7 @@
                   <div  *ngIf="testCase?.instructions.length !== 0" >
                     <div *ngFor="let testcase of testCase?.instructions">
                       {{ testcase?.instruction_name }}
+
                     </div>
                   </div>
                   <div class="accordian-body-div" *ngIf="testCase?.instructions.length === 0"  >
@@ -105,6 +107,8 @@
                         <div class="">
                           <div  *ngFor="let testcase of testCase?.instructions">
                             {{ testcase?.ins_name }}
+
+
                           </div>
                         </div>
                       </nb-accordion-item-body>

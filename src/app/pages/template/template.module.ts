@@ -7,7 +7,7 @@ import { TemplateDialogComponent } from './template-dialog/template-dialog.compo
 
 @NgModule({
   declarations: [
-    TemplateDialogComponent
+
   ],
   imports: [
     CommonModule,

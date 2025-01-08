@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../../shared/services/account/account.service';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'ngx-template-dialog',
@@ -30,17 +32,53 @@ export class TemplateDialogComponent {
     private applicationDataService: ApplicationDataService,
   private accountService: AccountService) {
     }
+  todo = [
+    'Get to work',
+    'Pick up groceries',
+    'Go home',
+    'Fall asleep',
+    'Walk Dog',
+    'Stretch',
+    'Code Stuff',
+    'Drag Stuff',
+    'Drop Stuff',
+    'Run',
+    'Walk'
+  ];
 
+  done = [
+    'Get up',
+    'Brush teeth',
+    'Take a shower',
+    'Check e-mail',
+    'Walk dog'
+  ];
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
   ngOnInit() {
+
+
+    console.log(this.editData)
+    debugger
+
     this.appDetails = this.applicationDataService.getData();
     this.appName = localStorage.getItem('app_name');
-    
+
 
     this.testCaseName = this.fb.group({
       test_case_name: ['', [Validators.required]],
       // testCases: [[], [Validators.required]],
     });
-    
+
     this.instruction = this.fb.group({
       instructionArr: [[], [Validators.required]],
     })
@@ -61,6 +99,7 @@ this.patchFormValues()
 
   patchFormValues() {
     if (this.editData) {
+      debugger
       // Assuming 'screen_name' exists in 'editData'
       this.testCaseName.patchValue({
         test_case_name: this.editData.screen_name,
@@ -75,10 +114,10 @@ this.patchFormValues()
         });
       }
 
-      if (this.editData.templateName) {
+      if (this.editData.wt_name) {
         this.templateForm.patchValue({
-          templateName: this.editData.templateName,
-          description: this.editData.description,
+          templateName: this.editData.wt_name,
+          description: this.editData.wt_desc,
         });
       }
 
@@ -91,6 +130,16 @@ this.patchFormValues()
   }
 
 
+  // drop(event: CdkDragDrop<string[]>) {
+  //   if (event.previousContainer === event.container) {
+  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  //   } else {
+  //     transferArrayItem(event.previousContainer.data,
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex);
+  //   }
+  // }
 
   onSubmit() {
     if (this.testCaseName.valid) {
@@ -121,6 +170,6 @@ this.patchFormValues()
     this.dialogRef.close({ confirmed: false });
   }
 
-  // 
+  //
 
 }

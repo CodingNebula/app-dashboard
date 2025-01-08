@@ -9,13 +9,16 @@ import {FilterModelComponent} from "../../signout/filter-model/filter-model.comp
 })
 export class DeleteDialogComponent {
 public itemToDelete: any;
+public typeName: any;
 
   constructor(private ref: NbDialogRef<DeleteDialogComponent>) {
-    console.log(this.itemToDelete,'itemsstoDeletere');
   }
 
   ngOnInit(): void {
+
+
     console.log(this.itemToDelete,'itemsstoDeletere');
+    debugger;
   }
 
   cancel() {
