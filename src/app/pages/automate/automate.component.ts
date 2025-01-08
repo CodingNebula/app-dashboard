@@ -48,6 +48,8 @@ export class AutomateComponent implements OnInit {
   public extras: any = {};
   public description: any;
   public buildNumber: any;
+  public showAppLaunchError: boolean = false;
+  public isAppLaunched: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -384,7 +386,7 @@ export class AutomateComponent implements OnInit {
 
   onSubmit() {
     if (this.myForm.valid) {
-      this.isAccordionExpanded = false;
+      
 
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
@@ -798,7 +800,6 @@ export class AutomateComponent implements OnInit {
 
       this.webSocketService.getSubject().subscribe((res) => {
         
-
         if (!timeChecked) {
           const currentDate = new Date();
         }
@@ -932,6 +933,17 @@ export class AutomateComponent implements OnInit {
     }
     this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+      console.log(res);
+      
+      if(res.message.message === "Appium Not Available"){
+        this.showIndividualEnd = false; 
+        this.showAppLaunchError = true;
+      this.appLaunchStatus = res.message.message;
+
+      setTimeout(() => {
+        this.showAppLaunchError = false; 
+      }, 2000);
+      }
 
       if (res?.message && res?.message?.info) {
 
@@ -1170,6 +1182,7 @@ export class AutomateComponent implements OnInit {
 
       this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+        
         if (res?.message && res?.message?.info) {
           this.currentOnGoingScreen = res.message.moduleName;
           let currentTime = Date.now() / 1000;
@@ -1699,12 +1712,22 @@ export class AutomateComponent implements OnInit {
           this.appLaunchLoading = false; // After 2 seconds, set it to false to hide the loader
         }, 2000);
 
-        this.appLaunchStatus = 'SUCCESS'
+        this.appLaunchStatus = 'SUCCESS';
+        this.showAppLaunchError = false;
+        this.isAppLaunched = true;
+        this.isAccordionExpanded = false;
       },
       (error) => {
         console.error('API Error:', error);
+        
         this.appLaunchLoading = false;
-        this.appLaunchStatus = 'FAILED'
+        this.showAppLaunchError = true;
+        this.appLaunchStatus = error.error.message;
+
+        setTimeout(() => {
+          this.showAppLaunchError = false; 
+          this.isAccordionExpanded = true;
+        }, 2000);
       }
     );
   }
