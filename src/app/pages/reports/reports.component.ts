@@ -48,7 +48,6 @@ export class ReportsComponent {
   ngOnInit() {
     this.apiService.getAllReports().subscribe((res: any) => {
       this.reports = res;
-      console.log(this.reports, 'reports');
       this.calculatePieChartData();
       this.generatePieData()
 
@@ -62,7 +61,6 @@ export class ReportsComponent {
       res['UNTESTED'] = Number(res.testcase_performed)
 
     })
-    console.log(this.reports, '------>after calculate');
   }
   goToPreviousPage() {
     if (this.currentPage > 1) {
@@ -85,12 +83,10 @@ export class ReportsComponent {
   }
   openReportDetail(item, $event) {
     $event.stopPropagation();
-    console.log(item,"item");
 
     this.router.navigateByUrl('pages/test-reports', { state: { reportData: item } });
   }
   onChartInit(instance: EChartsInstance): void {
-    console.log(instance, 'ins')
     this.echartsInstance = instance; // Capture the ECharts instance
   }
 
@@ -250,7 +246,6 @@ export class ReportsComponent {
 
   }
   downloadPDF(item, $event: Event) {
-    console.log(item);
     this.chartData = [];
 
     // this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed)===0?1:0 }, { name: 'UNTESTED', value: Number(item.testcase_performed)-(Number(item.testcase_passed)+Number(item.testcase_failed+1  )) })
@@ -266,12 +261,9 @@ this.chartData.forEach((ele:any,ind)=>{
     $event.stopPropagation();
     setTimeout(()=>{
       this.capabilities = item?.extra?.capabilities;
-      console.log(this.capabilities);
       this.testCases = item?.extra?.resultArr;
       // this.reportData = item?.reporesrtData;
       this.extras = item?.extra?.extras;
-      console.log(this.extras);
-      console.log(item);
 
       const doc = new jsPDF();
 
@@ -287,7 +279,6 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.text('Device Information', 14, 40);
       doc.setFont("helvetica", "normal");
       if (this.echartsInstance) {
-        console.log(this.echartsInstance, 'INSTANCE')
         // Get chart as Base64 image
         const chartImage = this.echartsInstance.getDataURL({
           type: 'png', // Specify the image format
@@ -313,7 +304,6 @@ this.chartData.forEach((ele:any,ind)=>{
       doc.setFontSize(14);
       doc.text('Test Cases', 14, 120);
 
-      console.log(this.testCases);
 
       // Prepare data for the table
       const testCaseData = this.testCases.map(testCase => ({

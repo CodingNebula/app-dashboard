@@ -25,7 +25,6 @@ export class InstructionsDialogComponent {
 
   onSubmit() {
     if (this.myForm.valid) {
-      console.log(this.myForm.value);
       
       this.dialogRef.close({ confirmed: true, data: this.myForm.value });
     }

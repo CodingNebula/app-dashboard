@@ -195,7 +195,6 @@ export class WebsocketService {
   }
 
   sendTestCaseRequest(item?: any): void {
-    console.log(item);
 
     this.testReportsData.reports.push(item);
 

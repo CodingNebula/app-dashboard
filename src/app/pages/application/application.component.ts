@@ -101,7 +101,6 @@ export class ApplicationComponent implements OnInit {
     const app_capa = localStorage.getItem("app_capa");
     const parsedAppCapa = app_capa ? JSON.parse(app_capa) : null;
 
-    console.log(parsedAppCapa);
 
     // Initialize instructionsArr
     const app_id = item.id;
@@ -115,7 +114,6 @@ export class ApplicationComponent implements OnInit {
 
       // Now, fetch capabilities after instructions API response
       this.accountService.getCapabilites(app_id).subscribe((capabilitiesData) => {
-        console.log(capabilitiesData);
         this.appCapabilities = capabilitiesData;
 
         // Now that both API responses are received, check the conditions
@@ -159,7 +157,6 @@ export class ApplicationComponent implements OnInit {
   getCapabilities(){
     const app_id = localStorage.getItem('app_id');
     this.accountService.getCapabilites(app_id).subscribe((data) => {
-      console.log(data);
 
     })
   }

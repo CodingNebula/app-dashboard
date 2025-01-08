@@ -137,14 +137,12 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
             backendName: result.data.actions, // Server-specific backend name for the instruction
             extra: {}, // Additional metadata or information (optional)
           }
-          console.log(instructionDetails);
 
           // this.saveApplicationData(appDetails);
           const app_id = localStorage.getItem('app_id');
           this.accountService.postInstruction(app_id, instructionDetails).subscribe((response) => {
             if (response) {
               // After successful post, update applicationDataArr
-              console.log(response[0]);
 
               this.applicationDataArr.push(response[0]); // Assuming the response contains the newly saved item
               this.applicationDataService.setData('instructions', response[0]);
@@ -167,7 +165,6 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
-        console.log(data);
 
         data.forEach(item => {
           if (item.element_name) {
@@ -179,11 +176,9 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
               item.element_name = resp.map(el => el.replace(/["{}]/g, '').trim());
             }
 
-            console.log(item);
           }
         });
 
-        console.log(data);
 
         this.applicationDataArr = data;
         this.applicationDataService.setData('instructions', data);

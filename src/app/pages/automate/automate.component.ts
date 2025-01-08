@@ -496,7 +496,6 @@ ngOnDestroy(){
   //   this.startInterval = setInterval(() => {
   //     this.individualCount = individualCount + 1;
   //
-  //     // console.log('count started:', this.individualCount);
   //   }, 1000);
   // }
 
@@ -908,7 +907,6 @@ this.sendAllInstructionSocket(itemData,result)
             res.extra = {};
           }
           const currentTime = Date.now() / 1000;
-          console.log(this.individualCount, 'indc')
           this.startApp = false;
           this.currentOnGoingScreen = res.message.moduleName;
           res.message.timeSpent = (currentTime- startInterval).toFixed(2);
@@ -999,8 +997,6 @@ this.sendAllInstructionSocket(itemData,result)
 
   singleInstructionWebsocket(allInstructions) {
     this.showIndividualEnd = true;
-
-    console.log(allInstructions);
     
     
 
@@ -1015,12 +1011,10 @@ this.sendAllInstructionSocket(itemData,result)
         moduleName: allInstructions.ins_set_screen_name,
       }
     
-      console.log(res);
 
       let startInterval = Date.now() / 1000;
       this.webSocketService.sendTestCaseRequest({...res, singleCase: true});
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
-        console.log(res);
         
         if (res?.message && res?.message?.info) {
           this.currentOnGoingScreen = res.message.moduleName;
@@ -1064,8 +1058,6 @@ this.sendAllInstructionSocket(itemData,result)
     // let totalTimeApp = Math.floor(Date.now() / 1000)
 
     // this.webSocketService.sendTestCaseRequest({...allInstructions[indexCounter], singleCase: true});
-    // console.log(allInstructions,'allisnnsdfd');
-    // console.log({...allInstructions[indexCounter], singleCase: true},'seewhatwentt');
     // let timeChecked = false;
     // this.showEnd = true
     // this.webSocketService.getSubject().subscribe((res) => {
@@ -1082,8 +1074,6 @@ this.sendAllInstructionSocket(itemData,result)
     //     }
     //     this.startApp = false;
     //     this.currentOnGoingScreen = res.message.moduleName;
-    //     console.log(res, 'lpos');
-    //     console.log(this.individualCount, 'indc')
     //     res.message.timeSpent = this.individualCount;
     //     res.message.totalTimeTaken = count;
 
@@ -1174,7 +1164,6 @@ this.sendAllInstructionSocket(itemData,result)
     this.showIndividualEnd = true;
     item.hideStart = true;
     // this.singleInstructionTimeTotal = Math.floor(Date.now() / 1000)
-    console.log(item);
 
 
 
@@ -1228,7 +1217,6 @@ this.sendAllInstructionSocket(itemData,result)
     //   btnName: item?.ins_element_name
     // }
 
-    // console.log(obj);
 
   }
 
@@ -1298,7 +1286,6 @@ this.recursiveInstructions(resArr,0)
   }
 
   endSingleInstruction(){
-    console.log(this.resultArr);
     
     let count = 0;
 
@@ -1711,7 +1698,6 @@ this.recursiveInstructions(resArr,0)
         inst.showSingleInstruction = false;
         inst.status = '';
 
-        console.log(inst);
         
         
         const exists = this.testCases.some(existingTestCase => existingTestCase.ins_set_id === item.ins_set_id);
@@ -1728,7 +1714,6 @@ this.recursiveInstructions(resArr,0)
       });
     });
 
-    console.log(this.testCases);
     
   }
 

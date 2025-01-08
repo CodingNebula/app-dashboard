@@ -46,14 +46,10 @@ export class TestReportsComponent implements OnInit {
 
     const state = window.history.state;
     this.capabilities = state?.reportData?.extra?.capabilities;
-    console.log(state,'state');
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
-    console.log(this.testCases, 'testCases')
     this.addScreenNameToTestCases();
     this.extras = state?.reportData?.extra?.extras;
-    console.log(this.testCases, "testcase");
-    // console.log(state);
 
     this.generatePie();
   }
@@ -90,10 +86,8 @@ export class TestReportsComponent implements OnInit {
 
   ngOnInit() {
     const state = history.state.reportData
-    console.log(state.extra.capabilities.extra.capabilities, "time crathe")
     this.timeCreated = state.extra.extras.createdAt
     this.timeTaken = state.extra.totalTimeElapsed;
-    console.log(this.timeTaken, "timetakens")
 
   }
   convertToSeconds(ms) {
@@ -113,7 +107,6 @@ export class TestReportsComponent implements OnInit {
     let untestedCount = this.reportData?.testcase_performed;
 
 
-    console.log(passedCount, failedCount, untestedCount, "testcase");
     dataArr.push({ name: 'SUCCESS', value: passedCount });
     dataArr.push({ name: 'FAILED', value: failedCount });
     dataArr.push({ name: 'UNTESTED', value: untestedCount - (failedCount + passedCount) });
@@ -245,7 +238,6 @@ export class TestReportsComponent implements OnInit {
 
   downloadPDF(item, $event: Event) {
 
-    console.log(item);
     this.chartData = [];
     this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
 
@@ -259,12 +251,9 @@ export class TestReportsComponent implements OnInit {
     $event.stopPropagation();
     setTimeout(() => {
       this.capabilities = item?.extra?.capabilities;
-      console.log(this.capabilities);
       // this.testCases = item?.extra?.resultArr;
       // this.reportData = item?.reportData;
       this.extras = item?.extra?.extras;
-      console.log(this.extras);
-      console.log(item);
 
       const doc = new jsPDF();
 
@@ -280,7 +269,6 @@ export class TestReportsComponent implements OnInit {
       doc.text('Device Information', 14, 40);
       doc.setFont("helvetica", "normal");
       if (this.echartsInstance) {
-        console.log(this.echartsInstance, 'INSTANCE')
         // Get chart as Base64 image
         const chartImage = this.echartsInstance.getDataURL({
           type: 'png', // Specify the image format
@@ -307,7 +295,6 @@ export class TestReportsComponent implements OnInit {
       doc.setFontSize(14);
       doc.text('Test Cases', 14, 120);
 
-      console.log(this.testCases);
 
       // Prepare data for the table
       const testCaseData = this.testCases.map(testCase => ({
@@ -380,7 +367,6 @@ export class TestReportsComponent implements OnInit {
       if (timeString) timeString += ', '; // Add a comma if hours or minutes were added
       timeString += `${remainingSeconds.toFixed(1)} second${remainingSeconds !== 1 ? 's' : ''}`; // Use fractional seconds
     }
-    console.log(timeString);
     return timeString;
   }
 }
