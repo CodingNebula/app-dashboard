@@ -19,11 +19,11 @@ export class SignOutComponent implements OnInit,OnDestroy{
   public dialog:NbDialogRef<any>;
   constructor(
     public route:Router,
-    public location: Location, 
-    // public storage: StorageService, 
-    private dialogService: NbDialogService, 
-    public router: Router, 
-    public websocketService: WebsocketService, 
+    public location: Location,
+    // public storage: StorageService,
+    private dialogService: NbDialogService,
+    public router: Router,
+    public websocketService: WebsocketService,
     public nbMenuService: NbMenuService,
     private accountService:AccountService) {
     /*this.dialogService.open(FilterModelComponent)
@@ -62,6 +62,7 @@ export class SignOutComponent implements OnInit,OnDestroy{
        // this.accountService.gethandleSubscriptions().map((res)=>{
        //   res?.unsubscribe();
        // })
+       localStorage.clear();
        this.router.navigate(['auth/login']);
      } else {
        window.history.back();

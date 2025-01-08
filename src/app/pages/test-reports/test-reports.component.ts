@@ -237,8 +237,6 @@ export class TestReportsComponent implements OnInit {
 
 
   downloadPDF(item, $event: Event) {
-    console.log(item);
-    
 
     this.chartData = [];
     this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
@@ -267,8 +265,6 @@ export class TestReportsComponent implements OnInit {
           year: 'numeric'
         }).replace(/\//g, ' ') // Replace slashes with a space
         : 'N/A';
-
-      console.log(formattedDate);
 
       const doc = new jsPDF();
 

@@ -1,25 +1,36 @@
 <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'name'">
-    <nb-card-header>{{appName}} Test Case</nb-card-header>
-    <nb-card-body>
-        <form [formGroup]="testCaseName"  class="custom-form">
-            <div class="form-row">
-                <div class="form-group">
-                  <label for="test_case_name">Test Case Name:</label>
-                  <input id="test_case_name" formControlName="test_case_name" class="form-control" />
-                  <div *ngIf="testCaseName.get('test_case_name').touched && testCaseName.get('test_case_name').invalid" class="error-message">
-                    <small *ngIf="testCaseName.get('test_case_name').hasError('required')">Test Case name is required!</small>
-                  </div>
-                </div>
-              </div>
-          </form>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton (click)="close()" class="close-button">Close</button>
+  <nb-card-header>{{appName}} Test Case</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="testCaseName"  class="custom-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="test_case_name">Test Case Name:</label>
+          <input id="test_case_name" formControlName="test_case_name" class="form-control" />
+          <div *ngIf="testCaseName.get('test_case_name').touched && testCaseName.get('test_case_name').invalid" class="error-message">
+            <small *ngIf="testCaseName.get('test_case_name').hasError('required')">Test Case name is required!</small>
+          </div>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
 
-        <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
 
-    </nb-card-footer>
-  </nb-card>
+  <div *ngIf="editData?.screen_name">
+  <div *ngFor="let inst of editData.instructions" >
+    <div>{{inst.instruction_name}}</div>
+  </div>
+
+
+  </div>
+
+
+  <nb-card-footer>
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <div class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
 
   <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'instruction'">
     <nb-card-header>{{appName}}Test Case</nb-card-header>

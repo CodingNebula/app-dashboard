@@ -11,7 +11,7 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
-
+import { NbPopoverModule } from '@nebular/theme';
 import { AppRoutingModule } from './app-routing.module';
 import {
   NbChatModule,
@@ -36,6 +36,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     AppRoutingModule,
     FormsModule,
     NbLayoutModule,
+    NbPopoverModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),

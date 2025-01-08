@@ -99,6 +99,30 @@ export class AccountService {
   deleteTestCase(id: string) {
     return this.apiService.deleteWithoutModal('test_case', id).pipe(
       map(applicationResponse => {
+
+        // Check if the response is valid, and return it
+        if (applicationResponse) {
+
+          return applicationResponse; // Transformation logic (if needed)
+        } else {
+          // In case of an invalid response, throw an error
+          throw new Error('Invalid response');
+        }
+      }),
+      catchError(error => {
+        // Handle the error here
+        console.error('Error during the application submission:', error);
+        // Return a user-friendly error message or rethrow it
+        return throwError(() => new Error('Failed to submit application. Please try again.'));
+      })
+    );
+  }
+
+
+  deleteTemplate(id: string) {
+
+    return this.apiService.deleteWithoutModal('workflow', id).pipe(
+      map(applicationResponse => {
         // Check if the response is valid, and return it
         if (applicationResponse) {
           return applicationResponse; // Transformation logic (if needed)

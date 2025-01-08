@@ -23,6 +23,6 @@ public itemToDelete: any;
   }
 
   submit() {
-    this.ref.close({confirmed: true, data: {insId:this.itemToDelete.id}});
+    this.ref.close({confirmed: true, deleteType: {typeName: this.typeName}, data: {insId:this.itemToDelete.id,testcase_id:this.itemToDelete.instruction_set_id,template_id:this.itemToDelete.wt_id}});
   }
 }
