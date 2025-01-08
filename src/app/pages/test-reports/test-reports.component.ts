@@ -266,13 +266,28 @@ export class TestReportsComponent implements OnInit {
       console.log(this.extras);
       console.log(item);
 
+      const dates = new Date(this.reportData?.extra?.extras.createdAt || 'N/A');
+
+// Check if 'dates' is a valid Date object
+      const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
+        ? dates.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }).replace(/\//g, ' ') // Replace slashes with a space
+        : 'N/A';
+
+      console.log(formattedDate);
+
+      debugger;
+
       const doc = new jsPDF();
 
       // Add report header
       doc.setFontSize(16);
       doc.text(item?.app_name || 'App Name', 14, 20);
       doc.setFontSize(12);
-      doc.text(`Created At: ${this.extras?.createdAt || 'N/A'}`, 14, 30);
+      doc.text(`Created At: ${formattedDate}`, 14, 30);
 
       // Add device and platform information
       doc.setFontSize(14);
@@ -296,10 +311,10 @@ export class TestReportsComponent implements OnInit {
       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
       doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${this.reportData?.extra?.extras.createdAt || 'N/A'} ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
+      doc.text(`Started Time: ${formattedDate}, ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
       doc.text(`Total Time Taken: ${this.timeTaken ? this.timeTaken + ' sec' : 'N/A'}`, 14, 90);
       doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
-      doc.text(`Build Number: ${item?.extra?.capabilities.buildNumber || 'N/A'}`, 14, 110);
+      doc.text(`Build Number: ${item?.extra?.capabilities.buildInfo || 'N/A'}`, 14, 110);
       // Add a line break
       doc.text('', 14, 110);
 

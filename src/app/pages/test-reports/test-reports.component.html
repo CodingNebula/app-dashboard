@@ -31,11 +31,11 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Description</label>
-          <label class="subLabel description-label"> {{this.reportData?.extra?.capabilities.description}}</label>
+          <label class="subLabel description-label"> {{this.reportData?.extra?.capabilities.description || 'N/A'}}</label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Build Number</label>
-          <label class="subLabel description-label"> {{this.reportData?.extra?.capabilities?.buildNumber}}</label>
+          <label class="subLabel description-label"> {{this.reportData?.extra?.capabilities?.buildInfo || 'N/A'}}</label>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
             </span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="row" *ngFor="let instructions of testCase.value" >
+            <div class="row" *ngFor="let instructions of testCase.value" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
 
               <div class="col-4" *ngIf="instructions.status ==='Failed'">
                 <nb-card>

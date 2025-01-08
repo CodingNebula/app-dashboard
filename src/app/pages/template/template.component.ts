@@ -256,7 +256,9 @@ this.getAllPages()
         }
 
         // Add current instruction to the appropriate group
-        acc[instruction_set_id].instructions.push(curr);
+        if(curr.instruction_name !== null  ){
+          acc[instruction_set_id].instructions.push(curr);
+        }
 
         return acc;
     }, {});
@@ -315,7 +317,11 @@ const sortedInstructions = result
                     ins_set_screen_name: curr.ins_set_screen_name,
                     instructions: [],
                 };
+
+              if(curr.ins_set_screen_name !== null){
                 wtGroup.screens.push(screenGroup);
+              }
+
             }
 
 
