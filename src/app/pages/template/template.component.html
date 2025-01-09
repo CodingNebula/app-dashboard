@@ -6,6 +6,7 @@
     <div class="test-case-head">
       <h5>{{appName}} Test Cases</h5>
       <button class="add-test-case-btn" (click)="openDialog('testCase', 'name')">Add Test Case</button>
+
     </div>
     <div class="test-case-main">
       <div *ngIf="testCasesArray.length === 0" class="no-app-div">
@@ -30,8 +31,9 @@
                   <ng-template #list>
                     <nb-card class="margin-bottom-0">
                       <nb-list>
-                        <nb-list-item  (click)="openDialog('testCase', 'name','',testCase)" >Edit</nb-list-item>
+                        <nb-list-item  (click)="openDialog('testCase', 'name','',testCase)" >Edit Testcase</nb-list-item>
                         <nb-list-item   (click)="openDeleteDailog(testCase)" >Delete</nb-list-item>
+                        <nb-list-item  (click)="openDialog('testcase', 'reorder','',testCase)" >Edit Instructions</nb-list-item>
                         <nb-list-item   (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)" >Add Instructions</nb-list-item>
                       </nb-list>
                     </nb-card>
@@ -42,6 +44,7 @@
                   <div  *ngIf="testCase?.instructions.length !== 0" >
                     <div *ngFor="let testcase of testCase?.instructions">
                       {{ testcase?.instruction_name }}
+
                     </div>
                   </div>
                   <div class="accordian-body-div" *ngIf="testCase?.instructions.length === 0"  >
@@ -105,6 +108,8 @@
                         <div class="">
                           <div  *ngFor="let testcase of testCase?.instructions">
                             {{ testcase?.ins_name }}
+
+
                           </div>
                         </div>
                       </nb-accordion-item-body>

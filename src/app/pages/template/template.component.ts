@@ -46,8 +46,6 @@ export class TemplateComponent {
   }
 
   openDeleteDailog(item){
-
-
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
       closeOnBackdropClick: true,
@@ -108,12 +106,6 @@ export class TemplateComponent {
       });
 
     }
-
-
-
-
-
-
 
 
 
@@ -294,7 +286,6 @@ export class TemplateComponent {
       ignoreHiddenApiPolicyError: true,
       newCommandTimeout: 1200000
     }
-
     this.router.navigateByUrl('/pages/automate', { state: { templateArr: template, capabilities: capabilities } })
   }
 

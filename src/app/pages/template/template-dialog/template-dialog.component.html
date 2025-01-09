@@ -15,15 +15,6 @@
   </nb-card-body>
 
 
-  <div *ngIf="editData?.screen_name">
-  <div *ngFor="let inst of editData.instructions" >
-    <div>{{inst.instruction_name}}</div>
-  </div>
-
-
-  </div>
-
-
   <nb-card-footer>
     <button nbButton (click)="close()" class="close-button">Close</button>
     <div class="form-row button-row">
@@ -98,6 +89,28 @@
 
 
           </form>
+
+
+
+      <div *ngIf="editData?.wt_name">
+<!--        <div *ngFor="let inst of editData.screens" >-->
+<!--          <div>{{inst.ins_set_screen_name }}     <nb-icon icon="delete-outline"  ></nb-icon>  </div>-->
+
+
+<!--        </div>-->
+
+<!--        <div cdkDropList #doneList="cdkDropList"  [cdkDropListData]="editData.screens"  [cdkDropListConnectedTo]="[editData.screens]" class="example-list"-->
+<!--             (cdkDropListDropped)="drop($event)">-->
+<!--          <div class="example-box" *ngFor="let inst of editData.screens" cdkDrag>{{inst.ins_set_screen_nam}}</div>-->
+<!--        </div>-->
+
+        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="editData.screens" [cdkDropListConnectedTo]="[todoList]" class="example-list"
+             (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of templateTestcaseData" cdkDrag>{{item}}</div>
+        </div>
+
+      </div>
+
     </nb-card-body>
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
@@ -134,3 +147,40 @@
         </div>
     </nb-card-footer>
   </nb-card>
+
+<nb-card *ngIf="selectedAction === 'testcase' && selectedType === 'reorder'">
+  <nb-card-header>Reorder Instructions</nb-card-header>
+  <nb-card-body>
+
+
+    <div *ngIf="editData?.screen_name">
+      <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="drop($event)"  >
+
+        <div class="example-box  " *ngFor="let inst of editData.instructions, index as i" cdkDrag>
+          <div  style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
+          <div   class="w-10 drag-icon">
+            <i    class="material-icons" cdkDragHandle><nb-icon icon="menu-outline" ></nb-icon></i>
+          </div>
+          <div style="width: 80%"  >{{inst.instruction_name}}     </div>
+
+          <div class="w-10 delete-icon">
+            <i class="material-icons"  ><nb-icon icon="trash-outline" ></nb-icon></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nb-card-body>
+
+
+
+
+
+  <nb-card-footer>
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <div class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
