@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NbDialogRef } from '@nebular/theme';
+import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../../shared/services/account/account.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { DeleteDialogComponent } from '../../component/delete-dialog/delete-dialog.component';
 
 
 @Component({
@@ -24,57 +25,25 @@ export class TemplateDialogComponent {
   public selectedType: string;
   public testCases: FormGroup;
   public appName: any;
-  public editData:any;
+  public editData: any;
   public templateTestcaseData: any;
+  public isEdit: boolean;
 
   constructor(
+    private dialogService: NbDialogService,
     private dialogRef: NbDialogRef<TemplateDialogComponent>,
     private fb: FormBuilder,
     private applicationDataService: ApplicationDataService,
-  private accountService: AccountService) {
-    }
-  todo = [
-    'Get to work',
-    'Pick up groceries',
-    'Go home',
-    'Fall asleep',
-    'Walk Dog',
-    'Stretch',
-    'Code Stuff',
-    'Drag Stuff',
-    'Drop Stuff',
-    'Run',
-    'Walk'
-  ];
-
-  done = [
-    'Get up',
-    'Brush teeth',
-    'Take a shower',
-    'Check e-mail',
-    'Walk dog'
-  ];
-
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
+    private accountService: AccountService) {
   }
+
   ngOnInit() {
 
-
-    console.log(this.editData)
-
-let data
-if(this.selectedAction === '' && this.selectedType === 'template'){
-   data =  this.editData?.screens.map((testcase)=>testcase.ins_set_screen_name)
-  this.templateTestcaseData = data;
-}
+    let data
+    if (this.selectedAction === '' && this.selectedType === 'template') {
+      data = this.editData?.screens.map((testcase) => testcase.ins_set_screen_name)
+      this.templateTestcaseData = data;
+    }
 
     this.appDetails = this.applicationDataService.getData();
     this.appName = localStorage.getItem('app_name');
@@ -98,7 +67,7 @@ if(this.selectedAction === '' && this.selectedType === 'template'){
       templates: [[], Validators.required],
     })
 
-this.patchFormValues()
+    this.patchFormValues()
 
   }
 
@@ -106,9 +75,12 @@ this.patchFormValues()
     moveItemInArray(this.editData.instructions, event.previousIndex, event.currentIndex);
   }
 
+  dropScreen(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.editData.screens, event.previousIndex, event.currentIndex);
+  }
+
   patchFormValues() {
     if (this.editData) {
-      debugger
       // Assuming 'screen_name' exists in 'editData'
       this.testCaseName.patchValue({
         test_case_name: this.editData.screen_name,
@@ -139,20 +111,15 @@ this.patchFormValues()
   }
 
 
-  // drop(event: CdkDragDrop<string[]>) {
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     transferArrayItem(event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex);
-  //   }
-  // }
 
-  onSubmit() {
+  onSubmit(type?) {
+    if (type === 'reorder') {
+      this.dialogRef.close({ confirmed: true, data: this.editData, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });
+
+    }
+
     if (this.testCaseName.valid) {
-      this.dialogRef.close({ confirmed: true, data: this.testCaseName.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
+      this.dialogRef.close({ confirmed: true, data: this.testCaseName.value, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });
     }
     if (this.instruction.valid) {
       this.dialogRef.close({ confirmed: true, data: this.instruction.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
@@ -177,6 +144,52 @@ this.patchFormValues()
 
   close() {
     this.dialogRef.close({ confirmed: false });
+  }
+
+  deleteInstruction(inst) {
+
+  }
+
+  openDeleteDailog(item) {
+    const dialogRef = this.dialogService.open(DeleteDialogComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+      context: { itemToDelete: item }
+    });
+
+
+    dialogRef.onClose.subscribe((result) => {
+
+      if (result) {
+        if (result.confirmed) {
+
+          // this.saveApplicationData(appDetails);
+          let app_id = localStorage.getItem('app_id');
+
+          let body = {
+            instruction_set_id: result?.data?.testcase_id,  // This value can be dynamic
+            instruction_id: [{
+              id: result?.data?.instruction_id,  // Mapping the dynamic id from instructionsArray
+              order: (0).toString(),
+              extra: {}
+            }]
+          };
+
+          const id = result?.data?.testcase_id;
+
+          this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
+            if (resp) {
+              // this.getAllPages()
+            }
+          })
+
+          // this.deleteTestcase(result.data)
+
+        }
+      }
+    });
+
   }
 
   //

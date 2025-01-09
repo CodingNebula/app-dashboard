@@ -140,8 +140,8 @@ export class AccountService {
     );
   }
 
-  updateTestCase(id: string, request: any) {
-    return this.apiService.updateWithoutModal(`app_test_case/${id}`, request).pipe(
+  updateTestCaseName(id: string, request: any) {
+    return this.apiService.updateWithoutModal(id, request).pipe(
       map(resp => {
         if (resp) {
           return resp;
@@ -273,7 +273,26 @@ export class AccountService {
   }
 
   postPageInstructions(request: any) {
-    return this.apiService.postWithoutModel(`page/${localStorage.getItem('app_id')}`, request).pipe(
+    return this.apiService.postWithoutModel(`page_mapper/${localStorage.getItem('app_id')}`, request).pipe(
+      map(resp => {
+        if (resp) {
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
+  updatePageInstructions(id, request: any) {
+    return this.apiService.updateWithoutModal(`page_mapper/${localStorage.getItem('app_id')}/${id}`, request).pipe(
       map(resp => {
         if (resp) {
           return resp;

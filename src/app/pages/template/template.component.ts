@@ -1,10 +1,10 @@
-import {Component, TemplateRef, ViewChild} from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { TemplateDialogComponent } from './template-dialog/template-dialog.component';
 import { Router } from '@angular/router';
 import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../shared/services/account/account.service';
-import {DeleteDialogComponent} from "../component/delete-dialog/delete-dialog.component";
+import { DeleteDialogComponent } from "../component/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'ngx-template',
@@ -21,7 +21,7 @@ export class TemplateComponent {
   public templateId: any;
   public tempTestCase: any = {};
   public tempTemplate: any = {};
-  public appName : any;
+  public appName: any;
 
 
   @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
@@ -31,13 +31,13 @@ export class TemplateComponent {
     private router: Router,
     private accountService: AccountService,
     private applicationDataService: ApplicationDataService) {
-      const appDetails = this.applicationDataService.getData();
+    const appDetails = this.applicationDataService.getData();
 
 
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.getAllPages();
     this.getAllTemplates();
     this.getInstructions();
@@ -45,12 +45,12 @@ export class TemplateComponent {
     this.appName = localStorage.getItem('app_name');
   }
 
-  openDeleteDailog(item){
+  openDeleteDailog(item) {
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
       closeOnBackdropClick: true,
       closeOnEsc: true,
-      context: {itemToDelete: item}
+      context: { itemToDelete: item }
     });
 
 
@@ -62,8 +62,7 @@ export class TemplateComponent {
           // this.saveApplicationData(appDetails);
           let app_id = localStorage.getItem('app_id');
 
-
-          this.deleteTestcase(result.data)
+          // this.deleteTestcase(result.data)
 
         }
       }
@@ -78,8 +77,8 @@ export class TemplateComponent {
 
 
     let url
-    if(ins_id.testcase_id !== undefined){
-       url = `${userId}/${ins_id.testcase_id}`
+    if (ins_id.testcase_id !== undefined) {
+      url = `${userId}/${ins_id.testcase_id}`
 
       this.accountService.deleteTestCase(url).subscribe((response) => {
         if (response) {
@@ -92,9 +91,8 @@ export class TemplateComponent {
       });
 
 
-    }else{
-      url =  `${userId}/${ins_id.template_id}`
-      debugger;
+    } else {
+      url = `${userId}/${ins_id.template_id}`
       this.accountService.deleteTemplate(url).subscribe((response) => {
         if (response) {
 
@@ -113,164 +111,260 @@ export class TemplateComponent {
   }
 
 
-  openDialog(action: string, type: string, id?: any, editData?: any) {
+  openDialog(action: string, type: string, id?: any, editData?: any, isEdit?: boolean) {
     // Open the dialog and pass data to it using 'context'
+    
 
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
-      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr ,editData:editData},
+      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr, editData: editData, isEdit: isEdit },
     });
 
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
-        if (result?.confirmed) {
-          if (result.selectedAction === 'testCase') {
-            if(result.selectedType === 'name'){
+      
+      if (result?.confirmed) {
+        if (result.selectedAction === 'testCase') {
+          if (result.selectedType === 'name') {
 
+            if (isEdit) {
+              const details = {
+                screenName: result.data.test_case_name,
+                extra: {},
+              }
+              
+              const api_url = `page/${localStorage.getItem('app_id')}/${id}`;
+              this.accountService.updateTestCaseName(api_url, details).subscribe((res) => {
+                if(res){
+                  this.getAllPages();
+                }
+              })
+            }
+            else {
               const details = {
                 screenName: result.data.test_case_name,
                 applicationId: localStorage.getItem('app_id'),
                 extra: {},
-            }
+              }
 
-
-
-              // this.saveApplicationData(appDetails);
               this.accountService.postPageName(details).subscribe((resp) => {
-                if(resp){
+                if (resp) {
 
-                  // this.testCasesArray.push(resp[0]);
-                  // this.screenNameId = resp[0]?.id
-                  // this.tempTestCase.screen_name = result.data.test_case_name;
-                  // this.tempTestCase.instruction_set_id = resp[0]?.id;
                   this.getAllPages();
 
                 }
               })
               this.applicationDataService.setData('testCases', this.testCasesArray);
-              // this.router.navigateByUrl('pages/capabilities');
+
             }
+          }
 
-            if(result.selectedType === 'instruction'){
+          if(result.selectedType === 'reorder'){
+            
+            let body = {
+              instruction_set_id: result?.data?.instruction_set_id,  // This value can be dynamic
+              instruction_id: result?.data?.instructions?.map((instruction, index) => {
+                return {
+                  id: instruction.instruction_id,  // Mapping the dynamic id from instructionsArray
+                  order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                  extra: {}  // Adding any extra dynamic data
+                };
+              })
+            };
 
-              let body = {
-                instruction_set_id: id,  // This value can be dynamic
-                instruction_id: result?.data?.instructionArr?.map((instruction, index) => {
-                    return {
-                        id: instruction.id,  // Mapping the dynamic id from instructionsArray
-                        order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
-                        extra: instruction.extra  // Adding any extra dynamic data
-                    };
-                })
+            const id = result?.data?.instruction_set_id;
+
+            this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
+              if (resp) {
+                this.getAllPages()
+              }
+            })
+          }
+
+          if (result.selectedType === 'instruction') {
+
+            let body = {
+              instruction_set_id: id,  // This value can be dynamic
+              instruction_id: result?.data?.instructionArr?.map((instruction, index) => {
+                return {
+                  id: instruction.id,  // Mapping the dynamic id from instructionsArray
+                  order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                  extra: instruction.extra  // Adding any extra dynamic data
+                };
+              })
             };
 
 
 
 
-              this.accountService.postPageInstructions(body).subscribe((resp) => {
-                if(resp){
-                  this.getAllPages()
-                  // this.testCasesArray.push(resp[0]);
+            this.accountService.postPageInstructions(body).subscribe((resp) => {
+              if (resp) {
+                this.getAllPages()
+                // this.testCasesArray.push(resp[0]);
                 //   if (this.testCasesArray.length > 0) {
                 //     this.testCasesArray.pop();
                 // }
                 //   this.tempTestCase.instructions = result.data.instructionArr;
                 //   this.testCasesArray.push(this.tempTestCase);
 
-                }
-              })
-              this.applicationDataService.setData('testCases', this.testCasesArray);
-              // this.router.navigateByUrl('pages/capabilities');
-            }
+              }
+            })
+            this.applicationDataService.setData('testCases', this.testCasesArray);
+            // this.router.navigateByUrl('pages/capabilities');
           }
-          else if (result.selectedAction === 'template') {
-            if(result.selectedType === 'name'){
+        }
+        else if (result.selectedAction === 'template') {
+          if (result.selectedType === 'name') {
 
             //   const details = {
             //     screenName: result.data.test_case_name,
             //     applicationId: localStorage.getItem('app_id'),
             //     extra: {},
             // }
+            
+
+            if (isEdit) {
+            //   {
+            //     "confirmed": true,
+            //     "data": {
+            //         "templateName": "newtesttemppp",
+            //         "description": "newtesttempdesccc"
+            //     },
+            //     "selectedAction": "template",
+            //     "selectedType": "name"
+            // }
+              const details = {
+                screenName: result.data.templateName,
+                description:  result.data.description,
+                extra: {},
+              }
+              
+              const api_url = `workflow/${localStorage.getItem('app_id')}/${id}`;
+              this.accountService.updateTestCaseName(api_url, details).subscribe((res) => {
+                if(res){
+                  this.getAllTemplates();
+                }
+              })
+            } else{
+              
 
             const details = {
               templateName: result.data.templateName,
               applicationId: localStorage.getItem('app_id'),
               description: result.data.description,
               extra: {},
-          }
-
-
-              // this.saveApplicationData(appDetails);
-              this.accountService.postTemplateName(details).subscribe((resp) => {
-                if(resp){
-
-
-                  // this.testCasesArray.push(resp[0]);
-                  this.templateId = resp[0]?.wt_id
-                  // this.tempTemplate.wt_name = resp[0]?.template_name;
-                  // this.tempTemplate.wt_desc = resp[0]?.description;
-                  // this.tempTemplate.wt_id = resp[0]?.id;
-
-
-
-                  // this.templateArray.push(this.tempTemplate)
-                  this.getAllTemplates();
-                }
-              })
-              this.applicationDataService.setData('testCases', this.testCasesArray);
-              // this.router.navigateByUrl('pages/capabilities');
             }
 
-            if(result.selectedType === 'testCase'){
 
-              let body = {
-                application_id: localStorage.getItem('app_id'),  // This value can be dynamic
-                wt_id:id,
-                instructions_set: result?.data?.templates?.map((instruction, index) => {
-                    return {
-                        id: instruction?.instruction_set_id,  // Mapping the dynamic id from instructionsArray
-                        order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
-                        extra: {}  // Adding any extra dynamic data
-                    };
-                })
+            // this.saveApplicationData(appDetails);
+            this.accountService.postTemplateName(details).subscribe((resp) => {
+              if (resp) {
+
+
+                // this.testCasesArray.push(resp[0]);
+                this.templateId = resp[0]?.wt_id
+                // this.tempTemplate.wt_name = resp[0]?.template_name;
+                // this.tempTemplate.wt_desc = resp[0]?.description;
+                // this.tempTemplate.wt_id = resp[0]?.id;
+
+
+
+                // this.templateArray.push(this.tempTemplate)
+                this.getAllTemplates();
+              }
+            })
+            this.applicationDataService.setData('testCases', this.testCasesArray);
+            // this.router.navigateByUrl('pages/capabilities');
+          }
+          
+        }
+
+        if(result.selectedType === 'reorder'){
+            
+          let body = {
+            instruction_set_id: result?.data?.instruction_set_id,  // This value can be dynamic
+            instruction_id: result?.data?.instructions?.map((instruction, index) => {
+              return {
+                id: instruction.instruction_id,  // Mapping the dynamic id from instructionsArray
+                order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                extra: {}  // Adding any extra dynamic data
+              };
+            })
+          };
+
+          const id = result?.data?.instruction_set_id;
+
+          
+
+          // this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
+          //   if (resp) {
+          //     this.getAllPages()
+          //   }
+          // })
+        }
+
+          if (result.selectedType === 'testCase') {
+
+            let body = {
+              application_id: localStorage.getItem('app_id'),  // This value can be dynamic
+              wt_id: id,
+              instructions_set: result?.data?.templates?.map((instruction, index) => {
+                return {
+                  id: instruction?.instruction_set_id,  // Mapping the dynamic id from instructionsArray
+                  order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                  extra: {}  // Adding any extra dynamic data
+                };
+              })
             };
 
 
             let screens = result?.data?.templates?.map((screen, index) => {
               return {
-                wt_id:screen?.wt_id,
+                wt_id: screen?.wt_id,
                 ins_set_id: screen?.instruction_set_id,
                 ins_set_screen_name: screen?.screen_name,  // Setting the screen name dynamically from result.data.screen_name
-                  instructions: screen?.instructions?.map((instruction) => {
-                      return {
-                        ins_name: instruction?.instruction_name,
-                        ins_back_name: instruction?.server_name,
-                        ins_element_name: instruction?.element_name,  // Mapping each instruction's inst_name dynamically
-                      };
-                  })
+                instructions: screen?.instructions?.map((instruction) => {
+                  return {
+                    ins_name: instruction?.instruction_name,
+                    ins_back_name: instruction?.server_name,
+                    ins_element_name: instruction?.element_name,  // Mapping each instruction's inst_name dynamically
+                  };
+                })
               };
-          });
+            });
 
-              let appId=localStorage.getItem('app_id');
-              this.accountService.postTemplates(id, body).subscribe((resp) => {
-                if(resp){
+            let appId = localStorage.getItem('app_id');
+            this.accountService.postTemplates(id, body).subscribe((resp) => {
+              if (resp) {
 
                 //   if (this.templateArray.length > 0) {
                 //     this.templateArray.pop();
                 // }
 
-                  // this.tempTemplate.screens = screens;
-                  //
-                  // this.templateArray.push(this.tempTemplate);
-                  this.getAllTemplates();
+                // this.tempTemplate.screens = screens;
+                //
+                // this.templateArray.push(this.tempTemplate);
+                this.getAllTemplates();
 
-                }
-              })
-            }
-
+              }
+            })
           }
+
         }
+      }
       // }
+    });
+  }
+
+  
+
+  deleteInstruction(app_id, insId) {
+    this.accountService.deleteInstruction(app_id, insId).subscribe((response) => {
+      if (response) {
+        this.getInstructions();
+      }
+    }, (error) => {
+      console.error('Error saving test case:', error);
     });
   }
 
@@ -289,7 +383,7 @@ export class TemplateComponent {
     this.router.navigateByUrl('/pages/automate', { state: { templateArr: template, capabilities: capabilities } })
   }
 
-  getAllPages(){
+  getAllPages() {
     const id = localStorage.getItem('app_id');
     this.accountService.getAllPages(id).subscribe((resp) => {
 
@@ -298,41 +392,44 @@ export class TemplateComponent {
 
         // Check if this instruction_set_id already exists in the accumulator
         if (!acc[instruction_set_id]) {
-            acc[instruction_set_id] = {
-                instruction_set_id: instruction_set_id,
-                screen_name: screen_name,
-                instructions: []
-            };
+          acc[instruction_set_id] = {
+            instruction_set_id: instruction_set_id,
+            screen_name: screen_name,
+            instructions: []
+          };
         }
-
+        
+        
         // Add current instruction to the appropriate group
-        if(curr.instruction_name !== null  ){
+        if (curr.instruction_name !== null) {
           acc[instruction_set_id].instructions.push(curr);
         }
-
+        
         return acc;
-    }, {});
-
-    // Convert the grouped object to an array
-    const result = Object.values(groupedInstructions); // assuming groupedInstructions is an object
-
-
-// Flatten and sort the instructions by 'instruction_order'
-const sortedInstructions = result
-  .map((item: any) => {
-    // Sort the instructions in each item by instruction_order
-    item.instructions.sort((a: any, b: any) => {
-      return parseInt(a.instruction_order) - parseInt(b.instruction_order);
-    });
-    return item;
-  })
-
-// sortedInstructions.forEach((instruction: any) => {
-// });
+      }, {});
+      
+      // Convert the grouped object to an array
+      const result = Object.values(groupedInstructions); // assuming groupedInstructions is an object
 
 
+      // Flatten and sort the instructions by 'instruction_order'
+      const sortedInstructions = result
+        .map((item: any) => {
+          // Sort the instructions in each item by instruction_order
+          item.instructions.sort((a: any, b: any) => {
+            return parseInt(a.instruction_order) - parseInt(b.instruction_order);
+          });
+          return item;
+        })
+        
 
-    this.testCasesArray = result;
+      // sortedInstructions.forEach((instruction: any) => {
+      // });
+
+      
+
+      this.testCasesArray = result;
+      
     })
   }
 
@@ -340,53 +437,53 @@ const sortedInstructions = result
   getAllTemplates() {
     const id = localStorage.getItem('app_id');
     this.accountService.getAllTemplates(id).subscribe((resp) => {
-        const groupedData = [];
+      const groupedData = [];
 
 
-        resp.forEach((curr) => {
-            // Find or create the weight group
-            let wtGroup = groupedData.find(group => group.wt_id === curr.wt_id);
+      resp.forEach((curr) => {
+        // Find or create the weight group
+        let wtGroup = groupedData.find(group => group.wt_id === curr.wt_id);
 
-            if (!wtGroup) {
-                wtGroup = {
-                    wt_id: curr.wt_id,
-                    wt_name: curr.wt_name,
-                    wt_desc: curr.wt_desc,
-                    screens: [],
-                };
-                groupedData.push(wtGroup);
-            }
-
-
-            // Find or create the screen group
-            let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
-            if (!screenGroup) {
-                screenGroup = {
-                    ins_set_id: curr.ins_set_id,
-                    ins_set_screen_name: curr.ins_set_screen_name,
-                    instructions: [],
-                };
-
-              if(curr.ins_set_screen_name !== null){
-                wtGroup.screens.push(screenGroup);
-              }
-
-            }
+        if (!wtGroup) {
+          wtGroup = {
+            wt_id: curr.wt_id,
+            wt_name: curr.wt_name,
+            wt_desc: curr.wt_desc,
+            screens: [],
+          };
+          groupedData.push(wtGroup);
+        }
 
 
-            // Check if the instruction is already added to the screenGroup
-            const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
-            if (!instructionExists) {
-                screenGroup.instructions.push(curr);
-            }
-        });
+        // Find or create the screen group
+        let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
+        if (!screenGroup) {
+          screenGroup = {
+            ins_set_id: curr.ins_set_id,
+            ins_set_screen_name: curr.ins_set_screen_name,
+            instructions: [],
+          };
 
-        this.templateArray = groupedData;
+          if (curr.ins_set_screen_name !== null) {
+            wtGroup.screens.push(screenGroup);
+          }
+
+        }
+
+
+        // Check if the instruction is already added to the screenGroup
+        const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
+        if (!instructionExists) {
+          screenGroup.instructions.push(curr);
+        }
+      });
+
+      this.templateArray = groupedData;
 
     });
-}
+  }
 
-  getInstructions(){
+  getInstructions() {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
@@ -395,7 +492,7 @@ const sortedInstructions = result
     })
   }
 
-  toInstructions(){
+  toInstructions() {
     this.router.navigateByUrl('pages/instructions');
   }
 

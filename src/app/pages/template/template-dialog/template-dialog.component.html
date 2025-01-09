@@ -17,7 +17,10 @@
 
   <nb-card-footer>
     <button nbButton (click)="close()" class="close-button">Close</button>
-    <div class="form-row button-row">
+    <div *ngIf="!isEdit" class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+    </div>
+    <div *ngIf="isEdit" class="form-row button-row">
       <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
     </div>
   </nb-card-footer>
@@ -114,9 +117,12 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
-      <div class="form-row button-row">
+      <div *ngIf="!isEdit" class="form-row button-row">
         <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Submit</button>
         </div>
+        <div *ngIf="isEdit" class="form-row button-row">
+          <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Edit</button>
+          </div>
     </nb-card-footer>
   </nb-card>
 
@@ -148,7 +154,7 @@
     </nb-card-footer>
   </nb-card>
 
-<nb-card *ngIf="selectedAction === 'testcase' && selectedType === 'reorder'">
+<nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'reorder'">
   <nb-card-header>Reorder Instructions</nb-card-header>
   <nb-card-body>
 
@@ -163,7 +169,7 @@
           </div>
           <div style="width: 80%"  >{{inst.instruction_name}}     </div>
 
-          <div class="w-10 delete-icon">
+          <div class="w-10 delete-icon" (click)="openDeleteDailog(inst)">
             <i class="material-icons"  ><nb-icon icon="trash-outline" ></nb-icon></i>
           </div>
         </div>
@@ -171,15 +177,41 @@
     </div>
 
   </nb-card-body>
-
-
-
-
-
   <nb-card-footer>
     <button nbButton (click)="close()" class="close-button">Close</button>
     <div class="form-row button-row">
-      <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+      <button type="submit" (click)="onSubmit(selectedType)" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
+<nb-card *ngIf="selectedAction === 'template' && selectedType === 'reorder'">
+  <nb-card-header>Reorder Screens</nb-card-header>
+  <nb-card-body>
+
+
+    <div *ngIf="editData?.wt_name">
+      <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="dropScreen($event)"  >
+
+        <div class="example-box  " *ngFor="let inst of editData.screens, index as i" cdkDrag>
+          <div  style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
+          <div   class="w-10 drag-icon">
+            <i    class="material-icons" cdkDragHandle><nb-icon icon="menu-outline" ></nb-icon></i>
+          </div>
+          <div style="width: 80%"  >{{inst.ins_set_screen_name}}     </div>
+
+          <div class="w-10 delete-icon" (click)="openDeleteDailog(inst)">
+            <i class="material-icons"  ><nb-icon icon="trash-outline" ></nb-icon></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <div class="form-row button-row">
+      <button type="submit" (click)="onSubmit(selectedType)" class="submit-button">Submit</button>
     </div>
   </nb-card-footer>
 </nb-card>

@@ -911,10 +911,10 @@ export class AutomateComponent implements OnInit {
   
 
   singleInstructionWebsocket(allInstructions) {
-    console.log(allInstructions);
     
     this.showIndividualEnd = true;
     allInstructions.showSingleInstruction = true;
+    allInstructions.singleInstLoader = true;
 
 
 
@@ -936,7 +936,7 @@ export class AutomateComponent implements OnInit {
       this.socketSubscription.unsubscribe();
 
     }
-    // this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
+    this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
       console.log(res);
       
@@ -944,6 +944,7 @@ export class AutomateComponent implements OnInit {
       if (res?.message && res?.message?.info) {
 
         this.currentOnGoingScreen = res.message.moduleName;
+        allInstructions.singleInstLoader = false;
         let currentTime = Date.now() / 1000;
         const now = new Date();
         const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -1635,6 +1636,7 @@ export class AutomateComponent implements OnInit {
 
         inst.showSingleInstruction = false;
         inst.status = '';
+        inst.singleInstLoader = false;
 
 
 

@@ -84,7 +84,6 @@ export class ReportPdfService {
   }
 
   downloadReportPDF(item, $event: Event) {
-    console.log(item);
 
     this.chartData = [];
 
@@ -133,16 +132,12 @@ export class ReportPdfService {
       doc.text('Device Information :- ', 14, 40);
       doc.setFont("helvetica", "normal");
 
-      console.log(this.echartsInstance);
-
-
-
       const chartImage = this.echartsInstance.getDataURL({
         type: 'png', // Specify the image format
         pixelRatio: 2, // Higher pixel ratio for better quality
         backgroundColor: '#fff' // Optional: Set a background color
       });
-      console.log(chartImage);
+      
       const pageWidth = doc.internal.pageSize.width;
       const xPosition = pageWidth - 140;
       doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);

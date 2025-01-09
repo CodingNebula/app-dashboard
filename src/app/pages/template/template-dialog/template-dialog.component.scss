@@ -70,7 +70,10 @@ i.disable{
   box-sizing: border-box;
   background: white;
   font-size: 14px;
-  margin-bottom: 20px;
+  margin: 10px 5px;
+}
+.delete-icon{
+  cursor: pointer;
 }
 
 .cdk-drag-preview {

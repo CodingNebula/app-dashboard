@@ -36,12 +36,10 @@ export class InstructionsDialogComponent {
 
 
   deleteInstruction(instId){
-    debugger
   }
 
   onSubmit() {
     if (this.myForm.valid) {
-      console.log(this.myForm.value);
 
       this.dialogRef.close({ confirmed: true, data: {formValue: this.myForm.value, isEdit: this.itemToEdit?true: false, insId: this.itemToEdit?this.itemToEdit.id:null} });
     }

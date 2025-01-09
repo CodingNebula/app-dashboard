@@ -161,6 +161,7 @@
           <ng-container *ngFor="let item of testCase.testCase">
             <div *ngIf="item.ins_set_id === testCase.ins_set_id" class="test-case-div test-case-body-data">
             <h6>{{item?.ins_name}}</h6>
+            <div [nbSpinner]="item.singleInstLoader"  class="instuction-loader" ></div>
             <button *ngIf="!item.showSingleInstruction && (!testCase.hideStart && !item?.status)" class="start-button" (click)="singleInstructionWebsocket(item, testCases)">Run</button>
             <div *ngIf="item?.status" [ngClass]="item?.status === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.status}}
             </div>

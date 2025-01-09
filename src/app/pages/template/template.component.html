@@ -22,18 +22,21 @@
                 <nb-accordion-item-header class="accordian-header">
                   {{ testCase?.screen_name }}
 
-                  <nb-icon [nbPopover]="list" icon="edit-outline" nbPopoverPlacement="bottom-end" ></nb-icon>
-                  <button class="add-new"
+                  <div class="add-new" [nbPopover]="list">
+                    Modify
+                    <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end" ></nb-icon>
+                  </div>
+                  <!-- <button class="add-new"
                     (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
-                    Instructions</button>
+                    Instructions</button> -->
 
 
                   <ng-template #list>
                     <nb-card class="margin-bottom-0">
                       <nb-list>
-                        <nb-list-item  (click)="openDialog('testCase', 'name','',testCase)" >Edit Testcase</nb-list-item>
+                        <nb-list-item  (click)="openDialog('testCase', 'name', testCase?.instruction_set_id ,testCase, true)" >Edit Testcase</nb-list-item>
                         <nb-list-item   (click)="openDeleteDailog(testCase)" >Delete</nb-list-item>
-                        <nb-list-item  (click)="openDialog('testcase', 'reorder','',testCase)" >Edit Instructions</nb-list-item>
+                        <nb-list-item  (click)="openDialog('testCase', 'reorder','',testCase)" >Edit Instructions</nb-list-item>
                         <nb-list-item   (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)" >Add Instructions</nb-list-item>
                       </nb-list>
                     </nb-card>
@@ -87,8 +90,9 @@
                   <ng-template #listTemplate>
                     <nb-card class="margin-bottom-0">
                       <nb-list>
-                        <nb-list-item  (click)="openDialog('template', 'name','',template)" >Edit</nb-list-item>
+                        <nb-list-item  (click)="openDialog('template', 'name',template?.wt_id, template, true)" >Edit Name and Desc</nb-list-item>
                         <nb-list-item   (click)="openDeleteDailog(template)" >Delete</nb-list-item>
+                        <nb-list-item  (click)="openDialog('template', 'reorder', '', template)" >Edit Screens</nb-list-item>
                         <nb-list-item   (click)="openDialog('template', 'testCase',template?.wt_id)" >Add Screens</nb-list-item>
                       </nb-list>
                     </nb-card>

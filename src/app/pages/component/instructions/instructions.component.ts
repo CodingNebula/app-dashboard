@@ -114,7 +114,6 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
 
     dialogRef.onClose.subscribe((result) => {
-      debugger
       if (result) {
         if (result.confirmed) {
 

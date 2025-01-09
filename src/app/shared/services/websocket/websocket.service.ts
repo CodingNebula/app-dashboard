@@ -196,9 +196,6 @@ export class WebsocketService {
 
   sendTestCaseRequest(item?: any): void {
 
-    console.log(item);
-    
-
     this.testReportsData.reports.push(item);
 
     // Check if the socket is connected before emitting
