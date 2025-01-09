@@ -559,7 +559,6 @@ export class AutomateComponent implements OnInit {
         }
       );
     }
-    // this.singleInstructionWebsocket(result)
     this.sendAllInstructionSocket(itemData, result)
 
   }
@@ -909,8 +908,13 @@ export class AutomateComponent implements OnInit {
     }
   }
 
+  
+
   singleInstructionWebsocket(allInstructions) {
+    console.log(allInstructions);
+    
     this.showIndividualEnd = true;
+    allInstructions.showSingleInstruction = true;
 
 
 
@@ -932,19 +936,10 @@ export class AutomateComponent implements OnInit {
       this.socketSubscription.unsubscribe();
 
     }
-    this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
+    // this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
       console.log(res);
       
-      if(res.message.message === "Appium Not Available"){
-        this.showIndividualEnd = false; 
-        this.showAppLaunchError = true;
-      this.appLaunchStatus = res.message.message;
-
-      setTimeout(() => {
-        this.showAppLaunchError = false; 
-      }, 2000);
-      }
 
       if (res?.message && res?.message?.info) {
 

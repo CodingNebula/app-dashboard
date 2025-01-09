@@ -3,6 +3,7 @@ import { WebsocketService } from '../../shared/services/websocket/websocket.serv
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { EChartsInstance } from 'echarts';
+import { ReportPdfService } from '../../shared/services/reportPdf/report-pdf.service';
 
 export interface TestCase {
   title: string;
@@ -20,6 +21,7 @@ export interface TestCase {
 export class TestReportsComponent implements OnInit {
   @ViewChild('chartElement', { static: false }) chartElement: any;
   private echartsInstance: EChartsInstance | null = null;
+
   public chartData: any = [];
   public customColumn = 'name';
   groupedData:any;
@@ -38,7 +40,7 @@ export class TestReportsComponent implements OnInit {
   public extras: any = {};
 
 
-  constructor(private webSocketService: WebsocketService) {
+  constructor(private webSocketService: WebsocketService, public reportPdfService: ReportPdfService) {
 
     this.reportHeading = localStorage.getItem('app_name')
     let plaformdata = localStorage.getItem('app_capa')
@@ -94,6 +96,10 @@ export class TestReportsComponent implements OnInit {
     const minutes = Math.floor(ms / 600000); // 1 minute = 60000 milliseconds
     const seconds = ((ms % 60000) / 1000).toFixed(0); // remainder of milliseconds for seconds
     return `${minutes} minutes and ${seconds} seconds`;
+  }
+
+  generateReport(item: any, event: Event): void {
+    this.reportPdfService.downloadReportPDF(item, event);
   }
 
 
@@ -163,7 +169,12 @@ export class TestReportsComponent implements OnInit {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               },
 
-            }
+            },
+            label: {
+              show: true,
+              position: 'outside',
+              formatter: '{d}%'
+            },
           }
         ],
         color: ['#10EB93', '#EE4748', '#A64C52'],
@@ -237,124 +248,125 @@ export class TestReportsComponent implements OnInit {
 
 
   downloadPDF(item, $event: Event) {
+    this.reportPdfService.downloadReportPDF(item, $event);
 
-    this.chartData = [];
-    this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
+//     this.chartData = [];
+//     this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
 
-    this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) === 0 ? 1 : 0 }, { name: 'UNTESTED', value: Number(item.testcase_performed) - (Number(item.testcase_passed) + Number(item.testcase_failed + 1)) })
-    this.chartData.forEach((ele: any, ind) => {
-      if (ele.value === 0) {
-        delete this.chartData[ind];
-      }
-    })
-    // this.updateCharts();
-    $event.stopPropagation();
-    setTimeout(() => {
-      this.capabilities = item?.extra?.capabilities;
-      // this.testCases = item?.extra?.resultArr;
-      // this.reportData = item?.reportData;
-      this.extras = item?.extra?.extras;
+//     this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) === 0 ? 1 : 0 }, { name: 'UNTESTED', value: Number(item.testcase_performed) - (Number(item.testcase_passed) + Number(item.testcase_failed + 1)) })
+//     this.chartData.forEach((ele: any, ind) => {
+//       if (ele.value === 0) {
+//         delete this.chartData[ind];
+//       }
+//     })
+//     // this.updateCharts();
+//     $event.stopPropagation();
+//     setTimeout(() => {
+//       this.capabilities = item?.extra?.capabilities;
+//       // this.testCases = item?.extra?.resultArr;
+//       // this.reportData = item?.reportData;
+//       this.extras = item?.extra?.extras;
 
-      const dates = new Date(this.reportData?.extra?.extras.createdAt || 'N/A');
+//       const dates = new Date(this.reportData?.extra?.extras.createdAt || 'N/A');
 
-// Check if 'dates' is a valid Date object
-      const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
-        ? dates.toLocaleDateString('en-GB', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric'
-        }).replace(/\//g, ' ') // Replace slashes with a space
-        : 'N/A';
+// // Check if 'dates' is a valid Date object
+//       const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
+//         ? dates.toLocaleDateString('en-GB', {
+//           day: '2-digit',
+//           month: 'short',
+//           year: 'numeric'
+//         }).replace(/\//g, ' ') // Replace slashes with a space
+//         : 'N/A';
 
-      const doc = new jsPDF();
+//       const doc = new jsPDF();
 
-      // Add report header
-      doc.setFontSize(16);
-      doc.setFont("helvetica", "bold");
-      doc.text(this.capabilities?.app_name || 'App Name', 14, 20);
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "normal");
-      doc.text(`Created At: ${formattedDate}`, 14, 30);
+//       // Add report header
+//       doc.setFontSize(16);
+//       doc.setFont("helvetica", "bold");
+//       doc.text(this.capabilities?.app_name || 'App Name', 14, 20);
+//       doc.setFontSize(12);
+//       doc.setFont("helvetica", "normal");
+//       doc.text(`Created At: ${formattedDate}`, 14, 30);
 
-      // Add device and platform information
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "bold");
-      doc.text('Device Information :- ', 14, 40);
-      doc.setFont("helvetica", "normal");
-      if (this.echartsInstance) {
-        // Get chart as Base64 image
-        const chartImage = this.echartsInstance.getDataURL({
-          type: 'png', // Specify the image format
-          pixelRatio: 2, // Higher pixel ratio for better quality
-          backgroundColor: '#fff' // Optional: Set a background color
-        });
-        const pageWidth = doc.internal.pageSize.width;
-        const xPosition = pageWidth - 140;
-        doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
+//       // Add device and platform information
+//       doc.setFontSize(14);
+//       doc.setFont("helvetica", "bold");
+//       doc.text('Device Information :- ', 14, 40);
+//       doc.setFont("helvetica", "normal");
+//       if (this.echartsInstance) {
+//         // Get chart as Base64 image
+//         const chartImage = this.echartsInstance.getDataURL({
+//           type: 'png', // Specify the image format
+//           pixelRatio: 2, // Higher pixel ratio for better quality
+//           backgroundColor: '#fff' // Optional: Set a background color
+//         });
+//         const pageWidth = doc.internal.pageSize.width;
+//         const xPosition = pageWidth - 140;
+//         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
 
-      }
-      doc.setFontSize(12);
-      doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
-      doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
-      doc.text(`Started By: John Doe`, 14, 70);
-      doc.text(`Started Time: ${formattedDate}, ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
-      doc.text(`Total Time Taken: ${this.timeTaken ? this.timeTaken + ' sec' : 'N/A'}`, 14, 90);
-      doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
-      doc.text(`Build Number: ${item?.extra?.capabilities.buildInfo || 'N/A'}`, 14, 110);
-      // Add a line break
-      doc.text('', 14, 110);
+//       }
+//       doc.setFontSize(12);
+//       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
+//       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
+//       doc.text(`Started By: John Doe`, 14, 70);
+//       doc.text(`Started Time: ${formattedDate}, ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
+//       doc.text(`Total Time Taken: ${this.timeTaken ? this.timeTaken + ' sec' : 'N/A'}`, 14, 90);
+//       doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
+//       doc.text(`Build Number: ${item?.extra?.capabilities.buildInfo || 'N/A'}`, 14, 110);
+//       // Add a line break
+//       doc.text('', 14, 110);
 
-      // Add test cases
-      doc.setFontSize(14);
-      doc.text('Test Cases', 14, 125);
-
-
-      // Prepare data for the table
-      const testCaseData = this.testCases.map(testCase => ({
-        info: testCase.successMessage,
-        message: testCase.message,
-        expectedResult: testCase.expected_result,
-        defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-        timeSpent: (`${testCase.timeSpent} sec`)
-      }));
-
-      // Create the table
-      autoTable(doc, {
-        head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
-        body: testCaseData.map(tc => [
-          tc.info,
-          tc.message,
-          tc.expectedResult,
-          tc.defect,
-          tc.timeSpent
-        ]),
-        startY: 130,
-        theme: 'grid',
-        headStyles: {
-          fillColor: [22, 160, 133],
-          textColor: [255, 255, 255],
-          fontSize: 12,
-          fontStyle: 'bold'
-        },
-        bodyStyles: {
-          fillColor: [255, 255, 255],
-          textColor: [0, 0, 0],
-          fontSize: 10,
-        },
-        alternateRowStyles: {
-          fillColor: [240, 240, 240]
-        },
-        margin: { top: 20 },
-      });
+//       // Add test cases
+//       doc.setFontSize(14);
+//       doc.text('Test Cases', 14, 125);
 
 
+//       // Prepare data for the table
+//       const testCaseData = this.testCases.map(testCase => ({
+//         info: testCase.successMessage,
+//         message: testCase.message,
+//         expectedResult: testCase.expected_result,
+//         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
+//         timeSpent: (`${testCase.timeSpent} sec`)
+//       }));
 
-      // Save the PDF
+//       // Create the table
+//       autoTable(doc, {
+//         head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
+//         body: testCaseData.map(tc => [
+//           tc.info,
+//           tc.message,
+//           tc.expectedResult,
+//           tc.defect,
+//           tc.timeSpent
+//         ]),
+//         startY: 130,
+//         theme: 'grid',
+//         headStyles: {
+//           fillColor: [22, 160, 133],
+//           textColor: [255, 255, 255],
+//           fontSize: 12,
+//           fontStyle: 'bold'
+//         },
+//         bodyStyles: {
+//           fillColor: [255, 255, 255],
+//           textColor: [0, 0, 0],
+//           fontSize: 10,
+//         },
+//         alternateRowStyles: {
+//           fillColor: [240, 240, 240]
+//         },
+//         margin: { top: 20 },
+//       });
 
-      doc.save('report.pdf');
 
 
-    }, 500)
+//       // Save the PDF
+
+//       doc.save('report.pdf');
+
+
+//     }, 500)
 
 
   }
