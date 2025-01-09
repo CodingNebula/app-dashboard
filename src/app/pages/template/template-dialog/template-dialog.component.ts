@@ -25,6 +25,7 @@ export class TemplateDialogComponent {
   public testCases: FormGroup;
   public appName: any;
   public editData:any;
+  public templateTestcaseData: any;
 
   constructor(
     private dialogRef: NbDialogRef<TemplateDialogComponent>,
@@ -68,7 +69,12 @@ export class TemplateDialogComponent {
 
 
     console.log(this.editData)
-    debugger
+
+let data
+if(this.selectedAction === '' && this.selectedType === 'template'){
+   data =  this.editData?.screens.map((testcase)=>testcase.ins_set_screen_name)
+  this.templateTestcaseData = data;
+}
 
     this.appDetails = this.applicationDataService.getData();
     this.appName = localStorage.getItem('app_name');
@@ -96,6 +102,9 @@ this.patchFormValues()
 
   }
 
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.editData.instructions, event.previousIndex, event.currentIndex);
+  }
 
   patchFormValues() {
     if (this.editData) {

@@ -31,8 +31,9 @@
                   <ng-template #list>
                     <nb-card class="margin-bottom-0">
                       <nb-list>
-                        <nb-list-item  (click)="openDialog('testCase', 'name','',testCase)" >Edit</nb-list-item>
+                        <nb-list-item  (click)="openDialog('testCase', 'name','',testCase)" >Edit Testcase</nb-list-item>
                         <nb-list-item   (click)="openDeleteDailog(testCase)" >Delete</nb-list-item>
+                        <nb-list-item  (click)="openDialog('testcase', 'reorder','',testCase)" >Edit Instructions</nb-list-item>
                         <nb-list-item   (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)" >Add Instructions</nb-list-item>
                       </nb-list>
                     </nb-card>
