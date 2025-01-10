@@ -6,7 +6,8 @@ import { Subject } from 'rxjs';
 })
 export class EditDeleteService {
 
-  public testCaseDeleteSubject = new Subject<any>();;
+  public testCaseDeleteSubject = new Subject<any>();
+  public templateDeleteSubject = new Subject<any>();
   constructor() { }
 
 
@@ -15,9 +16,15 @@ export class EditDeleteService {
   }
 
   setTestCaseDeleteSubject(item){
-    console.log(item);
-    
     this.testCaseDeleteSubject.next(item);
+  }
+
+  getTemplateDeleteSubject(){
+    return this.templateDeleteSubject;
+  }
+
+  setTemplateDeleteSubject(item){
+    this.templateDeleteSubject.next(item);
   }
 
   

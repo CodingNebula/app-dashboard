@@ -2,7 +2,7 @@
   <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download PDF</label>
   <label class="heading header-title">{{ this.reportData?.app_name }}</label>
  <label class="date-label" *ngIf="timeCreated" >Created At: <span>{{ timeCreated
- | date:'dd MMM yy '}}</span></label>
+ | date:'dd MMM yyyy '}}</span></label>
 </div>
 <div class="parentDiv">
 
@@ -23,7 +23,7 @@
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Started Time</label>
-          <label class="subLabel">{{reportData?.extra?.extras.createdAt | date:'dd MMM yy'}}, {{reportData.extra.extras?.startedTime }} </label>
+          <label class="subLabel">{{reportData?.extra?.extras.createdAt | date:'dd MMM yyyy'}}, {{reportData.extra.extras?.startedTime }} </label>
         </div>
         <div class="dividerDiv">
           <label class="labelHeading">Total Time taken</label>

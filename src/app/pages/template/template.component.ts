@@ -46,12 +46,14 @@ export class TemplateComponent {
     this.getAllTemplates();
     this.getInstructions();
     this.subscribeToDelete();
+    this.subscribeTemplateToDelete();
 
     this.appName = localStorage.getItem('app_name');
   }
 
   ngOnDestroy(){
     if(this.editDeleteSubcription){
+      this.editDeleteSubcription.unsubscribe();
       this.editDeleteSubcription.unsubscribe();
     }
   }
@@ -509,10 +511,14 @@ export class TemplateComponent {
 
   subscribeToDelete(){
     this.editDeleteSubcription = this.editDeleteService.getTestCaseDeleteSubject().subscribe(() => {
-      console.log('Subscribed');
-      
       this.getAllPages();
     });
+  }
+
+  subscribeTemplateToDelete(){
+    this.editDeleteSubcription = this.editDeleteService.getTemplateDeleteSubject().subscribe(() => {
+      this.getAllTemplates();
+    })
   }
 
 }

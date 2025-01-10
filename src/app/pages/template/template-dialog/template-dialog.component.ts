@@ -204,7 +204,7 @@ export class TemplateDialogComponent {
               // this.getAllPages()
               console.log(resp);
               
-              this.editDeleteService.setTestCaseDeleteSubject(resp);
+              this.editDeleteService.setTemplateDeleteSubject(resp);
             }
           })
 

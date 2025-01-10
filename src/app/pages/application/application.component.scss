@@ -9,6 +9,29 @@
     transform: translateX(-50%);
     z-index: 1000;
 }
+.application-img{
+    width: 100%;
+}
+
+
+
+.application-container::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .application-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .application-container::-webkit-scrollbar-thumb {
+    background-color: #00a3ab;
+    border-radius: 10px;
+  }
+  
+  .application-container::-webkit-scrollbar-thumb:hover {
+    background-color: #00a3ab;
+  }
+  
 .no-app-div{
     display: flex;
     flex-direction: column;
@@ -71,17 +94,17 @@ td{
     overflow: auto;
 }
 .application-div{
-    margin: 1em;
+    margin: 0.5em;
     padding: 1em;
     max-height: 33vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    // align-items: center;
     gap: 0.5em;
     background-color: #ffffff;
     border-radius: 1em;
     cursor: pointer;
+    max-width: 30rem;
 }
 
 .application-name{
