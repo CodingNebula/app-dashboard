@@ -23,6 +23,8 @@ export class DeleteDialogComponent {
   }
 
   submit() {
-    this.ref.close({ confirmed: true, data: { insId: this.itemToDelete.id, testcase_id: this.itemToDelete.instruction_set_id, template_id: this.itemToDelete.wt_id, instruction_id: this.itemToDelete.instruction_id } });
+    console.log(this.itemToDelete);
+    
+    this.ref.close({ confirmed: true, data: { insId: this.itemToDelete.id, testcase_id: this.itemToDelete.instruction_set_id, template_id: this.itemToDelete.wt_id, instruction_id: this.itemToDelete.instruction_id, screenId: this.itemToDelete.ins_set_id } });
   }
 }

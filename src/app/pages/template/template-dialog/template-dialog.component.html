@@ -33,7 +33,7 @@
               <div class="form-row">
               <div class="form-group">
                 <label for="instructionArr">Instruction:</label>
-                <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
+                <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown custom-select-new" multiple>
                   <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.instruction_name}}</nb-option>
 
                 </nb-select>
@@ -133,7 +133,7 @@
               <div class="form-row">
               <div class="form-group">
                 <label for="templates">Test Case</label>
-                <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
+                <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown  custom-select-new" multiple>
                   <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.screen_name}}</nb-option>
 
                 </nb-select>

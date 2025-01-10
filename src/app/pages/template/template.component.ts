@@ -1,10 +1,11 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbPopoverDirective } from '@nebular/theme';
 import { TemplateDialogComponent } from './template-dialog/template-dialog.component';
 import { Router } from '@angular/router';
 import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../shared/services/account/account.service';
 import { DeleteDialogComponent } from "../component/delete-dialog/delete-dialog.component";
+import { EditDeleteService } from '../../shared/services/edit-delete/edit-delete.service';
 
 @Component({
   selector: 'ngx-template',
@@ -22,15 +23,18 @@ export class TemplateComponent {
   public tempTestCase: any = {};
   public tempTemplate: any = {};
   public appName: any;
+  public editDeleteSubcription: any;
+  public isShowMenu:boolean=false;
 
-
+  @ViewChild('popover') popover: NbPopoverDirective;
   @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
 
   constructor(
     private dialogService: NbDialogService,
     private router: Router,
     private accountService: AccountService,
-    private applicationDataService: ApplicationDataService) {
+    private applicationDataService: ApplicationDataService,
+  private editDeleteService: EditDeleteService) {
     const appDetails = this.applicationDataService.getData();
 
 
@@ -41,8 +45,15 @@ export class TemplateComponent {
     this.getAllPages();
     this.getAllTemplates();
     this.getInstructions();
+    this.subscribeToDelete();
 
     this.appName = localStorage.getItem('app_name');
+  }
+
+  ngOnDestroy(){
+    if(this.editDeleteSubcription){
+      this.editDeleteSubcription.unsubscribe();
+    }
   }
 
   openDeleteDailog(item) {
@@ -62,7 +73,7 @@ export class TemplateComponent {
           // this.saveApplicationData(appDetails);
           let app_id = localStorage.getItem('app_id');
 
-          // this.deleteTestcase(result.data)
+          this.deleteTestcase(result.data)
 
         }
       }
@@ -199,13 +210,7 @@ export class TemplateComponent {
 
             this.accountService.postPageInstructions(body).subscribe((resp) => {
               if (resp) {
-                this.getAllPages()
-                // this.testCasesArray.push(resp[0]);
-                //   if (this.testCasesArray.length > 0) {
-                //     this.testCasesArray.pop();
-                // }
-                //   this.tempTestCase.instructions = result.data.instructionArr;
-                //   this.testCasesArray.push(this.tempTestCase);
+                this.getAllPages();
 
               }
             })
@@ -216,23 +221,7 @@ export class TemplateComponent {
         else if (result.selectedAction === 'template') {
           if (result.selectedType === 'name') {
 
-            //   const details = {
-            //     screenName: result.data.test_case_name,
-            //     applicationId: localStorage.getItem('app_id'),
-            //     extra: {},
-            // }
-            
-
             if (isEdit) {
-            //   {
-            //     "confirmed": true,
-            //     "data": {
-            //         "templateName": "newtesttemppp",
-            //         "description": "newtesttempdesccc"
-            //     },
-            //     "selectedAction": "template",
-            //     "selectedType": "name"
-            // }
               const details = {
                 screenName: result.data.templateName,
                 description:  result.data.description,
@@ -256,51 +245,40 @@ export class TemplateComponent {
             }
 
 
-            // this.saveApplicationData(appDetails);
             this.accountService.postTemplateName(details).subscribe((resp) => {
               if (resp) {
 
 
-                // this.testCasesArray.push(resp[0]);
                 this.templateId = resp[0]?.wt_id
-                // this.tempTemplate.wt_name = resp[0]?.template_name;
-                // this.tempTemplate.wt_desc = resp[0]?.description;
-                // this.tempTemplate.wt_id = resp[0]?.id;
-
-
-
-                // this.templateArray.push(this.tempTemplate)
                 this.getAllTemplates();
               }
             })
             this.applicationDataService.setData('testCases', this.testCasesArray);
-            // this.router.navigateByUrl('pages/capabilities');
           }
           
         }
 
         if(result.selectedType === 'reorder'){
+
+          console.log(result);
             
           let body = {
-            instruction_set_id: result?.data?.instruction_set_id,  // This value can be dynamic
-            instruction_id: result?.data?.instructions?.map((instruction, index) => {
+            wt_id: result?.data?.wt_id,  // This value can be dynamic
+            instructions_set: result?.data?.screens?.map((screen, index) => {
               return {
-                id: instruction.instruction_id,  // Mapping the dynamic id from instructionsArray
+                id: screen.ins_set_id,  // Mapping the dynamic id from instructionsArray
                 order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
                 extra: {}  // Adding any extra dynamic data
               };
             })
           };
 
-          const id = result?.data?.instruction_set_id;
-
-          
-
-          // this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
-          //   if (resp) {
-          //     this.getAllPages()
-          //   }
-          // })
+          const id = result?.data?.wt_id;
+          this.accountService.updateTemplateScreens(id, body).subscribe((resp) => {
+            if (resp) {
+              this.getAllTemplates();
+            }
+          })
         }
 
           if (result.selectedType === 'testCase') {
@@ -408,27 +386,18 @@ export class TemplateComponent {
         return acc;
       }, {});
       
-      // Convert the grouped object to an array
-      const result = Object.values(groupedInstructions); // assuming groupedInstructions is an object
+      const result = Object.values(groupedInstructions); 
 
 
-      // Flatten and sort the instructions by 'instruction_order'
-      const sortedInstructions = result
-        .map((item: any) => {
-          // Sort the instructions in each item by instruction_order
-          item.instructions.sort((a: any, b: any) => {
-            return parseInt(a.instruction_order) - parseInt(b.instruction_order);
-          });
-          return item;
-        })
-        
-
-      // sortedInstructions.forEach((instruction: any) => {
-      // });
-
+      const sortedInstructions = result.map((item: any) => {
+        item.instructions = item.instructions.filter((instruction: any) => {
+          return instruction.instruction_order !== "0";
+        });
+        return item;
+      });
       
 
-      this.testCasesArray = result;
+      this.testCasesArray = sortedInstructions;
       
     })
   }
@@ -457,10 +426,12 @@ export class TemplateComponent {
 
         // Find or create the screen group
         let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
+        
         if (!screenGroup) {
           screenGroup = {
             ins_set_id: curr.ins_set_id,
             ins_set_screen_name: curr.ins_set_screen_name,
+            wim_order: curr.wim_order,
             instructions: [],
           };
 
@@ -478,7 +449,29 @@ export class TemplateComponent {
         }
       });
 
-      this.templateArray = groupedData;
+      // const sortedInstructions = result.map((item: any) => {
+      //   item.instructions = item.instructions.filter((instruction: any) => {
+      //     return instruction.instruction_order !== "0";
+      //   });
+      //   return item;
+      // });
+      
+      
+      // console.log(sortedInstructions);
+
+      
+
+      let result = groupedData.map((item) => {
+        item.screens = item.screens.filter((screen) => {
+          return screen.wim_order !== "0"; 
+        })
+        return item;
+      })
+
+      
+      
+      this.templateArray = result;
+      
 
     });
   }
@@ -494,6 +487,32 @@ export class TemplateComponent {
 
   toInstructions() {
     this.router.navigateByUrl('pages/instructions');
+  }
+
+  openPopover() {
+    console.log('popover');
+    
+    if (this.popover.isShown) {
+      this.popover.hide(); // Hide the popover if it is currently shown
+    } else {
+      this.popover.show(); // Show the popover if it is currently hidden
+    }
+  }
+
+  // Example of a method that stops the propagation of the click event
+  propagation(event: MouseEvent) {
+    console.log('propagation');
+    
+    event.stopPropagation();
+    this.openPopover();
+  }
+
+  subscribeToDelete(){
+    this.editDeleteSubcription = this.editDeleteService.getTestCaseDeleteSubject().subscribe(() => {
+      console.log('Subscribed');
+      
+      this.getAllPages();
+    });
   }
 
 }

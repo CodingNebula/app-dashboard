@@ -310,6 +310,25 @@ export class AccountService {
     )
   }
 
+  updateTemplateScreens(id, request: any) {
+    return this.apiService.updateWithoutModal(`workflow_mapper/${localStorage.getItem('app_id')}/${id}`, request).pipe(
+      map(resp => {
+        if (resp) {
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
   postReportData(request: any){
     return this.apiService.postWithoutModel(`save_report`, request).pipe(
       map(resp => {

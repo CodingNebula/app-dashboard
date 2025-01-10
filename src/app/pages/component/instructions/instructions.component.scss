@@ -119,6 +119,18 @@ td{
   color: white !important;
 }
 
+.popover-card{
+    margin-bottom: 0;
+  }
+  .popover-card > nb-list > nb-list-item{
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 0.8rem;
+  }
+  .popover-card > nb-list > nb-list-item:hover{
+    color: #00A3AB;
+  }
+
 .data-div{
     height: 66vh;
     overflow: auto;

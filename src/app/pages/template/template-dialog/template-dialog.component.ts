@@ -5,6 +5,7 @@ import { ApplicationDataService } from '../../../shared/services/applicationData
 import { AccountService } from '../../../shared/services/account/account.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DeleteDialogComponent } from '../../component/delete-dialog/delete-dialog.component';
+import { EditDeleteService } from '../../../shared/services/edit-delete/edit-delete.service';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class TemplateDialogComponent {
     private dialogRef: NbDialogRef<TemplateDialogComponent>,
     private fb: FormBuilder,
     private applicationDataService: ApplicationDataService,
-    private accountService: AccountService) {
+    private accountService: AccountService,
+  private editDeleteService: EditDeleteService) {
   }
 
   ngOnInit() {
@@ -113,6 +115,7 @@ export class TemplateDialogComponent {
 
 
   onSubmit(type?) {
+    
     if (type === 'reorder') {
       this.dialogRef.close({ confirmed: true, data: this.editData, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });
 
@@ -160,33 +163,97 @@ export class TemplateDialogComponent {
 
 
     dialogRef.onClose.subscribe((result) => {
+      console.log(result, this.selectedAction, this.selectedType);
+      console.log(this.editData);
+      
+      
 
       if (result) {
         if (result.confirmed) {
+          if(this.selectedAction === 'template'){
+            let app_id = localStorage.getItem('app_id');
+            console.log(this.editData?.wt_id);
+            
+
+          let body = {
+            wt_id : this.editData?.wt_id,
+            instructions_set: this.editData.screens.map((screen, index) => {
+              if (screen.ins_set_id === result?.data?.screenId) {
+                return {
+                  id: screen.ins_set_id,  
+                  order: '0',
+                  extra: {}  
+                };
+              } else {
+                
+                return {
+                  id: screen.ins_set_id,  
+                  order: index < this.editData.screens.findIndex((item: any) => item.ins_set_id === result?.data?.screenId) ? (index + 1).toString() : (index).toString(),
+                  extra: {}  
+                };
+              }
+            })
+          };
+        
+          console.log(body);
+          
+
+          const id = this.editData?.wt_id;
+          this.accountService.updateTemplateScreens(id, body).subscribe((resp) => {
+            if (resp) {
+              // this.getAllPages()
+              console.log(resp);
+              
+              this.editDeleteService.setTestCaseDeleteSubject(resp);
+            }
+          })
+
+          // this.deleteTestcase(result.data)
+
+          }
+          else{
+
+          
 
           // this.saveApplicationData(appDetails);
           let app_id = localStorage.getItem('app_id');
 
           let body = {
-            instruction_set_id: result?.data?.testcase_id,  // This value can be dynamic
-            instruction_id: [{
-              id: result?.data?.instruction_id,  // Mapping the dynamic id from instructionsArray
-              order: (0).toString(),
-              extra: {}
-            }]
+            instruction_set_id: result?.data?.testcase_id,
+            instruction_id: this.editData.instructions.map((instruction, index) => {
+              if (instruction.instruction_id === result?.data?.instruction_id) {
+                return {
+                  id: instruction.instruction_id,  
+                  order: '0',
+                  extra: {}  
+                };
+              } else {
+                
+                return {
+                  id: instruction.instruction_id,  
+                  order: index < this.editData.instructions.findIndex((item: any) => item.instruction_id === result?.data?.instruction_id) ? (index + 1).toString() : (index).toString(),
+                  extra: {}  
+                };
+              }
+            })
           };
+        
 
           const id = result?.data?.testcase_id;
-
           this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
             if (resp) {
               // this.getAllPages()
+              
+              console.log(resp);
+              
+              this.editDeleteService.setTestCaseDeleteSubject(resp);
             }
           })
 
           // this.deleteTestcase(result.data)
 
         }
+      }
       }
     });
 
