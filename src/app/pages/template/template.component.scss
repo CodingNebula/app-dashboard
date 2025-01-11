@@ -103,6 +103,13 @@ td{
     overflow-y: auto;
 }
 
+.not-allowed {
+  cursor: not-allowed !important; /* Change cursor to not-allowed */
+  opacity: 0.5; /* Optional: make it look disabled */
+}
+.not-allowed:hover {
+  color: #000000 !important;
+}
 
 
 .template-div-container::-webkit-scrollbar {

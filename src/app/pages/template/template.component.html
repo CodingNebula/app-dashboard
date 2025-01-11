@@ -22,8 +22,8 @@
                 <nb-accordion-item-header class="accordian-header">
                   {{ testCase?.screen_name }}
 
-                  <div class="add-new" [nbPopover]="list" #popover="nbPopover" >
-                    <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end" ></nb-icon>
+                  <div class="add-new" [nbPopover]="list" #popover="nbPopover">
+                    <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
                   </div>
                   <!-- <button class="add-new"
                     (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
@@ -33,24 +33,32 @@
                   <ng-template #list>
                     <nb-card class="popover-card">
                       <nb-list>
-                        <nb-list-item  (click)="openDialog('testCase', 'name', testCase?.instruction_set_id ,testCase, true)" >Edit Testcase</nb-list-item>
-                        <nb-list-item   (click)="openDeleteDailog(testCase)" >Delete</nb-list-item>
-                        <nb-list-item  (click)="openDialog('testCase', 'reorder','',testCase)" >Edit Instructions</nb-list-item>
-                        <nb-list-item   (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)" >Add Instructions</nb-list-item>
+                        <nb-list-item
+                          (click)="openDialog('testCase', 'name', testCase?.instruction_set_id ,testCase, true)">Edit
+                          Testcase</nb-list-item>
+                        <nb-list-item (click)="openDeleteDailog(testCase)">Delete</nb-list-item>
+                        <nb-list-item [ngClass]="testCase?.instructions.length === 0 ? 'not-allowed' : ''"
+                          [attr.disabled]="testCase?.instructions.length === 0 ? true : null"
+                          (click)="testCase?.instructions.length > 0 && openDialog('testCase', 'reorder', '', testCase)">
+                          Edit Instructions
+                        </nb-list-item>
+                        <nb-list-item (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)">Add
+                          Instructions</nb-list-item>
                       </nb-list>
                     </nb-card>
                   </ng-template>
 
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
-                  <div  *ngIf="testCase?.instructions.length !== 0" >
+                  <div *ngIf="testCase?.instructions.length !== 0">
                     <div *ngFor="let testcase of testCase?.instructions">
                       {{ testcase?.instruction_name }}
 
                     </div>
                   </div>
-                  <div class="accordian-body-div" *ngIf="testCase?.instructions.length === 0"  >
-                    <button  class="add-new empty-btn-1" (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
+                  <div class="accordian-body-div" *ngIf="testCase?.instructions.length === 0">
+                    <button class="add-new empty-btn-1"
+                      (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
                       Instructions</button>
                   </div>
                 </nb-accordion-item-body>
@@ -85,24 +93,28 @@
                     Description: <span>{{template?.wt_desc}}</span>
                   </div>
 
-                  <div class="add-new" [nbPopover]="listTemplate" #popover="nbPopover" >
-                    <nb-icon   icon="edit-outline"  nbPopoverPlacement="bottom-end" ></nb-icon>
+                  <div class="add-new" [nbPopover]="listTemplate" #popover="nbPopover">
+                    <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
                   </div>
-                  
+
                   <ng-template #listTemplate>
                     <nb-card class="popover-card">
                       <nb-list>
-                        <nb-list-item  (click)="openDialog('template', 'name',template?.wt_id, template, true)" >Edit Name and Desc</nb-list-item>
-                        <nb-list-item  (click)="openDeleteDailog(template)" >Delete</nb-list-item>
-                        <nb-list-item  (click)="openDialog('template', 'reorder', '', template)" >Edit Screens</nb-list-item>
-                        <nb-list-item  (click)="openDialog('template', 'testCase',template?.wt_id)" >Add Screens</nb-list-item>
+                        <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit Name
+                          and Desc</nb-list-item>
+                        <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
+                        <nb-list-item (click)="openDialog('template', 'reorder', '', template)">Edit
+                          Screens</nb-list-item>
+                        <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
+                          Screens</nb-list-item>
                       </nb-list>
                     </nb-card>
                   </ng-template>
 
 
                   <!-- <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button> -->
-                  <nb-icon  *ngIf="template?.screens.length !== 0"   (click)="automateTemplate(template)" class="icon-btn" icon="play-circle-outline"></nb-icon>
+                  <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)" class="icon-btn"
+                    icon="play-circle-outline"></nb-icon>
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
                   <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
@@ -110,9 +122,9 @@
                       <nb-accordion-item-header class="accordian-header">
                         {{ testCase?.ins_set_screen_name }}
                       </nb-accordion-item-header>
-                      <nb-accordion-item-body  *ngIf="template?.screens.length !== 0" >
+                      <nb-accordion-item-body *ngIf="template?.screens.length !== 0">
                         <div class="">
-                          <div  *ngFor="let testcase of testCase?.instructions">
+                          <div *ngFor="let testcase of testCase?.instructions">
                             {{ testcase?.ins_name }}
 
 
@@ -121,8 +133,9 @@
                       </nb-accordion-item-body>
                     </nb-accordion-item>
                   </nb-accordion>
-                  <nb-accordion-item-body  class="accordian-body-div" *ngIf="template?.screens.length === 0"  >
-                    <button   class="add-new " (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button>
+                  <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
+                    <button class="add-new " (click)="openDialog('template', 'testCase',template?.wt_id)">Add
+                      Screens</button>
                   </nb-accordion-item-body>
                 </nb-accordion-item-body>
               </nb-accordion-item>
