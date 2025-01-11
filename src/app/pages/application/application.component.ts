@@ -16,6 +16,7 @@ export class ApplicationComponent implements OnInit {
   public applicationDataArr: any[] = [];
   public instructionsArr: any[] = [];
   public appCapabilities: any;
+  public applicationNameAlert: boolean = false;
 
   constructor(
     private dialogService: NbDialogService,
@@ -48,19 +49,39 @@ export class ApplicationComponent implements OnInit {
           //     extra: JSON.stringify(req.body.extra),
           // }
 
-          const appDetails = {
-            appName: result.data.application,
-            platform: result.data.platform,
-            test_case_results: null,
-            extra: {}
-          }
-          // this.applicationDataArr.push(appDetails);
-          this.saveApplicationData(appDetails);
-          // this.applicationDataService.setData('app_details', appDetails);
+          const appNameToCheck = result.data.application.replace(/\s+/g, ' ').trim().toLowerCase();
+          console.log(appNameToCheck);
+          
+          const appExists = this.applicationDataArr.some(app => app.app_name.trim().toLowerCase() === appNameToCheck);
 
-          setTimeout(() => {
-            this.router.navigateByUrl('pages/capabilities');
-          }, 1500)
+          if (appExists) {
+            this.applicationNameAlert = true;
+            console.log('app exist!');
+            
+
+            setTimeout(() => {
+              this.applicationNameAlert = false;
+            }, 1000)
+          }
+          else {
+
+
+            const appDetails = {
+              appName: result.data.application,
+              platform: result.data.platform,
+              test_case_results: null,
+              extra: {}
+            }
+
+            console.log(appDetails);
+
+
+            this.saveApplicationData(appDetails);
+            // this.applicationDataService.setData('app_details', appDetails);
+          }
+
+
+
         }
       }
     });
@@ -78,6 +99,11 @@ export class ApplicationComponent implements OnInit {
         this.applicationDataService.setData('app_details', response);
         localStorage.setItem('app_id', response?.id);
         localStorage.setItem('app_name', response?.app_name);
+
+        setTimeout(() => {
+          this.router.navigateByUrl('pages/capabilities');
+        }, 1500)
+
       }
     }, (error) => {
       console.error('Error saving test case:', error);
@@ -88,6 +114,7 @@ export class ApplicationComponent implements OnInit {
     this.accountService.getApplication().subscribe((data) => {
       if (data && data.length > 0) {
         this.applicationDataArr = data;
+
       }
     })
   }
@@ -125,7 +152,7 @@ export class ApplicationComponent implements OnInit {
           this.router.navigateByUrl('pages/template');
         } else {
           // Navigate to capabilities page if no conditions are met
-          this.router.navigateByUrl('pages/capabilities', { state: { id: item.id,appName:item?.app_name } });
+          this.router.navigateByUrl('pages/capabilities', { state: { id: item.id, appName: item?.app_name } });
 
           // Log item and store data
           this.applicationDataService.setData('app_details', item);
@@ -144,7 +171,7 @@ export class ApplicationComponent implements OnInit {
 
 
 
-  getInstructions(){
+  getInstructions() {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getInstruction(app_id).subscribe((data) => {
       if (data && data.length > 0) {
@@ -154,10 +181,14 @@ export class ApplicationComponent implements OnInit {
     })
   }
 
-  getCapabilities(){
+  getCapabilities() {
     const app_id = localStorage.getItem('app_id');
     this.accountService.getCapabilites(app_id).subscribe((data) => {
 
     })
+  }
+
+  onClose(){
+    this.applicationNameAlert = false;
   }
 }
