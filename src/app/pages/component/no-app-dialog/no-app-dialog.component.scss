@@ -40,8 +40,9 @@
 //   /* Focused input fields and select dropdowns */
   .form-control:focus,
   .custom-select-dropdown:focus {
-    border-color: #007bff;
+    // border-color: #007bff;
     outline: none;
+    border: none;
   }
   
 //   /* Error message styling */
@@ -49,6 +50,10 @@
     color: #ff4d4d;
     font-size: 12px;
     margin-top: 5px;
+  }
+
+  .no-app-footer{
+    padding: 0.5rem;
   }
   
 //   /* Submit button styling */
@@ -62,24 +67,27 @@
     border-radius: 4px;
     // width: 20%;
     transition: background-color 0.3s ease;
+    border-radius: 25px;
   }
 
   .close-button{
-    background-color: #0a0a23;
-    color: white;
-    border: none;
-    padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
-    width: 20%;
+    width: 25%;
     transition: background-color 0.3s ease;
     outline: none;
+    padding: 0.4875rem 1.125rem !important;
+    border: 1px solid #16a3ad !important;
+    color: #16a3ad !important;
+    text-transform: capitalize;
+    font-weight: 600;
+    border-radius: 25px;
+    background: white;
   }
   
   .submit-button:disabled {
-    background-color: #07f6ce;
-    color: #000000;
+    background-color: #00A3AB;
     cursor: not-allowed;
   }
   

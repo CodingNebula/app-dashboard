@@ -11,6 +11,7 @@ export class InstructionsDialogComponent {
   public myForm: FormGroup;
   public selectedItem: '';
   public itemToEdit: any;
+  public submitted: boolean = false;
 
   constructor(private dialogRef: NbDialogRef<InstructionsDialogComponent>, private fb: FormBuilder){
 
@@ -39,6 +40,8 @@ export class InstructionsDialogComponent {
   }
 
   onSubmit() {
+    this.submitted = true;
+
     if (this.myForm.valid) {
 
       this.dialogRef.close({ confirmed: true, data: {formValue: this.myForm.value, isEdit: this.itemToEdit?true: false, insId: this.itemToEdit?this.itemToEdit.id:null} });

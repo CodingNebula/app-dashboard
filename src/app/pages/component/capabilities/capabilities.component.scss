@@ -4,6 +4,15 @@
     height: 96vh;
     overflow: auto;
   }
+  .successAlert{
+    position: absolute;
+    top: 5rem;
+    left: 40rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0.5rem;
+  }
   
   .automate-left {
     width: 70%;
@@ -123,8 +132,8 @@
   }
   
   .submit-button:disabled {
-    background-color: #07f6ce;
-    color: #000000;
+    background-color: #00A3AB;
+    color: #ffffff;
     cursor: not-allowed;
   }
   

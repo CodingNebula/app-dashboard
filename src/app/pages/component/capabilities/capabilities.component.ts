@@ -15,6 +15,7 @@ export class CapabilitiesComponent {
   public selectedItem: '';
   public appDetails: any;
   public appName: any;
+  public submitted: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -73,14 +74,19 @@ export class CapabilitiesComponent {
 
 
   onSubmit() {
+    
+    this.submitted = true;
+
     if (this.myForm.valid) {
-      this.showSuccessAlert = true
 
       const app_id = localStorage.getItem("app_id");
 
       const capabilities = { app_id: app_id, capabilities: this.myForm.value };
 
       localStorage.setItem("app_capa", JSON.stringify(capabilities));
+
+      console.log('app-capa');
+      
 
 
       this.accountService.updateCapabilities(app_id,
@@ -91,10 +97,15 @@ export class CapabilitiesComponent {
           name:this.appDetails?.app_details?.app_name
         }).subscribe(
         (response) => {
+          if(response){
 
-          setTimeout(() => {
-            this.router.navigateByUrl('pages/instructions')
-          }, 1000)
+            this.showSuccessAlert = true
+            
+            setTimeout(() => {
+              this.router.navigateByUrl('pages/instructions')
+              
+            }, 1000)
+          }
         },
         (error) => {
           console.error('API Error:', error);
