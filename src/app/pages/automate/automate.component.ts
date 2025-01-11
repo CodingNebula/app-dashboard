@@ -772,11 +772,11 @@ export class AutomateComponent implements OnInit {
 
       item.push(obj);
 
-      // Output the modified item array
-
       this.showResult = true;
 
 
+      console.log(result);
+      
       this.webSocketService.sendTestCaseRequest(result);
       
 
@@ -798,6 +798,7 @@ export class AutomateComponent implements OnInit {
       }
 
       this.webSocketService.getSubject().subscribe((res) => {
+        console.log(res);
         
         if (!timeChecked) {
           const currentDate = new Date();

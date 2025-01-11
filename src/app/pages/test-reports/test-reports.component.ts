@@ -86,6 +86,11 @@ export class TestReportsComponent implements OnInit {
     this.echartsInstance = instance; // Capture the ECharts instance
   }
 
+  ngAfterViewInit(): void {
+    // Make sure the DOM is fully loaded before accessing the chart element
+    this.reportPdfService.onChartInit(this.chartElement.nativeElement);
+  }
+
   ngOnInit() {
     const state = history.state.reportData
     this.timeCreated = state.extra.extras.createdAt
@@ -248,6 +253,8 @@ export class TestReportsComponent implements OnInit {
 
 
   downloadPDF(item, $event: Event) {
+    
+    
     this.reportPdfService.downloadReportPDF(item, $event);
 
 //     this.chartData = [];

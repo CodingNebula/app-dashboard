@@ -16,6 +16,7 @@ export class CapabilitiesComponent {
   public appDetails: any;
   public appName: any;
   public submitted: boolean = false;
+  public platformName: any;
 
   constructor(
     private fb: FormBuilder,
@@ -29,10 +30,16 @@ export class CapabilitiesComponent {
   ngOnInit() {
     // Create the form with FormBuilder
 
+    const state = window.history.state;
 
+    if (state && state.platformName) {
+      this.platformName = state.platformName;
+      console.log(this.platformName);
+      
+    }
 
     this.myForm = this.fb.group({
-      platform: ['', [Validators.required]],
+      platform: [this.platformName, [Validators.required]],
       app: ['', [Validators.required]],
       package: ['com.example.app', [Validators.required]],
       automation: ['', [Validators.required]],

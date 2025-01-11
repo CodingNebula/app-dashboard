@@ -134,7 +134,10 @@
               <div class="form-group">
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown  custom-select-new" multiple>
-                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase">{{testCase?.screen_name}}</nb-option>
+                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase"
+                  [disabled]="testCase?.instructions.length === 0"  
+                  [ngClass]="testCase?.instructions.length === 0 ? 'not-allowed' : ''"
+                  >{{testCase?.screen_name}}</nb-option>
 
                 </nb-select>
                 <div *ngIf="testCases.get('templates').touched && testCases.get('templates').invalid" class="error-message">

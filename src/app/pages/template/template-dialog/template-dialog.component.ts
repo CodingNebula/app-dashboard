@@ -41,6 +41,9 @@ export class TemplateDialogComponent {
 
   ngOnInit() {
 
+    console.log(this.testCaseArr);
+    
+
     let data
     if (this.selectedAction === '' && this.selectedType === 'template') {
       data = this.editData?.screens.map((testcase) => testcase.ins_set_screen_name)

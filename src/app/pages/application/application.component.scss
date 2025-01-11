@@ -94,6 +94,7 @@ td{
     overflow: auto;
 }
 .application-div{
+    position: relative;
     margin: 0.5em;
     padding: 1em;
     max-height: 33vh;
@@ -105,6 +106,13 @@ td{
     border-radius: 1em;
     cursor: pointer;
     max-width: 30rem;
+}
+
+.more-icon{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #00A3AB;
 }
 
 .application-name{

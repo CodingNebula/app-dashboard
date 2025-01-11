@@ -93,7 +93,7 @@
                     Description: <span>{{template?.wt_desc}}</span>
                   </div>
 
-                  <div class="add-new" [nbPopover]="listTemplate" #popover="nbPopover">
+                  <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
                     <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
                   </div>
 
@@ -103,10 +103,12 @@
                         <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit Name
                           and Desc</nb-list-item>
                         <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
-                        <nb-list-item (click)="openDialog('template', 'reorder', '', template)">Edit
-                          Screens</nb-list-item>
+                        <nb-list-item [ngClass]="template?.screens.length === 0 ? 'not-allowed' : ''"
+                        [attr.disabled]="template?.screens.length === 0 ? true : null"
+                         (click)="template?.screens.length > 0 && openDialog('template', 'reorder', '', template)">Edit
+                          Test Cases</nb-list-item>
                         <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
-                          Screens</nb-list-item>
+                          Test Cases</nb-list-item>
                       </nb-list>
                     </nb-card>
                   </ng-template>

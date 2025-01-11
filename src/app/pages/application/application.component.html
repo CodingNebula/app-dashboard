@@ -7,11 +7,32 @@
   <!-- <div *ngIf="applicationDataArr.length > 0"> -->
   <div class="application-container">
     <div class="application-div" *ngFor="let item of applicationDataArr; let i = index"  (click)="navigate(item)">
+      <!-- <nb-icon icon="more-vertical-outline" class="more-icon"></nb-icon> -->
       <img class="application-img" width="200" src="../../../assets/images/any-logo.png" alt="any-logo">
       <div class="application-name">{{item.app_name}}</div>
       <div>{{item.platform}}</div>
     </div>
   </div>
+
+  <!-- <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
+    <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
+  </div>
+
+  <ng-template #listTemplate>
+    <nb-card class="popover-card">
+      <nb-list>
+        <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit Name
+          and Desc</nb-list-item>
+        <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
+        <nb-list-item [ngClass]="template?.screens.length === 0 ? 'not-allowed' : ''"
+        [attr.disabled]="template?.screens.length === 0 ? true : null"
+         (click)="template?.screens.length > 0 && openDialog('template', 'reorder', '', template)">Edit
+          Test Cases</nb-list-item>
+        <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
+          Test Cases</nb-list-item>
+      </nb-list>
+    </nb-card>
+  </ng-template> -->
 
   <!-- <div *ngIf="applicationDataArr.length > 0">
     <div class="container">

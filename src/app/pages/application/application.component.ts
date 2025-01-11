@@ -139,25 +139,21 @@ export class ApplicationComponent implements OnInit {
         this.instructionsArr = instructionData;
       }
 
-      // Now, fetch capabilities after instructions API response
       this.accountService.getCapabilites(app_id).subscribe((capabilitiesData) => {
         this.appCapabilities = capabilitiesData;
 
-        // Now that both API responses are received, check the conditions
         if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length === 0) {
-          // Navigate to instructions page if app_id matches and no instructions
+          
           this.router.navigateByUrl('pages/instructions');
         } else if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length > 0) {
-          // Navigate to template page if app_id matches and there are instructions
+          
           this.router.navigateByUrl('pages/template');
         } else {
-          // Navigate to capabilities page if no conditions are met
-          this.router.navigateByUrl('pages/capabilities', { state: { id: item.id, appName: item?.app_name } });
+          this.router.navigateByUrl('pages/capabilities', { state: { id: item.id, appName: item?.app_name, platformName: item?.platform } });
 
           // Log item and store data
           this.applicationDataService.setData('app_details', item);
 
-          // Store app_id and app_name again in localStorage (optional redundancy)
           localStorage.setItem('app_id', item?.id);
           localStorage.setItem('app_name', item?.app_name);
         }

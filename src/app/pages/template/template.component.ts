@@ -27,6 +27,8 @@ export class TemplateComponent {
   public isShowMenu:boolean=false;
 
   @ViewChild('popover') popover: NbPopoverDirective;
+  
+  @ViewChild('popoverTemplate', { static: false }) popoverTemplate: NbPopoverDirective;
   @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
 
   constructor(
@@ -59,6 +61,16 @@ export class TemplateComponent {
   }
 
   openDeleteDailog(item) {
+    if (this.popover.isShown) {
+      console.log(this.popover.isShown);
+      
+      this.popover.hide(); // Hide the popover if it is currently shown
+    }
+
+    if(this.popoverTemplate.isShown){
+      this.popoverTemplate.hide();
+    }
+    
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
       closeOnBackdropClick: true,
@@ -126,6 +138,27 @@ export class TemplateComponent {
 
   openDialog(action: string, type: string, id?: any, editData?: any, isEdit?: boolean) {
     // Open the dialog and pass data to it using 'context'
+    if (this.popover.isShown) {
+      console.log(this.popover);
+      
+      console.log(this.popover.isShown);
+      
+      this.popover.hide(); // Hide the popover if it is currently shown
+    }
+
+    console.log('Popover Template:', this.popoverTemplate);
+    console.log('Popover Template:', this.popoverTemplate.isShown);
+
+  if (this.popoverTemplate && this.popoverTemplate.isShown) {
+    console.log('Popover is shown:', this.popoverTemplate.isShown);
+    this.popoverTemplate.hide(); // Hide the popover if it is currently shown
+  }
+
+    if(this.popoverTemplate.isShown){
+      console.log(this.popoverTemplate.isShown);
+      
+      this.popoverTemplate.hide();
+    }
     
 
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
