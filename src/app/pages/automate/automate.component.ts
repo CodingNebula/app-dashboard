@@ -50,6 +50,7 @@ export class AutomateComponent implements OnInit {
   public buildNumber: any;
   public showAppLaunchError: boolean = false;
   public isAppLaunched: boolean = false;
+  public hideAll: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -521,7 +522,8 @@ export class AutomateComponent implements OnInit {
   onStartTrans(itemData, startAll) {
 
     let count = 0;
-    let totalTimeApp = Math.floor(Date.now() / 1000)
+    let totalTimeApp = Math.floor(Date.now() / 1000);
+    this.hideAll = true;
     let result = itemData;
     this.startApp = true;
     if (startAll) {
@@ -551,12 +553,6 @@ export class AutomateComponent implements OnInit {
 
 
       result.push(
-        {
-          id: "0",
-          screenName: "Find_Screen_Elements",
-          roomId: localStorage.getItem("id"),
-          ins_id: '6789',
-        },
         {
           screenName: 'End_Instructions',
           successMessage: 'End Instructions',
@@ -633,7 +629,7 @@ export class AutomateComponent implements OnInit {
         totalTestCase: intsCount,
         passed: passedCount,
         failed: failedCount,
-        crash_count: intsCount - passedCount - failedCount,
+        untestedCount: intsCount - passedCount - failedCount,
         extra: socketReport,
       }
       this.accountService.postReportData(body).subscribe((resp) => {
@@ -891,7 +887,7 @@ export class AutomateComponent implements OnInit {
               totalTestCase: result?.length - 1,
               passed: passedCount,
               failed: failedCount,
-              crash_count: untestedCount,
+              untestedCount: untestedCount,
               extra: socketReport,
             }
             this.accountService.postReportData(body).subscribe((resp) => {
@@ -1255,6 +1251,8 @@ export class AutomateComponent implements OnInit {
       }
     });
 
+    let totalCount = this.templateData.screens.reduce((acc, item) => acc + item.instructions.length, 0);
+
     const socketReport = {
       capabilities: {
         description: this.description,
@@ -1263,6 +1261,7 @@ export class AutomateComponent implements OnInit {
       resultArr: this.resultArr,
       extras: this.extras,
       totalTimeElapsed: this.singleInstructionTimeTotal,
+      untestedCount: totalCount - passedCount - failedCount,
     }
 
 
@@ -1271,7 +1270,6 @@ export class AutomateComponent implements OnInit {
 
     // Iterate over the reports to count the number of passed, failed, and untested test cases
 
-    let totalCount = this.templateData.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
 
     const body = {
@@ -1280,7 +1278,7 @@ export class AutomateComponent implements OnInit {
       totalTestCase: totalCount,
       passed: passedCount,
       failed: failedCount,
-      crash_count: totalCount - passedCount - failedCount,
+      crash_count: 0,
       extra: socketReport,
     }
 

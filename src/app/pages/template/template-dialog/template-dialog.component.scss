@@ -154,6 +154,9 @@ i.disable{
     transition: background-color 0.3s ease;
     outline: none;
   }
+  .star-mark{
+    color: #e26262;
+  }
 
   .submit-button:disabled {
     background-color: #07f6ce;

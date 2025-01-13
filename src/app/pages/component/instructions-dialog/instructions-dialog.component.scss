@@ -11,6 +11,10 @@
     margin-bottom: 10px;
     width: 300px;
   }
+
+  .star-mark{
+    color: #e26262;
+  }
   
 //   /* Each form group inside the row */
   .form-group {
@@ -77,12 +81,7 @@
     outline: none;
   }
   
-  .submit-button:disabled {
-    background-color: #07f6ce;
-    color: #000000;
-    cursor: not-allowed;
-  }
-  
+ 
   .submit-button:hover:not(:disabled) {
     background-color: #00A3AB;
     color: #ffffff;

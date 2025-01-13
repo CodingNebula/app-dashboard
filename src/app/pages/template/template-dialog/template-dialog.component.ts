@@ -29,6 +29,7 @@ export class TemplateDialogComponent {
   public editData: any;
   public templateTestcaseData: any;
   public isEdit: boolean;
+  public submitted: boolean;
 
   constructor(
     private dialogService: NbDialogService,
@@ -118,6 +119,7 @@ export class TemplateDialogComponent {
 
 
   onSubmit(type?) {
+    this.submitted = true;
 
     if (type === 'reorder') {
       this.dialogRef.close({ confirmed: true, data: this.editData, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });

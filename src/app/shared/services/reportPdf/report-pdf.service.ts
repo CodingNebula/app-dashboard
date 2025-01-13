@@ -73,8 +73,8 @@ export class ReportPdfService {
             },
             label: {
               show: true,
-              position: 'inside',
-              formatter: '{c} ({d}%)'
+              position: 'outside',
+              formatter: '{b} : {c} ({d}%)'
             },
           }
         ],

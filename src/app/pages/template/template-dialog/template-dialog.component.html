@@ -4,9 +4,9 @@
     <form [formGroup]="testCaseName"  class="custom-form">
       <div class="form-row">
         <div class="form-group">
-          <label for="test_case_name">Test Case Name:</label>
+          <label for="test_case_name">Test Case Name<span class="star-mark">*</span>:</label>
           <input id="test_case_name" formControlName="test_case_name" class="form-control" />
-          <div *ngIf="testCaseName.get('test_case_name').touched && testCaseName.get('test_case_name').invalid" class="error-message">
+          <div *ngIf="submitted && testCaseName.get('test_case_name').invalid" class="error-message">
             <small *ngIf="testCaseName.get('test_case_name').hasError('required')">Test Case name is required!</small>
           </div>
         </div>
@@ -16,10 +16,10 @@
   <nb-card-footer>
     <button nbButton (click)="close()" class="close-button">Close</button>
     <div *ngIf="!isEdit" class="form-row button-row">
-      <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+      <button type="submit" (click)="onSubmit()"  class="submit-button">Submit</button>
     </div>
     <div *ngIf="isEdit" class="form-row button-row">
-      <button type="submit" (click)="onSubmit()" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+      <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
     </div>
   </nb-card-footer>
 </nb-card>
@@ -31,13 +31,13 @@
         <form [formGroup]="instruction"  class="custom-form">
               <div class="form-row">
               <div class="form-group">
-                <label for="instructionArr">Instruction:</label>
+                <label for="instructionArr">Instructions<span class="star-mark">*</span>:</label>
                 <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown custom-select-new" multiple>
                   <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.instruction_name}}</nb-option>
 
                 </nb-select>
-                <div *ngIf="instruction.get('instructionArr').touched && instruction.get('instructionArr').invalid" class="error-message">
-                  <small *ngIf="instruction.get('instructionArr').hasError('required')">Platform Name is required!</small>
+                <div *ngIf="submitted && instruction.get('instructionArr').invalid" class="error-message">
+                  <small *ngIf="instruction.get('instructionArr').hasError('required')">Instructions required!</small>
                 </div>
               </div>
             </div>
@@ -48,7 +48,7 @@
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
       <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" [disabled]="instruction.invalid" class="submit-button">Submit</button>
+        <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
         </div>
     </nb-card-footer>
   </nb-card>
@@ -60,19 +60,19 @@
         <form [formGroup]="templateForm"  class="custom-form">
             <div class="form-row">
                 <div class="form-group">
-                  <label for="templateName">Template Name:</label>
+                  <label for="templateName">Template Name<span class="star-mark">*</span>:</label>
                   <input id="templateName" formControlName="templateName" class="form-control" />
-                  <div *ngIf="templateForm.get('templateName').touched && templateForm.get('templateName').invalid" class="error-message">
+                  <div *ngIf="submitted && templateForm.get('templateName').invalid" class="error-message">
                     <small *ngIf="templateForm.get('templateName').hasError('required')">Template name is required!</small>
                   </div>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="description">Template Description:</label>
+                  <label for="description">Template Description<span class="star-mark">*</span>:</label>
                   <input id="description" formControlName="description" class="form-control" />
-                  <div *ngIf="templateForm.get('description').touched && templateForm.get('description').invalid" class="error-message">
-                    <small *ngIf="templateForm.get('description').hasError('required')">Description is required!</small>
+                  <div *ngIf="submitted && templateForm.get('description').invalid" class="error-message">
+                    <small *ngIf="templateForm.get('description').hasError('required')">Template Description is required!</small>
                   </div>
                 </div>
               </div>
@@ -117,10 +117,10 @@
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
       <div *ngIf="!isEdit" class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Submit</button>
+        <button type="submit" (click)="onSubmit()"  class="submit-button">Submit</button>
         </div>
         <div *ngIf="isEdit" class="form-row button-row">
-          <button type="submit" (click)="onSubmit()" [disabled]="templateForm.invalid" class="submit-button">Edit</button>
+          <button type="submit" (click)="onSubmit()"  class="submit-button">Edit</button>
           </div>
     </nb-card-footer>
   </nb-card>
@@ -131,7 +131,7 @@
         <form [formGroup]="testCases"  class="custom-form">
               <div class="form-row">
               <div class="form-group">
-                <label for="templates">Test Case</label>
+                <label for="templates">Test Case<span class="star-mark">*</span></label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown  custom-select-new" multiple>
                   <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase"
                   [disabled]="testCase?.instructions.length === 0"  
@@ -139,8 +139,8 @@
                   >{{testCase?.screen_name}}</nb-option>
 
                 </nb-select>
-                <div *ngIf="testCases.get('templates').touched && testCases.get('templates').invalid" class="error-message">
-                  <small *ngIf="testCases.get('templates').hasError('required')">Platform Name is required!</small>
+                <div *ngIf="submitted && testCases.get('templates').invalid" class="error-message">
+                  <small *ngIf="testCases.get('templates').hasError('required')">Test Cases required!</small>
                 </div>
               </div>
             </div>
@@ -151,7 +151,7 @@
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
       <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" [disabled]="testCases.invalid" class="submit-button">Submit</button>
+        <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
         </div>
     </nb-card-footer>
   </nb-card>
@@ -182,7 +182,7 @@
   <nb-card-footer>
     <button nbButton (click)="close()" class="close-button">Close</button>
     <div class="form-row button-row">
-      <button type="submit" (click)="onSubmit(selectedType)" [disabled]="testCaseName.invalid" class="submit-button">Submit</button>
+      <button type="submit" (click)="onSubmit(selectedType)" class="submit-button">Submit</button>
     </div>
   </nb-card-footer>
 </nb-card>
