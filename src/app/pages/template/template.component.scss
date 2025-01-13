@@ -238,9 +238,9 @@ nb-accordion-item-body .item-body{
 }
 
 .template-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+      align-items: center;
+      gap: 2%;
 }
 .icon-btn{
     margin-right: 1.5em;
@@ -260,7 +260,7 @@ nb-accordion-item-body .item-body{
   .template-name{
     color: #000000;
     display: block;
-    width: 15%;
+    width: 25%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

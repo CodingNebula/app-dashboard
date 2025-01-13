@@ -7,7 +7,9 @@
   <!-- <div *ngIf="applicationDataArr.length > 0"> -->
   <div class="application-container">
     <div class="application-div" *ngFor="let item of applicationDataArr; let i = index"  (click)="navigate(item)">
-      <!-- <nb-icon icon="more-vertical-outline" class="more-icon"></nb-icon> -->
+      <!-- <div class="add-new" [nbPopover]="list" #popover="nbPopover">
+    <nb-icon icon="more-vertical-outlin" class="more-icon" nbPopoverPlacement="bottom-end"></nb-icon>
+  </div> -->
       <img class="application-img" width="200" src="../../../assets/images/any-logo.png" alt="any-logo">
       <div class="application-name">{{item.app_name}}</div>
       <div>{{item.platform}}</div>

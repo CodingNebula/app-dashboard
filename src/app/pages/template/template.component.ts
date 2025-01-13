@@ -61,14 +61,13 @@ export class TemplateComponent {
   }
 
   openDeleteDailog(item) {
-    if (this.popover.isShown) {
-      console.log(this.popover.isShown);
+    if (this.popover?.isShown) {
       
-      this.popover.hide(); // Hide the popover if it is currently shown
+      this.popover?.hide(); 
     }
 
-    if(this.popoverTemplate.isShown){
-      this.popoverTemplate.hide();
+    if(this.popoverTemplate?.isShown){
+      this.popoverTemplate?.hide();
     }
     
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
@@ -138,26 +137,18 @@ export class TemplateComponent {
 
   openDialog(action: string, type: string, id?: any, editData?: any, isEdit?: boolean) {
     // Open the dialog and pass data to it using 'context'
-    if (this.popover.isShown) {
-      console.log(this.popover);
+    if (this.popover?.isShown) {
       
-      console.log(this.popover.isShown);
-      
-      this.popover.hide(); // Hide the popover if it is currently shown
+      this.popover?.hide(); // Hide the popover if it is currently shown
     }
 
-    console.log('Popover Template:', this.popoverTemplate);
-    console.log('Popover Template:', this.popoverTemplate.isShown);
-
-  if (this.popoverTemplate && this.popoverTemplate.isShown) {
-    console.log('Popover is shown:', this.popoverTemplate.isShown);
-    this.popoverTemplate.hide(); // Hide the popover if it is currently shown
+  if (this.popoverTemplate && this.popoverTemplate?.isShown) {
+    this.popoverTemplate?.hide(); // Hide the popover if it is currently shown
   }
 
-    if(this.popoverTemplate.isShown){
-      console.log(this.popoverTemplate.isShown);
+    if(this.popoverTemplate?.isShown){
       
-      this.popoverTemplate.hide();
+      this.popoverTemplate?.hide();
     }
     
 
@@ -228,19 +219,19 @@ export class TemplateComponent {
           }
 
           if (result.selectedType === 'instruction') {
+            const instructionArr = this.testCasesArray.find((testCase) => testCase.instruction_set_id === id);
+            const instructionsLen = instructionArr.instructions.length;
 
             let body = {
               instruction_set_id: id,  // This value can be dynamic
               instruction_id: result?.data?.instructionArr?.map((instruction, index) => {
                 return {
                   id: instruction.id,  // Mapping the dynamic id from instructionsArray
-                  order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                  order: (instructionsLen + index + 1).toString(),     // Using index + 1 to set the order dynamically
                   extra: instruction.extra  // Adding any extra dynamic data
                 };
               })
             };
-
-
 
 
             this.accountService.postPageInstructions(body).subscribe((resp) => {
@@ -425,11 +416,18 @@ export class TemplateComponent {
 
 
       const sortedInstructions = result.map((item: any) => {
-        item.instructions = item.instructions.filter((instruction: any) => {
-          return instruction.instruction_order !== "0";
-        });
+        item.instructions = item.instructions
+          .filter((instruction: any) => instruction.instruction_order !== "0")
+          .sort((a: any, b: any) => {
+            return parseInt(a.instruction_order) - parseInt(b.instruction_order);
+          });
+        
         return item;
       });
+      
+
+
+      console.log(sortedInstructions);    
       
 
       this.testCasesArray = sortedInstructions;

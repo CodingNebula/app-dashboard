@@ -386,7 +386,7 @@ export class AutomateComponent implements OnInit {
 
   onSubmit() {
     if (this.myForm.valid) {
-      
+
 
       this.reportData.general.platform = this.myForm.value?.platform;
       this.reportData.general.device = this.myForm.value?.device;
@@ -527,7 +527,7 @@ export class AutomateComponent implements OnInit {
     if (startAll) {
       result = itemData.screens.map(screen => {
         return screen.instructions.map((instruction, index) => {
-          
+
           return {
             id: index,
             screenName: instruction.ins_back_name,
@@ -548,9 +548,15 @@ export class AutomateComponent implements OnInit {
       //     roomId: localStorage.getItem("id"),
       //   }
       // );
-      
+
 
       result.push(
+        {
+          id: "0",
+          screenName: "Find_Screen_Elements",
+          roomId: localStorage.getItem("id"),
+          ins_id: '6789',
+        },
         {
           screenName: 'End_Instructions',
           successMessage: 'End Instructions',
@@ -768,7 +774,7 @@ export class AutomateComponent implements OnInit {
           "id": "0",
           "screenName": "Find_Screen_Elements"
         }
-      ]
+      ];
 
       item.push(obj);
 
@@ -776,9 +782,9 @@ export class AutomateComponent implements OnInit {
 
 
       console.log(result);
-      
+
       this.webSocketService.sendTestCaseRequest(result);
-      
+
 
       this.counterInterval = setInterval(() => {
         count++;
@@ -799,7 +805,7 @@ export class AutomateComponent implements OnInit {
 
       this.webSocketService.getSubject().subscribe((res) => {
         console.log(res);
-        
+
         if (!timeChecked) {
           const currentDate = new Date();
         }
@@ -811,9 +817,9 @@ export class AutomateComponent implements OnInit {
           }
           this.testCases.map((item) => {
             item.testCase.map((inst) => {
-              
+
               if (inst.ins_id === res.message.ins_id) {
-                
+
                 inst.status = res.message.message;
                 return this.testCases;
               }
@@ -909,10 +915,10 @@ export class AutomateComponent implements OnInit {
     }
   }
 
-  
+
 
   singleInstructionWebsocket(allInstructions) {
-    
+
     this.showIndividualEnd = true;
     allInstructions.showSingleInstruction = true;
     allInstructions.singleInstLoader = true;
@@ -940,7 +946,7 @@ export class AutomateComponent implements OnInit {
     this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
       console.log(res);
-      
+
 
       if (res?.message && res?.message?.info) {
 
@@ -1181,7 +1187,7 @@ export class AutomateComponent implements OnInit {
       this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
       this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
-        
+
         if (res?.message && res?.message?.info) {
           let currentTime = Date.now() / 1000;
           const now = new Date();
@@ -1718,13 +1724,13 @@ export class AutomateComponent implements OnInit {
       },
       (error) => {
         console.error('API Error:', error);
-        
+
         this.appLaunchLoading = false;
         this.showAppLaunchError = true;
         this.appLaunchStatus = error.error.message;
 
         setTimeout(() => {
-          this.showAppLaunchError = false; 
+          this.showAppLaunchError = false;
           this.isAccordionExpanded = true;
         }, 2000);
       }
