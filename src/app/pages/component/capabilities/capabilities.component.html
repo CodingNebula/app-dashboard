@@ -6,7 +6,7 @@
   
             <div class="form-row">
               <div class="form-group">
-                <label for="platform">Platform Name:</label>
+                <label for="platform">Platform Name<span class="star-mark">*</span>:</label>
                 <nb-select id="platform" formControlName="platform" placeholder="Select Platform"
                   [(selected)]="selectedItem" class="custom-select-dropdown">
                   <nb-option value="Android">Android</nb-option>
@@ -14,15 +14,15 @@
                   <nb-option value="Windows">Windows</nb-option>
                   <nb-option value="MacOS">MacOS</nb-option>
                 </nb-select>
-                <div *ngIf="submitted && myForm.get('platform').touched && myForm.get('platform').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('platform').invalid" class="error-message">
                   <small *ngIf="myForm.get('platform').hasError('required')">Platform Name is required!</small>
                 </div>
               </div>
   
               <div class="form-group">
-                <label for="app">App Path:</label>
+                <label for="app">App Path<span class="star-mark">*</span>:</label>
                 <input id="app" formControlName="app" class="form-control" />
-                <div *ngIf="submitted && myForm.get('app').touched && myForm.get('app').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('app').invalid" class="error-message">
                   <small *ngIf="myForm.get('app').hasError('required')">App is required!</small>
                 </div>
               </div>
@@ -30,17 +30,17 @@
   
             <div class="form-row">
               <div class="form-group">
-                <label for="package">Package Name:</label>
+                <label for="package">Package Name<span class="star-mark">*</span>:</label>
                 <input id="package" formControlName="package" class="form-control timeout-input" readonly />
-                <div *ngIf="submitted && myForm.get('package').touched && myForm.get('package').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('package').invalid" class="error-message">
                   <small *ngIf="myForm.get('package').hasError('required')">Package name is required!</small>
                 </div>
               </div>
   
               <div class="form-group">
-                <label for="automation">Automation Name:</label>
+                <label for="automation">Automation Name<span class="star-mark">*</span>:</label>
                 <input id="automation" formControlName="automation" class="form-control" />
-                <div *ngIf="submitted && myForm.get('automation').touched && myForm.get('automation').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('automation').invalid" class="error-message">
                   <small *ngIf="myForm.get('automation').hasError('required')">Automation Name is required!</small>
                 </div>
               </div>
@@ -48,17 +48,17 @@
   
             <div class="form-row">
               <div class="form-group">
-                <label for="device">Device Name:</label>
+                <label for="device">Device Name<span class="star-mark">*</span>:</label>
                 <input id="device" formControlName="device" class="form-control" />
-                <div *ngIf="submitted && myForm.get('device').touched && myForm.get('device').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('device').invalid" class="error-message">
                   <small *ngIf="myForm.get('device').hasError('required')">Device Name is required!</small>
                 </div>
               </div>
   
               <div class="form-group">
-                <label for="timeout">New Command Timeout:</label>
+                <label for="timeout">New Command Timeout<span class="star-mark">*</span>:</label>
                 <input id="timeout" readonly type="number" formControlName="timeout" class="form-control timeout-input" />
-                <div *ngIf="submitted && myForm.get('timeout').touched && myForm.get('timeout').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('timeout').invalid" class="error-message">
                   <small *ngIf="myForm.get('timeout').hasError('required')">Timeout is required!</small>
                 </div>
               </div>
@@ -66,13 +66,13 @@
   
             <div class="form-row">
               <div class="form-group">
-                <label for="noReset">No Reset:</label>
+                <label for="noReset">No Reset<span class="star-mark">*</span>:</label>
                 <nb-select id="noReset" [formControlName]="'noReset'" [disabled]="true" class="custom-select-dropdown">
                   <nb-option value="True">True</nb-option>
                   <nb-option value="False">False</nb-option>
                 </nb-select>
   
-                <div *ngIf="submitted && myForm.get('noReset').touched && myForm.get('noReset').invalid" class="error-message">
+                <div *ngIf="submitted  && myForm.get('noReset').invalid" class="error-message">
                   <small *ngIf="myForm.get('noReset').hasError('required')">No Reset is required!</small>
                   <small *ngIf="myForm.get('noReset').hasError('invalidValue')">You cannot select "False" for No
                     Reset!</small>
@@ -80,13 +80,13 @@
               </div>
   
               <div class="form-group">
-                <label for="hiddenApp">Ignore hidden app policy:</label>
+                <label for="hiddenApp">Ignore hidden app policy<span class="star-mark">*</span>:</label>
                 <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="True" [disabled]="true"
                   class="custom-select-dropdown">
                   <nb-option value="True">True</nb-option>
                   <nb-option value="False">False</nb-option>
                 </nb-select>
-                <div *ngIf="submitted && myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
+                <div *ngIf="submitted && myForm.get('hiddenApp').invalid" class="error-message">
                   <small *ngIf="myForm.get('hiddenApp').hasError('required')">Hidden App is required!</small>
                   <small *ngIf="myForm.get('hiddenApp').hasError('invalidValue')">You cannot select "False" for Ignore
                     Hidden App!</small>
@@ -95,7 +95,7 @@
             </div>
   
             <div class="form-row button-row">
-              <button type="submit" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+              <button type="submit" class="submit-button">Submit</button>
               <!-- <button type="reset"  class="reset-button" (click)="onReset()">Reset</button> -->
   
               <!-- <button type="submit" class="submit-button">Submit</button> -->

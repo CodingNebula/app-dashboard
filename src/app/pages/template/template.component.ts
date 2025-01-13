@@ -309,17 +309,23 @@ export class TemplateComponent {
 
           if (result.selectedType === 'testCase') {
 
+            const template = this.templateArray.find((testCase) => testCase.wt_id === id);
+            const templateScreenLen = template?.screens?.length;
+
             let body = {
               application_id: localStorage.getItem('app_id'),  // This value can be dynamic
               wt_id: id,
               instructions_set: result?.data?.templates?.map((instruction, index) => {
                 return {
                   id: instruction?.instruction_set_id,  // Mapping the dynamic id from instructionsArray
-                  order: (index + 1).toString(),     // Using index + 1 to set the order dynamically
+                  order: (templateScreenLen + index + 1).toString(),     // Using index + 1 to set the order dynamically
                   extra: {}  // Adding any extra dynamic data
                 };
               })
             };
+
+            console.log();
+            
 
 
             let screens = result?.data?.templates?.map((screen, index) => {

@@ -14,6 +14,10 @@
     padding: 0.5rem;
   }
   
+  .star-mark{
+    color: #e26262;
+  }
+
   .automate-left {
     width: 70%;
     height: 100%;
@@ -129,12 +133,6 @@
     width: 20%;
     transition: background-color 0.3s ease;
     outline: none;
-  }
-  
-  .submit-button:disabled {
-    background-color: #00A3AB;
-    color: #ffffff;
-    cursor: not-allowed;
   }
   
   .submit-button:hover:not(:disabled) {

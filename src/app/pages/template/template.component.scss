@@ -212,14 +212,16 @@ display: flex;
 }
 
 .add-new{
-    border: none;
-    background-color: #00A3AB;
-    color: white;
-    border-radius: 2em;
-    outline: none;
-    margin-right: 2em;
-    padding: 0.5em;
-    font-size: 0.9rem;
+  border: none;
+  background-color: #00A3AB;
+  color: white;
+  border-radius: 50%;
+  outline: none;
+  margin-right: 2em;
+  padding: 0.5em;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
 }
 
 .popover-card{
