@@ -36,13 +36,13 @@ export class TemplateDialogComponent {
     private fb: FormBuilder,
     private applicationDataService: ApplicationDataService,
     private accountService: AccountService,
-  private editDeleteService: EditDeleteService) {
+    private editDeleteService: EditDeleteService) {
   }
 
   ngOnInit() {
 
     console.log(this.testCaseArr);
-    
+
 
     let data
     if (this.selectedAction === '' && this.selectedType === 'template') {
@@ -118,7 +118,7 @@ export class TemplateDialogComponent {
 
 
   onSubmit(type?) {
-    
+
     if (type === 'reorder') {
       this.dialogRef.close({ confirmed: true, data: this.editData, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });
 
@@ -171,109 +171,109 @@ export class TemplateDialogComponent {
 
       console.log(item);
 
-       
-       
-      
+
+
+
 
       if (result) {
         if (result.confirmed) {
-          if(this.selectedAction === 'template'){
+          if (this.selectedAction === 'template') {
             let app_id = localStorage.getItem('app_id');
             console.log(this.editData?.wt_id);
-            
 
-          let body = {
-            wt_id : this.editData?.wt_id,
-            instructions_set: this.editData.screens.map((screen, index) => {
-              if (screen.ins_set_id === result?.data?.screenId) {
-                return {
-                  id: screen.ins_set_id,  
-                  order: '0',
-                  extra: {}  
-                };
-              } else {
-                
-                return {
-                  id: screen.ins_set_id,  
-                  order: index < this.editData.screens.findIndex((item: any) => item.ins_set_id === result?.data?.screenId) ? (index + 1).toString() : (index).toString(),
-                  extra: {}  
-                };
+
+            let body = {
+              wt_id: this.editData?.wt_id,
+              instructions_set: this.editData.screens.map((screen, index) => {
+                if (screen.ins_set_id === result?.data?.screenId) {
+                  return {
+                    id: screen.ins_set_id,
+                    order: '0',
+                    extra: {}
+                  };
+                } else {
+
+                  return {
+                    id: screen.ins_set_id,
+                    order: index < this.editData.screens.findIndex((item: any) => item.ins_set_id === result?.data?.screenId) ? (index + 1).toString() : (index).toString(),
+                    extra: {}
+                  };
+                }
+              })
+            };
+
+            console.log(body);
+
+
+            const id = this.editData?.wt_id;
+
+            console.log(item);
+            console.log(this.editData);
+
+
+
+            
+            this.accountService.updateTemplateScreens(id, body).subscribe((resp) => {
+              if (resp) {
+                // this.getAllPages()
+                const screensLeft = this.editData?.screens?.filter((screen) => screen.ins_set_id !== item.ins_set_id);
+    
+                this.editData.screens = screensLeft;
+
+                this.editDeleteService.setTemplateDeleteSubject(resp);
               }
             })
-          };
-        
-          console.log(body);
-          
 
-          const id = this.editData?.wt_id;
-
-          console.log(item);
-          console.log(this.editData);
-          
-          
-
-          const screensLeft = this.editData?.screens?.filter((screen) => screen.ins_set_id !== item.ins_set_id);
-
-              this.editData.screens = screensLeft;
-
-          this.accountService.updateTemplateScreens(id, body).subscribe((resp) => {
-            if (resp) {
-              // this.getAllPages()
-              
-              this.editDeleteService.setTemplateDeleteSubject(resp);
-            }
-          })
-
-          // this.deleteTestcase(result.data)
+            // this.deleteTestcase(result.data)
 
           }
-          else{
+          else {
 
-           
-          
 
-          // this.saveApplicationData(appDetails);
-          let app_id = localStorage.getItem('app_id');
 
-          let body = {
-            instruction_set_id: result?.data?.testcase_id,
-            instruction_id: this.editData.instructions.map((instruction, index) => {
-              if (instruction.instruction_id === result?.data?.instruction_id) {
-                return {
-                  id: instruction.instruction_id,  
-                  order: '0',
-                  extra: {}  
-                };
-              } else {
-                
-                return {
-                  id: instruction.instruction_id,  
-                  order: index < this.editData.instructions.findIndex((item: any) => item.instruction_id === result?.data?.instruction_id) ? (index + 1).toString() : (index).toString(),
-                  extra: {}  
-                };
+
+            // this.saveApplicationData(appDetails);
+            let app_id = localStorage.getItem('app_id');
+
+            let body = {
+              instruction_set_id: result?.data?.testcase_id,
+              instruction_id: this.editData.instructions.map((instruction, index) => {
+                if (instruction.instruction_id === result?.data?.instruction_id) {
+                  return {
+                    id: instruction.instruction_id,
+                    order: '0',
+                    extra: {}
+                  };
+                } else {
+
+                  return {
+                    id: instruction.instruction_id,
+                    order: index < this.editData.instructions.findIndex((item: any) => item.instruction_id === result?.data?.instruction_id) ? (index + 1).toString() : (index).toString(),
+                    extra: {}
+                  };
+                }
+              })
+            };
+
+
+            const id = result?.data?.testcase_id;
+            this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
+              if (resp) {
+                // this.getAllPages()
+
+                const instructionsLeft = this.editData?.instructions?.filter((instruction) => instruction.instruction_id !== item.instruction_id);
+
+                this.editData.instructions = instructionsLeft;
+
+
+                this.editDeleteService.setTestCaseDeleteSubject(resp);
               }
             })
-          };
-        
 
-          const id = result?.data?.testcase_id;
-          this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
-            if (resp) {
-              // this.getAllPages()
+            // this.deleteTestcase(result.data)
 
-              const instructionsLeft = this.editData?.instructions?.filter((instruction) => instruction.instruction_id !== item.instruction_id);
-
-              this.editData.instructions = instructionsLeft;
-              
-              
-              this.editDeleteService.setTestCaseDeleteSubject(resp);
-            }
-          })
-
-          // this.deleteTestcase(result.data)
-
+          }
         }
-      }
       }
     });
 

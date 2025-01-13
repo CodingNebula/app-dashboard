@@ -93,11 +93,13 @@
                     Description: <span>{{template?.wt_desc}}</span>
                   </div>
 
-                  <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)" class="icon-btn"
+                  <div class="icon-div">
+                    <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)" class="icon-btn"
                     icon="play-circle-outline"></nb-icon>
-
-                  <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
-                    <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
+                    
+                    <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
+                      <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
+                    </div>
                   </div>
 
                   <ng-template #listTemplate>
