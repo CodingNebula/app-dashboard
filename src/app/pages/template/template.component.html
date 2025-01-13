@@ -93,6 +93,9 @@
                     Description: <span>{{template?.wt_desc}}</span>
                   </div>
 
+                  <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)" class="icon-btn"
+                    icon="play-circle-outline"></nb-icon>
+
                   <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
                     <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
                   </div>
@@ -115,8 +118,7 @@
 
 
                   <!-- <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button> -->
-                  <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)" class="icon-btn"
-                    icon="play-circle-outline"></nb-icon>
+                  
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
                   <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
@@ -136,7 +138,7 @@
                     </nb-accordion-item>
                   </nb-accordion>
                   <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
-                    <button class="add-new " (click)="openDialog('template', 'testCase',template?.wt_id)">Add
+                    <button class="add-new empty-btn-1" (click)="openDialog('template', 'testCase',template?.wt_id)">Add
                       Screens</button>
                   </nb-accordion-item-body>
                 </nb-accordion-item-body>

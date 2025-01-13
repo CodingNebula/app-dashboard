@@ -168,7 +168,11 @@ export class TemplateDialogComponent {
     dialogRef.onClose.subscribe((result) => {
       console.log(result, this.selectedAction, this.selectedType);
       console.log(this.editData);
-      
+
+      console.log(item);
+
+       
+       
       
 
       if (result) {
@@ -202,10 +206,19 @@ export class TemplateDialogComponent {
           
 
           const id = this.editData?.wt_id;
+
+          console.log(item);
+          console.log(this.editData);
+          
+          
+
+          const screensLeft = this.editData?.screens?.filter((screen) => screen.ins_set_id !== item.ins_set_id);
+
+              this.editData.screens = screensLeft;
+
           this.accountService.updateTemplateScreens(id, body).subscribe((resp) => {
             if (resp) {
               // this.getAllPages()
-              console.log(resp);
               
               this.editDeleteService.setTemplateDeleteSubject(resp);
             }
@@ -216,6 +229,7 @@ export class TemplateDialogComponent {
           }
           else{
 
+           
           
 
           // this.saveApplicationData(appDetails);
@@ -246,8 +260,11 @@ export class TemplateDialogComponent {
           this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
             if (resp) {
               // this.getAllPages()
+
+              const instructionsLeft = this.editData?.instructions?.filter((instruction) => instruction.instruction_id !== item.instruction_id);
+
+              this.editData.instructions = instructionsLeft;
               
-              console.log(resp);
               
               this.editDeleteService.setTestCaseDeleteSubject(resp);
             }

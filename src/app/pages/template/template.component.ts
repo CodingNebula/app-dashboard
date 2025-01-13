@@ -86,7 +86,7 @@ export class TemplateComponent {
           // this.saveApplicationData(appDetails);
           let app_id = localStorage.getItem('app_id');
 
-          this.deleteTestcase(result.data)
+          this.deleteTestcase(result.data);
 
         }
       }
