@@ -5,7 +5,7 @@
       <div class="form-row">
         <div class="form-group">
           <label for="test_case_name">Test Case Name<span class="star-mark">*</span>:</label>
-          <input id="test_case_name" formControlName="test_case_name" class="form-control" />
+          <input maxlength="50" id="test_case_name" formControlName="test_case_name" class="form-control" />
           <div *ngIf="submitted && testCaseName.get('test_case_name').invalid" class="error-message">
             <small *ngIf="testCaseName.get('test_case_name').hasError('required')">Test Case name is required!</small>
           </div>
@@ -61,7 +61,7 @@
             <div class="form-row">
                 <div class="form-group">
                   <label for="templateName">Template Name<span class="star-mark">*</span>:</label>
-                  <input id="templateName" formControlName="templateName" class="form-control" />
+                  <input maxlength="50" id="templateName" formControlName="templateName" class="form-control" />
                   <div *ngIf="submitted && templateForm.get('templateName').invalid" class="error-message">
                     <small *ngIf="templateForm.get('templateName').hasError('required')">Template name is required!</small>
                   </div>

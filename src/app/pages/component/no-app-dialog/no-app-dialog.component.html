@@ -5,7 +5,7 @@
             <div class="form-row">
                 <div class="form-group">
                   <label for="application">Application Name<span class="star-mark">*</span>:</label>
-                  <input id="application" formControlName="application" class="form-control" />
+                  <input maxlength="50" id="application" formControlName="application" class="form-control" />
                   <div *ngIf="submitted && myForm.get('application').invalid" class="error-message">
                     <small *ngIf="myForm.get('application').hasError('required')">Application name is required!</small>
                   </div>

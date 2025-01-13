@@ -11,7 +11,7 @@
                 <nb-option value="right-arrow">left-arrow</nb-option>
                 <nb-option value="click_image">click_image</nb-option>
               </nb-select> -->
-              <input id="actions" formControlName="actions" class="form-control" />
+              <input maxlength="50" id="actions" formControlName="actions" class="form-control" />
                   
               <div *ngIf="submitted && myForm.get('actions').invalid" class="error-message">
                 <small *ngIf="myForm.get('actions').hasError('required')">Actions are required!</small>
@@ -21,14 +21,14 @@
             <div class="form-row">
                 <div class="form-group">
                   <label for="elem_name">Element Name:</label>
-                  <input id="elem_name" formControlName="elem_name" class="form-control" />
+                  <input maxlength="50" id="elem_name" formControlName="elem_name" class="form-control" />
                   
                 </div>
               </div>
               <div class="form-row">
                   <div class="form-group">
                     <label for="normal_name">Normal Name<span class="star-mark">*</span>:</label>
-                    <input id="normal_name" formControlName="normal_name" class="form-control" />
+                    <input maxlength="50" id="normal_name" formControlName="normal_name" class="form-control" />
                     <div *ngIf="submitted && myForm.get('normal_name').invalid" class="error-message">
                       <small *ngIf="myForm.get('normal_name').hasError('required')">Normal name is required!</small>
                     </div>
