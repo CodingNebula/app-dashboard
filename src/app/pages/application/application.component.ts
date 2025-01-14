@@ -73,7 +73,7 @@ export class ApplicationComponent implements OnInit {
 
             if(result.type === 'edit'){
               const data = {
-                app_name: result.data.application,
+                name: result.data.application,
                 extra: {},
               }
 
@@ -146,7 +146,7 @@ export class ApplicationComponent implements OnInit {
   updateAppData(id, data){
     this.accountService.updateApplication(id, data).subscribe((response) => {
       if(response){
-        // console.log(response);
+        console.log(response);
         this.getApplication();
         
       }

@@ -134,15 +134,22 @@ td{
     color: white;
 }
 
+nb-popover .arrow::after{
+    top: 0 !important;
+}
+
 .popover-card{
     margin-bottom: 0;
     position: absolute;
-    left: 6rem;
+    left: 2rem;
+    top: 2.5rem;
+    // border-radius: 1rem;
   }
   .popover-card > nb-list > nb-list-item{
     cursor: pointer;
     transition: 0.3s;
     padding: 0.4rem;
+    // border: none;
   }
   .popover-card > nb-list > nb-list-item:hover{
     color: #00A3AB;
@@ -160,6 +167,10 @@ td{
     font-weight: 600;
     font-size: 1.2em;
     padding: 0.3em 0em;
+    width: 10rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .application-alert{
     position: absolute;

@@ -89,8 +89,8 @@
                   <div *ngIf="template?.wt_name" [nbTooltip]="template?.wt_name" class="template-name">
                     {{template?.wt_name}}
                   </div>
-                  <div *ngIf="template?.wt_desc" [nbTooltip]="template?.wt_desc" class="template-description">
-                    Description: <span>{{template?.wt_desc}}</span>
+                  <div *ngIf="template?.wt_desc"  class="template-description">
+                    Description: <span [nbTooltip]="template?.wt_desc">{{template?.wt_desc}}</span>
                   </div>
 
                   <div class="icon-div">

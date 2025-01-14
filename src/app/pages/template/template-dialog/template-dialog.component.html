@@ -1,7 +1,7 @@
 <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'name'">
   <nb-card-header>{{appName}} Test Case</nb-card-header>
   <nb-card-body>
-    <form [formGroup]="testCaseName"  class="custom-form">
+    <form [formGroup]="testCaseName" class="custom-form">
       <div class="form-row">
         <div class="form-group">
           <label for="test_case_name">Test Case Name<span class="star-mark">*</span>:</label>
@@ -16,7 +16,7 @@
   <nb-card-footer>
     <button nbButton (click)="close()" class="close-button">Close</button>
     <div *ngIf="!isEdit" class="form-row button-row">
-      <button type="submit" (click)="onSubmit()"  class="submit-button">Submit</button>
+      <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
     </div>
     <div *ngIf="isEdit" class="form-row button-row">
       <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
@@ -25,58 +25,63 @@
 </nb-card>
 
 
-  <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'instruction'">
-    <nb-card-header>{{appName}}Test Case</nb-card-header>
-    <nb-card-body>
-        <form [formGroup]="instruction"  class="custom-form">
-              <div class="form-row">
-              <div class="form-group">
-                <label for="instructionArr">Instructions<span class="star-mark">*</span>:</label>
-                <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown custom-select-new" multiple>
-                  <nb-option *ngFor="let instruction of instructionsArr" [value]="instruction">{{instruction?.instruction_name}}</nb-option>
+<nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'instruction'">
+  <nb-card-header>{{appName}}Test Case</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="instruction" class="custom-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="instructionArr">Instructions<span class="star-mark">*</span>:</label>
+          <nb-select id="instructionArr" formControlName="instructionArr" placeholder="Select Instructions"
+            (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown custom-select-new" multiple>
+            <nb-option *ngFor="let instruction of instructionsArr"
+              [value]="instruction">{{instruction?.instruction_name}}</nb-option>
 
-                </nb-select>
-                <div *ngIf="submitted && instruction.get('instructionArr').invalid" class="error-message">
-                  <small *ngIf="instruction.get('instructionArr').hasError('required')">Instructions required!</small>
-                </div>
-              </div>
-            </div>
-
-
-          </form>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton (click)="close()" class="close-button">Close</button>
-      <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
+          </nb-select>
+          <div *ngIf="submitted && instruction.get('instructionArr').invalid" class="error-message">
+            <small *ngIf="instruction.get('instructionArr').hasError('required')">Instructions required!</small>
+          </div>
         </div>
-    </nb-card-footer>
-  </nb-card>
+      </div>
 
 
-  <nb-card *ngIf="selectedAction === 'template' && selectedType === 'name'">
-    <nb-card-header>{{appName}} Templates</nb-card-header>
-    <nb-card-body>
-        <form [formGroup]="templateForm"  class="custom-form">
-            <div class="form-row">
-                <div class="form-group">
-                  <label for="templateName">Template Name<span class="star-mark">*</span>:</label>
-                  <input maxlength="50" id="templateName" formControlName="templateName" class="form-control" />
-                  <div *ngIf="submitted && templateForm.get('templateName').invalid" class="error-message">
-                    <small *ngIf="templateForm.get('templateName').hasError('required')">Template name is required!</small>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="description">Template Description<span class="star-mark">*</span>:</label>
-                  <input id="description" formControlName="description" class="form-control" />
-                  <div *ngIf="submitted && templateForm.get('description').invalid" class="error-message">
-                    <small *ngIf="templateForm.get('description').hasError('required')">Template Description is required!</small>
-                  </div>
-                </div>
-              </div>
-              <!-- <div class="form-row">
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <div class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
+
+<nb-card *ngIf="selectedAction === 'template' && selectedType === 'name'">
+  <nb-card-header>{{appName}} Templates</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="templateForm" class="custom-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="templateName">Template Name<span class="star-mark">*</span>:</label>
+          <input maxlength="50" id="templateName" formControlName="templateName" class="form-control" />
+          <div *ngIf="submitted && templateForm.get('templateName').invalid" class="error-message">
+            <small *ngIf="templateForm.get('templateName').hasError('required')">Template name is required!</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="description">Template Description<span class="star-mark">*</span>:</label>
+          <input maxlength="240" id="description" formControlName="description" class="form-control" />
+          <div
+            *ngIf="submitted && (templateForm.get('description').value.trim().length > 0 || templateForm.get('description').invalid)"
+            class="error-message">
+            <small *ngIf="templateForm.get('description').hasError('required')">Template Description is
+              required!</small>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="form-row">
               <div class="form-group">
                 <label for="templates">Test Case</label>
                 <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown" multiple>
@@ -90,71 +95,71 @@
             </div> -->
 
 
-          </form>
+    </form>
 
 
 
-      <div *ngIf="editData?.wt_name">
-<!--        <div *ngFor="let inst of editData.screens" >-->
-<!--          <div>{{inst.ins_set_screen_name }}     <nb-icon icon="delete-outline"  ></nb-icon>  </div>-->
+    <div *ngIf="editData?.wt_name">
+      <!--        <div *ngFor="let inst of editData.screens" >-->
+      <!--          <div>{{inst.ins_set_screen_name }}     <nb-icon icon="delete-outline"  ></nb-icon>  </div>-->
 
 
-<!--        </div>-->
+      <!--        </div>-->
 
-<!--        <div cdkDropList #doneList="cdkDropList"  [cdkDropListData]="editData.screens"  [cdkDropListConnectedTo]="[editData.screens]" class="example-list"-->
-<!--             (cdkDropListDropped)="drop($event)">-->
-<!--          <div class="example-box" *ngFor="let inst of editData.screens" cdkDrag>{{inst.ins_set_screen_nam}}</div>-->
-<!--        </div>-->
+      <!--        <div cdkDropList #doneList="cdkDropList"  [cdkDropListData]="editData.screens"  [cdkDropListConnectedTo]="[editData.screens]" class="example-list"-->
+      <!--             (cdkDropListDropped)="drop($event)">-->
+      <!--          <div class="example-box" *ngFor="let inst of editData.screens" cdkDrag>{{inst.ins_set_screen_nam}}</div>-->
+      <!--        </div>-->
 
-        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="editData.screens" [cdkDropListConnectedTo]="[todoList]" class="example-list"
-             (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of templateTestcaseData" cdkDrag>{{item}}</div>
-        </div>
-
+      <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="editData.screens"
+        [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of templateTestcaseData" cdkDrag>{{item}}</div>
       </div>
 
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton (click)="close()" class="close-button">Close</button>
-      <div *ngIf="!isEdit" class="form-row button-row">
-        <button type="submit" (click)="onSubmit()"  class="submit-button">Submit</button>
-        </div>
-        <div *ngIf="isEdit" class="form-row button-row">
-          <button type="submit" (click)="onSubmit()"  class="submit-button">Edit</button>
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <div *ngIf="!isEdit" class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
+    </div>
+    <div *ngIf="isEdit" class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" class="submit-button">Edit</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
+<nb-card *ngIf="selectedAction === 'template' && selectedType === 'testCase'">
+  <nb-card-header>{{appName}} Templates</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="testCases" class="custom-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="templates">Test Case<span class="star-mark">*</span></label>
+          <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases"
+            (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown  custom-select-new" multiple>
+            <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase"
+              [disabled]="testCase?.instructions.length === 0"
+              [ngClass]="testCase?.instructions.length === 0 ? 'not-allowed' : ''">{{testCase?.screen_name}}</nb-option>
+
+          </nb-select>
+          <div *ngIf="submitted && testCases.get('templates').invalid" class="error-message">
+            <small *ngIf="testCases.get('templates').hasError('required')">Test Cases required!</small>
           </div>
-    </nb-card-footer>
-  </nb-card>
-
-  <nb-card *ngIf="selectedAction === 'template' && selectedType === 'testCase'">
-    <nb-card-header>{{appName}}  Templates</nb-card-header>
-    <nb-card-body>
-        <form [formGroup]="testCases"  class="custom-form">
-              <div class="form-row">
-              <div class="form-group">
-                <label for="templates">Test Case<span class="star-mark">*</span></label>
-                <nb-select id="templates" formControlName="templates" placeholder="Select Test Cases" (selectedChange)="onTemplateChange($event)" class="custom-select-dropdown  custom-select-new" multiple>
-                  <nb-option *ngFor="let testCase of testCaseArr" [value]="testCase"
-                  [disabled]="testCase?.instructions.length === 0"  
-                  [ngClass]="testCase?.instructions.length === 0 ? 'not-allowed' : ''"
-                  >{{testCase?.screen_name}}</nb-option>
-
-                </nb-select>
-                <div *ngIf="submitted && testCases.get('templates').invalid" class="error-message">
-                  <small *ngIf="testCases.get('templates').hasError('required')">Test Cases required!</small>
-                </div>
-              </div>
-            </div>
-
-
-          </form>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton (click)="close()" class="close-button">Close</button>
-      <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
         </div>
-    </nb-card-footer>
-  </nb-card>
+      </div>
+
+
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <div class="form-row button-row">
+      <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
 
 <nb-card *ngIf="selectedAction === 'testCase' && selectedType === 'reorder'">
   <nb-card-header>Reorder Instructions</nb-card-header>
@@ -162,17 +167,17 @@
 
 
     <div *ngIf="editData?.screen_name">
-      <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="drop($event)"  >
+      <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="drop($event)">
 
         <div class="example-box  " *ngFor="let inst of editData.instructions, index as i" cdkDrag>
-          <div  style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
-          <div   class="w-10 drag-icon">
-            <i    class="material-icons" cdkDragHandle><nb-icon icon="menu-outline" ></nb-icon></i>
+          <div style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
+          <div class="w-10 drag-icon">
+            <i class="material-icons" cdkDragHandle><nb-icon icon="menu-outline"></nb-icon></i>
           </div>
-          <div style="width: 80%"  >{{inst.instruction_name}}     </div>
+          <div style="width: 80%">{{inst.instruction_name}} </div>
 
           <div class="w-10 delete-icon" (click)="openDeleteDailog(inst)">
-            <i class="material-icons"  ><nb-icon icon="trash-outline" ></nb-icon></i>
+            <i class="material-icons"><nb-icon icon="trash-outline"></nb-icon></i>
           </div>
         </div>
       </div>
@@ -180,7 +185,11 @@
 
   </nb-card-body>
   <nb-card-footer>
-    <button nbButton (click)="close()" class="close-button">Close</button>
+    <button nbButton (click)="close()" class="close-button" [ngClass]="isDisableClose ? 'not-allowed' : ''"
+      [disabled]="isDisableClose" [attr.aria-disabled]="isDisableClose ? 'true' : 'false'" [attr.aria-label]="'Close'">
+      Close
+    </button>
+
     <div class="form-row button-row">
       <button type="submit" (click)="onSubmit(selectedType)" class="submit-button">Submit</button>
     </div>
@@ -193,17 +202,17 @@
 
 
     <div *ngIf="editData?.wt_name">
-      <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="dropScreen($event)"  >
+      <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="dropScreen($event)">
 
         <div class="example-box  " *ngFor="let inst of editData.screens, index as i" cdkDrag>
-          <div  style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
-          <div   class="w-10 drag-icon">
-            <i    class="material-icons" cdkDragHandle><nb-icon icon="menu-outline" ></nb-icon></i>
+          <div style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
+          <div class="w-10 drag-icon">
+            <i class="material-icons" cdkDragHandle><nb-icon icon="menu-outline"></nb-icon></i>
           </div>
-          <div style="width: 80%"  >{{inst.ins_set_screen_name}}     </div>
+          <div style="width: 80%">{{inst.ins_set_screen_name}} </div>
 
           <div class="w-10 delete-icon" (click)="openDeleteDailog(inst)">
-            <i class="material-icons"  ><nb-icon icon="trash-outline" ></nb-icon></i>
+            <i class="material-icons"><nb-icon icon="trash-outline"></nb-icon></i>
           </div>
         </div>
       </div>
@@ -217,4 +226,3 @@
     </div>
   </nb-card-footer>
 </nb-card>
-

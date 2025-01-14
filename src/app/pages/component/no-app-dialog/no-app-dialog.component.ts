@@ -51,8 +51,10 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
 
   onSubmit() {
     this.submitted = true;
+    console.log(this.myForm.value);
+    
 
-    if(this.myForm.value.platform === '' && this.myForm.value.app_name !== ''){
+    if(this.myForm.value.platform === '' && this.myForm.value.application !== ''){
       this.dialogRef.close({ confirmed: true, data: this.myForm.value, type: this.selectedType, appId: this.itemToEdit.id });
     }
     if (this.myForm.valid) {

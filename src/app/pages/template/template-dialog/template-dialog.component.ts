@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../../shared/services/account/account.service';
@@ -30,6 +30,7 @@ export class TemplateDialogComponent {
   public templateTestcaseData: any;
   public isEdit: boolean;
   public submitted: boolean;
+  public isDisableClose: boolean = false;
 
   constructor(
     private dialogService: NbDialogService,
@@ -66,18 +67,23 @@ export class TemplateDialogComponent {
 
     this.templateForm = this.fb.group({
       templateName: ['', [Validators.required]],
-      description: ['', Validators.required],
+      // description: ['',[Validators.required, Validators.pattern(/^(?!.*\s{2,}).*$/)]]
+      description: ['',[Validators.required, this.noWhitespaceValidator]]
     })
 
     this.testCases = this.fb.group({
       templates: [[], Validators.required],
     })
 
-    this.patchFormValues()
+    this.patchFormValues();
 
   }
 
+
+  
   drop(event: CdkDragDrop<string[]>) {
+    this.isDisableClose = true;
+    
     moveItemInArray(this.editData.instructions, event.previousIndex, event.currentIndex);
   }
 
@@ -116,6 +122,12 @@ export class TemplateDialogComponent {
     }
   }
 
+  noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control && control.value && control.value.toString() || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+  }
+
 
 
   onSubmit(type?) {
@@ -131,9 +143,10 @@ export class TemplateDialogComponent {
     }
     if (this.instruction.valid) {
       this.dialogRef.close({ confirmed: true, data: this.instruction.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
-    }
-
-    if (this.templateForm.valid) {
+    }    
+    console.log(this.templateForm.get('description').invalid);
+    
+    if (this.templateForm.valid && this.templateForm.value.description.trim().length > 0) {
       this.dialogRef.close({ confirmed: true, data: this.templateForm.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
     }
     if (this.testCases.valid) {
@@ -236,6 +249,8 @@ export class TemplateDialogComponent {
 
             // this.saveApplicationData(appDetails);
             let app_id = localStorage.getItem('app_id');
+            console.log(result.data);
+            
 
             let body = {
               instruction_set_id: result?.data?.testcase_id,
@@ -258,10 +273,12 @@ export class TemplateDialogComponent {
             };
 
 
-            const id = result?.data?.testcase_id;
-            this.accountService.updatePageInstructions(id, body).subscribe((resp) => {
+            const testid = result?.data?.testcase_id;
+            const instid = result?.data?.instruction_id;
+            this.accountService.deletePageInstructions(testid, instid).subscribe((resp) => {
               if (resp) {
                 // this.getAllPages()
+                this.isDisableClose = true;
 
                 const instructionsLeft = this.editData?.instructions?.filter((instruction) => instruction.instruction_id !== item.instruction_id);
 
