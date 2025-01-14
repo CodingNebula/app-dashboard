@@ -7,9 +7,18 @@
   <!-- <div *ngIf="applicationDataArr.length > 0"> -->
   <div class="application-container">
     <div class="application-div" *ngFor="let item of applicationDataArr; let i = index" >
-      <div class="edit-div" [nbPopover]="list" #popover="nbPopover" (click)="editDeleteFunc(item)">
+      <div class="edit-div" [nbPopover]="list" (click)="editDeleteFunc(item)">
         <nb-icon class="edit-icon" icon="more-vertical-outline" nbPopoverPlacement="bottom-end"></nb-icon>
       </div>
+        <ng-template #list>
+          <nb-card class="popover-card">
+            <nb-list>
+              <nb-list-item
+                (click)="openDialog('edit', appData)">Edit</nb-list-item>
+              <nb-list-item (click)="openDeleteDailog(appData)">Delete</nb-list-item>
+            </nb-list>
+          </nb-card>
+        </ng-template>
       <div class="application-info" (click)="navigate(item)">
 
         <img class="application-img" width="200" src="../../../assets/images/any-logo.png" alt="any-logo">
@@ -20,15 +29,7 @@
       </div>
   </div>
 
-  <ng-template #list>
-    <nb-card class="popover-card">
-      <nb-list>
-        <nb-list-item
-          (click)="openDialog('edit', appData)">Edit</nb-list-item>
-        <nb-list-item (click)="openDeleteDailog(appData)">Delete</nb-list-item>
-      </nb-list>
-    </nb-card>
-  </ng-template>
+
 
   <!-- <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
     <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>

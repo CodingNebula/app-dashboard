@@ -136,11 +136,13 @@ td{
 
 .popover-card{
     margin-bottom: 0;
+    position: absolute;
+    left: 6rem;
   }
   .popover-card > nb-list > nb-list-item{
     cursor: pointer;
     transition: 0.3s;
-    padding: 0.8rem;
+    padding: 0.4rem;
   }
   .popover-card > nb-list > nb-list-item:hover{
     color: #00A3AB;
