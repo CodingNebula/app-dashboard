@@ -443,4 +443,41 @@ export class AccountService {
   )
   }
 
+  updateApplication(id, req){
+    return this.apiService.updateWithoutModal(`app_details/${id}`, req).pipe(
+      map(applicationRes => {
+        if(applicationRes){
+          return applicationRes;
+        }
+        else{
+          throw new Error('Invalid response');
+        }
+      }
+    ),
+    catchError(error => {
+      console.error('Error during getting the application data', error);
+      return throwError(() => new Error('Failed to get application data'));
+    })
+  )
+  }
+
+  deleteApplication(id: any) {
+    return this.apiService.deleteWithoutModal(`app_details`, id).pipe(
+      map(resp => {
+          if (resp) {
+            return resp;
+          }
+          else {
+            throw new Error('Invalid Response');
+          }
+        }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
 }

@@ -96,17 +96,56 @@ td{
 .application-div{
     position: relative;
     margin: 0.5em;
-    padding: 1em;
-    max-height: 33vh;
+    max-height: 28vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 0.5em;
     background-color: #ffffff;
     border-radius: 1em;
-    cursor: pointer;
     max-width: 30rem;
+    gap: 0.5rem;
 }
+
+.edit-div{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.edit-icon{
+    cursor: pointer;
+    color: #00A3AB;
+}
+.application-info{
+    padding: 0rem 0.5rem;
+    cursor: pointer;
+}
+.next-div{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #00A3AB;
+    color: white;
+}
+.next-icon{
+    // position: absolute;
+    // top: 1rem;
+    // right: 1rem;
+    color: white;
+}
+
+.popover-card{
+    margin-bottom: 0;
+  }
+  .popover-card > nb-list > nb-list-item{
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 0.8rem;
+  }
+  .popover-card > nb-list > nb-list-item:hover{
+    color: #00A3AB;
+  }
+
 
 .more-icon{
     position: absolute;

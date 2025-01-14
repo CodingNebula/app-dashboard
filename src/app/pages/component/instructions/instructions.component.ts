@@ -36,12 +36,6 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
   }
 
-
-
-
-
-
-
   textContent = 'Hello World';
 
   items = [];
@@ -103,7 +97,9 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
 
   openDeleteDailog(item){
-
+    if(this.popover.isShown){
+      this.popover.hide();
+    }
 
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
@@ -131,6 +127,10 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
   }
 
   openDialog(item ?:any) {
+
+    if(this.popover.isShown){
+      this.popover.hide();
+    }
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(InstructionsDialogComponent, {
       context : {itemToEdit: item}

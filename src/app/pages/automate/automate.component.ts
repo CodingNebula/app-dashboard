@@ -1265,13 +1265,6 @@ export class AutomateComponent implements OnInit {
     }
 
 
-
-
-
-    // Iterate over the reports to count the number of passed, failed, and untested test cases
-
-
-
     const body = {
       applicationId: localStorage.getItem('app_id'),
       app_version: "2.1",

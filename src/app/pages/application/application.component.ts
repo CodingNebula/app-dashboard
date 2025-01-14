@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { NbDialogRef, NbDialogService } from '@nebular/theme';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NbDialogRef, NbDialogService, NbPopoverDirective } from '@nebular/theme';
 import { NoAppDialogComponent } from '../component/no-app-dialog/no-app-dialog.component';
 import { Router } from '@angular/router';
 import { AccountService } from '../../shared/services/account/account.service';
 import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
 import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
+import { DeleteDialogComponent } from '../component/delete-dialog/delete-dialog.component';
 
 
 @Component({
@@ -17,6 +18,9 @@ export class ApplicationComponent implements OnInit {
   public instructionsArr: any[] = [];
   public appCapabilities: any;
   public applicationNameAlert: boolean = false;
+  public appData: any;
+
+  @ViewChild('popover') popover: NbPopoverDirective;
 
   constructor(
     private dialogService: NbDialogService,
@@ -32,32 +36,29 @@ export class ApplicationComponent implements OnInit {
     this.getCapabilities();
   }
 
-  openDialog() {
+  openDialog(type?, item?) {
     // Open the dialog and pass data to it using 'context'
-    const dialogRef = this.dialogService.open(NoAppDialogComponent, {});
+    const dialogRef = this.dialogService.open(NoAppDialogComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+      context: {itemToEdit: item, selectedType: type}
+    });
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
       if (result) {
         if (result.confirmed) {
 
-          //   const appDetails = {
-          //     app_name: req.body.appName,
-          //     user_id: userId,
-          //     platform: req.body.platform,
-          //     test_case_results: req.body.test_case_results,
-          //     extra: JSON.stringify(req.body.extra),
-          // }
-
           const appNameToCheck = result.data.application.replace(/\s+/g, ' ').trim().toLowerCase();
           console.log(appNameToCheck);
-          
+
           const appExists = this.applicationDataArr.some(app => app.app_name.trim().toLowerCase() === appNameToCheck);
 
           if (appExists) {
             this.applicationNameAlert = true;
             console.log('app exist!');
-            
+
 
             setTimeout(() => {
               this.applicationNameAlert = false;
@@ -65,8 +66,24 @@ export class ApplicationComponent implements OnInit {
           }
           else {
 
+            console.log(result.data);
 
-            const appDetails = {
+            const app_id = result.appId;
+            
+
+            if(result.type === 'edit'){
+              const data = {
+                app_name: result.data.application,
+                extra: {},
+              }
+
+              this.updateAppData(app_id, data);
+              
+            }
+
+            else{
+
+              const appDetails = {
               appName: result.data.application,
               platform: result.data.platform,
               test_case_results: null,
@@ -78,6 +95,10 @@ export class ApplicationComponent implements OnInit {
 
             this.saveApplicationData(appDetails);
             // this.applicationDataService.setData('app_details', appDetails);
+            }
+
+
+            
           }
 
 
@@ -85,6 +106,51 @@ export class ApplicationComponent implements OnInit {
         }
       }
     });
+  }
+
+  openDeleteDailog(item){
+  
+  
+      const dialogRef = this.dialogService.open(DeleteDialogComponent, {
+        hasBackdrop: true,
+        closeOnBackdropClick: true,
+        closeOnEsc: true,
+        context: {itemToDelete: item}
+      });
+  
+  
+      dialogRef.onClose.subscribe((result) => {
+        if (result) {
+          if (result.confirmed) {
+            console.log(result);
+            
+
+              this.deleteApplication(result.data  .appId)
+  
+  
+          }
+        }
+      });
+  
+    }
+
+    deleteApplication(id){
+      this.accountService.deleteApplication(id).subscribe((response) => {
+        if(response){
+          console.log(response);
+          
+        }
+      })
+    }
+
+  updateAppData(id, data){
+    this.accountService.updateApplication(id, data).subscribe((response) => {
+      if(response){
+        // console.log(response);
+        this.getApplication();
+        
+      }
+    })
   }
 
   saveApplicationData(data) {
@@ -143,10 +209,10 @@ export class ApplicationComponent implements OnInit {
         this.appCapabilities = capabilitiesData;
 
         if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length === 0) {
-          
+
           this.router.navigateByUrl('pages/instructions');
         } else if (this.appCapabilities?.extra?.capabilities && this.appCapabilities?.id === item.id && this.instructionsArr.length > 0) {
-          
+
           this.router.navigateByUrl('pages/template');
         } else {
           this.router.navigateByUrl('pages/capabilities', { state: { id: item.id, appName: item?.app_name, platformName: item?.platform } });
@@ -184,7 +250,17 @@ export class ApplicationComponent implements OnInit {
     })
   }
 
-  onClose(){
+  onClose() {
     this.applicationNameAlert = false;
+  }
+
+  onPopoverClick(event: MouseEvent) {
+    console.log('propagation');
+
+    event.stopPropagation()
+  }
+
+  editDeleteFunc(item){
+    this.appData = item;
   }
 }
