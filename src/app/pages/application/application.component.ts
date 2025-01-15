@@ -42,7 +42,7 @@ export class ApplicationComponent implements OnInit {
       hasBackdrop: true,
       closeOnBackdropClick: true,
       closeOnEsc: true,
-      context: {itemToEdit: item, selectedType: type}
+      context: { itemToEdit: item, selectedType: type }
     });
 
     // Get the result (data) when the dialog closes
@@ -69,36 +69,36 @@ export class ApplicationComponent implements OnInit {
             console.log(result.data);
 
             const app_id = result.appId;
-            
 
-            if(result.type === 'edit'){
+
+            if (result.type === 'edit') {
               const data = {
                 name: result.data.application,
                 extra: {},
               }
 
               this.updateAppData(app_id, data);
-              
+
             }
 
-            else{
+            else {
 
               const appDetails = {
-              appName: result.data.application,
-              platform: result.data.platform,
-              test_case_results: null,
-              extra: {}
+                appName: result.data.application,
+                platform: result.data.platform,
+                test_case_results: null,
+                extra: {}
+              }
+
+              console.log(appDetails);
+
+
+              this.saveApplicationData(appDetails);
+              // this.applicationDataService.setData('app_details', appDetails);
             }
 
-            console.log(appDetails);
 
 
-            this.saveApplicationData(appDetails);
-            // this.applicationDataService.setData('app_details', appDetails);
-            }
-
-
-            
           }
 
 
@@ -108,47 +108,53 @@ export class ApplicationComponent implements OnInit {
     });
   }
 
-  openDeleteDailog(item){
-  
-  
-      const dialogRef = this.dialogService.open(DeleteDialogComponent, {
-        hasBackdrop: true,
-        closeOnBackdropClick: true,
-        closeOnEsc: true,
-        context: {itemToDelete: item}
-      });
-  
-  
-      dialogRef.onClose.subscribe((result) => {
-        if (result) {
-          if (result.confirmed) {
-            console.log(result);
-            
+  openDeleteDailog(item) {
 
-              this.deleteApplication(result.data  .appId)
-  
-  
-          }
+
+    const dialogRef = this.dialogService.open(DeleteDialogComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+      context: { itemToDelete: item }
+    });
+
+
+    dialogRef.onClose.subscribe((result) => {
+      if (result) {
+        if (result.confirmed) {
+          console.log(result);
+
+
+          this.deleteApplication(result.data.appId)
+
+
         }
-      });
-  
-    }
+      }
+    });
 
-    deleteApplication(id){
-      this.accountService.deleteApplication(id).subscribe((response) => {
-        if(response){
-          console.log(response);
-          
-        }
-      })
-    }
+  }
 
-  updateAppData(id, data){
+  deleteApplication(id) {
+    console.log(this.applicationDataArr);
+
+    this.accountService.deleteApplication(id).subscribe((response) => {
+      if (response) {
+        const updatedApplication = this.applicationDataArr.filter((app) => app.id !== response.id);
+
+        console.log(updatedApplication);
+
+        this.applicationDataArr = updatedApplication;
+        
+      }
+    })
+  }
+
+  updateAppData(id, data) {
     this.accountService.updateApplication(id, data).subscribe((response) => {
-      if(response){
+      if (response) {
         console.log(response);
         this.getApplication();
-        
+
       }
     })
   }
@@ -260,7 +266,7 @@ export class ApplicationComponent implements OnInit {
     event.stopPropagation()
   }
 
-  editDeleteFunc(item){
+  editDeleteFunc(item) {
     this.appData = item;
   }
 }

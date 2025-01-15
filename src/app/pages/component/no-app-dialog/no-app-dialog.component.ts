@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit  } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'ngx-no-app-dialog',
@@ -22,7 +22,7 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
     
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
-      application: ['', [Validators.required]],
+      application: ['', [this.noSpacesValidator(),Validators.required]],
     });
 
     this.patchFormValues()
@@ -37,6 +37,15 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
 
     }
   }
+
+  noSpacesValidator(): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        if (control.value && control.value.trim().length === 0) {
+          return { 'noSpaces': true };
+        }
+        return null; 
+      };
+    }
 
   ngAfterViewInit() {
     // Disable any autofocus behavior here if needed
@@ -54,10 +63,10 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
     console.log(this.myForm.value);
     
 
-    if(this.myForm.value.platform === '' && this.myForm.value.application !== ''){
+    if(this.myForm.value.platform === '' && this.myForm.value.application !== '' && this.myForm.value.application.trim().length > 0){
       this.dialogRef.close({ confirmed: true, data: this.myForm.value, type: this.selectedType, appId: this.itemToEdit.id });
     }
-    if (this.myForm.valid) {
+    if (this.myForm.valid && this.myForm.value.application.trim().length > 0) {
       
       this.dialogRef.close({ confirmed: true, data: this.myForm.value, type: this.selectedType });
     }

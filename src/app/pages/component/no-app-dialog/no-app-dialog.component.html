@@ -6,8 +6,8 @@
                 <div class="form-group">
                   <label for="application">Application Name<span class="star-mark">*</span>:</label>
                   <input maxlength="50" id="application" formControlName="application" class="form-control" />
-                  <div *ngIf="submitted && myForm.get('application').invalid" class="error-message">
-                    <small *ngIf="myForm.get('application').hasError('required')">Application name is required!</small>
+                  <div *ngIf="(submitted && myForm.get('application').value.trim().length > 0) || (submitted && myForm.get('application').invalid)" class="error-message">
+                    <small *ngIf="myForm.get('application').hasError('required') || myForm.get('application').hasError('noSpaces')">Application name is required!</small>
                   </div>
                 </div>
               </div>
@@ -43,8 +43,8 @@
                 <div class="form-group">
                   <label for="application">Application Name<span class="star-mark">*</span>:</label>
                   <input maxlength="50" id="application" formControlName="application" class="form-control" />
-                  <div *ngIf="submitted && myForm.get('application').invalid" class="error-message">
-                    <small *ngIf="myForm.get('application').hasError('required')">Application name is required!</small>
+                  <div *ngIf="(submitted && myForm.get('application').value.trim().length > 0) || (submitted && myForm.get('application').invalid)" class="error-message">
+                    <small *ngIf="myForm.get('application').hasError('required') || myForm.get('application').hasError('noSpaces')">Application name is required!</small>
                   </div>
                 </div>
               </div>        
