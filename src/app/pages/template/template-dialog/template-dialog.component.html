@@ -64,8 +64,8 @@
         <div class="form-group">
           <label for="templateName">Template Name<span class="star-mark">*</span>:</label>
           <input maxlength="50" id="templateName" formControlName="templateName" class="form-control" />
-          <div *ngIf="submitted && templateForm.get('templateName').invalid" class="error-message">
-            <small *ngIf="templateForm.get('templateName').hasError('required')">Template name is required!</small>
+          <div *ngIf="(submitted && templateForm.get('templateName').value.trim().length > 0) || (submitted && templateForm.get('templateName').invalid)" class="error-message">
+            <small *ngIf="templateForm.get('templateName').hasError('required') || templateForm.get('templateName').hasError('noSpaces')">Template name is required!</small>
           </div>
         </div>
       </div>
@@ -74,9 +74,9 @@
           <label for="description">Template Description<span class="star-mark">*</span>:</label>
           <input maxlength="240" id="description" formControlName="description" class="form-control" />
           <div
-            *ngIf="submitted && (templateForm.get('description').value.trim().length > 0 || templateForm.get('description').invalid)"
+            *ngIf="(submitted && templateForm.get('description').value.trim().length > 0) || (submitted && templateForm.get('description').invalid)"
             class="error-message">
-            <small *ngIf="templateForm.get('description').hasError('required')">Template Description is
+            <small *ngIf="templateForm.get('description').hasError('required') || templateForm.get('description').hasError('noSpaces')">Template Description is
               required!</small>
           </div>
         </div>

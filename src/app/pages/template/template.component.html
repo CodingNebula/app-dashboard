@@ -86,8 +86,9 @@
             <nb-accordion class="accordian-container">
               <nb-accordion-item>
                 <nb-accordion-item-header class="template-header">
-                  <div *ngIf="template?.wt_name" [nbTooltip]="template?.wt_name" class="template-name">
-                    {{template?.wt_name}}
+                  <div *ngIf="template?.wt_name" class="template-name">
+                    <span [nbTooltip]="template?.wt_name">{{template?.wt_name}}</span>
+                    
                   </div>
                   <div *ngIf="template?.wt_desc"  class="template-description">
                     Description: <span [nbTooltip]="template?.wt_desc">{{template?.wt_desc}}</span>

@@ -311,7 +311,25 @@ export class AccountService {
   }
 
   deletePageInstructions(testid, instid) {
-    return this.apiService.deleteWithoutModal(`page/${localStorage.getItem('app_id')}/${testid}`, instid).pipe(
+    return this.apiService.deleteWithoutModal(`page_mapper/${localStorage.getItem('app_id')}/${testid}`, instid).pipe(
+      map(resp => {
+        if (resp) {
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+  deleteTemplateTestCases(templateid, testcaseid) {
+    return this.apiService.deleteWithoutModal(`workflow_mapper/${localStorage.getItem('app_id')}/${templateid}`, testcaseid).pipe(
       map(resp => {
         if (resp) {
           return resp;

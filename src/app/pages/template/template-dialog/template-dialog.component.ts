@@ -66,9 +66,9 @@ export class TemplateDialogComponent {
     })
 
     this.templateForm = this.fb.group({
-      templateName: ['', [Validators.required]],
+      templateName: ['', [ this.noSpacesValidator(), Validators.required]],
       // description: ['',[Validators.required, Validators.pattern(/^(?!.*\s{2,}).*$/)]]
-      description: ['',[Validators.required, this.noSpacesValidator()]]
+      description: ['',[ this.noSpacesValidator(), Validators.required]]
     })
 
     this.testCases = this.fb.group({
@@ -134,10 +134,10 @@ export class TemplateDialogComponent {
 
 
   onSubmit(type?) {
-    const trimmedValues = { 
-      ...this.templateForm.value, 
-      description: this.templateForm.get('description')?.value.trim() // Trim specific control
-    };
+    // const trimmedValues = { 
+    //   ...this.templateForm.value, 
+    //   description: this.templateForm.get('description')?.value.trim() // Trim specific control
+    // };
     this.submitted = true;
 
     if (type === 'reorder') {
@@ -153,7 +153,7 @@ export class TemplateDialogComponent {
     }    
     console.log(this.templateForm.get('description').invalid);
     
-    if (this.templateForm.valid && this.templateForm.value.description.trim().length > 0) {
+    if (this.templateForm.valid && this.templateForm.value.description.trim().length > 0 && this.templateForm.value.templateName.trim().length > 0) {
       this.dialogRef.close({ confirmed: true, data: this.templateForm.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
     }
     if (this.testCases.valid) {
@@ -227,15 +227,11 @@ export class TemplateDialogComponent {
             console.log(body);
 
 
-            const id = this.editData?.wt_id;
-
-            console.log(item);
-            console.log(this.editData);
-
-
-
+            const templateid = this.editData?.wt_id;
+            const testCaseid = result.data.screenId;
             
-            this.accountService.updateTemplateScreens(id, body).subscribe((resp) => {
+            
+            this.accountService.deleteTemplateTestCases(templateid, testCaseid).subscribe((resp) => {
               if (resp) {
                 // this.getAllPages()
                 const screensLeft = this.editData?.screens?.filter((screen) => screen.ins_set_id !== item.ins_set_id);

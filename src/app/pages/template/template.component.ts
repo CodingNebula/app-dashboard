@@ -481,6 +481,8 @@ export class TemplateComponent {
         }
 
 
+        console.log(screenGroup);
+        
         // Check if the instruction is already added to the screenGroup
         const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
         if (!instructionExists) {
@@ -498,6 +500,7 @@ export class TemplateComponent {
       
       // console.log(sortedInstructions);
 
+      console.log(groupedData);
       
 
       let result = groupedData.map((item) => {
@@ -508,6 +511,8 @@ export class TemplateComponent {
       })
 
       
+      
+      console.log(result);
       
       this.templateArray = result;
       

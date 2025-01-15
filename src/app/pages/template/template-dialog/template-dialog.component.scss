@@ -45,6 +45,31 @@
   -webkit-backdrop-filter: blur( 6px );
   border-radius: 10px;
   border: 1px solid rgba( 255, 255, 255, 0.18 );
+  background: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    max-height: 10rem;
+    overflow: auto;
+}
+
+.background-shadow::-webkit-scrollbar {
+  width: 5px;
+}
+
+.background-shadow::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.background-shadow::-webkit-scrollbar-thumb {
+  background-color: #00a3ab;
+  border-radius: 10px;
+}
+
+.background-shadow::-webkit-scrollbar-thumb:hover {
+  background-color: #00a3ab;
 }
 
 .drag-icon i {
