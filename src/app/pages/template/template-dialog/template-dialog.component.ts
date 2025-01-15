@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../../shared/services/account/account.service';
@@ -68,7 +68,7 @@ export class TemplateDialogComponent {
     this.templateForm = this.fb.group({
       templateName: ['', [Validators.required]],
       // description: ['',[Validators.required, Validators.pattern(/^(?!.*\s{2,}).*$/)]]
-      description: ['',[Validators.required, this.noWhitespaceValidator]]
+      description: ['',[Validators.required, this.noSpacesValidator()]]
     })
 
     this.testCases = this.fb.group({
@@ -122,15 +122,22 @@ export class TemplateDialogComponent {
     }
   }
 
-  noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control && control.value && control.value.toString() || '').trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { 'whitespace': true };
+  noSpacesValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value && control.value.trim().length === 0) {
+        return { 'noSpaces': true };
+      }
+      return null; // null means valid
+    };
   }
 
 
 
   onSubmit(type?) {
+    const trimmedValues = { 
+      ...this.templateForm.value, 
+      description: this.templateForm.get('description')?.value.trim() // Trim specific control
+    };
     this.submitted = true;
 
     if (type === 'reorder') {
