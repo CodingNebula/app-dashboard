@@ -98,18 +98,16 @@
 
           <div class="form-row">
 
-
-
             <div class="form-group">
-              <label for="buildNo">Build No:</label>
+              <label for="buildNo">Build No<span class="star-mark">*</span>:</label>
               <input id="buildNo" formControlName="buildNo" class="form-control" />
               <div *ngIf="myForm.get('buildNo').touched && myForm.get('buildNo').invalid" class="error-message">
                 <small *ngIf="myForm.get('buildNo').hasError('required')">Build Name is required!</small>
               </div>
             </div>
 
-            <div  class="form-group   ">
-              <label for="description">Description:</label>
+            <div  class="form-group">
+              <label for="description">Description<span class="star-mark">*</span>:</label>
               <textarea id="description" formControlName="description" class="form-control description-input" ></textarea>
               <div *ngIf="myForm.get('description').touched && myForm.get('description').invalid" class="error-message">
                 <small *ngIf="myForm.get('description').hasError('required')">Description name is required!</small>
@@ -120,7 +118,7 @@
 
           <div class="form-row button-row">
             <!-- <button class="edit-button" (click)="onEdit()">Edit</button> -->
-            <button type="submit" [disabled]="myForm.invalid" (click)="onSubmit()" class="submit-button">Submit</button>
+            <button type="submit" [disabled]="myForm.invalid" (click)="onSubmit()" class="submit-button">Launch App</button>
             <!-- <button type="submit" class="submit-button">Submit</button> -->
           </div>
         </form>

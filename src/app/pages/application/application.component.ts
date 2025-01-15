@@ -51,22 +51,17 @@ export class ApplicationComponent implements OnInit {
         if (result.confirmed) {
 
           const appNameToCheck = result.data.application.replace(/\s+/g, ' ').trim().toLowerCase();
-          console.log(appNameToCheck);
 
           const appExists = this.applicationDataArr.some(app => app.app_name.trim().toLowerCase() === appNameToCheck);
 
           if (appExists) {
             this.applicationNameAlert = true;
-            console.log('app exist!');
-
 
             setTimeout(() => {
               this.applicationNameAlert = false;
             }, 1000)
           }
           else {
-
-            console.log(result.data);
 
             const app_id = result.appId;
 
@@ -89,9 +84,6 @@ export class ApplicationComponent implements OnInit {
                 test_case_results: null,
                 extra: {}
               }
-
-              console.log(appDetails);
-
 
               this.saveApplicationData(appDetails);
               // this.applicationDataService.setData('app_details', appDetails);
@@ -122,8 +114,6 @@ export class ApplicationComponent implements OnInit {
     dialogRef.onClose.subscribe((result) => {
       if (result) {
         if (result.confirmed) {
-          console.log(result);
-
 
           this.deleteApplication(result.data.appId)
 
@@ -135,13 +125,10 @@ export class ApplicationComponent implements OnInit {
   }
 
   deleteApplication(id) {
-    console.log(this.applicationDataArr);
 
     this.accountService.deleteApplication(id).subscribe((response) => {
       if (response) {
         const updatedApplication = this.applicationDataArr.filter((app) => app.id !== response.id);
-
-        console.log(updatedApplication);
 
         this.applicationDataArr = updatedApplication;
         
@@ -152,7 +139,6 @@ export class ApplicationComponent implements OnInit {
   updateAppData(id, data) {
     this.accountService.updateApplication(id, data).subscribe((response) => {
       if (response) {
-        console.log(response);
         this.getApplication();
 
       }
@@ -251,9 +237,11 @@ export class ApplicationComponent implements OnInit {
 
   getCapabilities() {
     const app_id = localStorage.getItem('app_id');
-    this.accountService.getCapabilites(app_id).subscribe((data) => {
-
-    })
+    if(app_id){
+      this.accountService.getCapabilites(app_id).subscribe((data) => {
+        
+      })
+    }
   }
 
   onClose() {
@@ -261,8 +249,6 @@ export class ApplicationComponent implements OnInit {
   }
 
   onPopoverClick(event: MouseEvent) {
-    console.log('propagation');
-
     event.stopPropagation()
   }
 

@@ -367,8 +367,8 @@ export class AutomateComponent implements OnInit {
       noReset: [{ value: (this.appCapabilities?.noReset).toString(), disabled: true }, [Validators.required]],
       hiddenApp: [{ value: (this.appCapabilities?.ignoreHiddenApiPolicyError).toString(), disabled: true }, [Validators.required]],
       timeout: [this.appCapabilities?.newCommandTimeout, [Validators.required]],
-      description: [this.appCapabilities?.description, []],
-      buildNo: [this.appCapabilities?.buildNo, []],
+      description: [this.appCapabilities?.description, [Validators.required]],
+      buildNo: [this.appCapabilities?.buildNo, [Validators.required]],
     });
 
     this.myForm.get('platform').valueChanges.subscribe(platform => {
@@ -458,7 +458,7 @@ export class AutomateComponent implements OnInit {
       //     this.appLaunchStatus = 'FAILED'
       //   }
       // );
-      this.myForm.reset();
+      // this.myForm.reset();
     }
   }
 
@@ -553,6 +553,30 @@ export class AutomateComponent implements OnInit {
 
 
       result.push(
+        {
+          id: "2",
+          screenName: "Click_Image",
+          btnName: "Refund",
+        },
+        {
+          id: "2",
+          screenName: "Click_Text",
+          btnName: "374245*****1006"
+        },
+        {
+          "id": 9,
+          "screenName": "Click_Button",
+          "btnName": "Void"
+        },
+        {
+          "id": 9,
+          "screenName": "Find_Button",
+          "btnName": "Void"
+        },
+        {
+          "id": "0",
+          "screenName": "Find_Screen_Elements"
+        },
         {
           screenName: 'End_Instructions',
           successMessage: 'End Instructions',
@@ -776,8 +800,8 @@ export class AutomateComponent implements OnInit {
 
       this.showResult = true;
 
-
       console.log(result);
+
 
       this.webSocketService.sendTestCaseRequest(result);
 
@@ -800,7 +824,6 @@ export class AutomateComponent implements OnInit {
       }
 
       this.webSocketService.getSubject().subscribe((res) => {
-        console.log(res);
 
         if (!timeChecked) {
           const currentDate = new Date();
@@ -852,13 +875,7 @@ export class AutomateComponent implements OnInit {
             this.extras.startedTime = formattedTime;
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             this.extras.createdAt = formattedDate;
-            const socketReport = {
-              capabilities: { description: this.myForm.value.description, buildInfo: this.myForm.value.buildNo, ...this.completeAppData },
-              resultArr: this.resultArr,
-              extras: this.extras,
-              totalTimeElapsed: Math.floor(Date.now() / 1000) - totalTimeApp,
 
-            }
 
             let passedCount = 0;
             let failedCount = 0;
@@ -878,6 +895,16 @@ export class AutomateComponent implements OnInit {
                 }
               }
             });
+
+            const untestedData = result.slice(passedCount, result.length);
+
+            const socketReport = {
+              capabilities: { description: this.myForm.value.description, buildInfo: this.myForm.value.buildNo, ...this.completeAppData },
+              resultArr: this.resultArr,
+              extras: this.extras,
+              totalTimeElapsed: Math.floor(Date.now() / 1000) - totalTimeApp,
+              untestedData: untestedData,
+            }
 
 
             const body = {
@@ -941,8 +968,6 @@ export class AutomateComponent implements OnInit {
     }
     this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
-      console.log(res);
-
 
       if (res?.message && res?.message?.info) {
 
@@ -1693,7 +1718,7 @@ export class AutomateComponent implements OnInit {
     this.accountService.launchApp({
       capabilities: {
         platformName: "Android",
-        app: "/home/codingnebula/Downloads/app-debug-v12.apk",
+        app: "/home/codingnebula/Downloads/app-debug-v16.apk",
         appPackage: "com.example.app",
         automationName: "UIAutomator2",
         deviceName: "Samsung",

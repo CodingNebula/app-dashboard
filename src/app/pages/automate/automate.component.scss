@@ -155,8 +155,8 @@ label {
 }
 
 .submit-button:disabled {
-  background-color: #07f6ce;
-  color: #000000;
+  background-color: #00A3AB;
+  color: #ffffff;
   cursor: not-allowed;
 }
 
@@ -221,6 +221,10 @@ label {
   h6{
     width: 17rem;
   }
+}
+
+.star-mark{
+  color: #e26262;
 }
 
 .test-case-border{

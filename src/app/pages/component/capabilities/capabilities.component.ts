@@ -34,8 +34,6 @@ export class CapabilitiesComponent {
 
     if (state && state.platformName) {
       this.platformName = state.platformName;
-      console.log(this.platformName);
-      
     }
 
     this.myForm = this.fb.group({
@@ -91,10 +89,6 @@ export class CapabilitiesComponent {
       const capabilities = { app_id: app_id, capabilities: this.myForm.value };
 
       localStorage.setItem("app_capa", JSON.stringify(capabilities));
-
-      console.log('app-capa');
-      
-
 
       this.accountService.updateCapabilities(app_id,
         {

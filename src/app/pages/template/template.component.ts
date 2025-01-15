@@ -285,8 +285,6 @@ export class TemplateComponent {
         }
 
         if(result.selectedType === 'reorder'){
-
-          console.log(result);
             
           let body = {
             wt_id: result?.data?.wt_id,  // This value can be dynamic
@@ -323,10 +321,6 @@ export class TemplateComponent {
                 };
               })
             };
-
-            console.log();
-            
-
 
             let screens = result?.data?.templates?.map((screen, index) => {
               return {
@@ -431,11 +425,6 @@ export class TemplateComponent {
         return item;
       });
       
-
-
-      console.log(sortedInstructions);    
-      
-
       this.testCasesArray = sortedInstructions;
       
     })
@@ -480,8 +469,6 @@ export class TemplateComponent {
 
         }
 
-
-        console.log(screenGroup);
         
         // Check if the instruction is already added to the screenGroup
         const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
@@ -497,11 +484,7 @@ export class TemplateComponent {
       //   return item;
       // });
       
-      
-      // console.log(sortedInstructions);
 
-      console.log(groupedData);
-      
 
       let result = groupedData.map((item) => {
         item.screens = item.screens.filter((screen) => {
@@ -511,8 +494,6 @@ export class TemplateComponent {
       })
 
       
-      
-      console.log(result);
       
       this.templateArray = result;
       
@@ -534,8 +515,6 @@ export class TemplateComponent {
   }
 
   openPopover() {
-    console.log('popover');
-    
     if (this.popover.isShown) {
       this.popover.hide(); // Hide the popover if it is currently shown
     } else {
@@ -545,8 +524,6 @@ export class TemplateComponent {
 
   // Example of a method that stops the propagation of the click event
   propagation(event: MouseEvent) {
-    console.log('propagation');
-    
     event.stopPropagation();
     this.openPopover();
   }

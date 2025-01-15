@@ -43,9 +43,6 @@ export class TemplateDialogComponent {
 
   ngOnInit() {
 
-    console.log(this.testCaseArr);
-
-
     let data
     if (this.selectedAction === '' && this.selectedType === 'template') {
       data = this.editData?.screens.map((testcase) => testcase.ins_set_screen_name)
@@ -150,8 +147,7 @@ export class TemplateDialogComponent {
     }
     if (this.instruction.valid) {
       this.dialogRef.close({ confirmed: true, data: this.instruction.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
-    }    
-    console.log(this.templateForm.get('description').invalid);
+    }
     
     if (this.templateForm.valid && this.templateForm.value.description.trim().length > 0 && this.templateForm.value.templateName.trim().length > 0) {
       this.dialogRef.close({ confirmed: true, data: this.templateForm.value, selectedAction: this.selectedAction, selectedType: this.selectedType });
@@ -188,22 +184,11 @@ export class TemplateDialogComponent {
 
 
     dialogRef.onClose.subscribe((result) => {
-      console.log(result, this.selectedAction, this.selectedType);
-      console.log(this.editData);
-
-      console.log(item);
-
-
-
-
 
       if (result) {
         if (result.confirmed) {
           if (this.selectedAction === 'template') {
             let app_id = localStorage.getItem('app_id');
-            console.log(this.editData?.wt_id);
-
-
             let body = {
               wt_id: this.editData?.wt_id,
               instructions_set: this.editData.screens.map((screen, index) => {
@@ -223,9 +208,6 @@ export class TemplateDialogComponent {
                 }
               })
             };
-
-            console.log(body);
-
 
             const templateid = this.editData?.wt_id;
             const testCaseid = result.data.screenId;
@@ -247,13 +229,8 @@ export class TemplateDialogComponent {
           }
           else {
 
-
-
-
             // this.saveApplicationData(appDetails);
             let app_id = localStorage.getItem('app_id');
-            console.log(result.data);
-            
 
             let body = {
               instruction_set_id: result?.data?.testcase_id,

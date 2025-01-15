@@ -18,8 +18,6 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit() {
-    console.log(this.itemToEdit);
-    
     this.myForm = this.fb.group({
       platform: ['', [Validators.required]],
       application: ['', [this.noSpacesValidator(),Validators.required]],
@@ -60,8 +58,6 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.myForm.value);
-    
 
     if(this.myForm.value.platform === '' && this.myForm.value.application !== '' && this.myForm.value.application.trim().length > 0){
       this.dialogRef.close({ confirmed: true, data: this.myForm.value, type: this.selectedType, appId: this.itemToEdit.id });
