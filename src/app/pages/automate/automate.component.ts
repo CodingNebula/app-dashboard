@@ -560,29 +560,49 @@ export class AutomateComponent implements OnInit {
 
       result.push(
         {
-          id: "2",
-          screenName: "Click_Image",
-          btnName: "Refund"
-        },
+          id:"2",
+          screenName:"Click_Image",
+          btnName:"Refund"
+      },
+      {
+          id:"2",
+          screenName:"Click_Text",
+          btnName:"476173******0135"
+      },
+      {
+                  "id":9,
+                  "screenName":"Click_Button",
+                  "btnName":"Refund"
+              },
+      {
+                  "id":9,
+                  "screenName":"Click_Button",
+                  "btnName":"REFUND"
+              },
+      {
+                  "id":9,
+                  "screenName":"Click_Button",
+                  "btnName":"Change Amount"
+              },
+      {
+                  "id":14,
+                  "screenName":"Enter_Amount",
+                  "btnName":"200.00"
+              },
+      {
+                  "id":9,
+                  "screenName":"Click_Text",
+                  "btnName":"Go"
+              },
+      {
+                  "id":9,
+                  "screenName":"Click_Button",
+                  "btnName":"Continue"
+              },
         {
-          id: "2",
-          screenName: "Click_Text",
-          btnName: "374245*****1006"
-        },
-        {
-          "id": 9,
-          "screenName": "Click_Button",
-          "btnName": "Refund"
-        },
-        {
-          "id": 9,
-          "screenName": "Find_Button",
-          "btnName": "REFUND"
-        },
-        {
-          "id": "0",
-          "screenName": "Find_Screen_Elements"
-        },
+                  "id":"0",
+                  "screenName":"Find_Screen_Elements"
+              },
         {
           screenName: 'End_Instructions',
           successMessage: 'End Instructions',

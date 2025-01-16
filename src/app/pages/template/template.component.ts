@@ -455,7 +455,7 @@ export class TemplateComponent {
         // Find or create the screen group
         let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
         
-        if (!screenGroup) {
+        // if (!screenGroup) {
           screenGroup = {
             ins_set_id: curr.ins_set_id,
             ins_set_screen_name: curr.ins_set_screen_name,
@@ -467,7 +467,7 @@ export class TemplateComponent {
             wtGroup.screens.push(screenGroup);
           }
 
-        }
+        // }
 
         
         // Check if the instruction is already added to the screenGroup
