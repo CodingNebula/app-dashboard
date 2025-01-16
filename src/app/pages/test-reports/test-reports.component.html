@@ -56,9 +56,6 @@
         <nb-accordion-item>
 
           <nb-accordion-item-header style="position: relative;">
-
-            <!-- <nb-icon [icon]="testCase.message === 'SUCCESS' ? 'checkmark-outline' : 'close-outline'"></nb-icon>
-            <span style="margin-left: 1em;">{{ testCase?.successMessage || testCase?.failedMessage}}</span> -->
             <span>
               <div>{{ testCase?.key }} </div>
             </span>
@@ -66,7 +63,6 @@
           <nb-accordion-item-body>
             <div class="row" *ngFor="let instructions of testCase.value"
               [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
-
               <div class="col-4" *ngIf="instructions.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
@@ -74,23 +70,24 @@
                   </nb-card-body>
                 </nb-card>
               </div>
-              <div class="col-4" class="flex-col">
+              <div class="col-4" class="flex-col" *ngIf="instructions?.type !== Skip || instructions?.type !== Untested">
                 <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
                 <div style="width: 7%" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
                   {{instructions?.successMessage?'SUCCESS':'FAILED'}}</div>
-
-                <!--                <nb-card>-->
-
-                <!--                  <nb-card-body>-->
-
                 <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
-                <!--                  </nb-card-body>-->
-                <!--                </nb-card>-->
+              </div>
+
+              <div class="col-4" class="flex-col" *ngIf="instructions?.type === Skip || instructions?.type === Untested">
+                <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
+                <div style="width: 7%" >
+                  {{instructions?.type}}</div>
+                <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
               </div>
             </div>
 
           </nb-accordion-item-body>
         </nb-accordion-item>
+
       </nb-accordion>
     </div>
   </div>

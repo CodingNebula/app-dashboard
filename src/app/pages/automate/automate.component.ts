@@ -527,10 +527,11 @@ export class AutomateComponent implements OnInit {
     let result = itemData;
     this.startApp = true;
     if (startAll) {
+      let index = 0;
       result = itemData.screens.map(screen => {
-        return screen.instructions.map((instruction, index) => {
+        return screen.instructions.map((instruction) => {
 
-          return {
+          const newIntruction = {
             id: index,
             screenName: instruction.ins_back_name,
             btnName: instruction.ins_element_name,
@@ -540,6 +541,9 @@ export class AutomateComponent implements OnInit {
             moduleName: instruction.ins_set_screen_name,
             ins_id: instruction.ins_id,
           };
+
+          index += 1;
+          return newIntruction;
         });
       }).flat();
 
@@ -551,12 +555,14 @@ export class AutomateComponent implements OnInit {
       //   }
       // );
 
+      console.log(result);
+
 
       result.push(
         {
           id: "2",
           screenName: "Click_Image",
-          btnName: "Refund",
+          btnName: "Refund"
         },
         {
           id: "2",
@@ -566,12 +572,12 @@ export class AutomateComponent implements OnInit {
         {
           "id": 9,
           "screenName": "Click_Button",
-          "btnName": "Void"
+          "btnName": "Refund"
         },
         {
           "id": 9,
           "screenName": "Find_Button",
-          "btnName": "Void"
+          "btnName": "REFUND"
         },
         {
           "id": "0",
@@ -628,16 +634,25 @@ export class AutomateComponent implements OnInit {
         }
       });
 
+      const untestedData = result.slice(passedCount, result.length);
+
+      console.log('ShowEnd', this.showEnd);
+
+      console.log('untested', untestedData);
+
+
+
       const socketReport = {
         capabilities: {
           description: this.description,
-          buildInfo: this.buildNumber, ...this.completeAppData
+          buildInfo: this.buildNumber, ...this.completeAppData,
         },
         resultArr: this.resultArr,
         extras: this.extras,
         totalTimeElapsed: Math.floor(Date.now() / 1000) - this.totalTimeTaken,
+        untestedData: untestedData,
+        originalData: result,
       }
-
 
 
       // Iterate over the reports to count the number of passed, failed, and untested test cases
@@ -824,6 +839,8 @@ export class AutomateComponent implements OnInit {
       }
 
       this.webSocketService.getSubject().subscribe((res) => {
+        console.log(res);
+
 
         if (!timeChecked) {
           const currentDate = new Date();
@@ -897,6 +914,13 @@ export class AutomateComponent implements OnInit {
             });
 
             const untestedData = result.slice(passedCount, result.length);
+
+
+            console.log('ShowEnd', this.showEnd);
+
+            console.log('untested', untestedData);
+
+
 
             const socketReport = {
               capabilities: { description: this.myForm.value.description, buildInfo: this.myForm.value.buildNo, ...this.completeAppData },

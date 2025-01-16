@@ -38,7 +38,9 @@ export class TestReportsComponent implements OnInit {
   public searchTerm: string = '';
   public testCases: any;
   public extras: any = {};
-  public untestedData: any = {};
+  public untestedData: any[] = [];
+  public skipData: any[] = [];
+  public originalData: any[] = [];
 
 
   constructor(private webSocketService: WebsocketService, public reportPdfService: ReportPdfService) {
@@ -52,11 +54,38 @@ export class TestReportsComponent implements OnInit {
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
     this.untestedData = state?.reportData?.extra?.untestedData;
+    this.originalData = state?.reportData?.extra?.originalData;
+    this.calculateSkipData();
     this.addScreenNameToTestCases();
     this.extras = state?.reportData?.extra?.extras;
-    console.log(this.untestedData);
+    console.log(state?.reportData?.extra);
 
     this.generatePie();
+  }
+
+
+  calculateSkipData(){
+    console.log(this.testCases);
+    const id = this.testCases[0].id;
+    console.log(id);
+
+    if(id !== 0){
+      // this.skipData = this.testCases.slice(0, id);
+      this.skipData = this.originalData.slice(0, 5);
+    }
+
+    // this.skipData.map((item) => {
+    //   item.type = 'Skip';
+    // })
+
+    this.untestedData.map((item) => {
+      item.type = 'Unteested';
+    })
+
+    console.log(this.skipData);
+    
+    this.testCases = [...this.skipData, ...this.testCases, ...this.untestedData];
+    
   }
   addScreenNameToTestCases() {
     let storeFirstData: any = null;
@@ -72,6 +101,9 @@ export class TestReportsComponent implements OnInit {
     //   }
     //   storeFirstData.screens.push(this.testCases[i]);
     // }
+    console.log(this.testCases);
+    
+
     this.groupedData = this.testCases.reduce((acc, ele) => {
       if (!acc[ele?.moduleName]) {
         acc[ele?.moduleName] = [];
