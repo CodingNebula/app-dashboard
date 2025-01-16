@@ -66,7 +66,7 @@ export class TestReportsComponent implements OnInit {
 
   calculateSkipData(){
     console.log(this.testCases);
-    const id = this.testCases[0].id;
+    const id = this.testCases[0]?.id;
     console.log(id);
 
     if(id !== 0){
@@ -74,12 +74,14 @@ export class TestReportsComponent implements OnInit {
       this.skipData = this.originalData.slice(0, 5);
     }
 
-    // this.skipData.map((item) => {
-    //   item.type = 'Skip';
-    // })
+    this.skipData?.map((item) => {
+      item.message = 'Skip'
+      item.type = 'Skip';
+    })
 
-    this.untestedData.map((item) => {
-      item.type = 'Unteested';
+    this.untestedData?.map((item) => {
+      item.message = 'Skip'
+      item.type = 'Untested';
     })
 
     console.log(this.skipData);
