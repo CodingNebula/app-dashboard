@@ -453,7 +453,7 @@ export class TemplateComponent {
 
 
         // Find or create the screen group
-        let screenGroup = wtGroup.screens.find(screen => screen.ins_set_id === curr.ins_set_id);
+        let screenGroup = wtGroup.screens.find(screen => screen.wim_order === curr.wim_order);
         
         if (!screenGroup) {
           screenGroup = {
