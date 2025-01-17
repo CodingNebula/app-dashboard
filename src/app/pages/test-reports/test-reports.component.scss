@@ -46,6 +46,7 @@
     margin-right: 2.6rem;
     //background-color: #d4edda; // Light green for passed
     color: #1a6f2e;
+    font-weight: 600;
 }
 
 .failed {
@@ -54,18 +55,21 @@
     margin-right: 2.6rem;
     //background-color: #f8d7da; // Light red for failed
     color: #d03140;
+    font-weight: 600;
 }
 .skip{
     width: 30%;
     padding-left: 4rem;
     margin-right: 2.6rem;
     color: #9E9E9E;
+    font-weight: 600;
 }
 .untested{
     width: 30%;
     padding-left: 4rem;
     margin-right: 2.6rem;
     color: #705555;
+    font-weight: 600;
 }
 
 .description-label {

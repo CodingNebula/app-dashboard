@@ -81,43 +81,13 @@ export class ReportPdfService {
             },
           }
         ],
-        color: ['#10EB93', '#EE4748', '#A64C52'],
+        color: [' #10EB93', ' #EE4748', ' #808080', ' #A64C52'],
       });
     }
   }
 
   downloadReportPDF(item, $event: Event) {
     console.log(item);
-
-
-    this.chartData = [];
-
-    this.chartData.push({
-      name: 'SUCCESS', value: Number(item.testcase_passed)
-    },
-      { name: 'FAILED', value: Number(item.testcase_failed) },
-      { name: 'UNTESTED', value: Number(item.testcase_performed) - (Number(item.testcase_passed) + Number(item.testcase_failed)) })
-
-    this.generatePieData(this.chartData);
-    $event.stopPropagation();
-
-    this.echartsInstance?.on('finished', () => {
-      this.generatePDF(item);
-    });
-
-  }
-
-  generatePDF(item) {
-
-    const dates = new Date(item.extra?.extras.createdAt || 'N/A');
-
-    const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
-      ? dates.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      }).replace(/\//g, ' ') // Replace slashes with a space
-      : 'N/A';
 
     this.capabilities = item?.extra?.capabilities;
     this.testCases = item?.extra?.resultArr;
@@ -169,7 +139,101 @@ export class ReportPdfService {
     this.testCases = [...this.skipData, ...this.testCases, ...this.untestedData];
 
     console.log(this.testCases);
+
+
+    this.chartData = [];
+
+    // dataArr.push({ name: 'SUCCESS', value: passedCount });
+    // dataArr.push({ name: 'FAILED', value: failedCount });
+    // dataArr.push({ name: 'SKIP', value: this.skipData.length });
+    // dataArr.push({ name: 'UNTESTED', value: this.untestedData.length });
+
+    console.log(this.skipData);
+    console.log(this.untestedData);
     
+    
+
+    this.chartData.push(
+      { name: 'SUCCESS', value: Number(item.testcase_passed) },
+      { name: 'FAILED', value: Number(item.testcase_failed) },
+      { name: 'SKIP', value: Number(this.skipData.length) },
+      { name: 'UNTESTED', value: Number(this.untestedData.length) }
+      // { name: 'UNTESTED', value: Number(item.testcase_performed) - (Number(item.testcase_passed) + Number(item.testcase_failed)) 
+
+    )
+
+    
+    this.echartsInstance?.on('finished', () => {
+      this.generatePDF(item);
+    });
+    
+    this.generatePieData(this.chartData);
+    $event.stopPropagation();
+  }
+
+  generatePDF(item) {
+
+    const dates = new Date(item.extra?.extras.createdAt || 'N/A');
+
+    const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
+      ? dates.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }).replace(/\//g, ' ') // Replace slashes with a space
+      : 'N/A';
+
+    // this.capabilities = item?.extra?.capabilities;
+    // this.testCases = item?.extra?.resultArr;
+    // this.extras = item?.extra?.extras;
+    // this.originalData = item?.extra?.originalData;
+
+    // console.log(this.originalData);
+
+    // console.log(this.testCases);
+    // const id = this.testCases[0]?.id;
+    // let lastId = 0;
+
+    // if (this.testCases[this.testCases.length - 1]?.ins_id !== "12345") {
+    //   lastId = this.testCases[this.testCases.length - 1]?.id;
+    // }
+    // console.log(id);
+    // console.log(lastId);
+
+    // console.log(this.untestedData);
+    // console.log(this.originalData);
+
+
+
+    // if (id !== 0) {
+    //   this.skipData = this.originalData.slice(0, id);
+    //   // this.skipData = this.originalData?.slice(0, 5);
+    // }
+
+    // if (this.skipData) {
+    //   this.skipData?.map((item) => {
+    //     // item.message = 'Skip'
+    //     item.message = 'Skip';
+    //     item.timeSpent = 0;
+    //   })
+    // }
+
+    // // if()
+
+    // this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length - 1);
+
+    // this.untestedData?.map((item) => {
+    //   // item.message = 'Untested'
+    //   item.message = 'Untested';
+    //   item.timeSpent = 0;
+    // })
+
+    // console.log(this.skipData);
+
+    // this.testCases = [...this.skipData, ...this.testCases, ...this.untestedData];
+
+    // console.log(this.testCases);
+
 
 
     const doc = new jsPDF();
