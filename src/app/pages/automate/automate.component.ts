@@ -51,6 +51,7 @@ export class AutomateComponent implements OnInit {
   public showAppLaunchError: boolean = false;
   public isAppLaunched: boolean = false;
   public hideAll: boolean = false;
+  public originalData : any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -328,6 +329,8 @@ export class AutomateComponent implements OnInit {
 
     if (state && state.templateArr) {
       this.templateData = state.templateArr
+      console.log(this.templateData);
+      
     }
 
     // Call getCapabilities() and subscribe to it
@@ -381,7 +384,7 @@ export class AutomateComponent implements OnInit {
     })
 
 
-
+this.formatTemplateData();
     this.formatTestCaseData();
   }
 
@@ -627,6 +630,7 @@ export class AutomateComponent implements OnInit {
         extras: this.extras,
         totalTimeElapsed: Math.floor(Date.now() / 1000) - this.totalTimeTaken,
         untestedData: untestedData,
+        untestedCount: untestedCount,
         originalData: result,
       }
 
@@ -903,7 +907,8 @@ export class AutomateComponent implements OnInit {
               resultArr: this.resultArr,
               extras: this.extras,
               totalTimeElapsed: Math.floor(Date.now() / 1000) - totalTimeApp,
-              untestedData: untestedData,
+              // untestedData: untestedData,
+              originalData: result,
             }
 
 
@@ -1116,6 +1121,8 @@ export class AutomateComponent implements OnInit {
 
   }
   onStart(item, testCases) {
+    console.log(item);
+    
 
     // this.showEnd = true
     this.showIndividualEnd = true;
@@ -1140,8 +1147,25 @@ export class AutomateComponent implements OnInit {
     //   }
     // })).reduce((acc,item)=> acc.concat(...item),[])
 
+    // const res = item.testCase.map((item, index) => {
+    //   return {
+    //     id: index,
+    //     screenName: item.ins_back_name,
+    //     btnName: item.ins_element_name,
+    //     successMessage: `${item.ins_name}`,
+    //     failedMessage: `${item.ins_name}`,
+    //     roomId: localStorage.getItem("id"),
+    //     moduleName: item.ins_set_screen_name,
+    //     ins_id: item.ins_id,
+    //   }
+    // })
+
     const res = item.testCase.map((item, index) => {
-      return {
+      // Find the matching item from this.originalData based on ins_id
+      const matchedItem = this.originalData.find(originalItem => originalItem.ins_id === item.ins_id);
+    
+      // Create the result object
+      const result = {
         id: index,
         screenName: item.ins_back_name,
         btnName: item.ins_element_name,
@@ -1150,8 +1174,16 @@ export class AutomateComponent implements OnInit {
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
         ins_id: item.ins_id,
+      };
+    
+      // If a matching item is found, append the id from this.originalData
+      if (matchedItem) {
+        result.id = matchedItem.id;
       }
-    })
+    
+      return result;
+    });
+    
 
 
 
@@ -1167,7 +1199,7 @@ export class AutomateComponent implements OnInit {
 
     // this.onStartTrans(res,false)
 
-    this.sendInstructions(res)
+    this.sendInstructions(res);
 
 
     // const obj = {
@@ -1288,6 +1320,7 @@ export class AutomateComponent implements OnInit {
       extras: this.extras,
       totalTimeElapsed: this.singleInstructionTimeTotal,
       untestedCount: totalCount - passedCount - failedCount,
+      originalData: this.originalData,
     }
 
 
@@ -1677,8 +1710,34 @@ export class AutomateComponent implements OnInit {
         }
       });
     });
+    console.log(this.templateData);
+    
 
+  }
 
+  formatTemplateData(){
+    let index = 0;
+      this.originalData = this.templateData.screens.map(screen => {
+        return screen.instructions.map((instruction) => {
+
+          const newIntruction = {
+            id: index,
+            screenName: instruction.ins_back_name,
+            btnName: instruction.ins_element_name,
+            successMessage: `${instruction.ins_name}`,
+            failedMessage: `${instruction.ins_name}`,
+            roomId: localStorage.getItem("id"),
+            moduleName: instruction.ins_set_screen_name,
+            ins_id: instruction.ins_id,
+          };
+
+          index += 1;
+          return newIntruction;
+        });
+      }).flat();
+
+      console.log(this.originalData);
+      
   }
 
 

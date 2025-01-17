@@ -53,7 +53,7 @@ export class TestReportsComponent implements OnInit {
     this.capabilities = state?.reportData?.extra?.capabilities;
     this.testCases = state?.reportData?.extra?.resultArr.filter(testCase => testCase.successMessage !== "End_Instructions");
     this.reportData = state?.reportData;
-    this.untestedData = state?.reportData?.extra?.untestedData;
+    // this.untestedData = state?.reportData?.extra?.untestedData;
     this.originalData = state?.reportData?.extra?.originalData;
     this.extras = state?.reportData?.extra?.extras;
     console.log(state?.reportData?.extra);
@@ -70,13 +70,22 @@ export class TestReportsComponent implements OnInit {
   calculateSkipData(){
     console.log(this.testCases);
     const id = this.testCases[0]?.id;
+    let lastId = 0;
+
+    if(this.testCases[this.testCases.length - 1]?.ins_id !== "12345"){
+      lastId = this.testCases[this.testCases.length - 1]?.id;
+    }
     console.log(id);
+    console.log(lastId);
+    
     console.log(this.untestedData);
+    console.log(this.originalData);
+    
     
 
     if(id !== 0){
-      // this.skipData = this.testCases.slice(0, id);
-      this.skipData = this.originalData?.slice(0, 5);
+      this.skipData = this.originalData.slice(0, id);
+      // this.skipData = this.originalData?.slice(0, 5);
     }
 
     if(this.skipData){
@@ -85,6 +94,10 @@ export class TestReportsComponent implements OnInit {
         item.type = 'Skip';
       })
     }
+
+    // if()
+
+    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length - 1  );
 
     this.untestedData?.map((item) => {
       // item.message = 'Untested'
