@@ -32,7 +32,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="package">Package Name:</label>
-              <input id="package" formControlName="package" class="form-control timeout-input"  readonly/>
+              <input id="package" formControlName="package" class="form-control timeout-input" readonly />
               <div *ngIf="myForm.get('package').touched && myForm.get('package').invalid" class="error-message">
                 <small *ngIf="myForm.get('package').hasError('required')">Package name is required!</small>
               </div>
@@ -40,7 +40,7 @@
 
             <div class="form-group">
               <label for="automation">Automation Name:</label>
-              <input id="automation" formControlName="automation" class="form-control" readonly/>
+              <input id="automation" formControlName="automation" class="form-control" readonly />
               <div *ngIf="myForm.get('automation').touched && myForm.get('automation').invalid" class="error-message">
                 <small *ngIf="myForm.get('automation').hasError('required')">Automation Name is required!</small>
               </div>
@@ -82,15 +82,14 @@
 
             <div class="form-group">
               <label for="hiddenApp">Ignore hidden app policy:</label>
-              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select"
-                class="custom-select-dropdown">
+              <nb-select id="hiddenApp" formControlName="hiddenApp" placeholder="Select" class="custom-select-dropdown">
                 <nb-option value="true">True</nb-option>
                 <nb-option value="false">False</nb-option>
               </nb-select>
               <div *ngIf="myForm.get('hiddenApp').touched && myForm.get('hiddenApp').invalid" class="error-message">
                 <small *ngIf="myForm.get('hiddenApp').hasError('required')">Hidden App is required!</small>
                 <!-- <small *ngIf="myForm.get('hiddenApp').hasError('invalidValue')">You cannot select "False" for Ignore -->
-                  <!-- Hidden App!</small> -->
+                <!-- Hidden App!</small> -->
               </div>
             </div>
           </div>
@@ -106,9 +105,10 @@
               </div>
             </div>
 
-            <div  class="form-group">
+            <div class="form-group">
               <label for="description">Description<span class="star-mark">*</span>:</label>
-              <textarea id="description" formControlName="description" class="form-control description-input" ></textarea>
+              <textarea id="description" formControlName="description"
+                class="form-control description-input"></textarea>
               <div *ngIf="myForm.get('description').touched && myForm.get('description').invalid" class="error-message">
                 <small *ngIf="myForm.get('description').hasError('required')">Description name is required!</small>
               </div>
@@ -118,7 +118,8 @@
 
           <div class="form-row button-row">
             <!-- <button class="edit-button" (click)="onEdit()">Edit</button> -->
-            <button type="submit" [disabled]="myForm.invalid" (click)="onSubmit()" class="submit-button">Launch App</button>
+            <button type="submit" [disabled]="myForm.invalid" (click)="onSubmit()" class="submit-button">Launch
+              App</button>
             <!-- <button type="submit" class="submit-button">Submit</button> -->
           </div>
         </form>
@@ -129,13 +130,14 @@
 
   <!-- <div *ngIf="isAppLaunched"> -->
 
-    <div class="test-case-container" *ngIf="templateData?.screens?.length > 0">
-      
+  <div class="test-case-container" *ngIf="templateData?.screens?.length > 0">
+
     <div class="test-case-div">
       <h5>{{templateData?.wt_name}}</h5>
-      <div [nbSpinner]="startApp"  class="instuction-loader" ></div>
+      <div [nbSpinner]="startApp" class="instuction-loader"></div>
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button *ngIf="!showIndividualEnd" class="start-button" (click)="onStartTrans(templateData,true)">{{showEnd?'End Test':'Start All'}}</button>
+      <button *ngIf="!showIndividualEnd" class="start-button" (click)="onStartTrans(templateData,true)"
+        [disabled]="!isAppLaunched">{{showEnd?'End Test':'Start All'}}</button>
       <button *ngIf="showIndividualEnd" class="start-button" (click)="endSingleInstruction()">Finish Test</button>
 
 
@@ -147,65 +149,70 @@
     </div> -->
 
 
-    <div  class="test-case-status-container">
+    <div class="test-case-status-container">
 
       <ng-container *ngFor="let testCase of testCases">
         <div class="test-case-div test-case-border">
-          <h6 class="testCase-header" >{{testCase?.ins_set_screen_name}}</h6>
-          <div [nbSpinner]="testCase?.ins_set_screen_name === currentOnGoingScreen"  class="instuction-loader" ></div>
-          <button *ngIf="!testCase.hideStart && !hideAll"  class="start-button" (click)="onStart(testCase,testCases)">Start</button>
+          <h6 class="testCase-header">{{testCase?.ins_set_screen_name}}</h6>
+          <div [nbSpinner]="testCase?.ins_set_screen_name === currentOnGoingScreen" class="instuction-loader"></div>
+          <button *ngIf="!testCase.hideStart && !hideAll" class="start-button" (click)="onStart(testCase,testCases)"
+            [disabled]="!isAppLaunched">Start</button>
         </div>
-        <div >
+        <div>
           <ng-container *ngFor="let item of testCase.testCase">
             <div *ngIf="item.ins_set_id === testCase.ins_set_id" class="test-case-div test-case-body-data">
-            <h6>{{item?.ins_name}}</h6>
-            <div [nbSpinner]="item.singleInstLoader"  class="instuction-loader" ></div>
-            <button *ngIf="!item.showSingleInstruction && !hideAll && (!testCase.hideStart && !item?.status)" class="start-button" (click)="singleInstructionWebsocket(item, testCases)">Run</button>
-            <div *ngIf="item?.status" [ngClass]="item?.status === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.status}}
+              <h6>{{item?.ins_name}}</h6>
+              <div [nbSpinner]="item.singleInstLoader" class="instuction-loader"></div>
+              <button *ngIf="!item.showSingleInstruction && !hideAll && (!testCase.hideStart && !item?.status)"
+                class="start-button" (click)="singleInstructionWebsocket(item, testCases ) "
+                [disabled]="!isAppLaunched">Run</button>
+              <div *ngIf="item?.status"
+                [ngClass]="item?.status === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">
+                {{item?.status}}
+              </div>
             </div>
-          </div>
-        </ng-container>
-      </div>
-        
+          </ng-container>
+        </div>
+
 
         <!-- <ng-container *ngFor="let item of resultArr">
 
           <div *ngIf="item.moduleName === testCase.ins_set_screen_name" class="test-case-div test-case-body-data"> -->
 
-            <!-- <h6>{{item?.successMessage || item?.failedMessage}}</h6> -->
-<!--            <div>{{item.moduleName}}</div>-->
-            <!-- <span *ngIf=" item.message" class="status-message"
+        <!-- <h6>{{item?.successMessage || item?.failedMessage}}</h6> -->
+        <!--            <div>{{item.moduleName}}</div>-->
+        <!-- <span *ngIf=" item.message" class="status-message"
                   [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
-            <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
-            <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
-            <!-- </div> -->
-          <!-- </div>
+        <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
+        <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
+        <!-- </div> -->
+        <!-- </div>
         </ng-container> -->
       </ng-container>
 
 
+    </div>
+
+
+    <!--  <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container" #resultContainer>-->
+    <!--    <ng-container *ngFor="let item of resultArr">-->
+
+    <!--      <div class="test-case-div">-->
+
+    <!--        <h6>{{item?.successMessage || item?.failedMessage}}</h6>-->
+    <!--        <div>{{item.moduleName}}</div>-->
+    <!--        <span *ngIf=" item.message" class="status-message"-->
+    <!--              [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>-->
+    <!--        &lt;!&ndash; <button class="start-button" (click)="onStart(item)">Start</button> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} &ndash;&gt;-->
+    <!--        &lt;!&ndash; </div> &ndash;&gt;-->
+    <!--      </div>-->
+    <!--    </ng-container>-->
+
+
+    <!--  </div>-->
   </div>
-
-
-<!--  <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container" #resultContainer>-->
-<!--    <ng-container *ngFor="let item of resultArr">-->
-
-<!--      <div class="test-case-div">-->
-
-<!--        <h6>{{item?.successMessage || item?.failedMessage}}</h6>-->
-<!--        <div>{{item.moduleName}}</div>-->
-<!--        <span *ngIf=" item.message" class="status-message"-->
-<!--              [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>-->
-<!--        &lt;!&ndash; <button class="start-button" (click)="onStart(item)">Start</button> &ndash;&gt;-->
-<!--        &lt;!&ndash; <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} &ndash;&gt;-->
-  <!--        &lt;!&ndash; </div> &ndash;&gt;-->
-<!--      </div>-->
-<!--    </ng-container>-->
-
-
-<!--  </div>-->
-</div>
-<!-- </div> -->
+  <!-- </div> -->
 
 </div>
 

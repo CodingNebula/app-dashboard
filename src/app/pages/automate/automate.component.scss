@@ -43,6 +43,11 @@
   font-weight: bold !important;
 }
 
+.start-button:disabled {
+  cursor: not-allowed;  /* Change cursor to 'not-allowed' */
+  opacity: 0.6;  /* Optional: Make the button appear less active */
+}
+
 .automate-right {
   width: 30%;
   display: flex;
