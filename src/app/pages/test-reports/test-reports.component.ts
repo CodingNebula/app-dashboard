@@ -310,6 +310,8 @@ export class TestReportsComponent implements OnInit {
 
 
   downloadPDF(item, $event: Event) {
+    console.log(item);
+    
 
 
     this.reportPdfService.downloadReportPDF(item, $event);
