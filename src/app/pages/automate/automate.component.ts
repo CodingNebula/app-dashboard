@@ -971,11 +971,14 @@ this.formatTemplateData();
       this.socketSubscription.unsubscribe();
 
     }
+
+    console.log(res);
+    
     this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
       console.log(res);
       
-      if (res?.message && res?.message?.info) {
+      if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
 
         this.currentOnGoingScreen = res.message.moduleName;
         allInstructions.singleInstLoader = false;
@@ -1237,12 +1240,14 @@ this.formatTemplateData();
 
       }
       let startInterval = Date.now() / 1000;
-
+      console.log(...instructionsArr);
+      
       this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
       this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
-
-        if (res?.message && res?.message?.info) {
+        console.log(res);
+        
+        if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
           let currentTime = Date.now() / 1000;
           const now = new Date();
           const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -1261,12 +1266,16 @@ this.formatTemplateData();
           this.resultArr.push(res.message);
           this.testCases.map((item) => {
             item.testCase.map((inst) => {
+              console.log(this.testCases);
               if (inst.ins_id === instructionsArr[indexCounter].ins_id) {
                 inst.status = res.message.message;
+                
                 return this.testCases;
               }
             })
           })
+          console.log(this.testCases);
+          
           indexCounter += 1;
           this.recursiveInstructions(instructionsArr, indexCounter);
 
