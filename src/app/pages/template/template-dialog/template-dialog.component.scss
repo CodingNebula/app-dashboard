@@ -210,3 +210,11 @@ i.disable{
     //margin: 0;
     padding: 0.5rem;
   }
+  nb-select {
+    height: 100%;
+    /* max-height: var(--option-list-max-height); */
+    /* margin-bottom: 1rem; */
+    padding: 0;
+    overflow: auto;
+    max-height: 45vh;
+}
