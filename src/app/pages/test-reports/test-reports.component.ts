@@ -58,37 +58,37 @@ export class TestReportsComponent implements OnInit {
     this.extras = state?.reportData?.extra?.extras;
     console.log(state?.reportData?.extra);
     console.log(state?.reportData);
-    
 
-    
+
+
     this.calculateSkipData();
     this.addScreenNameToTestCases();
     this.generatePie();
   }
 
 
-  calculateSkipData(){
+  calculateSkipData() {
     console.log(this.testCases);
     const id = this.testCases[0]?.id;
     let lastId = 0;
 
-    if(this.testCases[this.testCases.length - 1]?.ins_id !== "12345"){
+    if (this.testCases[this.testCases.length - 1]?.ins_id !== "12345") {
       lastId = this.testCases[this.testCases.length - 1]?.id;
     }
     console.log(id);
     console.log(lastId);
-    
+
     console.log(this.untestedData);
     console.log(this.originalData);
-    
-    
 
-    if(id !== 0){
+
+
+    if (id !== 0) {
       this.skipData = this.originalData.slice(0, id);
       // this.skipData = this.originalData?.slice(0, 5);
     }
 
-    if(this.skipData){
+    if (this.skipData) {
       this.skipData?.map((item) => {
         // item.message = 'Skip'
         item.type = 'Skip';
@@ -97,7 +97,7 @@ export class TestReportsComponent implements OnInit {
 
     // if()
 
-    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length - 1  );
+    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length - 1);
 
     this.untestedData?.map((item) => {
       // item.message = 'Untested'
@@ -105,9 +105,9 @@ export class TestReportsComponent implements OnInit {
     })
 
     console.log(this.skipData);
-    
+
     this.testCases = [...this.skipData, ...this.testCases, ...this.untestedData];
-    
+
   }
   addScreenNameToTestCases() {
     let storeFirstData: any = null;
@@ -124,7 +124,7 @@ export class TestReportsComponent implements OnInit {
     //   storeFirstData.screens.push(this.testCases[i]);
     // }
     console.log(this.testCases);
-    
+
 
     this.groupedData = this.testCases.reduce((acc, ele) => {
       if (!acc[ele?.moduleName]) {
@@ -168,16 +168,21 @@ export class TestReportsComponent implements OnInit {
   generatePie() {
     // Initialize the array to hold the pie chart data
     const dataArr = [];
+    console.log(this.skipData);
+    console.log(this.untestedData);
+
+
 
     // Initialize counters for passed, failed, and untested
     let passedCount = this.reportData?.testcase_passed;
     let failedCount = this.reportData?.testcase_failed;
-    let untestedCount = this.reportData?.testcase_performed;
+    let untestedCount = this.untestedData;
 
 
     dataArr.push({ name: 'SUCCESS', value: passedCount });
     dataArr.push({ name: 'FAILED', value: failedCount });
-    dataArr.push({ name: 'UNTESTED', value: untestedCount - (failedCount + passedCount) });
+    dataArr.push({ name: 'SKIP', value: this.skipData.length });
+    dataArr.push({ name: 'UNTESTED', value: this.untestedData.length });
 
     this.pieData = dataArr
 
@@ -239,7 +244,7 @@ export class TestReportsComponent implements OnInit {
             },
           }
         ],
-        color: ['#10EB93', '#EE4748', '#A64C52'],
+        color: [' #10EB93', ' #EE4748', ' #808080', ' #A64C52'],
       };
     }, 10)
   }
@@ -311,7 +316,7 @@ export class TestReportsComponent implements OnInit {
 
   downloadPDF(item, $event: Event) {
     console.log(item);
-    
+
 
 
     this.reportPdfService.downloadReportPDF(item, $event);
