@@ -54,6 +54,9 @@ export class ReportsComponent implements OnInit, AfterViewInit {
         return bDateTime.getTime() - aDateTime.getTime(); // Sort in ascending order
       });
       this.reports = res;
+
+      console.log(this.reports);
+      
       this.calculatePieChartData();
       this.generatePieData()
 

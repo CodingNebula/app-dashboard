@@ -55,11 +55,14 @@ export class TestReportsComponent implements OnInit {
     this.reportData = state?.reportData;
     this.untestedData = state?.reportData?.extra?.untestedData;
     this.originalData = state?.reportData?.extra?.originalData;
-    this.calculateSkipData();
-    this.addScreenNameToTestCases();
     this.extras = state?.reportData?.extra?.extras;
     console.log(state?.reportData?.extra);
+    console.log(state?.reportData);
+    
 
+    
+    this.calculateSkipData();
+    this.addScreenNameToTestCases();
     this.generatePie();
   }
 
@@ -68,19 +71,23 @@ export class TestReportsComponent implements OnInit {
     console.log(this.testCases);
     const id = this.testCases[0]?.id;
     console.log(id);
+    console.log(this.untestedData);
+    
 
     if(id !== 0){
       // this.skipData = this.testCases.slice(0, id);
-      this.skipData = this.originalData.slice(0, 5);
+      this.skipData = this.originalData?.slice(0, 5);
     }
 
-    this.skipData?.map((item) => {
-      item.message = 'Skip'
-      item.type = 'Skip';
-    })
+    if(this.skipData){
+      this.skipData?.map((item) => {
+        // item.message = 'Skip'
+        item.type = 'Skip';
+      })
+    }
 
     this.untestedData?.map((item) => {
-      item.message = 'Skip'
+      // item.message = 'Untested'
       item.type = 'Untested';
     })
 

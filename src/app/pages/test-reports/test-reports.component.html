@@ -70,10 +70,11 @@
                   </nb-card-body>
                 </nb-card>
               </div>
-              <div class="col-4" class="flex-col" *ngIf="instructions?.type !== 'Skip' || instructions?.type !== 'Untested'">
+              <div class="col-4" class="flex-col" *ngIf="instructions?.type !== 'Skip' && instructions?.type !== 'Untested'">
                 <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
                 <div style="width: 7%" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
                   {{instructions?.successMessage?'SUCCESS':'FAILED'}}</div>
+                  <!-- <div>{{instructions | json}}</div> -->
                 <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
               </div>
 

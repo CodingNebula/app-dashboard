@@ -560,15 +560,6 @@ export class AutomateComponent implements OnInit {
 
       result.push(
         {
-          "id": "8",
-          "screenName": "Click_Image", // image 
-          "btnName": "Account%20Avatar"
-        },
-        {
-          "id": "0",
-          "screenName": "Find_Screen_Elements"
-        },
-        {
           screenName: 'End_Instructions',
           successMessage: 'End Instructions',
           roomId: localStorage.getItem("id"),
