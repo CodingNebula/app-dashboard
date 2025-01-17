@@ -61,8 +61,7 @@
             </span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="row" *ngFor="let instructions of testCase.value"
-            [ngClass]="instructions?.message === 'SUCCESS' ? 'passed' : instructions?.message === 'FAILED' ? 'failed' : 'untested'">
+            <div class="row" *ngFor="let instructions of testCase.value">
               <div class="col-4" *ngIf="instructions.status ==='Failed'">
                 <nb-card>
                   <nb-card-body>
@@ -72,17 +71,16 @@
               </div>
               <div class="col-4" class="flex-col" *ngIf="instructions?.type !== 'Skip' && instructions?.type !== 'Untested'">
                 <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
-                <div style="width: 7%" [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
+                <div [ngClass]="instructions?.message==='SUCCESS'?'passed':'failed'">
                   {{instructions?.successMessage?'SUCCESS':'FAILED'}}</div>
-                  <!-- <div>{{instructions | json}}</div> -->
-                <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
+                <div class="time-div"><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
               </div>
 
               <div class="col-4" class="flex-col" *ngIf="instructions?.type === 'Skip' || instructions?.type === 'Untested'"> 
                 <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
-                <div style="width: 7%" >
+                <div [ngClass]="instructions?.type === 'Skip' ? 'skip' : 'untested'">
                   {{instructions?.type}}</div>
-                <div><span class="descriptionLabel">Time Spend -</span> {{instructions?.timeSpent}} sec</div>
+                <div class="time-div"><span class="descriptionLabel">Time Spend -</span> N/A</div>
               </div>
             </div>
 
