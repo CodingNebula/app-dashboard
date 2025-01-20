@@ -1266,6 +1266,7 @@ this.formatTemplateData();
         console.log(res);
         
         if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage) && res?.message?.successMessage !== "End Instructions") {
+          this.showWaitLoader = false;
           let currentTime = Date.now() / 1000;
           const now = new Date();
           const formatdate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -1300,6 +1301,7 @@ this.formatTemplateData();
         }
 
         if (res?.message?.successMessage === "End Instructions") {
+          this.showWaitLoader = false;
           clearInterval(this.counterInterval);
           clearInterval(startInterval)
           // res.extra.timeTaken = Math.floor(Date.now() / 1000) - this.count;
