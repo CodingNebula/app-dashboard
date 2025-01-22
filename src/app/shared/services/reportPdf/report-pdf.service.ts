@@ -97,7 +97,23 @@ export class ReportPdfService {
     console.log(this.originalData);
 
     console.log(this.testCases);
-    const id = this.testCases[0]?.id;
+    let id = 0;
+
+    // this.testCases.map((item) => {
+    //   if(!item?.Skip){
+    //     id = item?.id;
+    //     break;
+    //   }
+    // })
+
+    for (const item of this.testCases) {
+      if (!item?.Skip) {  // Check if Skip is false
+        id = item?.id;  // Assign the id of the item
+        break;  // Break the loop as soon as you find the condition
+      }
+    }
+    console.log(id);
+
     let lastId = 0;
 
     if (this.testCases[this.testCases.length - 1]?.ins_id !== "12345") {
@@ -126,7 +142,7 @@ export class ReportPdfService {
 
     // if()
 
-    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length - 1);
+    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length);
 
     this.untestedData?.map((item) => {
       // item.message = 'Untested'
@@ -134,10 +150,12 @@ export class ReportPdfService {
       item.timeSpent = 0;
     })
 
+    let updatedTestCase = this.testCases.slice(id, this.testCases.length);
+    console.log(updatedTestCase);
+    
     console.log(this.skipData);
 
-    this.testCases = [...this.skipData, ...this.testCases, ...this.untestedData];
-
+    this.testCases = [...this.skipData, ...updatedTestCase, ...this.untestedData];
     console.log(this.testCases);
 
 
