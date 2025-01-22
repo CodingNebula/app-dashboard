@@ -114,7 +114,9 @@ export class TestReportsComponent implements OnInit {
 
     // if()
     
-    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length - 1);
+    this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length);
+    console.log(this.untestedData);
+    
     
     this.untestedData?.map((item) => {
       // item.message = 'Untested'

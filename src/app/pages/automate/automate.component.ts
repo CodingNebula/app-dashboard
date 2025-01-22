@@ -727,6 +727,8 @@ export class AutomateComponent implements OnInit {
 
       }
 
+      
+
 
 
     })
@@ -899,7 +901,32 @@ export class AutomateComponent implements OnInit {
       return result;
     });
 
-    this.sendInstructions(res);
+    res.push(
+      {
+        screenName: 'End_Instructions',
+        successMessage: 'End Instructions',
+        roomId: localStorage.getItem("id"),
+        ins_id: '12345',
+      }
+    );
+
+    let id = res[0].id;
+    // let updatedReq;
+    let leftOverInstructions;
+
+    if(id !== 0){
+      leftOverInstructions = this.originalData.slice(0, id);
+      console.log(leftOverInstructions);
+      
+    }
+
+    const updatedReq = [...leftOverInstructions, ...res];
+    console.log(updatedReq);
+    
+
+    console.log(res);
+    
+    this.sendInstructions(updatedReq);
 
   }
 
@@ -933,12 +960,12 @@ export class AutomateComponent implements OnInit {
       let startInterval = Date.now() / 1000;
 
       this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
-      if(this.iSingleCase){
-        this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
-      }
-      else{
+      // if(this.iSingleCase){
         this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
-      }
+      // }
+      // else{
+        // this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
+      // }
       console.log(instructionsArr[indexCounter]);
 
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
