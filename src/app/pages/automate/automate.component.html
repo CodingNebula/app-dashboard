@@ -167,7 +167,7 @@
                 class="start-button" (click)="singleInstructionWebsocket(item, testCases ) "
                 [disabled]="!isAppLaunched">Run</button>
               <div *ngIf="item?.status"
-                [ngClass]="item?.status === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">
+                [ngClass]="item?.status === 'SUCCESS' ? 'success-status-result' : item?.status === 'FAILED' ?'failed-status-result' : 'skip-status-result'">
                 {{item?.status}}
               </div>
             </div>

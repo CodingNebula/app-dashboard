@@ -51,11 +51,13 @@ export class AutomateComponent implements OnInit {
   public showAppLaunchError: boolean = false;
   public isAppLaunched: boolean = false;
   public hideAll: boolean = false;
-  public originalData : any[] = [];
-  public count : number = 0;
+  public originalData: any[] = [];
+  public count: number = 0;
   public totalTimeApp: number;
   private endTest: boolean = false;
   public showWaitLoader: boolean = false;
+  public iSingleCase: boolean = true;
+  public isInstructionSkipped: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -64,258 +66,6 @@ export class AutomateComponent implements OnInit {
     private automateDataService: AutomationDataService,
     private applicationDataService: ApplicationDataService,
     private router: Router) {
-
-
-    this.temp = [
-      {
-        "id": "0",
-        "screenName": "Welcome",
-        "title": "Welcome"
-      },
-      {
-        "id": "8",
-        "screenName": "Click_Image", // image
-        "btnName": "left_arrow",
-        "title": "Welcome_Next_Button"
-      },
-      {
-        "id": "1",
-        "screenName": "Permissions",
-        "title": "Permissions"
-      },
-      {
-        "id": "8",
-        "screenName": "Click_Image",
-        "btnName": "left_arrow",
-        "title": "Permissions_Next_Button"
-      },
-      {
-        "id": "2",
-        "screenName": "Permissions_list",
-        "title": "Permissions_list"
-      },
-      {
-        "id": "3",
-        "screenName": "Allow_PhoneCalls",
-        "action": "Allow",
-        "title": "Permissions_Allow_PhoneCalls"
-      },
-      {
-        "id": "4",
-        "screenName": "Allow_DeviceLocation",
-        "action": "ALLOW",
-        "title": "Permissions_Allow_DeviceLocations"
-      },
-      {
-        "id": "5",
-        "screenName": "Allow_BluetoothConnection",
-        "action": "ALLOW",
-        "title": "Permissions_Allow_BluetoothConnections"
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Continue",
-        "title": "Permission_Continue_Button"
-      },
-      {
-        "id": "7",
-        "screenName": "Terminal Setup",
-        "title": "Terminal Setup"
-      },
-      {
-        "id": "8",
-        "screenName": "Click_Image", // image
-        "title": "TerminalID_Next_Button"
-      },
-      //    {
-      //     "id":"7",
-      //     "screenName":"Terminal ID",
-      //     "title": "Terminal ID"
-      // },
-      {
-        "id": "9",
-        "screenName": "Select_Options",
-        "options": "Testing",
-        "title": "TerminalID_Setting"
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "PROCEED",
-        "title": "TerminalID_Setting_Proceed_Button"
-      },
-      {
-        "id": "1",
-        "screenName": "Enter_Terminal_ID",
-        "terminal_id": ["2994001"],
-        "title": "Welcome"
-
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Next",
-        "title": "TerminalID_Next_Button"
-      },
-
-      {
-        "id": "10",
-        "screenName": "Enter_Terminal_ID",
-        "terminal_id": ["2994001"],
-        "title": "Re-Terminal ID"
-
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Submit",
-        "title": "TerminalID_Submit_Button"
-      },
-
-      {
-        "id": "11",
-        "screenName": "Profile_Login",
-        "pin": ["9", "2", "0", "4"],
-        "title": "Verify Detail Page"
-      },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "Confirm",
-        "title": "Detail_Confirm_Button"
-      },
-      //    {
-      //     "id":"6",
-      //     "screenName":"Click_Button",
-      //     "btnName":"ReLogIn",
-      //     "title": "Detail_ReLogIn_Button"
-      // },
-      //   {
-      //     "id":"6",
-      //     "screenName":"Terminal_Setup_Complete",
-      //     "title": "Terminal Setup Complete"
-      // },
-      {
-        "id": "6",
-        "screenName": "Click_Button",
-        "btnName": "GO",
-        "title": "Terminal_Setup_Go_Button"
-      },
-      //    {
-      //     "id":"6",
-      //     "screenName":"Device_Connection",
-      //     "title": "Device Connection"
-      // },
-      {
-        "id": 9,
-        "screenName": "Click_Text",
-        "btnName": "Skip >",
-        "title": "DeviceConnection_Skip_Button"
-      },
-      //  {
-      //      "id":9,
-      //      "screenName":"homePage",
-      //      "title": "HomePage"
-      //  },
-      {
-        "id": 9,
-        "screenName": "homePage",
-        "action": "Transaction",
-        "title": "Home_Setting_Button"
-      },
-      //  {
-      //      "id":10,
-      //      "screenName":"Click_View",
-      //      "btnName":"Device"
-      //  },
-
-
-      //  {
-      //      "id":12,
-      //      "screenName":"Click_Button",
-      //      "btnName":"CONNECT TO READER"
-      //  },
-      //  {
-      //      "id":13,
-      //      "screenName":"Wait_For_Text",
-      //       "btnName":"WPC323951000219"
-      //  },
-      //  {
-      //      "id":13,
-      //      "screenName":"Click_Text",
-      //      "btnName":"WPC323951000219"
-      //  },
-      //  {
-      //      "id":14,
-      //      "screenName":"Find_Button",
-      //      "btnName":"Disconnect"
-      //  },
-      //   {
-      //      "id":"8",
-      //      "screenName":"Click_Image" // image
-      //  },
-      //  {
-      //      "id":"8",
-      //      "screenName":"Click_Image", // image
-      //      "btnName":"Sale"
-      //  },
-      //  {
-      //      "id":14,
-      //      "screenName":"Enter_Amount",
-      //      "amount":"200.00"
-      //  },
-      //    {
-      //      "id":9,get
-      //      "screenName":"Click_Text",
-      //      "btnName":"Clear"
-      //  },
-      //    {
-      //      "id":14,
-      //      "screenName":"Enter_Amount",
-      //      "amount":"50.00"
-      //  },
-      //   {
-      //      "id":10,
-      //      "screenName":"Click_View",
-      //      "btnName":"2 / 4"
-      //  },
-      //   {
-      //      "id":9,
-      //      "screenName":"Click_Text",
-      //      "btnName":"Go"
-      //  },
-      //    {
-      //      "id":9,
-      //      "screenName":"Click_Text",
-      //      "btnName":"10%"
-      //  },
-      //  {
-      //      "id":12,
-      //      "screenName":"Click_Button",
-      //      "btnName":"Continue"
-      //  },
-      //   {
-      //      "id":13,
-      //      "screenName":"Wait_For_Text",
-      //       "btnName":"Transaction ID"
-      //  },
-      //   {
-      //      "id":"14",
-      //      "screenName":"Element_Avail", // image
-      //      "elementName":["Transaction FAILED", "Transaction Approved"]
-      //  },
-
-      //  {
-      //      "id":"12",
-      //      "screenName":"Click_Button",
-      //      "btnName":"See Details"
-      //  },
-      //   {
-      //      "id":"0",
-      //      "screenName":"Find_Screen_Elements"
-      //  }
-    ]
 
     this.applicationData = this.automateDataService.selectedApplication;
 
@@ -334,7 +84,7 @@ export class AutomateComponent implements OnInit {
     if (state && state.templateArr) {
       this.templateData = state.templateArr
       console.log(this.templateData);
-      
+
     }
 
     // Call getCapabilities() and subscribe to it
@@ -388,7 +138,7 @@ export class AutomateComponent implements OnInit {
     })
 
 
-this.formatTemplateData();
+    this.formatTemplateData();
     this.formatTestCaseData();
   }
 
@@ -439,33 +189,6 @@ this.formatTemplateData();
         this.appLaunch(app_id);
       }
 
-
-
-
-      // this.accountService.launchApp({
-      //   capabilities: {
-      //     platformName: "Android",
-      //     app: "/home/codingnebula/Downloads/app-debug-v12.apk",
-      //     appPackage: "com.example.app",
-      //     automationName: "UIAutomator2",
-      //     deviceName: "Samsung",
-      //     noReset: true,
-      //     ignoreHiddenApiPolicPUSyError: true,
-      //     newCommandTimeout: 1200000
-      //   }
-      // }, app_id).subscribe(
-      //   (response) => {
-
-      //     this.appLaunchLoading = false;
-      //     this.appLaunchStatus = 'SUCCESS'
-      //   },
-      //   (error) => {
-      //     console.error('API Error:', error);
-      //     this.appLaunchLoading = false;
-      //     this.appLaunchStatus = 'FAILED'
-      //   }
-      // );
-      // this.myForm.reset();
     }
   }
 
@@ -477,30 +200,8 @@ this.formatTemplateData();
 
 
   scrollToBottom() {
-    // setTimeout(()=>{
-    //   const parentDiv = document.getElementsByClassName('test-case-container')[0]
-    //   if (parentDiv) {
-    //     parentDiv.scrollTop = parentDiv.scrollHeight
-    //   }
-    // },500)
   }
 
-  // noResetValidator(control) {
-  //   if (control.value === 'False') {
-  //     return { invalidValue: true };
-  //   }
-  //   return null;
-  // }
-
-  // ignoreHiddenValidator(control) {
-  //   if (control.value === 'False') {
-  //     return { invalidValue: true };
-  //   }
-  //   return null;
-  // }
-  onSaveDescription() {
-
-  }
 
   // startCounting(individualCount) {
   //
@@ -527,6 +228,7 @@ this.formatTemplateData();
 
 
   onStartTrans(itemData, startAll) {
+    this.iSingleCase = false;
 
     let count = 0;
     let totalTimeApp = Math.floor(Date.now() / 1000);
@@ -807,8 +509,10 @@ this.formatTemplateData();
 
       console.log(result);
 
-
+      // for single instructions
       this.sendInstructions(result);
+
+      // for testing
       // this.webSocketService.sendTestCaseRequest(result);
 
 
@@ -984,11 +688,11 @@ this.formatTemplateData();
     }
 
     console.log(res);
-    
+
     this.webSocketService.sendTestCaseRequest({ ...res, singleCase: true });
     this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
       console.log(res);
-      
+
       if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage)) {
 
         this.currentOnGoingScreen = res.message.moduleName;
@@ -1136,7 +840,7 @@ this.formatTemplateData();
   }
   onStart(item, testCases) {
     console.log(item);
-    
+
 
     // this.showEnd = true
     this.showIndividualEnd = true;
@@ -1175,10 +879,8 @@ this.formatTemplateData();
     // })
 
     const res = item.testCase.map((item, index) => {
-      // Find the matching item from this.originalData based on ins_id
       const matchedItem = this.originalData.find(originalItem => originalItem.ins_id === item.ins_id);
-    
-      // Create the result object
+
       const result = {
         id: index,
         screenName: item.ins_back_name,
@@ -1189,40 +891,15 @@ this.formatTemplateData();
         moduleName: item.ins_set_screen_name,
         ins_id: item.ins_id,
       };
-    
-      // If a matching item is found, append the id from this.originalData
+
       if (matchedItem) {
         result.id = matchedItem.id;
       }
-    
+
       return result;
     });
-    
 
-
-
-    //   {
-    //     "sender": "e6135615-48a5-4b5d-a121-af82670e0a92",
-    //     "message": {
-    //         "message": "SUCCESS",
-    //         "info": "Continue Button Clicked on Screen",
-    //         "id": "e6135615-48a5-4b5d-a121-af82670e0a92",
-    //         "successMessage": "Permission list Continue button Passed"
-    //     }
-    // }
-
-    // this.onStartTrans(res,false)
-
-    // console.log(res);
-    
     this.sendInstructions(res);
-
-
-    // const obj = {
-    //   screenName: item?.ins_back_name,
-    //   btnName: item?.ins_element_name
-    // }
-
 
   }
 
@@ -1255,16 +932,19 @@ this.formatTemplateData();
       }
       let startInterval = Date.now() / 1000;
 
-      console.log(...instructionsArr);
-      
       this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
-      this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
+      if(this.iSingleCase){
+        this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: true });
+      }
+      else{
+        this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
+      }
       console.log(instructionsArr[indexCounter]);
-      
+
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
 
         console.log(res);
-        
+
         if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage) && res?.message?.successMessage !== "End Instructions") {
           this.showWaitLoader = false;
           let currentTime = Date.now() / 1000;
@@ -1279,6 +959,7 @@ this.formatTemplateData();
           res.startedTime = `${hours}:${minutes}:${seconds}`;
           res.createdAt = formatdate;
           res.message.timeSpent = (currentTime - startInterval).toFixed(2);
+          this.isInstructionSkipped = res.message.Skip;
 
           startInterval = Date.now() / 1000;
           this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent);
@@ -1288,19 +969,25 @@ this.formatTemplateData();
               console.log(this.testCases);
               if (inst.ins_id === instructionsArr[indexCounter].ins_id) {
                 inst.status = res.message.message;
-                
+
                 return this.testCases;
               }
             })
           })
           console.log(this.testCases);
-          
+
           indexCounter += 1;
-          this.recursiveInstructions(instructionsArr, indexCounter);
+          if(res?.message?.failedMessage && !res?.message?.successMessage){
+            this.endTest = true;
+
+          }
+          else{
+            this.recursiveInstructions(instructionsArr, indexCounter);
+          }
 
         }
 
-        if (res?.message?.successMessage === "End Instructions") {
+        if (res?.message?.successMessage === "End Instructions" || this.endTest) {
           this.showWaitLoader = false;
           clearInterval(this.counterInterval);
           clearInterval(startInterval)
@@ -1319,7 +1006,6 @@ this.formatTemplateData();
           let failedCount = 0;
           let untestedCount = 0;
 
-          // Iterate over the reports to count the number of passed, failed, and untested test cases
           this.resultArr?.map((testCase) => {
             testCase.completeCount = this.count;
             if (testCase?.successMessage !== "End_Instructions") {
@@ -1373,11 +1059,6 @@ this.formatTemplateData();
             }
           })
         }
-
-        
-
-
-
       })
     }
 
@@ -1510,275 +1191,6 @@ this.formatTemplateData();
     });
   }
 
-  onStartTemp() {
-    let item = [{
-      "id": "0",
-      "screenName": "Welcome"
-    },
-    {
-      "id": "8",
-      "screenName": "Click_Image", // image
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "1",
-      "screenName": "Permissions"
-    },
-    {
-      "id": "8",
-      "screenName": "Click_Image", // image
-      "btnName": "left_arrow"
-    },
-    {
-      "id": "2",
-      "screenName": "Permissions_list"
-    },
-    {
-      "id": "3",
-      "screenName": "Allow_PhoneCalls",
-      "action": "Allow"
-    },
-    {
-      "id": "4",
-      "screenName": "Allow_DeviceLocation",
-      "action": "ALLOW"
-    },
-    {
-      "id": "5",
-      "screenName": "Allow_BluetoothConnection",
-      "action": "ALLOW"
-    },
-    {
-      "id": "6",
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": "7",
-      "screenName": "Terminal Setup"
-    },
-    {
-      "id": "8",
-      "screenName": "Click_Image" // image
-    },
-    {
-      "id": "9",
-      "screenName": "Select_Options",
-      "options": "Testing"
-    },
-    {
-      "id": "6",
-      "screenName": "Click_Button",
-      "btnName": "PROCEED"
-    },
-    {
-      "id": "1",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
-
-    },
-    {
-      "id": "6",
-      "screenName": "Click_Button",
-      "btnName": "Next"
-    },
-    {
-      "id": "10",
-      "screenName": "Enter_Terminal_ID",
-      "terminal_id": ["2994001"]
-
-    },
-    {
-      "id": "6",
-      "screenName": "Click_Button",
-      "btnName": "Submit"
-    },
-
-    {
-      "id": "11",
-      "screenName": "Profile_Login",
-      "pin": ["9", "2", "0", "4"]
-    },
-    {
-      "id": "6",
-      "screenName": "Click_Button",
-      "btnName": "Confirm"
-    },
-    {
-      "id": "6",
-      "screenName": "Click_Button",
-      "btnName": "GO"
-    },
-    {
-      "id": 9,
-      "screenName": "Click_Text",
-      "btnName": "Skip >"
-    },
-
-
-    // connect reader steps start
-    {
-      "id": 10,
-      "screenName": "Click_View",
-      "btnName": "Device"
-    },
-
-
-    {
-      "id": 12,
-      "screenName": "Click_Button",
-      "btnName": "CONNECT TO READER"
-    },
-    {
-      "id": 13,
-      "screenName": "Wait_For_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      //   "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": 13,
-      "screenName": "Click_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "WPC323951000219"
-      // "btnName":"CHB2A6132009935"
-      // "btnName":"CHB204650000480"
-    },
-    {
-      "id": 14,
-      "screenName": "Find_Button",
-      "btnName": "Disconnect"
-    },
-    {
-      "id": "8",
-      "screenName": "Click_Image" // image
-    },
-    // connect reader steps ends
-    // transaction step starts
-    {
-      "id": "8",
-      "screenName": "Click_Image", // image
-      "btnName": "Sale"
-
-    },
-    {
-      "id": 14,
-      "screenName": "Enter_Amount",
-      "amount": "200.00"
-    },
-    {
-      "id": 9,
-      "screenName": "Click_Text",
-      "btnName": "Clear"
-    },
-    {
-      "id": 14,
-      "screenName": "Enter_Amount",
-      "amount": "50.00"
-    },
-    {
-      "id": 10,
-      "screenName": "Click_View",
-      "btnName": "2 / 4"
-    },
-    {
-      "id": 9,
-      "screenName": "Click_Text",
-      "btnName": "Go"
-    },
-    //custom tip
-    //     {
-    //     "id":9,
-    //     "screenName":"Click_Text",
-    //     "btnName":"Custom"
-    // },
-    //   {
-    //     "id":14,
-    //     "screenName":"Enter_Amount",
-    //     "amount":"500.00"
-    // },
-    // fix tip
-    {
-      "id": 9,
-      "screenName": "Click_Text",
-      "btnName": "10%"
-    },
-    {
-      "id": 12,
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": 13,
-      "screenName": "Wait_For_Text",
-      "btnName": "Transaction ID"
-    },
-    {
-      "id": "14",
-      "screenName": "Element_Avail", // image
-      "elementName": ["Transaction FAILED", "Transaction Approved"]
-    },
-
-    {
-      "id": "12",
-      "screenName": "Click_Button",
-      "btnName": "See Details"
-    },
-    //     // 2nd transaction starts
-    {
-      "id": "8",
-      "screenName": "Click_Image", // image
-      "btnName": "Sale"
-
-    },
-    {
-      "id": 14,
-      "screenName": "Enter_Amount",
-      "amount": "25.00"
-    },
-    {
-      "id": 9,
-      "screenName": "Click_Text",
-      "btnName": "Go"
-    },
-    {
-      "id": 12,
-      "screenName": "Click_Button",
-      "btnName": "Continue"
-    },
-    {
-      "id": 13,
-      "screenName": "Wait_For_Text",
-      // "btnName":"WPS323247002051"
-      "btnName": "Transaction ID"
-    },
-    {
-      "id": "14",
-      "screenName": "Element_Avail", // image
-      "elementName": ["Transaction FAILED", "Transaction Approved"]
-    },
-    {
-      "id": "12",
-      "screenName": "Click_Button",
-      "btnName": "See Details"
-    },
-    {
-      "id": "8",
-      "screenName": "Click_Image", // image
-      "btnName": "Sale"
-
-    },
-    ];
-    this.webSocketService.sendTestCaseRequest(item);
-
-    this.webSocketService.getSubject().subscribe((res) => {
-      this.resultArr.push(res.message);
-    })
-
-
-  }
-
   formatDate(date: Date): string {
     const day = ("0" + date.getDate()).slice(-2);
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -1792,8 +1204,6 @@ this.formatTemplateData();
     let idCounter = 1;
     this.templateData?.screens.map((item) => {
       item?.instructions?.map((inst) => {
-        // Check if testCase with the same ins_set_id is already present in testCases array
-        // Check if the current ins_set_id exists in this.testCases
 
         inst.showSingleInstruction = false;
         inst.status = '';
@@ -1807,41 +1217,41 @@ this.formatTemplateData();
           this.testCases.push({
             id: idCounter++,
             ins_set_id: item.ins_set_id,
-            ins_set_screen_name: item.ins_set_screen_name, // Include ins_set_screen_name for reference
+            ins_set_screen_name: item.ins_set_screen_name,
             hideStart: false,
-            testCase: item.instructions  // Add the entire instructions array as a nested property
+            testCase: item.instructions  
           });
         }
       });
     });
     console.log(this.templateData);
-    
+
 
   }
 
-  formatTemplateData(){
+  formatTemplateData() {
     let index = 0;
-      this.originalData = this.templateData.screens.map(screen => {
-        return screen.instructions.map((instruction) => {
+    this.originalData = this.templateData.screens.map(screen => {
+      return screen.instructions.map((instruction) => {
 
-          const newIntruction = {
-            id: index,
-            screenName: instruction.ins_back_name,
-            btnName: instruction.ins_element_name,
-            successMessage: `${instruction.ins_name}`,
-            failedMessage: `${instruction.ins_name}`,
-            roomId: localStorage.getItem("id"),
-            moduleName: instruction.ins_set_screen_name,
-            ins_id: instruction.ins_id,
-          };
+        const newIntruction = {
+          id: index,
+          screenName: instruction.ins_back_name,
+          btnName: instruction.ins_element_name,
+          successMessage: `${instruction.ins_name}`,
+          failedMessage: `${instruction.ins_name}`,
+          roomId: localStorage.getItem("id"),
+          moduleName: instruction.ins_set_screen_name,
+          ins_id: instruction.ins_id,
+        };
 
-          index += 1;
-          return newIntruction;
-        });
-      }).flat();
+        index += 1;
+        return newIntruction;
+      });
+    }).flat();
 
-      console.log(this.originalData);
-      
+    console.log(this.originalData);
+
   }
 
 
@@ -1882,7 +1292,7 @@ this.formatTemplateData();
     this.accountService.launchApp({
       capabilities: {
         platformName: "Android",
-        app: "/home/codingnebula/Downloads/app-debug-v16.apk",
+        app: "/home/codingnebula/Downloads/app-debug-v17.apk",
         appPackage: "com.example.app",
         automationName: "UIAutomator2",
         deviceName: "Samsung",
