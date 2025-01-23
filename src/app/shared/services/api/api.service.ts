@@ -58,6 +58,40 @@ export class ApiService {
       );
   }
 
+  getRefreshTokenWithoutModal(endpoint: string): Observable<any> {
+    const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
+    
+    const token = localStorage.getItem('accessToken');  // Replace 'token' with the correct key if necessary
+    const refreshToken = localStorage.getItem('refreshToken');
+
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'Authorization,Content-Type',
+      'Access-Control-Max-Age': '3600',
+
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;  // Bearer token format
+    }
+    if(refreshToken){ 
+      headers["refresh-token"] = refreshToken;
+    }
+    
+    return this.http.get<any>(apiURL, { headers })
+      .pipe(
+        catchError(error => {
+          console.error('Error during HTTP request:', error);
+          return throwError(() => new Error('Failed to make request. Please try again.'));
+        })
+      );
+
+  }
+
   getWithoutModal(endpoint: string): Observable<any> {
     const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
     const headers = this.setHeaders();

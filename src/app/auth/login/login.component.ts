@@ -71,15 +71,16 @@ export class LoginComponent implements OnInit {
         (data) => {
           if (data?.token) {
             let response = data;
+            console.log(data);
+            
+            localStorage.setItem('id', response.id);
+            localStorage.setItem('accessToken', response.token);
+            localStorage.setItem('refreshToken', response.refreshToken);
+            localStorage.setItem('expiry', moment(new Date()).add(response.expireTime, 'seconds').unix().toString());
 
-            localStorage.setItem('accessToken', response.access_token);
-            localStorage.setItem('refreshToken', response.refresh_token);
-            localStorage.setItem('expiry', moment(new Date()).add(response.expires_in, 'seconds').unix().toString());
-
-            localStorage.setItem('refreshExpiry', moment(new Date()).add(response.refresh_expires_in, 'seconds').unix().toString());
+            // localStorage.setItem('refreshExpiry', moment(new Date()).add(response.refresh_expires_in, 'seconds').unix().toString());
 
             // localStorage.setItem('token', data.token);
-            // localStorage.setItem('id', data.id);
 
             // this.webSocketService.socketConnect(data?.token);
 
