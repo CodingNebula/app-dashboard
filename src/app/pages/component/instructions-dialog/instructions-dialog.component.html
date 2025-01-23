@@ -11,10 +11,11 @@
                 <nb-option value="right-arrow">left-arrow</nb-option>
                 <nb-option value="click_image">click_image</nb-option>
               </nb-select> -->
-              <input maxlength="50" id="actions" formControlName="actions" class="form-control" />
+              <input maxlength="50" id="actions" formControlName="actions" class="form-control" (keydown)="preventSpace($event)"/>
                   
               <div *ngIf="submitted && myForm.get('actions').invalid" class="error-message">
                 <small *ngIf="myForm.get('actions').hasError('required')">Actions are required!</small>
+                <small *ngIf="myForm.get('actions').hasError('noSpaces')">Spaces are not allowed!</small>          
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'ngx-instructions-dialog',
@@ -19,12 +19,25 @@ export class InstructionsDialogComponent {
 
   ngOnInit() {
     this.myForm = this.fb.group({
-      actions: ['', [Validators.required]],
+      actions: ['', [Validators.required, this.noSpacesValidator()]],
       elem_name: [''],
       normal_name: ['', [Validators.required]]
     });
 
     this.patchFormValues()
+  }
+
+  noSpacesValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const hasSpace = control.value && control.value.includes(' ');
+      return hasSpace ? { 'noSpaces': true } : null;
+    };
+  }
+
+  preventSpace(event: KeyboardEvent): void {
+    if (event.key === ' ') {
+      event.preventDefault();  // Prevent space from being entered
+    }
   }
 
   patchFormValues() {

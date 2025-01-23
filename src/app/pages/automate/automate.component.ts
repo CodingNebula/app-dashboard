@@ -346,11 +346,6 @@ export class AutomateComponent implements OnInit {
         originalData: result,
       }
 
-
-      // Iterate over the reports to count the number of passed, failed, and untested test cases
-
-
-
       let intsCount = itemData?.screens.reduce((acc, item) => acc + item.instructions.length, 0);
 
       const body = {
@@ -363,13 +358,15 @@ export class AutomateComponent implements OnInit {
         untestedCount: intsCount - passedCount - failedCount,
         extra: socketReport,
       }
-      this.accountService.postReportData(body).subscribe((resp) => {
-        if (resp) {
-          setTimeout(() => {
-            this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
-          }, 1000)
-        }
-      })
+      // this.accountService.postReportData(body).subscribe((resp) => {
+      //   if (resp) {
+      //     setTimeout(() => {
+      //       this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+      //     }, 1000)
+      //   }
+      // })
+
+      this.sendReportData(body);
 
 
     } else {
@@ -1076,15 +1073,17 @@ export class AutomateComponent implements OnInit {
             untestedCount: untestedCount,
             extra: socketReport,
           }
-          this.accountService.postReportData(body).subscribe((resp) => {
-            if (resp) {
+          // this.accountService.postReportData(body).subscribe((resp) => {
+          //   if (resp) {
 
-              setTimeout(() => {
-                this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
-              }, 1000)
+          //     setTimeout(() => {
+          //       this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+          //     }, 1000)
 
-            }
-          })
+          //   }
+          // })
+
+          this.sendReportData(body);
         }
       })
     }
@@ -1146,16 +1145,28 @@ export class AutomateComponent implements OnInit {
       extra: socketReport,
     }
 
-    this.accountService.postReportData(body).subscribe((resp) => {
+    // this.accountService.postReportData(body).subscribe((resp) => {
+    //   if (resp) {
+    //     setTimeout(() => {
+    //       this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
+    //     }, 1000)
+    //   }
+    // })
+
+    this.sendReportData(body);
+
+
+
+  }
+
+  sendReportData(data){
+    this.accountService.postReportData(data).subscribe((resp) => {
       if (resp) {
         setTimeout(() => {
           this.router.navigateByUrl('pages/test-reports', { state: { reportData: resp } });
         }, 1000)
       }
     })
-
-
-
   }
 
   generateReport() {
