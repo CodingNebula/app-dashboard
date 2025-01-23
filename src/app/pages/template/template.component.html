@@ -57,9 +57,7 @@
                     </div>
                   </div>
                   <div class="accordian-body-div" *ngIf="testCase?.instructions.length === 0">
-                    <button class="add-new empty-btn-1"
-                      (click)="openDialog('testCase', 'instruction', testCase?.instruction_set_id)">Add
-                      Instructions</button>
+                    Add Instructions!
                   </div>
                 </nb-accordion-item-body>
               </nb-accordion-item>
@@ -141,8 +139,7 @@
                     </nb-accordion-item>
                   </nb-accordion>
                   <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
-                    <button class="add-new empty-btn-1" (click)="openDialog('template', 'testCase',template?.wt_id)">Add
-                      Screens</button>
+                    Add Screens!
                   </nb-accordion-item-body>
                 </nb-accordion-item-body>
               </nb-accordion-item>

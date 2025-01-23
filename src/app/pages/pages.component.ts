@@ -19,7 +19,7 @@ import {WebsocketService} from "../shared/services/websocket/websocket.service";
 export class PagesComponent {
   public showAlert = false;
   constructor(public webSocketService: WebsocketService) {
-    let dataToken = localStorage.getItem('token');
+    let dataToken = localStorage.getItem('accessToken');
     this.webSocketService.socketConnect(dataToken);
   this.showAlert = this.webSocketService.showAlert
   }

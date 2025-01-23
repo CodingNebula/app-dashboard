@@ -13,7 +13,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private setHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');  // Replace 'token' with the correct key if necessary
+    const token = localStorage.getItem('accessToken');  // Replace 'token' with the correct key if necessary
 
 
     const headersConfig = {

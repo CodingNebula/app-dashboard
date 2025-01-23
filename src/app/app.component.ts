@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
 
     if (token && this.isTokenExpired(token)) {
         this.logoutUser();
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
   }
 
   logoutUser(){
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     this.router.navigateByUrl('auth/login');
   }
 
