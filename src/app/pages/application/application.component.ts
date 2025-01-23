@@ -107,21 +107,18 @@ export class ApplicationComponent implements OnInit {
       hasBackdrop: true,
       closeOnBackdropClick: true,
       closeOnEsc: true,
-      context: { itemToDelete: item }
+      context: { itemToDelete: item },
+      autoFocus: false,
     });
 
 
     dialogRef.onClose.subscribe((result) => {
       if (result) {
         if (result.confirmed) {
-
-          this.deleteApplication(result.data.appId)
-
-
+          this.deleteApplication(result.data.appId);
         }
       }
     });
-
   }
 
   deleteApplication(id) {
@@ -131,7 +128,7 @@ export class ApplicationComponent implements OnInit {
         const updatedApplication = this.applicationDataArr.filter((app) => app.id !== response.id);
 
         this.applicationDataArr = updatedApplication;
-        
+
       }
     })
   }
@@ -237,9 +234,9 @@ export class ApplicationComponent implements OnInit {
 
   getCapabilities() {
     const app_id = localStorage.getItem('app_id');
-    if(app_id){
+    if (app_id) {
       this.accountService.getCapabilites(app_id).subscribe((data) => {
-        
+
       })
     }
   }

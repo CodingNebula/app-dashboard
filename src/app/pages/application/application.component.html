@@ -7,7 +7,7 @@
   <!-- <div *ngIf="applicationDataArr.length > 0"> -->
   <div class="application-container">
     <div class="application-div" *ngFor="let item of applicationDataArr; let i = index" >
-      <div class="edit-div" [nbPopover]="list" (click)="editDeleteFunc(item)">
+      <div class="edit-div" [nbPopoverAppendTo]="'viewport'" [nbPopover]="list" (click)="editDeleteFunc(item)">
         <nb-icon class="edit-icon" icon="more-vertical-outline" nbPopoverPlacement="bottom-end"></nb-icon>
       </div>
         <ng-template #list>
