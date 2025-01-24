@@ -79,7 +79,7 @@
               <div class="col-4" class="flex-col" *ngIf="instructions?.type === 'Skip' || instructions?.type === 'Untested'"> 
                 <div class="testcase-status">{{instructions?.successMessage||instructions?.failedMessage}}</div>
                 <div [ngClass]="instructions?.type === 'Skip' ? 'skip' : 'untested'">
-                  {{instructions?.type}}</div>
+                  {{instructions?.type?.toUpperCase()}}</div>
                 <div class="time-div"><span class="descriptionLabel">Time Spend -</span> N/A</div>
               </div>
             </div>

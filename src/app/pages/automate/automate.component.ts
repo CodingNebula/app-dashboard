@@ -1104,7 +1104,10 @@ export class AutomateComponent implements OnInit {
     let untestedCount = 0;
     // this.socketSubscription.unsubscribe();
 
-
+    setTimeout(() => {
+      this.endTest = true;
+    }, 2000)
+    
     this.resultArr?.map((testCase) => {
       testCase.completeCount = count;
 
@@ -1342,10 +1345,10 @@ export class AutomateComponent implements OnInit {
       (response) => {
 
         setTimeout(() => {
+          this.appLaunchStatus = 'SUCCESS';
           this.appLaunchLoading = false; // After 2 seconds, set it to false to hide the loader
-        }, 2000);
+        }, 7000);
 
-        this.appLaunchStatus = 'SUCCESS';
         this.showAppLaunchError = false;
         this.isAppLaunched = true;
         this.isAccordionExpanded = false;

@@ -106,7 +106,7 @@ export class TestReportsComponent implements OnInit {
       // this.skipData = this.originalData?.slice(0, 5);
     }
 
-    if(id === undefined){
+    if (id === undefined) {
       this.skipData = this.testCases;
     }
 
@@ -118,25 +118,25 @@ export class TestReportsComponent implements OnInit {
     }
 
     // if()
-    
+
     this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length);
     console.log(this.untestedData);
-    
-    
+
+
     this.untestedData?.map((item) => {
       // item.message = 'Untested'
       item.type = 'Untested';
     })
-    
+
     let updatedTestCase = this.testCases.slice(id, this.testCases.length);
     console.log(updatedTestCase);
-    
+
     console.log(this.skipData);
 
-    if(id === undefined){
+    if (id === undefined) {
       this.testCases = [...this.skipData, ...this.untestedData];
     }
-    else{
+    else {
       this.testCases = [...this.skipData, ...updatedTestCase, ...this.untestedData];
     }
     console.log(this.testCases);
@@ -256,7 +256,7 @@ export class TestReportsComponent implements OnInit {
 
             radius: '60%', // Decreased radius percentage
             center: ['50%', '50%'],
-            selectedMode: 'single',
+            selectedMode: false,
             labelLine: {
               show: true,
               length: 1,
@@ -265,16 +265,19 @@ export class TestReportsComponent implements OnInit {
 
             emphasis: {
               itemStyle: {
-                shadowBlur: 10,
+                shadowBlur: 0,
                 shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              },
-
+                shadowOffsetY: 0,
+                borderWidth: 0,
+                borderColor: 'transparent',
+                cursor: 'default'
+              }
             },
             label: {
               show: true,
               position: 'outside',
-              formatter: '{d}%'
+              formatter: '{d}%',
+              fontSize: 12,
             },
           }
         ],
@@ -317,7 +320,7 @@ export class TestReportsComponent implements OnInit {
 
           radius: '60%', // Decreased radius percentage
           center: ['50%', '50%'],
-          selectedMode: 'single',
+          selectedMode: false,
           labelLine: {
             show: true,
             length: 1,
@@ -326,12 +329,14 @@ export class TestReportsComponent implements OnInit {
 
           emphasis: {
             itemStyle: {
-              shadowBlur: 10,
+              shadowBlur: 0,
               shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            },
-
-          }
+              shadowOffsetY: 0,
+              borderWidth: 0,
+              borderColor: 'transparent',
+              cursor: 'default'
+            }
+          },
         }
       ],
       color: ['#10EB93', '#EE4748', '#A64C52'],

@@ -17,7 +17,7 @@
 
 
     <!-- Scrollable Table -->
-    <div class="table-container">
+    <div>
       <table class="reports-table" *ngIf="reports?.length>0">
         <thead>
           <tr>
@@ -30,16 +30,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let reportData of reports; let j = index" (click)="openReportDetail(reportData, $event)">
+          <tr *ngFor="let reportData of reports; let j = index" >
             <!-- <td><input type="checkbox"></td> -->
              <td class="report-data">{{j+1}}</td>
-            <td  class="report-data">{{reportData.app_name}}</td>
+            <td  class="report-data"><span class="appname" (click)="openReportDetail(reportData, $event)">{{reportData.app_name}}</span></td>
             <td class="report-data">{{reportData.application_version}}</td>
 
             <td class="report-data">{{reportData.testcase_performed}}</td>
             <td  class="report-data">{{reportData?.extra?.extras?.createdAt| date:'dd-MM-yyyy '}} {{reportData?.extra?.extras?.startedTime}}</td>
             <td class="report-data"><button class="downloadbtn" (click)="downloadPDF(reportData, $event)">
-              <nb-icon icon="download-outline"></nb-icon>
+              <nb-icon icon="download-outline" class="download-icon"></nb-icon>
             </button></td>
           </tr>
         </tbody>

@@ -268,15 +268,16 @@ export class ReportPdfService {
     // Add report header
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
-    doc.text(item?.app_name || 'App Name', 14, 20);
+    
+    doc.text(item?.app_name || 'App Name', 100, 20);
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text(`Created At: ${formattedDate} `, 14, 30);
+    doc.text(`Created At: ${formattedDate} `, 160, 20);
 
     // Add device and platform information
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text('Device Information :- ', 14, 40);
+    doc.text('Details :- ', 14, 40);
     doc.setFont("helvetica", "normal");
 
     const chartImage = this.echartsInstance.getDataURL({
@@ -286,8 +287,8 @@ export class ReportPdfService {
     });
 
     const pageWidth = doc.internal.pageSize.width;
-    const xPosition = pageWidth - 140;
-    doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
+    const xPosition = pageWidth - 100;
+    doc.addImage(chartImage, 'PNG', xPosition, 35, 100, 65);
 
     // }
     doc.setFontSize(12);
@@ -302,24 +303,24 @@ export class ReportPdfService {
     doc.text('', 14, 110);
     // Add test cases
     doc.setFontSize(14);
-    doc.text('Test Cases', 14, 125);
+    doc.text('Test Cases :- ', 14, 125);
 
 
     // Prepare data for the table
     const testCaseData = this.testCases.map(testCase => ({
       info: testCase.successMessage || testCase.failedMessage,
       message: testCase.message,
-      expectedResult: testCase.expected_result,
+      expectedResult: testCase.expected_result ? testCase.expected_result : 'N/A',
       defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
       timeSpent: (`${testCase.timeSpent} sec`)
     }));
 
     // Create the table
     autoTable(doc, {
-      head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
+      head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spend']],
       body: testCaseData.map(tc => [
         tc.info,
-        tc.message,
+        tc.message?.toUpperCase(),
         tc.expectedResult,
         tc.defect,
         tc.timeSpent
