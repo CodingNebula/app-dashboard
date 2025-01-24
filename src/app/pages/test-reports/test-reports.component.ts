@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { EChartsInstance } from 'echarts';
 import { ReportPdfService } from '../../shared/services/reportPdf/report-pdf.service';
+import { skip } from 'rxjs/operators';
 
 export interface TestCase {
   title: string;
@@ -69,7 +70,7 @@ export class TestReportsComponent implements OnInit {
 
   calculateSkipData() {
     console.log(this.testCases);
-    let id = 0;
+    let id;
 
     // this.testCases.map((item) => {
     //   if(!item?.Skip){
@@ -105,6 +106,10 @@ export class TestReportsComponent implements OnInit {
       // this.skipData = this.originalData?.slice(0, 5);
     }
 
+    if(id === undefined){
+      this.skipData = this.testCases;
+    }
+
     if (this.skipData) {
       this.skipData?.map((item) => {
         // item.message = 'Skip'
@@ -128,7 +133,12 @@ export class TestReportsComponent implements OnInit {
     
     console.log(this.skipData);
 
-    this.testCases = [...this.skipData, ...updatedTestCase, ...this.untestedData];
+    if(id === undefined){
+      this.testCases = [...this.skipData, ...this.untestedData];
+    }
+    else{
+      this.testCases = [...this.skipData, ...updatedTestCase, ...this.untestedData];
+    }
     console.log(this.testCases);
 
 

@@ -97,7 +97,7 @@ export class ReportPdfService {
     console.log(this.originalData);
 
     console.log(this.testCases);
-    let id = 0;
+    let id;
 
     // this.testCases.map((item) => {
     //   if(!item?.Skip){
@@ -132,6 +132,10 @@ export class ReportPdfService {
       // this.skipData = this.originalData?.slice(0, 5);
     }
 
+    if (id === undefined) {
+      this.skipData = this.testCases;
+    }
+
     if (this.skipData) {
       this.skipData?.map((item) => {
         // item.message = 'Skip'
@@ -152,10 +156,15 @@ export class ReportPdfService {
 
     let updatedTestCase = this.testCases.slice(id, this.testCases.length);
     console.log(updatedTestCase);
-    
+
     console.log(this.skipData);
 
-    this.testCases = [...this.skipData, ...updatedTestCase, ...this.untestedData];
+    if (id === undefined) {
+      this.testCases = [...this.skipData, ...this.untestedData];
+    }
+    else {
+      this.testCases = [...this.skipData, ...updatedTestCase, ...this.untestedData];
+    }
     console.log(this.testCases);
 
 
@@ -168,8 +177,8 @@ export class ReportPdfService {
 
     console.log(this.skipData);
     console.log(this.untestedData);
-    
-    
+
+
 
     this.chartData.push(
       { name: 'SUCCESS', value: Number(item.testcase_passed) },
@@ -180,11 +189,11 @@ export class ReportPdfService {
 
     )
 
-    
+
     this.echartsInstance?.on('finished', () => {
       this.generatePDF(item);
     });
-    
+
     this.generatePieData(this.chartData);
     $event.stopPropagation();
   }
