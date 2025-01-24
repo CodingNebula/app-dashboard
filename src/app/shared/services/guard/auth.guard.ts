@@ -19,18 +19,14 @@ export class AuthGuard implements CanActivate {
 
     setInterval(() => {
       let accessToken = localStorage.getItem('accessToken');
-      console.log(accessToken);
       
       let refreshToken = localStorage.getItem('refreshToken');
       let expiry = localStorage.getItem('expiry');
-      console.log(expiry);
       
       if (accessToken && expiry) {
 
         const remainingTime = Number(expiry) - moment(new Date()).unix();
-        console.log(remainingTime);
         if (remainingTime < 30000) {
-          console.log(remainingTime);
           
           this.refreshAccessToken();
         }
@@ -47,7 +43,6 @@ export class AuthGuard implements CanActivate {
   }
 
   refreshAccessToken() {
-    console.log('kninvnsl');
     
     try {
       this.apiService.getRefreshTokenWithoutModal('refresh-token').subscribe((res) => {
