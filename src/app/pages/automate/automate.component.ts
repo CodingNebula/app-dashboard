@@ -366,7 +366,7 @@ export class AutomateComponent implements OnInit {
       //   }
       // })
 
-      this.sendReportData(body);
+      // this.sendReportData(body);
 
 
     } else {
@@ -507,6 +507,7 @@ export class AutomateComponent implements OnInit {
       console.log(result);
 
       // for single instructions
+      
       this.sendInstructions(result);
 
       // for testing
@@ -1107,7 +1108,7 @@ export class AutomateComponent implements OnInit {
     setTimeout(() => {
       this.endTest = true;
     }, 2000)
-    
+
     this.resultArr?.map((testCase) => {
       testCase.completeCount = count;
 
