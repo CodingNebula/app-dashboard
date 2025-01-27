@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { Router } from '@angular/router';
 import { AccountService } from '../../../shared/services/account/account.service';
+import { platform } from 'os';
 
 @Component({
   selector: 'ngx-capabilities',
@@ -89,11 +90,24 @@ export class CapabilitiesComponent {
       const capabilities = { app_id: app_id, capabilities: this.myForm.value };
 
       localStorage.setItem("app_capa", JSON.stringify(capabilities));
+      console.log(this.myForm.value);
+      const details = {
+        platform: this.myForm.value.platform.trim(),
+        app: this.myForm.value.app.trim(),
+        package: this.myForm.value.package.trim(),
+        device: this.myForm.value.device.trim(),
+        automation: this.myForm.value.automation.trim(),
+        noReset: this.myForm.value.noReset,
+        hiddenApp: this.myForm.value.hiddenApp,
+        timeout: this.myForm.value.timeout,
+      }
+
+      
 
       this.accountService.updateCapabilities(app_id,
         {
           extra: {
-            capabilities: this.myForm.value
+            capabilities: details
           },
           name:this.appDetails?.app_details?.app_name
         }).subscribe(

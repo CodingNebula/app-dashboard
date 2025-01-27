@@ -13,7 +13,7 @@ export class InstructionsDialogComponent {
   public itemToEdit: any;
   public submitted: boolean = false;
 
-  constructor(private dialogRef: NbDialogRef<InstructionsDialogComponent>, private fb: FormBuilder){
+  constructor(private dialogRef: NbDialogRef<InstructionsDialogComponent>, private fb: FormBuilder) {
 
   }
 
@@ -42,14 +42,23 @@ export class InstructionsDialogComponent {
 
   patchFormValues() {
     if (this.itemToEdit) {
-      this.myForm.controls['actions'].setValue(this.itemToEdit.back_name);
-      this.myForm.controls['elem_name'].setValue(this.itemToEdit.element_name);
-      this.myForm.controls['normal_name'].setValue(this.itemToEdit.instruction_name);
+      this.myForm.controls['actions'].setValue(this.itemToEdit.back_name.trim());
+      // console.log(this.itemToEdit.element_name);
+      
+      const elementName = this.itemToEdit.element_name[0]; // Access the string in the array
+      if (typeof elementName === 'string') {
+        this.myForm.controls['elem_name'].setValue(elementName.trim());
+      } else {
+        this.myForm.controls['elem_name'].setValue(''); // or a fallback value
+      }
+      // this.myForm.controls['elem_name'].setValue(elementName);
+      // this.myForm.controls['elem_name'].setValue(this.itemToEdit.element_name);
+      this.myForm.controls['normal_name'].setValue(this.itemToEdit.instruction_name.trim());
     }
   }
 
 
-  deleteInstruction(instId){
+  deleteInstruction(instId) {
   }
 
   onSubmit() {
@@ -57,13 +66,13 @@ export class InstructionsDialogComponent {
 
     if (this.myForm.valid) {
 
-      this.dialogRef.close({ confirmed: true, data: {formValue: this.myForm.value, isEdit: this.itemToEdit?true: false, insId: this.itemToEdit?this.itemToEdit.id:null} });
+      this.dialogRef.close({ confirmed: true, data: { formValue: this.myForm.value, isEdit: this.itemToEdit ? true : false, insId: this.itemToEdit ? this.itemToEdit.id : null } });
     }
   }
 
 
   close() {
-    this.dialogRef.close({confirmed: false});
+    this.dialogRef.close({ confirmed: false });
   }
 
 }

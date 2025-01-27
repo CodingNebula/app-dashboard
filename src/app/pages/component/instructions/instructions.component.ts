@@ -150,9 +150,9 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
           // }
 
           const instructionDetails: any = {
-            name: result.data.formValue.normal_name, // Name of the instruction provided by the user
-            elementName: result.data.formValue.elem_name, // Frontend-specific element name
-            backendName: result.data.formValue.actions, // Server-specific backend name for the instruction
+            name: result.data.formValue.normal_name.trim(), // Name of the instruction provided by the user
+            elementName: result.data.formValue.elem_name.trim(), // Frontend-specific element name
+            backendName: result.data.formValue.actions.trim(), // Server-specific backend name for the instruction
             extra: {}, // Additional metadata or information (optional)
           }
 
