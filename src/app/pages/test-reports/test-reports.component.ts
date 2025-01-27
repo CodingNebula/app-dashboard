@@ -72,12 +72,6 @@ export class TestReportsComponent implements OnInit {
     console.log(this.testCases);
     let id;
 
-    // this.testCases.map((item) => {
-    //   if(!item?.Skip){
-    //     id = item?.id;
-    //     break;
-    //   }
-    // })
 
     for (const item of this.testCases) {
       if (!item?.Skip) {  // Check if Skip is false
@@ -87,7 +81,6 @@ export class TestReportsComponent implements OnInit {
     }
     console.log(id);  // Log the id to see which one was found
 
-    // const id = this.testCases[0]?.id;
     let lastId = 0;
 
     if (this.testCases[this.testCases.length - 1]?.ins_id !== "12345") {
@@ -103,7 +96,6 @@ export class TestReportsComponent implements OnInit {
 
     if (id !== 0) {
       this.skipData = this.originalData.slice(0, id);
-      // this.skipData = this.originalData?.slice(0, 5);
     }
 
     if (id === undefined) {
@@ -112,19 +104,16 @@ export class TestReportsComponent implements OnInit {
 
     if (this.skipData) {
       this.skipData?.map((item) => {
-        // item.message = 'Skip'
         item.type = 'Skip';
       })
     }
 
-    // if()
 
     this.untestedData = this.originalData.slice(lastId + 1, this.originalData.length);
     console.log(this.untestedData);
 
 
     this.untestedData?.map((item) => {
-      // item.message = 'Untested'
       item.type = 'Untested';
     })
 
@@ -145,18 +134,6 @@ export class TestReportsComponent implements OnInit {
   }
   addScreenNameToTestCases() {
     let storeFirstData: any = null;
-    // for(let i=0;i<this.testCases.length;i++){
-    //   if(storeFirstData?.moduleName===this.testCases[i].moduleName){
-    //     this.testCases[i].continue=true;
-    //   }
-    //   else{
-    //     storeFirstData=this.testCases[i];
-    //   }
-    //   if(!storeFirstData?.screens){
-    //     storeFirstData.screens=[];
-    //   }
-    //   storeFirstData.screens.push(this.testCases[i]);
-    // }
     console.log(this.testCases);
 
 
@@ -178,7 +155,6 @@ export class TestReportsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    // Make sure the DOM is fully loaded before accessing the chart element
     this.reportPdfService.onChartInit(this.chartElement.nativeElement);
   }
 
@@ -214,14 +190,10 @@ export class TestReportsComponent implements OnInit {
 
 
   generatePie() {
-    // Initialize the array to hold the pie chart data
     const dataArr = [];
     console.log(this.skipData);
     console.log(this.untestedData);
 
-
-
-    // Initialize counters for passed, failed, and untested
     let passedCount = this.reportData?.testcase_passed;
     let failedCount = this.reportData?.testcase_failed;
     let untestedCount = this.untestedData;
@@ -302,8 +274,6 @@ export class TestReportsComponent implements OnInit {
 
   updateCharts() {
 
-    // Update the chart options with the new data
-
     this.CompletionChart = {
       tooltip: {
         trigger: 'item',
@@ -373,124 +343,6 @@ export class TestReportsComponent implements OnInit {
 
 
     this.reportPdfService.downloadReportPDF(item, $event);
-
-    //     this.chartData = [];
-    //     this.testCases = this.testCases.filter(test => test.hasOwnProperty('info'));
-
-    //     this.chartData.push({ name: 'PASSED', value: Number(item.testcase_passed) }, { name: 'FAILED', value: Number(item.testcase_failed) === 0 ? 1 : 0 }, { name: 'UNTESTED', value: Number(item.testcase_performed) - (Number(item.testcase_passed) + Number(item.testcase_failed + 1)) })
-    //     this.chartData.forEach((ele: any, ind) => {
-    //       if (ele.value === 0) {
-    //         delete this.chartData[ind];
-    //       }
-    //     })
-    //     // this.updateCharts();
-    //     $event.stopPropagation();
-    //     setTimeout(() => {
-    //       this.capabilities = item?.extra?.capabilities;
-    //       // this.testCases = item?.extra?.resultArr;
-    //       // this.reportData = item?.reportData;
-    //       this.extras = item?.extra?.extras;
-
-    //       const dates = new Date(this.reportData?.extra?.extras.createdAt || 'N/A');
-
-    // // Check if 'dates' is a valid Date object
-    //       const formattedDate = dates instanceof Date && !isNaN(dates.getTime())
-    //         ? dates.toLocaleDateString('en-GB', {
-    //           day: '2-digit',
-    //           month: 'short',
-    //           year: 'numeric'
-    //         }).replace(/\//g, ' ') // Replace slashes with a space
-    //         : 'N/A';
-
-    //       const doc = new jsPDF();
-
-    //       // Add report header
-    //       doc.setFontSize(16);
-    //       doc.setFont("helvetica", "bold");
-    //       doc.text(this.capabilities?.app_name || 'App Name', 14, 20);
-    //       doc.setFontSize(12);
-    //       doc.setFont("helvetica", "normal");
-    //       doc.text(`Created At: ${formattedDate}`, 14, 30);
-
-    //       // Add device and platform information
-    //       doc.setFontSize(14);
-    //       doc.setFont("helvetica", "bold");
-    //       doc.text('Device Information :- ', 14, 40);
-    //       doc.setFont("helvetica", "normal");
-    //       if (this.echartsInstance) {
-    //         // Get chart as Base64 image
-    //         const chartImage = this.echartsInstance.getDataURL({
-    //           type: 'png', // Specify the image format
-    //           pixelRatio: 2, // Higher pixel ratio for better quality
-    //           backgroundColor: '#fff' // Optional: Set a background color
-    //         });
-    //         const pageWidth = doc.internal.pageSize.width;
-    //         const xPosition = pageWidth - 140;
-    //         doc.addImage(chartImage, 'PNG', xPosition, 10, 150, 90);
-
-    //       }
-    //       doc.setFontSize(12);
-    //       doc.text(`Device Name: ${this.capabilities?.extra?.capabilities.device || 'N/A'}`, 14, 50);
-    //       doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
-    //       doc.text(`Started By: John Doe`, 14, 70);
-    //       doc.text(`Started Time: ${formattedDate}, ${this.reportData?.extra?.extras?.startedTime}`, 14, 80);
-    //       doc.text(`Total Time Taken: ${this.timeTaken ? this.timeTaken + ' sec' : 'N/A'}`, 14, 90);
-    //       doc.text(`Description: ${this.reportData?.extra?.capabilities.description || 'N/A'}`, 14, 100);
-    //       doc.text(`Build Number: ${item?.extra?.capabilities.buildInfo || 'N/A'}`, 14, 110);
-    //       // Add a line break
-    //       doc.text('', 14, 110);
-
-    //       // Add test cases
-    //       doc.setFontSize(14);
-    //       doc.text('Test Cases', 14, 125);
-
-
-    //       // Prepare data for the table
-    //       const testCaseData = this.testCases.map(testCase => ({
-    //         info: testCase.successMessage,
-    //         message: testCase.message,
-    //         expectedResult: testCase.expected_result,
-    //         defect: testCase.status === 'Failed' ? testCase.defect : 'N/A',
-    //         timeSpent: (`${testCase.timeSpent} sec`)
-    //       }));
-
-    //       // Create the table
-    //       autoTable(doc, {
-    //         head: [['Info', 'Message', 'Expected Result', 'Defect', 'Time Spent']],
-    //         body: testCaseData.map(tc => [
-    //           tc.info,
-    //           tc.message,
-    //           tc.expectedResult,
-    //           tc.defect,
-    //           tc.timeSpent
-    //         ]),
-    //         startY: 130,
-    //         theme: 'grid',
-    //         headStyles: {
-    //           fillColor: [22, 160, 133],
-    //           textColor: [255, 255, 255],
-    //           fontSize: 12,
-    //           fontStyle: 'bold'
-    //         },
-    //         bodyStyles: {
-    //           fillColor: [255, 255, 255],
-    //           textColor: [0, 0, 0],
-    //           fontSize: 10,
-    //         },
-    //         alternateRowStyles: {
-    //           fillColor: [240, 240, 240]
-    //         },
-    //         margin: { top: 20 },
-    //       });
-
-
-
-    //       // Save the PDF
-
-    //       doc.save('report.pdf');
-
-
-    //     }, 500)
 
 
   }
