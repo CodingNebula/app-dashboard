@@ -30,7 +30,7 @@ export class NoAppDialogComponent implements OnInit, AfterViewInit{
     if (this.selectedType === 'edit') {
       // Assuming 'screen_name' exists in 'editData'
       this.myForm.patchValue({
-        application: this.itemToEdit.app_name,
+        application: this.itemToEdit.app_name.trim(),
       });
 
     }

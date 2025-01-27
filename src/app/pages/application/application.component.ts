@@ -68,7 +68,7 @@ export class ApplicationComponent implements OnInit {
 
             if (result.type === 'edit') {
               const data = {
-                name: result.data.application,
+                name: result.data.application.trim(),
                 extra: {},
               }
 
@@ -79,7 +79,7 @@ export class ApplicationComponent implements OnInit {
             else {
 
               const appDetails = {
-                appName: result.data.application,
+                appName: result.data.application.trim(),
                 platform: result.data.platform,
                 test_case_results: null,
                 extra: {}
