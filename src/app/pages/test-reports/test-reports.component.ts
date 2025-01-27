@@ -188,11 +188,25 @@ export class TestReportsComponent implements OnInit {
     this.timeTaken = state.extra.totalTimeElapsed;
 
   }
-  convertToSeconds(ms) {
-    const minutes = Math.floor(ms / 600000); // 1 minute = 60000 milliseconds
-    const seconds = ((ms % 60000) / 1000).toFixed(0); // remainder of milliseconds for seconds
-    return `${minutes} minutes and ${seconds} seconds`;
-  }
+  convertToHoursMinutesAndSeconds(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600); // 1 hour = 3600 seconds
+    const minutes = Math.floor((totalSeconds % 3600) / 60); // Remaining seconds converted to minutes
+    const seconds = totalSeconds % 60; // Remaining seconds after extracting hours and minutes
+
+    const parts = [];
+
+    if (hours > 0) {
+        parts.push(`${hours} hour${hours > 1 ? 's' : ''}`); // Add hours if greater than 0
+    }
+    if (minutes > 0) {
+        parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`); // Add minutes if greater than 0
+    }
+    if (seconds > 0 || parts.length === 0) { // Always show seconds if no other parts are present
+        parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`); // Add seconds if greater than 0 or if no other parts
+    }
+
+    return parts.join(', '); // Join the parts with a comma
+}
 
   generateReport(item: any, event: Event): void {
     this.reportPdfService.downloadReportPDF(item, event);

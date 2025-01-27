@@ -479,7 +479,6 @@ export class TemplateComponent {
           }
 
         }
-        console.log(screenGroup);
         
         
         // Check if the instruction is already added to the screenGroup

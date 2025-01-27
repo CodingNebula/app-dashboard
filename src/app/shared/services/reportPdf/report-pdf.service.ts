@@ -296,7 +296,7 @@ export class ReportPdfService {
     doc.text(`Platform: ${this.capabilities?.extra?.capabilities.platform || 'N/A'}`, 14, 60);
     doc.text(`Started By: John Doe`, 14, 70);
     doc.text(`Started Time: ${formattedDate}, ${item.extra.extras.startedTime}`, 14, 80);
-    doc.text(`Total Time Taken: ${item.extra.totalTimeElapsed ? item.extra.totalTimeElapsed + ' sec' : 'N/A'} `, 14, 90);
+    doc.text(`Total Time Taken: ${item.extra.totalTimeElapsed ? this.convertToHoursMinutesAndSeconds(item.extra.totalTimeElapsed) : 'N/A'} `, 14, 90);
     doc.text(`Description: ${item?.extra?.capabilities.description || 'N/A'}`, 14, 100);
     doc.text(`Build Number: ${item?.extra?.capabilities.buildInfo || 'N/A'}`, 14, 110);
     // Add a line break
@@ -348,6 +348,26 @@ export class ReportPdfService {
 
   }
 
+
+  convertToHoursMinutesAndSeconds(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600); // 1 hour = 3600 seconds
+    const minutes = Math.floor((totalSeconds % 3600) / 60); // Remaining seconds converted to minutes
+    const seconds = totalSeconds % 60; // Remaining seconds after extracting hours and minutes
+
+    const parts = [];
+
+    if (hours > 0) {
+        parts.push(`${hours} hour${hours > 1 ? 's' : ''}`); // Add hours if greater than 0
+    }
+    if (minutes > 0) {
+        parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`); // Add minutes if greater than 0
+    }
+    if (seconds > 0 || parts.length === 0) { // Always show seconds if no other parts are present
+        parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`); // Add seconds if greater than 0 or if no other parts
+    }
+
+    return parts.join(', '); // Join the parts with a comma
+}
 
   generatePieData(chartData: any) {
     if (this.echartsInstance) {
