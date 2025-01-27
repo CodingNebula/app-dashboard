@@ -91,11 +91,11 @@ export class TemplateDialogComponent {
   patchFormValues() {
     if (this.editData) {
       // Assuming 'screen_name' exists in 'editData'
-      this.testCaseName.patchValue({
-        test_case_name: this.editData.screen_name,
-        elem_name: this.editData.screen_name,
-        normal_name: this.editData.screen_name,
-      });
+      if(this.editData.screen_name){
+        this.testCaseName.patchValue({
+          test_case_name: this.editData.screen_name.trim(),
+        });
+      }
 
       // Optionally, you can patch the 'instruction' or 'template' values similarly
       if (this.editData.instructionArr) {
@@ -105,6 +105,8 @@ export class TemplateDialogComponent {
       }
 
       if (this.editData.wt_name) {
+        console.log(this.editData);
+        
         this.templateForm.patchValue({
           templateName: this.editData.wt_name,
           description: this.editData.wt_desc,

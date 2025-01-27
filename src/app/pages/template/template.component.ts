@@ -166,7 +166,7 @@ export class TemplateComponent {
 
             if (isEdit) {
               const details = {
-                screenName: result.data.test_case_name,
+                screenName: result.data.test_case_name.trim(),
                 extra: {},
               }
               
@@ -179,7 +179,7 @@ export class TemplateComponent {
             }
             else {
               const details = {
-                screenName: result.data.test_case_name,
+                screenName: result.data.test_case_name.trim(),
                 applicationId: localStorage.getItem('app_id'),
                 extra: {},
               }
@@ -249,8 +249,8 @@ export class TemplateComponent {
 
             if (isEdit) {
               const details = {
-                screenName: result.data.templateName,
-                description:  result.data.description,
+                screenName: result.data.templateName.trim(),
+                description:  result.data.description.trim(),
                 extra: {},
               }
               
@@ -264,9 +264,9 @@ export class TemplateComponent {
               
 
             const details = {
-              templateName: result.data.templateName,
+              templateName: result.data.templateName.trim(),
               applicationId: localStorage.getItem('app_id'),
-              description: result.data.description,
+              description: result.data.description.trim(),
               extra: {},
             }
 
