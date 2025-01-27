@@ -1373,6 +1373,9 @@ export class AutomateComponent implements OnInit {
     const app_id = localStorage.getItem('app_id');
     return this.accountService.getCapabilites(app_id);
   }
-
+  
+  goBack(): void {
+    window.history.back();
+  }
 
 }

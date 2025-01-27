@@ -85,6 +85,7 @@
     font-weight: 800;
     cursor: pointer;
     text-decoration: underline;
+    margin-left: 50rem;
 }
 
 nb-accordion-item-header {
@@ -144,6 +145,16 @@ nb-accordion::-webkit-scrollbar-thumb {
 nb-accordion::-webkit-scrollbar-thumb:hover {
     background-color: #00a3ab;
 }
+
+.download-icon{
+    outline: none;
+    border: none;
+}
+.back-btn{
+    color: #00A3AB;
+    font-size: 2rem;
+    cursor: pointer;
+  }
 
 .testSpecification {
     background: #fff;
@@ -210,6 +221,9 @@ nb-accordion::-webkit-scrollbar-thumb:hover {
     align-items: center;
     position: relative;
 
+    label{
+        margin-bottom: 0;
+    }
 }
 
 .date-label {

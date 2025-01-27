@@ -504,4 +504,7 @@ export class TestReportsComponent implements OnInit {
     }
     return timeString;
   }
+  goBack(): void {
+    window.history.back();
+  }
 }

@@ -17,7 +17,7 @@
 }
 
 .main-div{
-  height: 86vh;
+  height: 81vh;
   overflow-y: scroll;
 }
 
@@ -363,7 +363,11 @@ label {
   .test-case-status-container::-webkit-scrollbar-thumb:hover {
     background: #03838a;
   }
-
+  .back-btn{
+    color: #00A3AB;
+    font-size: 2rem;
+    cursor: pointer;
+  }
 
 
 @media screen and (min-width: 2561px) and (max-width: 3840px) {

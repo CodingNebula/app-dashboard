@@ -539,6 +539,9 @@ export class TemplateComponent {
       this.getAllTemplates();
     })
   }
+  goBack(): void {
+    window.history.back();
+  }
 
 }
 

@@ -96,7 +96,11 @@ td{
   background-color: #00a3ab;
 }
 
-
+.back-btn{
+  color: #00A3AB;
+  font-size: 2rem;
+  cursor: pointer;
+}
 
 .template-div-container{
     height: 37vh;
@@ -307,11 +311,12 @@ nb-accordion-item-body .item-body{
     border: 1px solid #00A3AB;
     border-radius: 25px;
     padding: 0.5rem;
+    margin-left: 26rem;
 }
 
 .add-btn-div{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 

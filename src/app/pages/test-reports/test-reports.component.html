@@ -1,5 +1,10 @@
 <div class="header-div">
-  <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">Download PDF</label>
+  <label>
+    <nb-icon (click)="goBack()" icon="arrow-ios-back-outline" class="back-btn"></nb-icon>
+  </label>
+  <label class="downloadbtn" (click)="downloadPDF(reportData, $event)">
+    <nb-icon  nbTooltip="Download PDF" nbButton icon="download-outline" class="download-icon"></nb-icon>
+  </label>
   <label class="heading header-title">{{ this.reportData?.app_name }}</label>
   <label class="date-label" *ngIf="timeCreated">Created At: <span>{{ timeCreated
       | date:'dd MMM yyyy '}}</span></label>
