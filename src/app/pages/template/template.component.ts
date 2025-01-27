@@ -151,9 +151,20 @@ export class TemplateComponent {
       this.popoverTemplate?.hide();
     }
     
+    let item;
+    console.log(editData, action, type);
+
+    if(type === 'reorder'){
+      item = JSON.parse(JSON.stringify(editData));
+    }
+    else{
+      item = editData;
+    }
+
+    
 
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
-      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr, editData: editData, isEdit: isEdit },
+      context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr, item: item, isEdit: isEdit },
     });
 
 
@@ -468,7 +479,8 @@ export class TemplateComponent {
           }
 
         }
-
+        console.log(screenGroup);
+        
         
         // Check if the instruction is already added to the screenGroup
         const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);

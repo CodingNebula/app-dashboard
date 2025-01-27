@@ -120,11 +120,11 @@ label {
 }
 
 /* Focused input fields and select dropdowns */
-.form-control:focus,
-.custom-select-dropdown:focus {
-  border-color: #007bff;
-  outline: none;
-}
+// .form-control:focus,
+// .custom-select-dropdown:focus {
+//   border-color: #007bff;
+//   outline: none;
+// }
 
 /* Error message styling */
 .error-message {
@@ -369,7 +369,13 @@ label {
     cursor: pointer;
   }
 
+  textarea{
+    resize: none;
+  }
 
+  textarea:focus{
+    border: none;
+  }
 @media screen and (min-width: 2561px) and (max-width: 3840px) {
   nb-accordion-item-header {
     font-size: 2em;

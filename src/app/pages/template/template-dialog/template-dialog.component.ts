@@ -27,6 +27,7 @@ export class TemplateDialogComponent {
   public testCases: FormGroup;
   public appName: any;
   public editData: any;
+  public item: any;
   public templateTestcaseData: any;
   public isEdit: boolean;
   public submitted: boolean;
@@ -45,7 +46,7 @@ export class TemplateDialogComponent {
 
     let data
     if (this.selectedAction === '' && this.selectedType === 'template') {
-      data = this.editData?.screens.map((testcase) => testcase.ins_set_screen_name)
+      data = this.item?.screens.map((testcase) => testcase.ins_set_screen_name)
       this.templateTestcaseData = data;
     }
 
@@ -81,41 +82,41 @@ export class TemplateDialogComponent {
   drop(event: CdkDragDrop<string[]>) {
     this.isDisableClose = true;
     
-    moveItemInArray(this.editData.instructions, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.item.instructions, event.previousIndex, event.currentIndex);
   }
 
   dropScreen(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.editData.screens, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.item.screens, event.previousIndex, event.currentIndex);
   }
 
   patchFormValues() {
-    if (this.editData) {
+    if (this.item) {
       // Assuming 'screen_name' exists in 'editData'
-      if(this.editData.screen_name){
+      if(this.item.screen_name){
         this.testCaseName.patchValue({
-          test_case_name: this.editData.screen_name.trim(),
+          test_case_name: this.item.screen_name.trim(),
         });
       }
 
       // Optionally, you can patch the 'instruction' or 'template' values similarly
-      if (this.editData.instructionArr) {
+      if (this.item.instructionArr) {
         this.instruction.patchValue({
-          instructionArr: this.editData.instructionArr
+          instructionArr: this.item.instructionArr
         });
       }
 
-      if (this.editData.wt_name) {
-        console.log(this.editData);
+      if (this.item.wt_name) {
+        console.log(this.item);
         
         this.templateForm.patchValue({
-          templateName: this.editData.wt_name,
-          description: this.editData.wt_desc,
+          templateName: this.item.wt_name,
+          description: this.item.wt_desc,
         });
       }
 
-      if (this.editData.testCases) {
+      if (this.item.testCases) {
         this.testCases.patchValue({
-          templates: this.editData.testCases,
+          templates: this.item.testCases,
         });
       }
     }
@@ -140,7 +141,7 @@ export class TemplateDialogComponent {
     this.submitted = true;
 
     if (type === 'reorder') {
-      this.dialogRef.close({ confirmed: true, data: this.editData, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });
+      this.dialogRef.close({ confirmed: true, data: this.item, selectedAction: this.selectedAction, selectedType: this.selectedType, isEdit: this.isEdit });
 
     }
 
@@ -192,8 +193,8 @@ export class TemplateDialogComponent {
           if (this.selectedAction === 'template') {
             let app_id = localStorage.getItem('app_id');
             let body = {
-              wt_id: this.editData?.wt_id,
-              instructions_set: this.editData.screens.map((screen, index) => {
+              wt_id: this.item?.wt_id,
+              instructions_set: this.item.screens.map((screen, index) => {
                 if (screen.ins_set_id === result?.data?.screenId) {
                   return {
                     id: screen.ins_set_id,
@@ -204,23 +205,23 @@ export class TemplateDialogComponent {
 
                   return {
                     id: screen.ins_set_id,
-                    order: index < this.editData.screens.findIndex((item: any) => item.ins_set_id === result?.data?.screenId) ? (index + 1).toString() : (index).toString(),
+                    order: index < this.item.screens.findIndex((item: any) => item.ins_set_id === result?.data?.screenId) ? (index + 1).toString() : (index).toString(),
                     extra: {}
                   };
                 }
               })
             };
 
-            const templateid = this.editData?.wt_id;
+            const templateid = this.item?.wt_id;
             const testCaseid = result.data.screenId;
             
             
             this.accountService.deleteTemplateTestCases(templateid, testCaseid).subscribe((resp) => {
               if (resp) {
                 // this.getAllPages()
-                const screensLeft = this.editData?.screens?.filter((screen) => screen.ins_set_id !== item.ins_set_id);
+                const screensLeft = this.item?.screens?.filter((screen) => screen.ins_set_id !== item.ins_set_id);
     
-                this.editData.screens = screensLeft;
+                this.item.screens = screensLeft;
 
                 this.editDeleteService.setTemplateDeleteSubject(resp);
               }
@@ -236,7 +237,7 @@ export class TemplateDialogComponent {
 
             let body = {
               instruction_set_id: result?.data?.testcase_id,
-              instruction_id: this.editData.instructions.map((instruction, index) => {
+              instruction_id: this.item.instructions.map((instruction, index) => {
                 if (instruction.instruction_id === result?.data?.instruction_id) {
                   return {
                     id: instruction.instruction_id,
@@ -247,7 +248,7 @@ export class TemplateDialogComponent {
 
                   return {
                     id: instruction.instruction_id,
-                    order: index < this.editData.instructions.findIndex((item: any) => item.instruction_id === result?.data?.instruction_id) ? (index + 1).toString() : (index).toString(),
+                    order: index < this.item.instructions.findIndex((item: any) => item.instruction_id === result?.data?.instruction_id) ? (index + 1).toString() : (index).toString(),
                     extra: {}
                   };
                 }
@@ -262,9 +263,9 @@ export class TemplateDialogComponent {
                 // this.getAllPages()
                 this.isDisableClose = true;
 
-                const instructionsLeft = this.editData?.instructions?.filter((instruction) => instruction.instruction_id !== item.instruction_id);
+                const instructionsLeft = this.item?.instructions?.filter((instruction) => instruction.instruction_id !== item.instruction_id);
 
-                this.editData.instructions = instructionsLeft;
+                this.item.instructions = instructionsLeft;
 
 
                 this.editDeleteService.setTestCaseDeleteSubject(resp);

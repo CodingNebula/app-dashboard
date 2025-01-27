@@ -99,7 +99,7 @@
 
 
 
-    <div *ngIf="editData?.wt_name">
+    <div *ngIf="item?.wt_name">
       <!--        <div *ngFor="let inst of editData.screens" >-->
       <!--          <div>{{inst.ins_set_screen_name }}     <nb-icon icon="delete-outline"  ></nb-icon>  </div>-->
 
@@ -111,7 +111,7 @@
       <!--          <div class="example-box" *ngFor="let inst of editData.screens" cdkDrag>{{inst.ins_set_screen_nam}}</div>-->
       <!--        </div>-->
 
-      <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="editData.screens"
+      <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="item.screens"
         [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
         <div class="example-box" *ngFor="let item of templateTestcaseData" cdkDrag>{{item}}</div>
       </div>
@@ -166,10 +166,10 @@
   <nb-card-body>
 
 
-    <div *ngIf="editData?.screen_name">
+    <div *ngIf="item?.screen_name">
       <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="drop($event)">
 
-        <div class="example-box  " *ngFor="let inst of editData.instructions, index as i" cdkDrag>
+        <div class="example-box  " *ngFor="let inst of item.instructions, index as i" cdkDrag>
           <div style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
           <div class="w-10 drag-icon">
             <i class="material-icons" cdkDragHandle><nb-icon icon="menu-outline"></nb-icon></i>
@@ -185,8 +185,7 @@
 
   </nb-card-body>
   <nb-card-footer>
-    <button nbButton (click)="close()" class="close-button" [ngClass]="isDisableClose ? 'not-allowed' : ''"
-      [disabled]="isDisableClose" [attr.aria-disabled]="isDisableClose ? 'true' : 'false'" [attr.aria-label]="'Close'">
+    <button nbButton (click)="close()" class="close-button" >
       Close
     </button>
 
@@ -201,10 +200,10 @@
   <nb-card-body>
 
 
-    <div *ngIf="editData?.wt_name">
+    <div *ngIf="item?.wt_name">
       <div cdkDropList class="example-list mt-20 background-shadow " (cdkDropListDropped)="dropScreen($event)">
 
-        <div class="example-box  " *ngFor="let inst of editData.screens, index as i" cdkDrag>
+        <div class="example-box  " *ngFor="let inst of item.screens, index as i" cdkDrag>
           <div style="width: 10%; text-align: center" class="drag-index">{{i+1}}</div>
           <div class="w-10 drag-icon">
             <i class="material-icons" cdkDragHandle><nb-icon icon="menu-outline"></nb-icon></i>

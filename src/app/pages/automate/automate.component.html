@@ -107,7 +107,7 @@
 
             <div class="form-group">
               <label for="description">Description<span class="star-mark">*</span>:</label>
-              <textarea id="description" formControlName="description"
+              <textarea maxlength="240" rows="4" cols="50" id="description" formControlName="description"
                 class="form-control description-input"></textarea>
               <div *ngIf="myForm.get('description').touched && myForm.get('description').invalid" class="error-message">
                 <small *ngIf="myForm.get('description').hasError('required')">Description is required!</small>
