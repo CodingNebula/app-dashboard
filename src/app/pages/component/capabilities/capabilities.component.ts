@@ -118,4 +118,7 @@ export class CapabilitiesComponent {
       this.applicationDataService.setData('capabilities', this.myForm.value);
     }
   }
+  goBack(): void {
+    window.history.back();
+  }
 }

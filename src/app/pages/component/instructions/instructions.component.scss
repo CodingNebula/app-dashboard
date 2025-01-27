@@ -136,6 +136,16 @@ td{
   }
 
 .data-div{
-    height: 66vh;
+    height: 64vh;
     overflow: auto;
 }
+.back-btn{
+    color: #00A3AB;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  .action-div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }

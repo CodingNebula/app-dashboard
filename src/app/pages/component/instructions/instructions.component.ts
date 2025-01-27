@@ -237,4 +237,7 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
   toTemplate() {
     this.router.navigateByUrl('pages/template');
   }
+  goBack(): void {
+    window.history.back();
+  }
 }

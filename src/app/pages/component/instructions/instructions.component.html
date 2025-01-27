@@ -2,7 +2,7 @@
     <div class="instructions-header-div">
         <h5 class="instructions-heading">{{appName}} Instructions</h5>
         <!-- <button *ngIf="applicationDataArr.length > 0" (click)="saveInstructions()" class="save-btn">Save Instructions</button> -->
-      <button class="done-btn" nbButton (click)="toTemplate()">Next</button>
+      
     </div>
     <div *ngIf="applicationDataArr.length === 0" class="no-app-div">
     <h4>No Instructions Added Yet</h4>
@@ -38,7 +38,11 @@
 
     </div>
 
-    <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon>
+    <div class="action-div">
+      <nb-icon (click)="goBack()" icon="arrow-ios-back-outline" class="back-btn"></nb-icon>
+      <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon>
+      <button class="done-btn" nbButton (click)="toTemplate()">Next</button>
+    </div>
 
 
 
