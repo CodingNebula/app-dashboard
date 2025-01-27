@@ -145,7 +145,12 @@ td{
     cursor: pointer;
   }
   .action-div{
+    position: absolute;
+    width: 78%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    bottom: 0rem;
+    background: #ebeff6;
+
   }
