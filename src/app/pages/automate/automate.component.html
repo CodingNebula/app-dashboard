@@ -101,7 +101,7 @@
               <label for="buildNo">Build No<span class="star-mark">*</span>:</label>
               <input id="buildNo" formControlName="buildNo" class="form-control" />
               <div *ngIf="myForm.get('buildNo').touched && myForm.get('buildNo').invalid" class="error-message">
-                <small *ngIf="myForm.get('buildNo').hasError('required')">Build Name is required!</small>
+                <small *ngIf="myForm.get('buildNo').hasError('required')">Build Number is required!</small>
               </div>
             </div>
 
@@ -110,7 +110,7 @@
               <textarea id="description" formControlName="description"
                 class="form-control description-input"></textarea>
               <div *ngIf="myForm.get('description').touched && myForm.get('description').invalid" class="error-message">
-                <small *ngIf="myForm.get('description').hasError('required')">Description name is required!</small>
+                <small *ngIf="myForm.get('description').hasError('required')">Description is required!</small>
               </div>
             </div>
 

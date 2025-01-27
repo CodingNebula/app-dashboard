@@ -335,8 +335,8 @@ export class AutomateComponent implements OnInit {
 
       const socketReport = {
         capabilities: {
-          description: this.description,
-          buildInfo: this.buildNumber, ...this.completeAppData,
+          description: this.description.trim(),
+          buildInfo: this.buildNumber.trim(), ...this.completeAppData,
         },
         resultArr: this.resultArr,
         extras: this.extras,
@@ -910,7 +910,7 @@ export class AutomateComponent implements OnInit {
 
     let id = res[0].id;
     // let updatedReq;
-    let leftOverInstructions;
+    let leftOverInstructions = [];
 
     if(id !== 0){
       leftOverInstructions = this.originalData.slice(0, id);
@@ -1128,8 +1128,8 @@ export class AutomateComponent implements OnInit {
 
     const socketReport = {
       capabilities: {
-        description: this.description,
-        buildInfo: this.buildNumber, ...this.completeAppData
+        description: this.description.trim(),
+        buildInfo: this.buildNumber.trim(), ...this.completeAppData
       },
       resultArr: this.resultArr,
       extras: this.extras,
