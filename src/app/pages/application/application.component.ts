@@ -45,6 +45,8 @@ export class ApplicationComponent implements OnInit {
       context: { itemToEdit: item, selectedType: type }
     });
 
+    console.log(item.extra);
+    
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
       if (result) {
@@ -63,13 +65,15 @@ export class ApplicationComponent implements OnInit {
           }
           else {
 
+            console.log(result);
+            
             const app_id = result.appId;
 
 
             if (result.type === 'edit') {
               const data = {
                 name: result.data.application.trim(),
-                extra: {},
+                extra: item?.extra,
               }
 
               this.updateAppData(app_id, data);
