@@ -32,7 +32,9 @@
           <div class="col-3 table-data">{{item.back_name}}</div>
           <div class="col-3 table-data">{{item.element_name}}</div>
           <div class="col-3 table-data">{{item.instruction_name}}</div>
-          <div class="col-2" style="text-align: center; cursor: pointer;"> <nb-icon [nbPopover]="list"  icon="edit-outline"></nb-icon></div>
+          <div class="col-2" style="text-align: center; cursor: pointer;" #popover="nbPopover" [nbPopover]="list">
+            <nb-icon  icon="edit-outline" ></nb-icon>
+          </div>
         </div>
       </div>
 

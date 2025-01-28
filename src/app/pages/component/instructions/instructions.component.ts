@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { InstructionsDialogComponent } from '../instructions-dialog/instructions-dialog.component';
-import {NbDialogRef, NbDialogService} from '@nebular/theme';
+import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { AccountService } from '../../../shared/services/account/account.service';
 import { AfterViewInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { NbPopoverDirective } from '@nebular/theme';
-import {FilterModelComponent} from "../../signout/filter-model/filter-model.component";
-import {DeleteDialogComponent} from "../delete-dialog/delete-dialog.component";
+import { FilterModelComponent } from "../../signout/filter-model/filter-model.component";
+import { DeleteDialogComponent } from "../delete-dialog/delete-dialog.component";
 
 
 @Component({
@@ -18,10 +18,11 @@ import {DeleteDialogComponent} from "../delete-dialog/delete-dialog.component";
 export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
 
-  @ViewChild(NbPopoverDirective) popover: NbPopoverDirective;
+  @ViewChild('popover') popover: NbPopoverDirective;
+
 
   @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
-  public dialog:NbDialogRef<any>;
+  public dialog: NbDialogRef<any>;
   public applicationDataArr: any[] = [];
   public appDetails: any;
   public appName: any;
@@ -96,8 +97,8 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
 
 
-  openDeleteDailog(item){
-    if(this.popover?.isShown){
+  openDeleteDailog(item) {
+    if (this.popover?.isShown) {
       this.popover?.hide();
     }
 
@@ -105,7 +106,7 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
       hasBackdrop: true,
       closeOnBackdropClick: true,
       closeOnEsc: true,
-      context: {itemToDelete: item}
+      context: { itemToDelete: item }
     });
 
 
@@ -117,7 +118,7 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
           let app_id = localStorage.getItem('app_id');
 
 
-            this.deleteInstruction(app_id, result.data.insId)
+          this.deleteInstruction(app_id, result.data.insId)
 
 
         }
@@ -126,14 +127,15 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
 
   }
 
-  openDialog(item ?:any) {
+  openDialog(item?: any) {
+    console.log(this.popover);
 
-    if(this.popover?.isShown){
+    if (this.popover?.isShown) {
       this.popover?.hide();
     }
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(InstructionsDialogComponent, {
-      context : {itemToEdit: item}
+      context: { itemToEdit: item }
     });
 
     // Get the result (data) when the dialog closes
@@ -188,7 +190,7 @@ export class InstructionsComponent implements OnDestroy, AfterViewInit {
     this.accountService.putInstruction(app_id, instructionDetails).subscribe((response) => {
       if (response) {
 
-    this.getInstructions();
+        this.getInstructions();
       }
     }, (error) => {
       console.error('Error saving test case:', error);
