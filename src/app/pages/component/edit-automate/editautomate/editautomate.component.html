@@ -1,0 +1,22 @@
+<div>
+
+    <nb-card>
+        <nb-card-header>Instructions</nb-card-header>
+        <nb-card-body class="card-body">
+            <div *ngFor="let item of itemsToEdit.screens">
+                <h6>{{item.ins_set_screen_name}}</h6>
+                <div class="instruction-div" *ngFor="let instruction of item.instructions">
+                    <div>{{instruction?.ins_name}}</div>
+                    <input class="instruction-input" type="text" [(ngModel)]="instruction.ins_element_name">
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="close()" class="close-button">Close</button>
+            <div class="form-row button-row">
+                <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
+
+</div>

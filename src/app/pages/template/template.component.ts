@@ -278,7 +278,9 @@ export class TemplateComponent {
               templateName: result.data.templateName.trim(),
               applicationId: localStorage.getItem('app_id'),
               description: result.data.description.trim(),
-              extra: {},
+              extra: {
+                quick: result.data.quick
+              },
             }
 
 
@@ -447,6 +449,7 @@ export class TemplateComponent {
     this.accountService.getAllTemplates(id).subscribe((resp) => {
       const groupedData = [];
 
+console.log(resp);
 
       resp.forEach((curr) => {
         // Find or create the weight group
@@ -458,6 +461,7 @@ export class TemplateComponent {
             wt_name: curr.wt_name,
             wt_desc: curr.wt_desc,
             screens: [],
+            quick: curr?.wt_extra?.quick ? curr?.wt_extra?.quick : false,
           };
           groupedData.push(wtGroup);
         }
@@ -505,6 +509,7 @@ export class TemplateComponent {
       })
 
       
+      console.log(result);
       
       this.templateArray = result;
       

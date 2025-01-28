@@ -232,20 +232,12 @@ export class ReportPdfService {
     // this.extras = item?.extra?.extras;
     // this.originalData = item?.extra?.originalData;
 
-    // console.log(this.originalData);
-
-    // console.log(this.testCases);
     // const id = this.testCases[0]?.id;
     // let lastId = 0;
 
     // if (this.testCases[this.testCases.length - 1]?.ins_id !== "12345") {
     //   lastId = this.testCases[this.testCases.length - 1]?.id;
     // }
-    // console.log(id);
-    // console.log(lastId);
-
-    // console.log(this.untestedData);
-    // console.log(this.originalData);
 
 
 
@@ -272,11 +264,9 @@ export class ReportPdfService {
     //   item.timeSpent = 0;
     // })
 
-    // console.log(this.skipData);
 
     // this.testCases = [...this.skipData, ...this.testCases, ...this.untestedData];
 
-    // console.log(this.testCases);
 
 
 

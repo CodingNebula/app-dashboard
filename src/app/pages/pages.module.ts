@@ -18,7 +18,7 @@ import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { AutomateComponent } from './automate/automate.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TestCasesComponent } from './test-cases/test-cases.component';
 import { ApplicationComponent } from './application/application.component';
 import { NoAppDialogComponent } from './component/no-app-dialog/no-app-dialog.component';
@@ -35,6 +35,7 @@ import { InstructionsDialogComponent } from './component/instructions-dialog/ins
 import { TemplateDialogComponent } from './template/template-dialog/template-dialog.component';
 import { DeleteDialogComponent } from './component/delete-dialog/delete-dialog.component';
 import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
+import { EditautomateComponent } from './component/edit-automate/editautomate/editautomate.component';
 
 @NgModule({
     imports: [
@@ -58,7 +59,8 @@ import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
         NbListModule,
         CdkDropList,
         CdkDrag,
-        CdkDragHandle
+        CdkDragHandle,
+        FormsModule
     ],
   declarations: [
     PagesComponent,
@@ -76,6 +78,7 @@ import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
     InstructionsDialogComponent,
     TemplateDialogComponent,
     DeleteDialogComponent,
+    EditautomateComponent,
   ],
 })
 export class PagesModule {

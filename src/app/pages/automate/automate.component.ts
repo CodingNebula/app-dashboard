@@ -5,6 +5,8 @@ import { WebsocketService } from '../../shared/services/websocket/websocket.serv
 import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
 import { Router } from '@angular/router';
 import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
+import { NbDialogService } from '@nebular/theme';
+import { EditautomateComponent } from '../component/edit-automate/editautomate/editautomate.component';
 
 @Component({
   selector: 'ngx-automate',
@@ -58,6 +60,7 @@ export class AutomateComponent implements OnInit {
   public showWaitLoader: boolean = false;
   public iSingleCase: boolean = true;
   public isInstructionSkipped: boolean = true;
+  public isQuickTemplate: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +68,8 @@ export class AutomateComponent implements OnInit {
     private accountService: AccountService,
     private automateDataService: AutomationDataService,
     private applicationDataService: ApplicationDataService,
-    private router: Router) {
+    private router: Router,
+    private dialogService: NbDialogService) {
 
     this.applicationData = this.automateDataService.selectedApplication;
 
@@ -143,6 +147,7 @@ export class AutomateComponent implements OnInit {
   }
 
   onSubmit() {
+    // this.openEditInstructionDialog();
     if (this.myForm.valid) {
 
 
@@ -196,7 +201,23 @@ export class AutomateComponent implements OnInit {
     this.scrollToBottom();
   }
 
+  openEditInstructionDialog(){
+    const dialogRef = this.dialogService.open(EditautomateComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+      context: {
+        itemsToEdit: this.templateData
+      }
+    })
 
+    dialogRef.onClose.subscribe((result) => {
+      // console.log(result);
+      this.templateData = result.data;
+      console.log(this.templateData);
+      
+    })
+  }
 
 
   scrollToBottom() {
@@ -229,6 +250,8 @@ export class AutomateComponent implements OnInit {
 
   onStartTrans(itemData, startAll) {
     this.iSingleCase = false;
+    console.log(itemData);
+
 
     let count = 0;
     let totalTimeApp = Math.floor(Date.now() / 1000);
@@ -507,7 +530,7 @@ export class AutomateComponent implements OnInit {
 
 
       // for single instructions
-      
+
       this.sendInstructions(result);
 
       // for testing
@@ -532,8 +555,6 @@ export class AutomateComponent implements OnInit {
       // }
 
       // this.webSocketService.getSubject().subscribe((res) => {
-      //   console.log(res);
-
 
       //   if (!timeChecked) {
       //     const currentDate = new Date();
@@ -608,13 +629,6 @@ export class AutomateComponent implements OnInit {
 
       //       const untestedData = result.slice(passedCount, result.length);
 
-
-      //       console.log('ShowEnd', this.showEnd);
-
-      //       console.log('untested', untestedData);
-
-
-
       //       const socketReport = {
       //         capabilities: { description: this.myForm.value.description, buildInfo: this.myForm.value.buildNo, ...this.completeAppData },
       //         resultArr: this.resultArr,
@@ -647,7 +661,6 @@ export class AutomateComponent implements OnInit {
       //     }
       //   }
       // }, (err) => {
-      //   console.log(err, 'err')
 
       //   clearInterval(this.startInterval);
       // })
@@ -725,7 +738,7 @@ export class AutomateComponent implements OnInit {
 
       }
 
-      
+
 
 
 
@@ -832,7 +845,6 @@ export class AutomateComponent implements OnInit {
 
     //   }
     // }, (err) => {
-    //   console.log(err,'err')
 
     //   clearInterval(this.startInterval);
     // })
@@ -913,18 +925,18 @@ export class AutomateComponent implements OnInit {
     // let updatedReq;
     let leftOverInstructions = [];
 
-    if(id !== 0){
+    if (id !== 0) {
       leftOverInstructions = this.originalData.slice(0, id);
       console.log(leftOverInstructions);
-      
+
     }
 
     const updatedReq = [...leftOverInstructions, ...res];
     console.log(updatedReq);
-    
+
 
     console.log(res);
-    
+
     this.sendInstructions(updatedReq);
 
   }
@@ -952,7 +964,7 @@ export class AutomateComponent implements OnInit {
 
   recursiveInstructions(instructionsArr, indexCounter) {
     console.log(instructionsArr);
-    
+
     if (indexCounter < instructionsArr.length && !this.endTest) {
       if (this.socketSubscription) {
         this.socketSubscription.unsubscribe();
@@ -962,13 +974,13 @@ export class AutomateComponent implements OnInit {
 
       // if(this.iSingleCase){
       instructionsArr[indexCounter].singleInstLoader = true;
-        this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
+      this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
       // }
       // else{
-        // this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
+      // this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
       // }
       console.log(instructionsArr[indexCounter]);
-      
+
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
         this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
 
@@ -1006,11 +1018,11 @@ export class AutomateComponent implements OnInit {
           console.log(this.testCases);
 
           indexCounter += 1;
-          if(res?.message?.failedMessage && !res?.message?.successMessage){
+          if (res?.message?.failedMessage && !res?.message?.successMessage) {
             this.endTest = true;
 
           }
-          else{
+          else {
             this.recursiveInstructions(instructionsArr, indexCounter);
           }
 
@@ -1167,7 +1179,7 @@ export class AutomateComponent implements OnInit {
 
   }
 
-  sendReportData(data){
+  sendReportData(data) {
     this.accountService.postReportData(data).subscribe((resp) => {
       if (resp) {
         setTimeout(() => {
@@ -1246,6 +1258,8 @@ export class AutomateComponent implements OnInit {
 
 
   formatTestCaseData() {
+    this.isQuickTemplate = this.templateData?.quick;
+
 
     let idCounter = 1;
     this.templateData?.screens.map((item) => {
@@ -1265,14 +1279,13 @@ export class AutomateComponent implements OnInit {
             ins_set_id: item.ins_set_id,
             ins_set_screen_name: item.ins_set_screen_name,
             hideStart: false,
-            testCase: item.instructions  
+            testCase: item.instructions
           });
         }
       });
     });
-    
-    console.log(this.templateData);
 
+    console.log(this.testCases);
 
   }
 
@@ -1353,6 +1366,9 @@ export class AutomateComponent implements OnInit {
         setTimeout(() => {
           this.appLaunchStatus = 'SUCCESS';
           this.appLaunchLoading = false; // After 2 seconds, set it to false to hide the loader
+          if(this.isQuickTemplate){
+            this.openEditInstructionDialog();
+          }
         }, 7000);
 
         this.showAppLaunchError = false;
@@ -1378,7 +1394,7 @@ export class AutomateComponent implements OnInit {
     const app_id = localStorage.getItem('app_id');
     return this.accountService.getCapabilites(app_id);
   }
-  
+
   goBack(): void {
     window.history.back();
   }

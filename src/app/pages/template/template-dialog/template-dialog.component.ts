@@ -66,7 +66,8 @@ export class TemplateDialogComponent {
     this.templateForm = this.fb.group({
       templateName: ['', [ this.noSpacesValidator(), Validators.required]],
       // description: ['',[Validators.required, Validators.pattern(/^(?!.*\s{2,}).*$/)]]
-      description: ['',[ this.noSpacesValidator(), Validators.required]]
+      description: ['',[ this.noSpacesValidator(), Validators.required]],
+      quick: [false]
     })
 
     this.testCases = this.fb.group({
@@ -138,6 +139,7 @@ export class TemplateDialogComponent {
     //   ...this.templateForm.value, 
     //   description: this.templateForm.get('description')?.value.trim() // Trim specific control
     // };
+    
     this.submitted = true;
 
     if (type === 'reorder') {

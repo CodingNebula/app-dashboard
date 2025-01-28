@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Import FormsModule
 import { NbPopoverModule } from '@nebular/theme';
 import { AppRoutingModule } from './app-routing.module';
 import {
@@ -49,7 +49,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
     NbCardModule,
-    NgxEchartsModule
+    NgxEchartsModule,
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent],
 })

@@ -68,8 +68,6 @@ export class ApplicationComponent implements OnInit {
       closeOnEsc: true,
       context: { itemToEdit: item, selectedType: type }
     });
-
-    console.log(item.extra);
     
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
@@ -89,8 +87,6 @@ export class ApplicationComponent implements OnInit {
             }, 1000)
           }
           else {
-
-            console.log(result);
             
             const app_id = result.appId;
 

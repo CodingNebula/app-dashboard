@@ -43,7 +43,6 @@ export class InstructionsDialogComponent {
   patchFormValues() {
     if (this.itemToEdit) {
       this.myForm.controls['actions'].setValue(this.itemToEdit.back_name.trim());
-      // console.log(this.itemToEdit.element_name);
       
       const elementName = this.itemToEdit.element_name[0]; // Access the string in the array
       if (typeof elementName === 'string') {

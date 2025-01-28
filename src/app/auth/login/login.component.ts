@@ -71,7 +71,6 @@ export class LoginComponent implements OnInit {
         (data) => {
           if (data?.token) {
             let response = data;
-            console.log(data);
             
             localStorage.setItem('id', response.id);
             localStorage.setItem('accessToken', response.token);
@@ -180,7 +179,6 @@ export class LoginComponent implements OnInit {
 //             localStorage.setItem('refreshExpiry', moment(new Date()).add(response.refresh_expires_in, 'seconds').unix().toString());
 
 //             // this.webSocketService.socketConnect(data?.token);
-//             console.log('njfnjkdnvd');
             
 
 //             this.router.navigateByUrl('pages/application');

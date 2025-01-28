@@ -137,7 +137,8 @@
       <div [nbSpinner]="startApp" class="instuction-loader"></div>
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
       <button *ngIf="!showIndividualEnd" class="start-button" (click)="onStartTrans(templateData,true)"
-        [disabled]="!isAppLaunched">{{showEnd?'End Test':'Start All'}}</button>
+        [disabled]="!isAppLaunched"
+        >{{showEnd?'End Test':'Start All'}}</button>
       <button *ngIf="showIndividualEnd" class="start-button" (click)="endSingleInstruction()">Finish Test</button>
 
 
@@ -173,44 +174,10 @@
             </div>
           </ng-container>
         </div>
-
-
-        <!-- <ng-container *ngFor="let item of resultArr">
-
-          <div *ngIf="item.moduleName === testCase.ins_set_screen_name" class="test-case-div test-case-body-data"> -->
-
-        <!-- <h6>{{item?.successMessage || item?.failedMessage}}</h6> -->
-        <!--            <div>{{item.moduleName}}</div>-->
-        <!-- <span *ngIf=" item.message" class="status-message"
-                  [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span> -->
-        <!-- <button class="start-button" (click)="onStart(item)">Start</button> -->
-        <!-- <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} -->
-        <!-- </div> -->
-        <!-- </div>
-        </ng-container> -->
       </ng-container>
 
 
     </div>
-
-
-    <!--  <div *ngIf="showResult && resultArr.length > 0"  class="test-case-status-container" #resultContainer>-->
-    <!--    <ng-container *ngFor="let item of resultArr">-->
-
-    <!--      <div class="test-case-div">-->
-
-    <!--        <h6>{{item?.successMessage || item?.failedMessage}}</h6>-->
-    <!--        <div>{{item.moduleName}}</div>-->
-    <!--        <span *ngIf=" item.message" class="status-message"-->
-    <!--              [ngClass]="item.message === 'SUCCESS' ? 'success-status' : 'failed-status'">{{item.message}}</span>-->
-    <!--        &lt;!&ndash; <button class="start-button" (click)="onStart(item)">Start</button> &ndash;&gt;-->
-    <!--        &lt;!&ndash; <div [ngClass]="item?.message === 'SUCCESS' ? 'success-status-result' : 'failed-status-result'">{{item?.message}} &ndash;&gt;-->
-    <!--        &lt;!&ndash; </div> &ndash;&gt;-->
-    <!--      </div>-->
-    <!--    </ng-container>-->
-
-
-    <!--  </div>-->
   </div>
   <!-- </div> -->
 
