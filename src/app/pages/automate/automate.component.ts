@@ -249,6 +249,7 @@ export class AutomateComponent implements OnInit {
             roomId: localStorage.getItem("id"),
             moduleName: instruction.ins_set_screen_name,
             ins_id: instruction.ins_id,
+            singleInstLoader: false,
           };
 
           index += 1;
@@ -504,7 +505,6 @@ export class AutomateComponent implements OnInit {
 
       this.showResult = true;
 
-      console.log(result);
 
       // for single instructions
       
@@ -890,6 +890,7 @@ export class AutomateComponent implements OnInit {
         roomId: localStorage.getItem("id"),
         moduleName: item.ins_set_screen_name,
         ins_id: item.ins_id,
+        singleInstLoader: false,
       };
 
       if (matchedItem) {
@@ -950,6 +951,8 @@ export class AutomateComponent implements OnInit {
   }
 
   recursiveInstructions(instructionsArr, indexCounter) {
+    console.log(instructionsArr);
+    
     if (indexCounter < instructionsArr.length && !this.endTest) {
       if (this.socketSubscription) {
         this.socketSubscription.unsubscribe();
@@ -957,16 +960,17 @@ export class AutomateComponent implements OnInit {
       }
       let startInterval = Date.now() / 1000;
 
-      this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
       // if(this.iSingleCase){
+      instructionsArr[indexCounter].singleInstLoader = true;
         this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
       // }
       // else{
         // this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
       // }
       console.log(instructionsArr[indexCounter]);
-
+      
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
+        this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
 
         console.log(res);
 
@@ -1266,6 +1270,7 @@ export class AutomateComponent implements OnInit {
         }
       });
     });
+    
     console.log(this.templateData);
 
 
@@ -1334,7 +1339,7 @@ export class AutomateComponent implements OnInit {
     this.accountService.launchApp({
       capabilities: {
         platformName: "Android",
-        app: "/home/codingnebula/Downloads/app-debug-v17.apk",
+        app: "/home/codingnebula/Downloads/app-debug-v18.apk",
         appPackage: "com.example.app",
         automationName: "UIAutomator2",
         deviceName: "Samsung",

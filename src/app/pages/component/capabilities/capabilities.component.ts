@@ -43,8 +43,8 @@ export class CapabilitiesComponent {
       package: ['com.example.app', [Validators.required]],
       automation: ['', [Validators.required]],
       device: ['', [Validators.required]],
-      noReset: ['True', [Validators.required, this.noResetValidator]],
-      hiddenApp: ['True', [Validators.required, this.ignoreHiddenValidator]],
+      noReset: [{value: 'True', disabled: true}, [Validators.required, this.noResetValidator]],
+      hiddenApp: [{value: 'True', disabled: true}, [Validators.required, this.ignoreHiddenValidator]],
       timeout: ['1200000', [Validators.required]],
     });
 
