@@ -30,6 +30,19 @@ export class ReportPdfService {
   updateCharts(chartData: any): void {
     if (this.echartsInstance) {
       this.chartData = chartData;
+      const colorPalette = {
+        'SUCCESS': '#10EB93',
+        'FAILED': '#EE4748',
+        'SKIP': '#808080',
+        'UNTESTED': '#A64C52',
+      };
+  
+      // Map the pie data to include color from the colorPalette
+      const pieDataWithColors = chartData.map((item) => ({
+        ...item,
+        itemStyle: { color: colorPalette[item.name] } // Map each segment to its specific color
+      }));
+
       this.echartsInstance.setOption({
         tooltip: {
           trigger: 'item',
@@ -51,7 +64,8 @@ export class ReportPdfService {
           textStyle: {
             fontSize: 10,     // Font size for legend text
             color: '#333'     // Color for legend text
-          }
+          },
+          data: chartData.map(item => item.name),
         },
         series: [
           {
@@ -64,7 +78,7 @@ export class ReportPdfService {
               show: true,
               length: 1,
             },
-            data: this.chartData,
+            data: pieDataWithColors,
 
             emphasis: {
               itemStyle: {
@@ -81,7 +95,7 @@ export class ReportPdfService {
             },
           }
         ],
-        color: [' #10EB93', ' #EE4748', ' #808080', ' #A64C52'],
+        color: Object.values(colorPalette),
       });
     }
   }
@@ -189,12 +203,15 @@ export class ReportPdfService {
 
     )
 
+    const data = this.chartData.sort((a, b) => b.value - a.value);
+
+
 
     this.echartsInstance?.on('finished', () => {
       this.generatePDF(item);
     });
 
-    this.generatePieData(this.chartData);
+    this.generatePieData(data);
     $event.stopPropagation();
   }
 

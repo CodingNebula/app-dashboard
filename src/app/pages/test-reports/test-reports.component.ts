@@ -204,12 +204,26 @@ export class TestReportsComponent implements OnInit {
     dataArr.push({ name: 'SKIP', value: this.skipData.length });
     dataArr.push({ name: 'UNTESTED', value: this.untestedData.length });
 
-    this.pieData = dataArr
+    this.pieData = dataArr.sort((a, b) => b.value - a.value);
+    console.log(this.pieData);
+    
 
     this.generatePieData();
   }
 
   generatePieData() {
+    const colorPalette = {
+      'SUCCESS': '#10EB93',
+      'FAILED': '#EE4748',
+      'SKIP': '#808080',
+      'UNTESTED': '#A64C52',
+    };
+
+    // Map the pie data to include color from the colorPalette
+    const pieDataWithColors = this.pieData.map((item) => ({
+      ...item,
+      itemStyle: { color: colorPalette[item.name] } // Map each segment to its specific color
+    }));
 
     setTimeout(() => {
       this.CompletionChart = {
@@ -234,7 +248,8 @@ export class TestReportsComponent implements OnInit {
           textStyle: {
             fontSize: 8,     // Font size for legend text
             color: '#333'     // Color for legend text
-          }
+          },
+          data: this.pieData.map(item => item.name),
         },
         series: [
           {
@@ -247,7 +262,7 @@ export class TestReportsComponent implements OnInit {
               show: true,
               length: 1,
             },
-            data: this.pieData,
+            data: pieDataWithColors,
 
             emphasis: {
               itemStyle: {
@@ -267,7 +282,7 @@ export class TestReportsComponent implements OnInit {
             },
           }
         ],
-        color: [' #10EB93', ' #EE4748', ' #808080', ' #A64C52'],
+        color: Object.values(colorPalette),
       };
     }, 10)
   }
