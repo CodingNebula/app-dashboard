@@ -8,7 +8,7 @@
   <div class="application-container">
     <div class="application-div" *ngFor="let item of applicationDataArr; let i = index" >
       <div class="edit-div" >
-        <nb-icon [nbPopoverAppendTo]="'viewport'" [nbPopover]="list" (click)="editDeleteFunc(item)" class="edit-icon" icon="more-vertical-outline" nbPopoverPlacement="bottom-end"></nb-icon>
+        <nb-icon [nbPopoverAppendTo]="'viewport'" #popover="nbPopover" [nbPopover]="list" (click)="editDeleteFunc(item)" class="edit-icon" icon="more-vertical-outline" nbPopoverPlacement="bottom-end"></nb-icon>
       </div>
         <ng-template #list>
           <nb-card class="popover-card">

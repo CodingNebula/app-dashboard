@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef, NbDialogService, NbPopoverDirective } from '@nebular/theme';
 import { NoAppDialogComponent } from '../component/no-app-dialog/no-app-dialog.component';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AccountService } from '../../shared/services/account/account.service';
 import { AutomationDataService } from '../../shared/services/automationData/automation-data.service';
 import { ApplicationDataService } from '../../shared/services/applicationData/application-data.service';
 import { DeleteDialogComponent } from '../component/delete-dialog/delete-dialog.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,6 +20,8 @@ export class ApplicationComponent implements OnInit {
   public appCapabilities: any;
   public applicationNameAlert: boolean = false;
   public appData: any;
+  private dialogRef: NbDialogRef<NoAppDialogComponent>;
+  private routerSubscription: Subscription;
 
   @ViewChild('popover') popover: NbPopoverDirective;
 
@@ -27,16 +30,37 @@ export class ApplicationComponent implements OnInit {
     protected router: Router,
     private accountService: AccountService,
     private automateDataService: AutomationDataService,
-    private applicationDataService: ApplicationDataService) {
+    private applicationDataService: ApplicationDataService,
+  ) {
 
   }
 
   ngOnInit() {
+
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (this.dialogRef) {
+          this.dialogRef.close();
+          this.dialogRef = null;
+        }
+      }
+    });
+
     this.getApplication();
     this.getCapabilities();
   }
 
-  openDialog(type?, item?) {
+  ngOnDestroy() {
+    // Unsubscribe to avoid memory leaks
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  openDialog(type?, item?) {    
+    if(this.popover?.isShown){
+      this.popover?.hide();
+    }
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(NoAppDialogComponent, {
       hasBackdrop: true,
@@ -49,6 +73,7 @@ export class ApplicationComponent implements OnInit {
     
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
+      this.dialogRef = null;
       if (result) {
         if (result.confirmed) {
 
@@ -105,7 +130,9 @@ export class ApplicationComponent implements OnInit {
   }
 
   openDeleteDailog(item) {
-
+    if(this.popover?.isShown){
+      this.popover?.hide();
+    }
 
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
