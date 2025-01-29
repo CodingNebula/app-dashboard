@@ -81,72 +81,75 @@
           <h4>Add Templates</h4>
         </div>
         <div *ngIf="templateArray.length > 0">
+          <h6 class="template-condition">Normal Template</h6>
           <div class="template-div-container">
-            <div class="table-data-div" *ngFor="let template of templateArray">
-              <nb-accordion class="accordian-container">
-                <nb-accordion-item>
-                  <nb-accordion-item-header class="template-header">
-                    <div *ngIf="template?.wt_name" class="template-name">
-                      <span [nbTooltip]="template?.wt_name">{{template?.wt_name}}</span>
+            <div *ngFor="let template of templateArray">
+              <div class="table-data-div" *ngIf="!template.quick">
+                <nb-accordion class="accordian-container">
+                  <nb-accordion-item>
+                    <nb-accordion-item-header class="template-header">
+                      <div *ngIf="template?.wt_name" class="template-name">
+                        <span [nbTooltip]="template?.wt_name">{{template?.wt_name}}</span>
 
-                    </div>
-                    <div *ngIf="template?.wt_desc" class="template-description">
-                      Description:<span [nbTooltip]="template?.wt_desc"> {{template?.wt_desc}} </span>
-                    </div>
-
-                    <div class="icon-div">
-                      <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)"
-                        class="icon-btn" icon="play-circle-outline"></nb-icon>
-
-                      <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
-                        <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
                       </div>
-                    </div>
+                      <div *ngIf="template?.wt_desc" class="template-description">
+                        Description:<span [nbTooltip]="template?.wt_desc"> {{template?.wt_desc}} </span>
+                      </div>
 
-                    <ng-template #listTemplate>
-                      <nb-card class="popover-card">
-                        <nb-list>
-                          <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit
-                            Name
-                            and Desc</nb-list-item>
-                          <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
-                          <nb-list-item [ngClass]="template?.screens.length === 0 ? 'not-allowed' : ''"
-                            [attr.disabled]="template?.screens.length === 0 ? true : null"
-                            (click)="template?.screens.length > 0 && openDialog('template', 'reorder', '', template)">Edit
-                            Test Cases</nb-list-item>
-                          <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
-                            Test Cases</nb-list-item>
-                        </nb-list>
-                      </nb-card>
-                    </ng-template>
+                      <div class="icon-div">
+                        <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)"
+                          class="icon-btn" icon="play-circle-outline"></nb-icon>
 
+                        <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
+                          <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
+                        </div>
+                      </div>
 
-                    <!-- <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button> -->
-
-                  </nb-accordion-item-header>
-                  <nb-accordion-item-body>
-                    <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
-                      <nb-accordion-item>
-                        <nb-accordion-item-header class="accordian-header">
-                          {{ testCase?.ins_set_screen_name }}
-                        </nb-accordion-item-header>
-                        <nb-accordion-item-body *ngIf="template?.screens.length !== 0">
-                          <div class="">
-                            <div *ngFor="let testcase of testCase?.instructions">
-                              {{ testcase?.ins_name }}
+                      <ng-template #listTemplate>
+                        <nb-card class="popover-card">
+                          <nb-list>
+                            <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit
+                              Name
+                              and Desc</nb-list-item>
+                            <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
+                            <nb-list-item [ngClass]="template?.screens.length === 0 ? 'not-allowed' : ''"
+                              [attr.disabled]="template?.screens.length === 0 ? true : null"
+                              (click)="template?.screens.length > 0 && openDialog('template', 'reorder', '', template)">Edit
+                              Test Cases</nb-list-item>
+                            <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
+                              Test Cases</nb-list-item>
+                          </nb-list>
+                        </nb-card>
+                      </ng-template>
 
 
+                      <!-- <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button> -->
+
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                      <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
+                        <nb-accordion-item>
+                          <nb-accordion-item-header class="accordian-header">
+                            {{ testCase?.ins_set_screen_name }}
+                          </nb-accordion-item-header>
+                          <nb-accordion-item-body *ngIf="template?.screens.length !== 0">
+                            <div class="">
+                              <div *ngFor="let testcase of testCase?.instructions">
+                                {{ testcase?.ins_name }}
+
+
+                              </div>
                             </div>
-                          </div>
-                        </nb-accordion-item-body>
-                      </nb-accordion-item>
-                    </nb-accordion>
-                    <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
-                      Add Screens!
+                          </nb-accordion-item-body>
+                        </nb-accordion-item>
+                      </nb-accordion>
+                      <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
+                        Add Screens!
+                      </nb-accordion-item-body>
                     </nb-accordion-item-body>
-                  </nb-accordion-item-body>
-                </nb-accordion-item>
-              </nb-accordion>
+                  </nb-accordion-item>
+                </nb-accordion>
+              </div>
             </div>
 
           </div>
@@ -154,72 +157,75 @@
       </div>
       <div>
         <div>
+          <h6 class="template-condition">Quick Template</h6>
           <div class="template-div-container">
-            <div class="table-data-div" *ngFor="let template of templateArray">
-              <nb-accordion class="accordian-container">
-                <nb-accordion-item>
-                  <nb-accordion-item-header class="template-header">
-                    <div *ngIf="template?.wt_name" class="template-name">
-                      <span [nbTooltip]="template?.wt_name">{{template?.wt_name}}</span>
+            <div *ngFor="let template of templateArray">
+              <div class="table-data-div" *ngIf="template.quick">
+                <nb-accordion class="accordian-container">
+                  <nb-accordion-item>
+                    <nb-accordion-item-header class="template-header">
+                      <div *ngIf="template?.wt_name" class="template-name">
+                        <span [nbTooltip]="template?.wt_name">{{template?.wt_name}}</span>
 
-                    </div>
-                    <div *ngIf="template?.wt_desc" class="template-description">
-                      Description:<span [nbTooltip]="template?.wt_desc"> {{template?.wt_desc}} </span>
-                    </div>
-
-                    <div class="icon-div">
-                      <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)"
-                        class="icon-btn" icon="play-circle-outline"></nb-icon>
-
-                      <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
-                        <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
                       </div>
-                    </div>
+                      <div *ngIf="template?.wt_desc" class="template-description">
+                        Description:<span [nbTooltip]="template?.wt_desc"> {{template?.wt_desc}} </span>
+                      </div>
 
-                    <ng-template #listTemplate>
-                      <nb-card class="popover-card">
-                        <nb-list>
-                          <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit
-                            Name
-                            and Desc</nb-list-item>
-                          <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
-                          <nb-list-item [ngClass]="template?.screens.length === 0 ? 'not-allowed' : ''"
-                            [attr.disabled]="template?.screens.length === 0 ? true : null"
-                            (click)="template?.screens.length > 0 && openDialog('template', 'reorder', '', template)">Edit
-                            Test Cases</nb-list-item>
-                          <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
-                            Test Cases</nb-list-item>
-                        </nb-list>
-                      </nb-card>
-                    </ng-template>
+                      <div class="icon-div">
+                        <nb-icon *ngIf="template?.screens.length !== 0" (click)="automateTemplate(template)"
+                          class="icon-btn" icon="play-circle-outline"></nb-icon>
 
+                        <div class="add-new" [nbPopover]="listTemplate" #popoverTemplate="nbPopover">
+                          <nb-icon icon="edit-outline" nbPopoverPlacement="bottom-end"></nb-icon>
+                        </div>
+                      </div>
 
-                    <!-- <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button> -->
-
-                  </nb-accordion-item-header>
-                  <nb-accordion-item-body>
-                    <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
-                      <nb-accordion-item>
-                        <nb-accordion-item-header class="accordian-header">
-                          {{ testCase?.ins_set_screen_name }}
-                        </nb-accordion-item-header>
-                        <nb-accordion-item-body *ngIf="template?.screens.length !== 0">
-                          <div class="">
-                            <div *ngFor="let testcase of testCase?.instructions">
-                              {{ testcase?.ins_name }}
+                      <ng-template #listTemplate>
+                        <nb-card class="popover-card">
+                          <nb-list>
+                            <nb-list-item (click)="openDialog('template', 'name',template?.wt_id, template, true)">Edit
+                              Name
+                              and Desc</nb-list-item>
+                            <nb-list-item (click)="openDeleteDailog(template)">Delete</nb-list-item>
+                            <nb-list-item [ngClass]="template?.screens.length === 0 ? 'not-allowed' : ''"
+                              [attr.disabled]="template?.screens.length === 0 ? true : null"
+                              (click)="template?.screens.length > 0 && openDialog('template', 'reorder', '', template)">Edit
+                              Test Cases</nb-list-item>
+                            <nb-list-item (click)="openDialog('template', 'testCase',template?.wt_id)">Add
+                              Test Cases</nb-list-item>
+                          </nb-list>
+                        </nb-card>
+                      </ng-template>
 
 
+                      <!-- <button class="add-new" (click)="openDialog('template', 'testCase',template?.wt_id)">Add Screens</button> -->
+
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                      <nb-accordion class="accordian-container" *ngFor="let testCase of template?.screens">
+                        <nb-accordion-item>
+                          <nb-accordion-item-header class="accordian-header">
+                            {{ testCase?.ins_set_screen_name }}
+                          </nb-accordion-item-header>
+                          <nb-accordion-item-body *ngIf="template?.screens.length !== 0">
+                            <div class="">
+                              <div *ngFor="let testcase of testCase?.instructions">
+                                {{ testcase?.ins_name }}
+
+
+                              </div>
                             </div>
-                          </div>
-                        </nb-accordion-item-body>
-                      </nb-accordion-item>
-                    </nb-accordion>
-                    <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
-                      Add Screens!
+                          </nb-accordion-item-body>
+                        </nb-accordion-item>
+                      </nb-accordion>
+                      <nb-accordion-item-body class="accordian-body-div" *ngIf="template?.screens.length === 0">
+                        Add Screens!
+                      </nb-accordion-item-body>
                     </nb-accordion-item-body>
-                  </nb-accordion-item-body>
-                </nb-accordion-item>
-              </nb-accordion>
+                  </nb-accordion-item>
+                </nb-accordion>
+              </div>
             </div>
 
           </div>

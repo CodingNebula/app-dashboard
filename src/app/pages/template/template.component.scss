@@ -108,9 +108,11 @@ td{
 .template-div-container{
   height: 33vh;
   overflow-y: auto;
-  width: 36rem;
+  width: 34rem;
 }
-
+.template-condition{
+  text-align: center;
+}
 .not-allowed {
   cursor: not-allowed !important; /* Change cursor to not-allowed */
   opacity: 0.5; /* Optional: make it look disabled */
