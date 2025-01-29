@@ -136,10 +136,10 @@
       <h5>{{templateData?.wt_name}}</h5>
       <div [nbSpinner]="startApp" class="instuction-loader"></div>
       <!-- <button [disabled]="appLaunchStatus === 'FAILED'" [ngClass]="appLaunchStatus === 'FAILED' ? 'not-allowed' : ''" class="start-button" (click)="onStartTrans()">Start</button> -->
-      <button *ngIf="!showIndividualEnd" class="start-button" (click)="onStartTrans(templateData,true)"
+      <button class="start-button" (click)="onStartTrans(templateData,true)"
         [disabled]="!isAppLaunched"
         >{{showEnd?'End Test':'Start All'}}</button>
-      <button *ngIf="showIndividualEnd" class="start-button" (click)="endSingleInstruction()">Finish Test</button>
+      <button class="start-button" (click)="endSingleInstruction()">Finish Test</button>
 
 
     </div>

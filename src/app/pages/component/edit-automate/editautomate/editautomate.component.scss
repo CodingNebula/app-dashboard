@@ -131,3 +131,20 @@
     padding: 0 10px;
   }
   
+
+  .card-body::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .card-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .card-body::-webkit-scrollbar-thumb {
+    background-color: #00a3ab;
+    border-radius: 10px;
+  }
+  
+  .card-body::-webkit-scrollbar-thumb:hover {
+    background-color: #00a3ab;
+  }

@@ -23,6 +23,6 @@ export class EditautomateComponent {
     this.dialogRef.close({data: this.itemsToEdit});
   }
   close(){
-    this.dialogRef.close();
+    this.dialogRef.close({data: this.itemsToEdit});
   }
 }

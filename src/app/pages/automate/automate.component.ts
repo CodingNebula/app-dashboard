@@ -147,7 +147,9 @@ export class AutomateComponent implements OnInit {
   }
 
   onSubmit() {
-    // this.openEditInstructionDialog();
+    // if(this.isQuickTemplate){
+    //   this.openEditInstructionDialog();
+    // }
     if (this.myForm.valid) {
 
 
@@ -213,7 +215,7 @@ export class AutomateComponent implements OnInit {
 
     dialogRef.onClose.subscribe((result) => {
       // console.log(result);
-      this.templateData = result.data;
+      this.templateData = result?.data;
       console.log(this.templateData);
       
     })
@@ -255,6 +257,7 @@ export class AutomateComponent implements OnInit {
 
     let count = 0;
     let totalTimeApp = Math.floor(Date.now() / 1000);
+    const roomId = localStorage.getItem("id");
     this.hideAll = true;
     let result = itemData;
     this.startApp = true;
@@ -262,14 +265,13 @@ export class AutomateComponent implements OnInit {
       let index = 0;
       result = itemData.screens.map(screen => {
         return screen.instructions.map((instruction) => {
-
           const newIntruction = {
             id: index,
             screenName: instruction.ins_back_name,
             btnName: instruction.ins_element_name,
             successMessage: `${instruction.ins_name}`,
             failedMessage: `${instruction.ins_name}`,
-            roomId: localStorage.getItem("id"),
+            roomId,
             moduleName: instruction.ins_set_screen_name,
             ins_id: instruction.ins_id,
             singleInstLoader: false,
@@ -323,6 +325,8 @@ export class AutomateComponent implements OnInit {
       this.showWaitLoader = true;
 
       setTimeout(() => {
+        console.log(this.endTest);
+        
         this.endTest = true;
       }, 2000)
 
@@ -966,6 +970,8 @@ export class AutomateComponent implements OnInit {
     console.log(instructionsArr);
 
     if (indexCounter < instructionsArr.length && !this.endTest) {
+      console.log('endtest', this.endTest);
+      
       if (this.socketSubscription) {
         this.socketSubscription.unsubscribe();
 
@@ -975,6 +981,7 @@ export class AutomateComponent implements OnInit {
       // if(this.iSingleCase){
       instructionsArr[indexCounter].singleInstLoader = true;
       this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
+      this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
       // }
       // else{
       // this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
@@ -982,7 +989,6 @@ export class AutomateComponent implements OnInit {
       console.log(instructionsArr[indexCounter]);
 
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
-        this.currentOnGoingScreen = instructionsArr[indexCounter].moduleName;
 
         console.log(res);
 
@@ -1010,7 +1016,6 @@ export class AutomateComponent implements OnInit {
               console.log(this.testCases);
               if (inst.ins_id === instructionsArr[indexCounter].ins_id) {
                 inst.status = res.message.message;
-
                 return this.testCases;
               }
             })
@@ -1018,22 +1023,27 @@ export class AutomateComponent implements OnInit {
           console.log(this.testCases);
 
           indexCounter += 1;
-          if (res?.message?.failedMessage && !res?.message?.successMessage) {
-            this.endTest = true;
-
+          if (res?.message?.successMessage) {
+            this.recursiveInstructions(instructionsArr, indexCounter);
+            // this.endTest = false;
           }
           else {
-            this.recursiveInstructions(instructionsArr, indexCounter);
+            
+            console.log(this.endTest);
+            this.endTest = true;
           }
 
         }
+console.log(this.endTest);
 
         if (res?.message?.successMessage === "End Instructions" || this.endTest) {
+          console.log('End Instructions', res?.message?.successMessage);
+          console.log('endtest', this.endTest);
+          
+          
           this.showWaitLoader = false;
           clearInterval(this.counterInterval);
           clearInterval(startInterval)
-          // res.extra.timeTaken = Math.floor(Date.now() / 1000) - this.count;
-          // res.message.totalTimeTaken = Math.floor(Date.now() / 1000) - this.totalTimeApp;
 
           const now = new Date();
           const formattedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
@@ -1122,6 +1132,8 @@ export class AutomateComponent implements OnInit {
     // this.socketSubscription.unsubscribe();
 
     setTimeout(() => {
+      console.log(this.endTest);
+      
       this.endTest = true;
     }, 2000)
 
@@ -1374,6 +1386,7 @@ export class AutomateComponent implements OnInit {
         this.showAppLaunchError = false;
         this.isAppLaunched = true;
         this.isAccordionExpanded = false;
+        this.endTest = false;
       },
       (error) => {
         console.error('API Error:', error);
