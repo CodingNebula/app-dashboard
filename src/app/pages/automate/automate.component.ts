@@ -71,13 +71,20 @@ export class AutomateComponent implements OnInit {
     private router: Router,
     private dialogService: NbDialogService) {
 
+      console.log('gbnglglnberbiereeeeeeeeeeee');
+      
     this.applicationData = this.automateDataService.selectedApplication;
 
   }
   ngOnDestroy() {
-    clearInterval(this.startInterval)
+    clearInterval(this.startInterval);
+    if (this.socketSubscription) {
+      this.socketSubscription.unsubscribe();
+    }
   }
   ngOnInit() {
+    console.log('gbnglglnberbiereeeeeeeeeeee');
+    
     this.webSocketService.getSocketFailure().subscribe((res) => {
       if (this.startInterval) {
         clearInterval(this.startInterval);
@@ -203,7 +210,7 @@ export class AutomateComponent implements OnInit {
     this.scrollToBottom();
   }
 
-  openEditInstructionDialog(){
+  openEditInstructionDialog() {
     const dialogRef = this.dialogService.open(EditautomateComponent, {
       hasBackdrop: true,
       closeOnBackdropClick: true,
@@ -217,7 +224,7 @@ export class AutomateComponent implements OnInit {
       // console.log(result);
       this.templateData = result?.data;
       console.log(this.templateData);
-      
+
     })
   }
 
@@ -325,8 +332,8 @@ export class AutomateComponent implements OnInit {
       this.showWaitLoader = true;
 
       setTimeout(() => {
-        console.log(this.endTest);
-        
+        console.log(this.endTest, 'endtest1');
+
         this.endTest = true;
       }, 2000)
 
@@ -971,7 +978,7 @@ export class AutomateComponent implements OnInit {
 
     if (indexCounter < instructionsArr.length && !this.endTest) {
       console.log('endtest', this.endTest);
-      
+
       if (this.socketSubscription) {
         this.socketSubscription.unsubscribe();
 
@@ -987,10 +994,15 @@ export class AutomateComponent implements OnInit {
       // this.webSocketService.sendTestCaseRequest({ ...instructionsArr[indexCounter], singleCase: false, Skip: this.isInstructionSkipped });
       // }
       console.log(instructionsArr[indexCounter]);
+      console.log(this.endTest, 'end before mess received');
 
       this.socketSubscription = this.webSocketService.getSubject().subscribe((res) => {
 
         console.log(res);
+        // this.endTest = false;
+
+        console.log(this.endTest, 'end after mess received');
+        
 
         if (res?.message && (res?.message?.successMessage || res?.message?.failedMessage) && res?.message?.successMessage !== "End Instructions") {
           this.showWaitLoader = false;
@@ -1008,6 +1020,7 @@ export class AutomateComponent implements OnInit {
           res.message.timeSpent = (currentTime - startInterval).toFixed(2);
           this.isInstructionSkipped = res.message.Skip;
 
+          console.log(this.endTest, 'end when mess received');
           startInterval = Date.now() / 1000;
           this.singleInstructionTimeTotal += Math.ceil(res.message.timeSpent);
           this.resultArr.push(res.message);
@@ -1023,24 +1036,28 @@ export class AutomateComponent implements OnInit {
           console.log(this.testCases);
 
           indexCounter += 1;
+          
+        console.log(this.endTest, 'end after mess received');
           if (res?.message?.successMessage) {
+            console.log(this.endTest, 'nsglnglsnglsgls');
             this.recursiveInstructions(instructionsArr, indexCounter);
+            
             // this.endTest = false;
           }
           else {
-            
-            console.log(this.endTest);
+
+            console.log(this.endTest, 'endtest2');
             this.endTest = true;
           }
 
         }
-console.log(this.endTest);
+        console.log(this.endTest, 'endtest3');
 
         if (res?.message?.successMessage === "End Instructions" || this.endTest) {
           console.log('End Instructions', res?.message?.successMessage);
           console.log('endtest', this.endTest);
-          
-          
+
+
           this.showWaitLoader = false;
           clearInterval(this.counterInterval);
           clearInterval(startInterval)
@@ -1132,8 +1149,8 @@ console.log(this.endTest);
     // this.socketSubscription.unsubscribe();
 
     setTimeout(() => {
-      console.log(this.endTest);
-      
+      console.log(this.endTest, 'endtest4');
+
       this.endTest = true;
     }, 2000)
 
@@ -1378,7 +1395,7 @@ console.log(this.endTest);
         setTimeout(() => {
           this.appLaunchStatus = 'SUCCESS';
           this.appLaunchLoading = false; // After 2 seconds, set it to false to hide the loader
-          if(this.isQuickTemplate){
+          if (this.isQuickTemplate) {
             this.openEditInstructionDialog();
           }
         }, 7000);

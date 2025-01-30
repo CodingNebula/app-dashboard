@@ -139,7 +139,7 @@
       <button class="start-button" (click)="onStartTrans(templateData,true)"
         [disabled]="!isAppLaunched"
         >{{showEnd?'End Test':'Start All'}}</button>
-      <button class="start-button" (click)="endSingleInstruction()">Finish Test</button>
+      <button *ngIf="showIndividualEnd" class="start-button" (click)="endSingleInstruction()">Finish Test</button>
 
 
     </div>
