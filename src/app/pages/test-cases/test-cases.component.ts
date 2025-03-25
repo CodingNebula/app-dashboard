@@ -98,7 +98,6 @@ export class TestCasesComponent implements OnInit{
 
 
   openDialog(itemToEdit?) {
-    console.log(itemToEdit)
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(TestCasesDialogComponent, {
       context: {item: itemToEdit},
@@ -139,7 +138,6 @@ export class TestCasesComponent implements OnInit{
         //         "TerminalID_Next_Button"
         //     ]
         // }
-            console.log(result);
 
             // {
             //   terminalName: 'pps50',
