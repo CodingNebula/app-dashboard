@@ -1,35 +1,148 @@
 <nb-card>
-    <nb-card-header>Test Case</nb-card-header>
+    <nb-card-header>Terminal</nb-card-header>
     <nb-card-body>
         <form [formGroup]="myForm"  class="custom-form">
             <div class="form-row">
                 <div class="form-group">
-                  <label for="application">Test Case Name:</label>
-                  <input id="application" formControlName="application" class="form-control" />
-                  <div *ngIf="myForm.get('application').touched && myForm.get('application').invalid" class="error-message">
-                    <small *ngIf="myForm.get('application').hasError('required')">Test Case name is required!</small>
+                  <label for="terminalName">Terminal Name:</label>
+                  <input id="terminalName" formControlName="terminalName" class="form-control" />
+                  <div *ngIf="isSubmit && myForm.get('terminalName').invalid" class="error-message">
+                    <small *ngIf="myForm.get('terminalName').hasError('required')">Terminal Name is required!</small>
                   </div>
                 </div>
               </div>
               <div class="form-row">
               <div class="form-group">
-                <label for="testCases">Actions:</label>
-                <nb-select id="testCases" formControlName="testCases" placeholder="Select Actions" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown" multiple>
-                  <nb-option *ngFor="let item of temp" [value]="item">{{item?.title}}</nb-option>
+                <label for="endpoint">Endpoint:</label>
+                <nb-select id="endpoint" formControlName="endpoint" placeholder="Select Endpoint" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown">
+                  <nb-option *ngFor="let item of endpoints" [value]="item">{{item}}</nb-option>
                   </nb-select>
-                <div *ngIf="myForm.get('testCases').touched && myForm.get('testCases').invalid" class="error-message">
-                  <small *ngIf="myForm.get('testCases').hasError('testCases')">Actions required!</small>
+                <div *ngIf="isSubmit && myForm.get('endpoint').invalid" class="error-message">
+                  <small *ngIf="myForm.get('endpoint').hasError('endpoint')">Endpoint required!</small>
                 </div>
               </div>
             </div>
-          
-            
+          <div *ngIf="selectedEndpoint === 'Propay'">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="merchantId">MerchantId:</label>
+              <input id="merchantId" formControlName="merchantId" class="form-control" />
+              <div *ngIf="isSubmit && myForm.get('merchantId').invalid" class="error-message">
+                <small *ngIf="myForm.get('merchantId').hasError('merchantId')">MerchantId required!</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+          <div class="form-group">
+            <label for="consumerKey">Consumer Key:</label>
+            <input id="consumerKey" formControlName="consumerKey" class="form-control" />
+            <div *ngIf="isSubmit && myForm.get('consumerKey').invalid" class="error-message">
+              <small *ngIf="myForm.get('consumerKey').hasError('consumerKey')">Consumer Key required!</small>
+            </div>
+          </div>
+        </div>
+          <div class="form-row">
+          <div class="form-group">
+            <label for="secret">Secret:</label>
+            <input id="secret" formControlName="secret" class="form-control" />
+            <div *ngIf="isSubmit && myForm.get('secret').invalid" class="error-message">
+              <small *ngIf="myForm.get('secret').hasError('secret')">Secret required!</small>
+            </div>
+          </div>
+        </div>
+          <div class="form-row">
+          <div class="form-group">
+            <label for="gatewayUrl">Gateway Url:</label>
+            <input id="gatewayUrl" formControlName="gatewayUrl" class="form-control" />
+            <div *ngIf="isSubmit && myForm.get('gatewayUrl').invalid" class="error-message">
+              <small *ngIf="myForm.get('gatewayUrl').hasError('gatewayUrl')">Gateway Url required!</small>
+            </div>
+          </div>
+        </div>
+          </div>
+          <div *ngIf="selectedEndpoint === 'pps'">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="gatewayUrl">Gateway Url:</label>
+                <input id="gatewayUrl" formControlName="gatewayUrl" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('gatewayUrl').invalid" class="error-message">
+                  <small *ngIf="myForm.get('gatewayUrl').hasError('gatewayUrl')">Gateway Url required!</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="merchantId">MerchantId:</label>
+                <input id="merchantId" formControlName="merchantId" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('merchantId').invalid" class="error-message">
+                  <small *ngIf="myForm.get('merchantId').hasError('merchantId')">MerchantId required!</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="secret">Secret:</label>
+                <input id="secret" formControlName="secret" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('secret').invalid" class="error-message">
+                  <small *ngIf="myForm.get('secret').hasError('secret')">Secret required!</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="consumerKey">Consumer Key:</label>
+                <input id="consumerKey" formControlName="consumerKey" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('consumerKey').invalid" class="error-message">
+                  <small *ngIf="myForm.get('consumerKey').hasError('consumerKey')">Consumer Key required!</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedEndpoint === 'WorldNet'">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="secret">Secret:</label>
+                <input id="secret" formControlName="secret" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('secret').invalid" class="error-message">
+                  <small *ngIf="myForm.get('secret').hasError('secret')">Secret required!</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="gatewayUrl">Gateway Url:</label>
+                <input id="gatewayUrl" formControlName="gatewayUrl" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('gatewayUrl').invalid" class="error-message">
+                  <small *ngIf="myForm.get('gatewayUrl').hasError('gatewayUrl')">Gateway Url required!</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="merchantId">MerchantId:</label>
+                <input id="merchantId" formControlName="merchantId" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('merchantId').invalid" class="error-message">
+                  <small *ngIf="myForm.get('merchantId').hasError('merchantId')">MerchantId required!</small>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="consumerKey">Consumer Key:</label>
+                <input id="consumerKey" formControlName="consumerKey" class="form-control" />
+                <div *ngIf="isSubmit && myForm.get('consumerKey').invalid" class="error-message">
+                  <small *ngIf="myForm.get('consumerKey').hasError('consumerKey')">Consumer Key required!</small>
+                </div>
+              </div>
+            </div>
+
+          </div>
           </form>
     </nb-card-body>
     <nb-card-footer>
       <button nbButton (click)="close()" class="close-button">Close</button>
       <div class="form-row button-row">
-        <button type="submit" (click)="onSubmit()" [disabled]="myForm.invalid" class="submit-button">Submit</button>
+        <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
         </div>
     </nb-card-footer>
   </nb-card>

@@ -52,47 +52,48 @@ export class LoginComponent implements OnInit {
 
   }
   onLoggedin() {
+    const email = this.loginForm.get('email').value;
+    const password = this.loginForm.get('password').value;
+    console.log(email, password, '------->')
     // Check if the form is invalid
-    if (this.loginForm.invalid) {
+    if (!email && !password) {
       return;
     }
 
-    const email = this.loginForm.get('email').value;
-    const password = this.loginForm.get('password').value;
 
     const payload = {
       email: email,
       password: password
     };
-
+    this.router.navigateByUrl('pages/terminal');
     // Make the POST request to authenticate the user
-    this.http.post<any>(`${environment.api_url}/authenticate`, payload)
-      .subscribe(
-        (data) => {
-          if (data?.token) {
-            let response = data;
-            
-            localStorage.setItem('id', response.id);
-            localStorage.setItem('accessToken', response.token);
-            localStorage.setItem('refreshToken', response.refreshToken);
-            localStorage.setItem('expiry', moment(new Date()).add(response.expireTime, 'seconds').unix().toString());
-
-            // localStorage.setItem('refreshExpiry', moment(new Date()).add(response.refresh_expires_in, 'seconds').unix().toString());
-
-            // localStorage.setItem('token', data.token);
-
-            // this.webSocketService.socketConnect(data?.token);
-
-            this.router.navigateByUrl('pages/application');
-          } else {
-            console.error('No token received');
-          }
-        },
-        (error) => {
-          console.error('Error during HTTP request:', error);
-          // alert('Login failed. Please check your credentials and try again.');
-        }
-      );
+    // this.http.post<any>(`${environment.api_url}/authenticate`, payload)
+      // .subscribe(
+      //   (data) => {
+      //     if (data?.token) {
+      //       let response = data;
+      //
+      //       localStorage.setItem('id', response.id);
+      //       localStorage.setItem('accessToken', response.token);
+      //       localStorage.setItem('refreshToken', response.refreshToken);
+      //       localStorage.setItem('expiry', moment(new Date()).add(response.expireTime, 'seconds').unix().toString());
+      //
+      //       // localStorage.setItem('refreshExpiry', moment(new Date()).add(response.refresh_expires_in, 'seconds').unix().toString());
+      //
+      //       // localStorage.setItem('token', data.token);
+      //
+      //       // this.webSocketService.socketConnect(data?.token);
+      //
+      //       this.router.navigateByUrl('pages/application');
+      //     } else {
+      //       console.error('No token received');
+      //     }
+      //   },
+      //   (error) => {
+      //     console.error('Error during HTTP request:', error);
+      //     // alert('Login failed. Please check your credentials and try again.');
+      //   }
+      // );
   }
 
 }
@@ -179,7 +180,7 @@ export class LoginComponent implements OnInit {
 //             localStorage.setItem('refreshExpiry', moment(new Date()).add(response.refresh_expires_in, 'seconds').unix().toString());
 
 //             // this.webSocketService.socketConnect(data?.token);
-            
+
 
 //             this.router.navigateByUrl('pages/application');
 //           } else {

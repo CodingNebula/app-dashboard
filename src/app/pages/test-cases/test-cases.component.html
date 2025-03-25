@@ -1,36 +1,27 @@
 <div class="test-case-main">
-  <div *ngIf="applicationDataArr.length === 0" class="no-app-div">
-    <h4>No Test Cases Added Yet</h4>
-  </div>
-
-
-  <div *ngIf="applicationDataArr.length > 0">
+<!--  <div *ngIf="applicationDataArr.length === 0" class="no-app-div">-->
+<!--    <h4>No Test Cases Added Yet</h4>-->
+<!--  </div>-->
+  <div class="header-div">
+    <div class="page-title">Terminal</div>
+  <button (click)="openDialog()" class="add-terminal-btn">Add Terminal</button>
+    </div>
+  <div>
     <div class="container">
       <div class="row table-header-div">
-        <div class="col-1 s-no-div ">S.No</div>
-        <div class="col-4 table-header p-0">Test Case Name</div>
-        <div class="col-4 table-header ">Test Cases</div>
-        <div class="col-2 table-header-action">Action</div>
-        <div class="col-1 table-header"></div>
+        <div class="col-2 s-no-div ">S.No</div>
+        <div class="col-4 table-header p-0">Terminal Name</div>
+        <div class="col-4 table-header ">Endpoint</div>
+        <div class="col-2 table-header-action">Configuration</div>
       </div>
     </div>
-    <div class="table-data-div-container">
+    <div class="table-data-div-container container">
       <div class="table-data-div" *ngFor="let item of applicationDataArr; let i = index">
-        <div class="col-1">{{i + 1}}</div>
-        <div class="col-4 table-data">{{item.test_case_title}}</div>
-        <div class="col-4 table-data" [nbTooltip]="getTestCaseTitles(item.test_case_types)"> {{ getTestCaseTitles(item.test_case_types) }}</div>
-        <div class="col-2 table-data-action">
-          <button [nbPopover]="actionref" nbPopoverPlacement="bottom">
-            <nb-icon class="edit-icon" icon="edit-2-outline" ></nb-icon>
-          </button>
-          <ng-template class="edit-popup" #actionref>
-            <button class="popup-btn popup-submit" (click)="openDialog(item)">Edit</button>
-            <button class="popup-btn popup-delete" (click)="deleteTestCase(item?.test_case_id)">Delete</button>
-          </ng-template>
-          <!-- <nb-icon class="edit-icon" icon="edit-2-outline" (click)="openDialog(item)"></nb-icon> -->
-        </div>
-        <div class="col-1 table-data-auto">
-          <nb-icon nbTooltip="Automate" class="edit-icon" icon="settings-2-outline" ></nb-icon>
+        <div class="col-2">{{i + 1}}</div>
+        <div class="col-4 table-data">{{item.terminalName}}</div>
+        <div class="col-4 table-data" > {{item.endpoint }}</div>
+        <div class="col-2 see-config-data">
+          <button class="see-config-btn" (click)="openDialog(item)">See Configuration</button>
         </div>
       </div>
     </div>
@@ -58,5 +49,5 @@
       </tbody>
     </table>
   </div> -->
-  <nb-icon class="plus-circle-icon" (click)="openDialog()" icon="plus-circle-outline"></nb-icon>
+
 </div>

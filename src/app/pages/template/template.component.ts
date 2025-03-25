@@ -27,7 +27,7 @@ export class TemplateComponent {
   public isShowMenu:boolean=false;
 
   @ViewChild('popover') popover: NbPopoverDirective;
-  
+
   @ViewChild('popoverTemplate', { static: false }) popoverTemplate: NbPopoverDirective;
   @ViewChild('list', { read: TemplateRef }) templateList: TemplateRef<any>;
 
@@ -36,10 +36,8 @@ export class TemplateComponent {
     private router: Router,
     private accountService: AccountService,
     private applicationDataService: ApplicationDataService,
-  private editDeleteService: EditDeleteService) {
+    private editDeleteService: EditDeleteService) {
     const appDetails = this.applicationDataService.getData();
-
-
 
   }
 
@@ -62,14 +60,14 @@ export class TemplateComponent {
 
   openDeleteDailog(item) {
     if (this.popover?.isShown) {
-      
-      this.popover?.hide(); 
+
+      this.popover?.hide();
     }
 
     if(this.popoverTemplate?.isShown){
       this.popoverTemplate?.hide();
     }
-    
+
     const dialogRef = this.dialogService.open(DeleteDialogComponent, {
       hasBackdrop: true,
       closeOnBackdropClick: true,
@@ -99,7 +97,6 @@ export class TemplateComponent {
 
     const userId = localStorage.getItem('app_id')
 
-
     let url
     if (ins_id.testcase_id !== undefined) {
       url = `${userId}/${ins_id.testcase_id}`
@@ -113,7 +110,6 @@ export class TemplateComponent {
       }, (error) => {
         console.error('Error saving test case:', error);
       });
-
 
     } else {
       url = `${userId}/${ins_id.template_id}`
@@ -129,28 +125,19 @@ export class TemplateComponent {
 
     }
 
-
-
-
   }
 
 
   openDialog(action: string, type: string, id?: any, editData?: any, isEdit?: boolean) {
     // Open the dialog and pass data to it using 'context'
     if (this.popover?.isShown) {
-      
       this.popover?.hide(); // Hide the popover if it is currently shown
     }
 
-  if (this.popoverTemplate && this.popoverTemplate?.isShown) {
-    this.popoverTemplate?.hide(); // Hide the popover if it is currently shown
-  }
-
     if(this.popoverTemplate?.isShown){
-      
       this.popoverTemplate?.hide();
     }
-    
+
     let item;
     console.log(editData, action, type);
 
@@ -161,16 +148,13 @@ export class TemplateComponent {
       item = editData;
     }
 
-    
-
     const dialogRef = this.dialogService.open(TemplateDialogComponent, {
       context: { selectedAction: action, selectedType: type, testCaseArr: this.testCasesArray, instructionsArr: this.instructionsArr, item: item, isEdit: isEdit },
     });
 
-
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
-      
+
       if (result?.confirmed) {
         if (result.selectedAction === 'testCase') {
           if (result.selectedType === 'name') {
@@ -180,7 +164,7 @@ export class TemplateComponent {
                 screenName: result.data.test_case_name.trim(),
                 extra: {},
               }
-              
+
               const api_url = `page/${localStorage.getItem('app_id')}/${id}`;
               this.accountService.updateTestCaseName(api_url, details).subscribe((res) => {
                 if(res){
@@ -208,7 +192,7 @@ export class TemplateComponent {
           }
 
           if(result.selectedType === 'reorder'){
-            
+
             let body = {
               instruction_set_id: result?.data?.instruction_set_id,  // This value can be dynamic
               instruction_id: result?.data?.instructions?.map((instruction, index) => {
@@ -264,7 +248,7 @@ export class TemplateComponent {
                 description:  result.data.description.trim(),
                 extra: {},
               }
-              
+
               const api_url = `workflow/${localStorage.getItem('app_id')}/${id}`;
               this.accountService.updateTestCaseName(api_url, details).subscribe((res) => {
                 if(res){
@@ -272,7 +256,7 @@ export class TemplateComponent {
                 }
               })
             } else{
-              
+
 
             const details = {
               templateName: result.data.templateName.trim(),
@@ -282,7 +266,6 @@ export class TemplateComponent {
                 quick: result.data.quick
               },
             }
-
 
             this.accountService.postTemplateName(details).subscribe((resp) => {
               if (resp) {
@@ -294,11 +277,11 @@ export class TemplateComponent {
             })
             this.applicationDataService.setData('testCases', this.testCasesArray);
           }
-          
+
         }
 
         if(result.selectedType === 'reorder'){
-            
+
           let body = {
             wt_id: result?.data?.wt_id,  // This value can be dynamic
             instructions_set: result?.data?.screens?.map((screen, index) => {
@@ -373,7 +356,7 @@ export class TemplateComponent {
     });
   }
 
-  
+
 
   deleteInstruction(app_id, insId) {
     this.accountService.deleteInstruction(app_id, insId).subscribe((response) => {
@@ -415,17 +398,17 @@ export class TemplateComponent {
             instructions: []
           };
         }
-        
-        
+
+
         // Add current instruction to the appropriate group
         if (curr.instruction_name !== null) {
           acc[instruction_set_id].instructions.push(curr);
         }
-        
+
         return acc;
       }, {});
-      
-      const result = Object.values(groupedInstructions); 
+
+      const result = Object.values(groupedInstructions);
 
 
       const sortedInstructions = result.map((item: any) => {
@@ -434,12 +417,12 @@ export class TemplateComponent {
           .sort((a: any, b: any) => {
             return parseInt(a.instruction_order) - parseInt(b.instruction_order);
           });
-        
+
         return item;
       });
-      
+
       this.testCasesArray = sortedInstructions;
-      
+
     })
   }
 
@@ -469,7 +452,7 @@ console.log(resp);
 
         // Find or create the screen group
         let screenGroup = wtGroup.screens.find(screen => screen.wim_order === curr.wim_order);
-        
+
         if (!screenGroup) {
           screenGroup = {
             ins_set_id: curr.ins_set_id,
@@ -483,8 +466,8 @@ console.log(resp);
           }
 
         }
-        
-        
+
+
         // Check if the instruction is already added to the screenGroup
         const instructionExists = screenGroup.instructions.some(instr => instr.im_id === curr.im_id);
         if (!instructionExists) {
@@ -498,21 +481,21 @@ console.log(resp);
       //   });
       //   return item;
       // });
-      
+
 
 
       let result = groupedData.map((item) => {
         item.screens = item.screens.filter((screen) => {
-          return screen.wim_order !== "0"; 
+          return screen.wim_order !== "0";
         })
         return item;
       })
 
-      
+
       console.log(result);
-      
+
       this.templateArray = result;
-      
+
 
     });
   }

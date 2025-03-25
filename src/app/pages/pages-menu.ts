@@ -1,27 +1,28 @@
 import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
+  // {
+  //   title: 'Application',
+  //   icon: 'monitor-outline',
+  //   link: '/pages/application',
+  //   home: true,
+  // },
   {
-    title: 'Application',
-    icon: 'monitor-outline',
-    link: '/pages/application',
+    title: 'Terminal',
+    icon: 'clipboard-outline',
+    link: '/pages/terminal',
     home: true,
   },
-  // {
-  //   title: 'Test Cases',
-  //   icon: 'clipboard-outline',
-  //   link: '/pages/test-cases',
-  // },
   // {
   //   title: 'Automate',
   //   icon: 'repeat-outline',
   //   link: '/pages/automate',
   // },
-  {
-    title: 'Reports',
-    icon: 'file-text-outline',
-    link: '/pages/reports',
-  },
+  // {
+  //   title: 'Reports',
+  //   icon: 'file-text-outline',
+  //   link: '/pages/reports',
+  // },
   {
     title: 'Sign Out',
     icon: 'log-in-outline',

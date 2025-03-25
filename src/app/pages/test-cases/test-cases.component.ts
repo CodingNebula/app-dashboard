@@ -13,9 +13,72 @@ export class TestCasesComponent implements OnInit{
   public applicationDataArr: any[] = [];
   public applicationId: any;
   constructor(
-    private dialogService: NbDialogService, 
+    private dialogService: NbDialogService,
     protected router: Router,
-  private accountService: AccountService){}
+  private accountService: AccountService){
+    this.applicationDataArr =  [
+      {
+        terminalName: 'propay1',
+        endpoint: 'propay',
+        configuration: {
+          merchantId : "1000015959",
+          consumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+          secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+          gatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+        }
+      },
+      {
+        terminalName: 'propay12',
+        endpoint: 'propay',
+        configuration: {
+          merchantId : "1000015959",
+          consumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+          secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+          gatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+        }
+      },
+      {
+        terminalName: 'worldnet123',
+        endpoint: 'worldnet',
+        configuration: {
+          merchantId : "1000015959",
+          consumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+          secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+          gatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+        }
+      },
+      {
+        terminalName: 'worldnet456',
+        endpoint: 'worldnet',
+        configuration: {
+          merchantId : "1000015959",
+          consumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+          secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+          gatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+        }
+      },
+      {
+        terminalName: 'pps01',
+        endpoint: 'pps',
+        configuration: {
+          merchantId : "1000015959",
+          consumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+          secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+          gatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+        }
+      },
+      {
+        terminalName: 'pps50',
+        endpoint: 'pps',
+        configuration: {
+          merchantId : "1000015959",
+          consumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+          secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+          gatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+        }
+      },
+    ]
+  }
 
   ngOnInit(){
     const state = window.history.state;
@@ -23,9 +86,9 @@ export class TestCasesComponent implements OnInit{
     if (state && state.id) {
       this.applicationId = state.id;
     }
-    
-    
-    this.getTestCases();
+
+
+    // this.getTestCases();
 
   }
 
@@ -35,26 +98,31 @@ export class TestCasesComponent implements OnInit{
 
 
   openDialog(itemToEdit?) {
-  
+    console.log(itemToEdit)
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(TestCasesDialogComponent, {
       context: {item: itemToEdit},
     });
-  
+
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
+      console.log(result);
       if (result) {
         if (result.confirmed) {
           if (itemToEdit) {
             const index = this.applicationDataArr.findIndex((item) => item === itemToEdit);
-            
-            if (index > -1) {
-              // this.applicationDataArr[index] = result.data; // Update the existing item
-              this.applicationDataArr[index].test_case_title = result.data.application;
-              this.applicationDataArr[index].test_case_types = result.data.testCases;
-
-              // this.accountService.updateTestCase();
+            const data = {
+              terminalName: result.data.terminalName,
+              endpoint: result.data.endpoint,
+              configuration: {
+                merchantId: result.data.merchantId,
+                consumerKey: result.data.consumerKey,
+                secret: result.data.secret,
+                gatewayUrl: result.data.gatewayUrl
+              }
             }
+            this.applicationDataArr.splice(index, 1, data);
+
           } else {
             // Otherwise, add a new item
           //   const details = {
@@ -71,15 +139,45 @@ export class TestCasesComponent implements OnInit{
         //         "TerminalID_Next_Button"
         //     ]
         // }
-          
-            const details = {
-              title: result.data.application,
-              types: result.data.testCases,
-              applicationId: this.applicationId,
-              extra: {}
+            console.log(result);
+
+            // {
+            //   terminalName: 'pps50',
+            //     endpoint: 'pps',
+            //   configuration: {
+            //   MerchantId : "1000015959",
+            //     ConsumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
+            //     Secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+            //     GatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
+            // }
+            // },
+
+            // {
+            //   "terminalName": "Propay12",
+            //   "endpoint": "Propay",
+            //   "merchantId": "1000015959",
+            //   "consumerKey": "9T7tBhJPwIUH2bAIaYRXcgvM",
+            //   "secret": "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
+            //   "gatewayUrl": "https://sandbox.api.mxmerchant.com/checkout/v3/"
+            // }
+            const data = {
+              terminalName: result.data.terminalName,
+              endpoint: result.data.endpoint,
+              configuration: {
+                merchantId: result.data.merchantId,
+                consumerKey: result.data.consumerKey,
+                secret: result.data.secret,
+                gatewayUrl: result.data.gatewayUrl
+              }
             }
-            this.saveTestCasesData(details);
-            // this.applicationDataArr.push(result.data);
+            // const details = {
+            //   title: result.data.application,
+            //   types: result.data.testCases,
+            //   applicationId: this.applicationId,
+            //   extra: {}
+            // }
+            // this.saveTestCasesData(details);
+            this.applicationDataArr.push(data);
           }
         }
       }
@@ -88,11 +186,11 @@ export class TestCasesComponent implements OnInit{
 
   saveTestCasesData(data) {
     this.accountService.postTestCases(data).subscribe((response) => {
-  
+
       if (response) {
         if (Array.isArray(this.applicationDataArr)) {
           this.applicationDataArr.push(response); // Add the new item to the array
-          
+
         } else {
           console.error('applicationDataArr is not an array');
         }
@@ -103,9 +201,9 @@ export class TestCasesComponent implements OnInit{
   }
 
   getTestCases(){
-    
+
   this.accountService.getTestCases(this.applicationId).subscribe((data) => {
-    
+
     if (data?.message !== 'No Test Case Found') {
       this.applicationDataArr = data;
     }
@@ -119,6 +217,10 @@ deleteTestCase(id: string){
     }
   })
 }
-  
+
+openDonfigurationDialog(config){
+  console.log(config);
+}
+
 
 }

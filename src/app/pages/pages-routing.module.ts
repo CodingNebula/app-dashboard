@@ -24,7 +24,7 @@ const routes: Routes = [{
       component: ApplicationComponent
     },
     {
-      path: 'test-cases',
+      path: 'terminal',
       canActivate: [AuthGuard],
       component: TestCasesComponent,
     },

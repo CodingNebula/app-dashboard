@@ -38,9 +38,9 @@
                           (click)="openDialog('testCase', 'name', testCase?.instruction_set_id ,testCase, true)">Edit
                           Testcase</nb-list-item>
                         <nb-list-item (click)="openDeleteDailog(testCase)">Delete</nb-list-item>
-                        <nb-list-item [ngClass]="testCase?.instructions.length === 0 ? 'not-allowed' : ''"
-                          [attr.disabled]="testCase?.instructions.length === 0 ? true : null"
-                          (click)="testCase?.instructions.length > 0 && openDialog('testCase', 'reorder', '', testCase)">
+                        <nb-list-item [ngClass]="testCase.instructions.length === 0 ? 'not-allowed' : ''"
+                          [attr.disabled]="testCase.instructions.length === 0"
+                          (click)="testCase.instructions.length > 0 && openDialog('testCase', 'reorder', '', testCase)">
                           Edit Instructions
                         </nb-list-item>
                         <nb-list-item (click)="openDialog('testCase', 'instruction',testCase?.instruction_set_id)">Add
