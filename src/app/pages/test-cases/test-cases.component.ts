@@ -97,85 +97,43 @@ export class TestCasesComponent implements OnInit{
   }
 
 
-  openDialog(itemToEdit?) {
+  openDialog(itemToEdit?,edit = false) {
+
     // Open the dialog and pass data to it using 'context'
     const dialogRef = this.dialogService.open(TestCasesDialogComponent, {
-      context: {item: itemToEdit},
+      context: {item: itemToEdit, editing: edit},
     });
 
     // Get the result (data) when the dialog closes
     dialogRef.onClose.subscribe((result) => {
-      console.log(result);
+
       if (result) {
         if (result.confirmed) {
           if (itemToEdit) {
             const index = this.applicationDataArr.findIndex((item) => item === itemToEdit);
-            const data = {
-              terminalName: result.data.terminalName,
-              endpoint: result.data.endpoint,
-              configuration: {
-                merchantId: result.data.merchantId,
-                consumerKey: result.data.consumerKey,
-                secret: result.data.secret,
-                gatewayUrl: result.data.gatewayUrl
-              }
-            }
-            this.applicationDataArr.splice(index, 1, data);
+            this.applicationDataArr.splice(index, 1, result.data);
 
           } else {
-            // Otherwise, add a new item
-          //   const details = {
-          //     title: req.body.title,
-          //     types: JSON.stringify(req.body.types),
-          //     applicationId: req.body.applicationId,
-          //     extra: JSON.stringify(req.body.extra),
-          // }
+            this.applicationDataArr.push(result.data);
+          }
 
-        //   {
-        //     "application": "Welcome page",
-        //     "testCases": [
-        //         "Permission_Continue_Button",
-        //         "TerminalID_Next_Button"
-        //     ]
-        // }
+          const formattedData = {
+            terminalName: result.data.terminalName,
+            endpoint: result.data.endpoint,
+            configuration: { ...result.data }
+          };
 
-            // {
-            //   terminalName: 'pps50',
-            //     endpoint: 'pps',
-            //   configuration: {
-            //   MerchantId : "1000015959",
-            //     ConsumerKey : "9T7tBhJPwIUH2bAIaYRXcgvM",
-            //     Secret : "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
-            //     GatewayUrl : "https://sandbox.api.mxmerchant.com/checkout/v3/",
-            // }
-            // },
+          delete formattedData.configuration.terminalName;
+          delete formattedData.configuration.endpoint;
 
-            // {
-            //   "terminalName": "Propay12",
-            //   "endpoint": "Propay",
-            //   "merchantId": "1000015959",
-            //   "consumerKey": "9T7tBhJPwIUH2bAIaYRXcgvM",
-            //   "secret": "KrJ+cxSM9fRlBOol4+iQK8Ztggw=",
-            //   "gatewayUrl": "https://sandbox.api.mxmerchant.com/checkout/v3/"
-            // }
-            const data = {
-              terminalName: result.data.terminalName,
-              endpoint: result.data.endpoint,
-              configuration: {
-                merchantId: result.data.merchantId,
-                consumerKey: result.data.consumerKey,
-                secret: result.data.secret,
-                gatewayUrl: result.data.gatewayUrl
-              }
-            }
-            // const details = {
-            //   title: result.data.application,
-            //   types: result.data.testCases,
-            //   applicationId: this.applicationId,
-            //   extra: {}
-            // }
-            // this.saveTestCasesData(details);
-            this.applicationDataArr.push(data);
+          if (result.data.endpoint === 'pps') {
+            delete formattedData.configuration.logLevel;
+            delete formattedData.configuration.remoteLoggingEnabled;
+
+            formattedData.configuration.logging = {
+              logLevel: result.data.logLevel,
+              remoteLoggingEnabled: result.data.remoteLoggingEnabled,
+            };
           }
         }
       }

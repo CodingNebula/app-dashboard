@@ -14,8 +14,8 @@ import { LayoutService } from '../../../@core/utils';
         <div class="header-container">
           <div class="logo-container">
             <!--              <i routerLink="/health" style="color: wheat" class="fa fa-heart health-icon"></i>-->
-            
-            
+
+
           </div>
         </div>
         <ng-content select="nb-menu"></ng-content>
@@ -25,7 +25,7 @@ import { LayoutService } from '../../../@core/utils';
       <nb-layout-column class="main-content mobile-view" style="padding: 1rem">
         <div *ngIf="hideHeader" (click)="test()" class="backdrop-custom">
         </div>
-        
+
         <ng-content select="router-outlet"></ng-content>
       </nb-layout-column>
     </nb-layout>

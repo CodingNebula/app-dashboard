@@ -10,33 +10,6 @@
                 <h3>Sign In</h3>
                 <p class="mb-2">Track and Monitor your Transactions</p>
               </div>
-              <!-- <div class="button text-center mb-2">
-                <button class="custom-btn" nbButton fullWidth shape="round" size="medium" >Sign in Username/Password</button>
-              </div>
-              <div class="line">
-                <h6>Or Sign in with Username</h6>
-              </div> -->
-              <!-- <form role="form" class="custom-form" >
-
-                <div class="form-group">
-                  <label for="key">Username*</label>
-                  <input type="text" class="form-control" [(ngModel)]="email" id="key" >
-                  <div class="invalid-feedback">
-                    <div >Username is required</div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="passPhrase">Password*</label>
-                  <input type="password" class="form-control" [(ngModel)]="password" formControlName="adminKey" id="passPhrase" >
-                  <div  class="invalid-feedback">
-                    <div >Password is required</div>
-                  </div>
-                </div>
-                <div class="form-group form-check mb-3">
-                  <nb-checkbox (checkedChange)="toggle($event)" >Remember me</nb-checkbox>
-                </div>
-                <button class="submit-btn" type="submit" (click)="onLoggedin()"  shape="round" size="medium">Sign in</button>
-              </form> -->
               <form [formGroup]="loginForm" (ngSubmit)="onLoggedin()">
                 <div class="form-group">
                   <label for="key">Username*</label>

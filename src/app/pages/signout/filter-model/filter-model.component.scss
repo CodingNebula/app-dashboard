@@ -2,38 +2,52 @@
 @import 'node_modules/bootstrap/scss/mixins/breakpoints';
 @import 'node_modules/@nebular/theme/styles/global/breakpoints';
 @include nb-install-component() {
-  nb-card {
-    border-radius: 1rem;
-    nb-card-header {
-      padding: 0.5rem 1rem;
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
-    }
-    nb-card-body {
-      padding: 0.5rem 1rem 1rem 1rem;
-    }
-  }
+
   .cancel {
     margin-right: 1rem;
+    margin-left: 20px;
   }
   .button-center {
     text-align:center;
     button {
-      width:45%;
+      width:40%;
       padding: 0.4875rem 1.125rem;
       border: 1px solid #16a3ad;
       color: #16a3ad;
       text-transform: capitalize;
       font-weight: 600;
+      margin-top: 10px;
+      border-radius: 20px;
     }
     .submit {
       background-color: #16a3ad;
       color:#FFFFFF;
+      margin-right: 20px
     }
   }
-   //.signout-main{
-   //  background-color: #FFFFFF;
-   //  width: 50vw;
-   //  height: 24vh;
-   //}
+   .signout-main{
+     background-color: #FFFFFF;
+     width: 40vw;
+     height: 24vh;
+     padding: 10px 15px
+   }
+
+  @media (min-width: 1024px) and (max-width: 1240px) {
+    button {
+      width:40%;
+      padding: 0.4875rem 1.125rem;
+      border: 1px solid #16a3ad;
+      color: #16a3ad;
+      text-transform: capitalize;
+      font-weight: 600;
+      margin-top: 7px;
+      border-radius: 20px;
+    }
+    .signout-main{
+      background-color: #FFFFFF;
+      width: 50vw;
+      height: 30vh;
+      padding: 10px 15px
+    }
+  }
 }

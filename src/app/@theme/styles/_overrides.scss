@@ -46,7 +46,7 @@ nb-menu .menu-items >.menu-item > a.active:hover > .menu-icon{
   color: #00A3AB;
 }
 
-nb-menu .menu-items >.menu-item > a:hover, 
+nb-menu .menu-items >.menu-item > a:hover,
 nb-menu .menu-items >.menu-item > a:hover > .menu-icon{
   color: #ffffff;
 }
@@ -161,3 +161,7 @@ nb-spinner.status-info{
   background:none !important;
   background-color: transparent !important;
 }
+.cdk-global-scrollblock{
+  overflow-y:hidden !important;
+}
+
