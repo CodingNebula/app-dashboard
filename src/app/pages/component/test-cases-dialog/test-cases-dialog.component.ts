@@ -34,47 +34,48 @@ export class TestCasesDialogComponent implements OnInit {
     if (this.item) {
       this.selectedEndpoint = this.item.endpoint;
       this.myForm.patchValue({
-        terminalName: this.item?.terminalName,
-        endpoint: this.item?.endpoint,
+        terminalName: this.item?.Name,
+        endpoint: this.item?.TerminalConfiguration.endpoint.provider,
       });
 
-      this.addControls(this.item.endpoint, false);
+      this.selectedEndpoint = this.item.TerminalConfiguration.endpoint.provider
+      this.addControls(this.item.TerminalConfiguration.endpoint.provider, false);
 
-      if (this.item.endpoint === 'worldnet') {
+      if (this.item.TerminalConfiguration.endpoint.provider === 'worldnet') {
         this.myForm.patchValue({
-          api: this.item.api,
-          gatewayurl: this.item.gatewayurl,
-          worldnetId: this.item.worldnetId,
+          api: this.item.TerminalConfiguration.endpoint.apiKey,
+          gatewayurl: this.item.TerminalConfiguration.endpoint.gatewayUrl,
+          worldnetId: this.item.TerminalConfiguration.endpoint.worldnetTerminalID,
         });
-      } else if (this.item.endpoint === 'propay') {
+      } else if (this.item.TerminalConfiguration.endpoint.provider === 'propay') {
         this.myForm.patchValue({
-          debug: this.item.debug,
-          flavor: this.item.flavor,
-          certstr: this.item.certstr,
-          x509Cert: this.item.x509Cert,
-          accountNum: this.item.accountNum,
-          gatewayUrlPropay: this.item.gatewayUrlPropay,
-          terminalId: this.item.terminalId,
-          xmlApiBaseUrl: this.item.xmlApiBaseUrl,
-          classMetaKey: this.item.classMetaKey,
-          jsonApiBaseUrl: this.item.jsonApiBaseUrl,
-          ServerDateFormat: this.item.ServerDateFormat,
-          splitfundingAccountNum: this.item.splitfundingAccountNum,
+          debug: this.item.TerminalConfiguration.endpoint.debug,
+          flavor: this.item.TerminalConfiguration.endpoint.flavor,
+          certstr: this.item.TerminalConfiguration.endpoint.certStr,
+          x509Cert: this.item.TerminalConfiguration.endpoint.x509Cert,
+          accountNum: this.item.TerminalConfiguration.endpoint.accountNum,
+          gatewayUrlPropay: this.item.TerminalConfiguration.endpoint.gatewayUrl,
+          terminalId: this.item.TerminalConfiguration.endpoint.terminalId,
+          xmlApiBaseUrl: this.item.TerminalConfiguration.endpoint.xmlApiBaseUrl,
+          classMetaKey: this.item.TerminalConfiguration.endpoint.CLASS_META_KEY,
+          jsonApiBaseUrl: this.item.TerminalConfiguration.endpoint.jsonApiBaseUrl,
+          ServerDateFormat: this.item.TerminalConfiguration.endpoint.serverDateFormat,
+          splitfundingAccountNum: this.item.TerminalConfiguration.endpoint.splitfundingAccountNum,
         });
-      } else if (this.item.endpoint === 'pps') {
+      } else if (this.item.TerminalConfiguration.endpoint.provider === 'pps') {
         this.myForm.patchValue({
-          Debug: this.item.Debug,
-          Flavor: this.item.Flavor,
-          secret: this.item.secret,
-          logLevel: this.item.logLevel,
-          remoteLoggingEnabled: this.item.remoteLoggingEnabled,
-          password: this.item.password,
-          username: this.item.username,
-          gatewayURL: this.item.gatewayURL,
-          merchantId: this.item.merchantId,
-          consumerKey: this.item.consumerKey,
-          consumerSecret: this.item.consumerSecret,
-          serverDateFormatPPS: this.item.serverDateFormatPPS
+          Debug: this.item.TerminalConfiguration.endpoint.debug,
+          Flavor: this.item.TerminalConfiguration.endpoint.flavor,
+          secret: this.item.TerminalConfiguration.endpoint.secret,
+          logLevel: this.item.TerminalConfiguration.endpoint.logging.logLevel,
+          remoteLoggingEnabled: this.item.TerminalConfiguration.endpoint.logging.remoteLoggingEnabled,
+          password: this.item.TerminalConfiguration.endpoint.password,
+          username: this.item.TerminalConfiguration.endpoint.username,
+          gatewayURL: this.item.TerminalConfiguration.endpoint.gatewayUrl,
+          merchantId: this.item.TerminalConfiguration.endpoint.merchantId,
+          consumerKey: this.item.TerminalConfiguration.endpoint.consumerKey,
+          consumerSecret: this.item.TerminalConfiguration.endpoint.consumerSecret,
+          serverDateFormatPPS: this.item.TerminalConfiguration.endpoint.serverDateFormat
         });
       }
 
@@ -209,11 +210,22 @@ export class TestCasesDialogComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    console.log(this.myForm.value);
+    const formValues = this.myForm.value;
+  
+    const hasEmptyField = Object.values(formValues).some(value => typeof value === 'string' && value.trim() === '');
+  
+    if (hasEmptyField) {
+  
+      return; 
+    }
+
+
+  
     if (this.myForm.valid) {
-      this.dialogRef.close({ confirmed: true, data: this.myForm.value });
+      this.dialogRef.close({ confirmed: true, data: formValues });
     }
   }
+  
 
   close() {
     this.dialogRef.close({confirmed: false});

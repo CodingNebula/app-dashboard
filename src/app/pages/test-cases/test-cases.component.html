@@ -15,17 +15,30 @@
         <div class="col-2 table-header-action">Configuration</div>
       </div>
     </div>
-    <div class="table-data-div-container container">
+    <div class="table-data-div-container container" *ngIf="applicationDataArr.length > 0 else noResults" >
       <div class="table-data-div" *ngFor="let item of applicationDataArr; let i = index">
         <div class="col-2">{{i + 1}}</div>
-        <div class="col-4 table-data">{{item.terminalName}}</div>
-        <div class="col-4 table-data" > {{item.endpoint }}</div>
+        <div class="col-4 table-data">{{item.Name}}</div>
+        <div class="col-4 table-data" > {{item.TerminalConfiguration.endpoint.provider }}</div>
         <div class="col-2 see-config-data">
           <button class="see-config-btn" (click)="openDialog(item,true)">See Configuration</button>
         </div>
       </div>
     </div>
   </div>
+
+  <ng-template #noResults>
+    <div class="no-data">
+      <div   class="row h-100 custom-row">
+        <div class="col-md-12">
+          <div class="text-center">
+            <img    src="assets/new-ui/no-data.png" width="80px" height="80px" alt=""/>
+            <h5  >No Data Found</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 
 
   <!-- <div *ngIf="applicationDataArr.length > 0">

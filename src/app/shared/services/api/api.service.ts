@@ -13,21 +13,19 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private setHeaders(): HttpHeaders {
-    const token = localStorage.getItem('accessToken');  // Replace 'token' with the correct key if necessary
+    const token = localStorage.getItem('token');  // Replace 'token' with the correct key if necessary
 
 
     const headersConfig = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
       'Access-Control-Allow-Credentials': 'true',
       'Access-Control-Allow-Headers': 'Authorization,Content-Type',
       'Access-Control-Max-Age': '3600',
-
     };
     if (token) {
-      headersConfig['Authorization'] = `Bearer ${token}`;  // Bearer token format
+      headersConfig['Authorization'] = `Basic ${JSON.parse(token)}`;  // Bearer token format
     }
     return new HttpHeaders(headersConfig);
   }
@@ -46,7 +44,7 @@ export class ApiService {
   }
 
   postWithoutModel(endpoint: string, request: any): Observable<any> {
-    const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
+    const apiURL = `${environment.api_url}/${endpoint}`;
     const headers = this.setHeaders();
 
     return this.http.post<any>(apiURL, request, { headers })
@@ -60,7 +58,7 @@ export class ApiService {
 
   getRefreshTokenWithoutModal(endpoint: string): Observable<any> {
     const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
-    
+
     const token = localStorage.getItem('accessToken');  // Replace 'token' with the correct key if necessary
     const refreshToken = localStorage.getItem('refreshToken');
 
@@ -78,10 +76,10 @@ export class ApiService {
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;  // Bearer token format
     }
-    if(refreshToken){ 
+    if(refreshToken){
       headers["refresh-token"] = refreshToken;
     }
-    
+
     return this.http.get<any>(apiURL, { headers })
       .pipe(
         catchError(error => {
@@ -93,7 +91,7 @@ export class ApiService {
   }
 
   getWithoutModal(endpoint: string): Observable<any> {
-    const apiURL = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
+    const apiURL = `${environment.api_url}/${endpoint}`;
     const headers = this.setHeaders();
     return this.http.get<any>(apiURL, { headers })
       .pipe(
@@ -130,7 +128,7 @@ export class ApiService {
     }
 
     updateWithoutModal(endpoint: string, request: any): Observable<any>{
-      const apiUrl = `${environment.api_url}/${localStorage.getItem('id')}/${endpoint}`;
+      const apiUrl = `${environment.api_url}/${endpoint}`;
       const headers = this.setHeaders();
       return this.http.put<any>(apiUrl, request, {headers})
       .pipe(

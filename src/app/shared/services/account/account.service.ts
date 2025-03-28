@@ -517,4 +517,74 @@ export class AccountService {
     )
   }
 
+  addTerminal(data) {
+
+    return this.apiService.postWithoutModel('appUser/terminal',data).pipe(
+      map(resp => {
+        if(resp){
+          return resp;
+        }
+      }),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+
+    )
+  }
+
+  getTerminal(){
+    return this.apiService.getWithoutModal('appUser/terminal').pipe(
+      map(resp => {
+        if(resp){
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
+  userLogin(body) {
+    return this.apiService.postWithoutModel('appUser/auth',body).pipe(
+      map(resp => {
+        if(resp){
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+
+    )
+  }
+
+  updateTerminal(terminalId,body) {
+    return this.apiService.updateWithoutModal(`appUser/terminal/${terminalId}`, body).pipe(
+      map(resp => {
+          if (resp) {
+            return resp;
+          }
+        }
+      ),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+    )
+  }
+
 }

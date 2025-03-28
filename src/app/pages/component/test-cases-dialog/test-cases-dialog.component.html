@@ -10,8 +10,8 @@
         <div class="form-group">
           <label for="terminalName">Terminal Name:</label>
           <input id="terminalName" [readOnly]="editing" formControlName="terminalName" class="form-control" />
-          <div *ngIf="isSubmit && myForm.get('terminalName').invalid" class="error-message">
-            <small *ngIf="myForm.get('terminalName').hasError('required')">Terminal Name is required!</small>
+          <div *ngIf="isSubmit && (myForm.get('terminalName').invalid || myForm.get('terminalName').value.trim() === '')" class="error-message">
+            <small *ngIf="myForm.get('terminalName').hasError('required') || myForm.get('terminalName').value.trim() === ''">Terminal Name is required!</small>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
           <nb-select id="endpoint"   formControlName="endpoint" placeholder="Select an endpoint" (selectedChange)="onTestCaseChange($event)" class="custom-select-dropdown">
             <nb-option *ngFor="let item of endpoints" [disabled]="editing" [value]="item">{{ item }}</nb-option>
           </nb-select>
-          <div *ngIf="isSubmit && myForm.get('endpoint').invalid" class="error-message">
+          <div *ngIf="isSubmit && (myForm.get('endpoint').invalid)" class="error-message">
             <small *ngIf="myForm.get('endpoint').hasError('required')">Endpoint is required!</small>
           </div>
         </div>
@@ -33,10 +33,10 @@
       <div *ngIf="selectedEndpoint === 'worldnet'">
         <div class="form-row">
           <div class="form-group">
-            <label for="api">API:</label>
+            <label for="api">API Key:</label>
             <input id="api" [readOnly]="editing" formControlName="api" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('api').invalid" class="error-message">
-              <small *ngIf="myForm.get('api').hasError('required')">API is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('api').invalid || myForm.get('api').value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('api').hasError('required') || myForm.get('api').value.trim() === ''">API is required!</small>
             </div>
           </div>
         </div>
@@ -44,17 +44,17 @@
           <div class="form-group">
             <label for="gatewayurlwldnt">Gateway URL:</label>
             <input id="gatewayurlwldnt" [readOnly]="editing" formControlName="gatewayurl" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('gatewayurl').invalid" class="error-message">
-              <small *ngIf="myForm.get('gatewayurl').hasError('required')">Gateway URL is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('gatewayurl').invalid || myForm.get('gatewayurl').value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('gatewayurl').hasError('required') || myForm.get('gatewayurl').value.trim() === ''">Gateway URL is required!</small>
             </div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="worldnetId">Worldnet ID:</label>
+            <label for="worldnetId">Worldnet terminal ID:</label>
             <input id="worldnetId" [readOnly]="editing" formControlName="worldnetId" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('worldnetId').invalid" class="error-message">
-              <small *ngIf="myForm.get('worldnetId').hasError('required')">Worldnet ID is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('worldnetId').invalid || myForm.get('worldnetId').value.trim() === '' )" class="error-message">
+              <small *ngIf="myForm.get('worldnetId').hasError('required') || myForm.get('worldnetId').value.trim() === ''">Worldnet ID is required!</small>
             </div>
           </div>
         </div>
@@ -78,8 +78,8 @@
           <div class="form-group">
             <label for="flavor">Flavor:</label>
             <input id="flavor" [readonly]="editing" formControlName="flavor" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('flavor')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('flavor')?.hasError('required')">Flavor is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('flavor')?.invalid || myForm.get('flavor')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('flavor')?.hasError('required') || myForm.get('flavor')?.value.trim() === '' ">Flavor is required!</small>
             </div>
           </div>
         </div>
@@ -88,8 +88,8 @@
           <div class="form-group">
             <label for="certstr">Certstr:</label>
             <input id="certstr" [readOnly]="editing" formControlName="certstr" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('certstr')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('certstr')?.hasError('required')">Certstr is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('certstr')?.invalid || myForm.get('certstr')?.value.trim() === '' )" class="error-message">
+              <small *ngIf="myForm.get('certstr')?.hasError('required') || myForm.get('certstr')?.value.trim() === '' ">Certstr is required!</small>
             </div>
           </div>
         </div>
@@ -98,8 +98,8 @@
           <div class="form-group">
             <label for="x509Cert">x509Cert:</label>
             <input id="x509Cert" [readOnly]="editing" formControlName="x509Cert" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('x509Cert')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('x509Cert')?.hasError('required')">x509Cert is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('x509Cert')?.invalid || myForm.get('x509Cert')?.value.trim() === '') " class="error-message">
+              <small *ngIf="myForm.get('x509Cert')?.hasError('required') || myForm.get('x509Cert')?.value.trim() === '' ">x509Cert is required!</small>
             </div>
           </div>
         </div>
@@ -108,8 +108,8 @@
           <div class="form-group">
             <label for="accountNum">Account Number:</label>
             <input id="accountNum" [readOnly]="editing" formControlName="accountNum" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('accountNum')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('accountNum')?.hasError('required')">Account Number is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('accountNum')?.invalid || myForm.get('accountNum')?.value.trim() === '' )" class="error-message">
+              <small *ngIf="myForm.get('accountNum')?.hasError('required') || myForm.get('accountNum')?.value.trim() === ''">Account Number is required!</small>
             </div>
           </div>
         </div>
@@ -118,8 +118,8 @@
           <div class="form-group">
             <label for="gatewayUrl">Gateway URL:</label>
             <input id="gatewayUrl" [readOnly]="editing" formControlName="gatewayUrlPropay" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('gatewayUrlPropay')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('gatewayUrlPropay')?.hasError('required')">Gateway URL is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('gatewayUrlPropay')?.invalid || myForm.get('gatewayUrlPropay')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('gatewayUrlPropay')?.hasError('required') || myForm.get('gatewayUrlPropay')?.value.trim() === ''">Gateway URL is required!</small>
             </div>
           </div>
         </div>
@@ -128,8 +128,8 @@
           <div class="form-group">
             <label for="terminalId">Terminal ID:</label>
             <input id="terminalId" [readOnly]="editing" formControlName="terminalId" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('terminalId')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('terminalId')?.hasError('required')">Terminal ID is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('terminalId')?.invalid || myForm.get('terminalId')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('terminalId')?.hasError('required') || myForm.get('terminalId')?.value.trim() === ''">Terminal ID is required!</small>
             </div>
           </div>
         </div>
@@ -138,8 +138,8 @@
           <div class="form-group">
             <label for="xmlApiBaseUrl">XML API Base URL:</label>
             <input id="xmlApiBaseUrl" [readOnly]="editing" formControlName="xmlApiBaseUrl" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('xmlApiBaseUrl')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('xmlApiBaseUrl')?.hasError('required')">XML API Base URL is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('xmlApiBaseUrl')?.invalid || myForm.get('xmlApiBaseUrl')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('xmlApiBaseUrl')?.hasError('required') || myForm.get('xmlApiBaseUrl')?.value.trim() === ''">XML API Base URL is required!</small>
             </div>
           </div>
         </div>
@@ -148,8 +148,8 @@
           <div class="form-group">
             <label for="classMetaKey">Class Meta Key:</label>
             <input id="classMetaKey" [readOnly]="editing" formControlName="classMetaKey" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('classMetaKey')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('classMetaKey')?.hasError('required')">Class Meta Key is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('classMetaKey')?.invalid || myForm.get('classMetaKey')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('classMetaKey')?.hasError('required') || myForm.get('classMetaKey')?.value.trim() === ''">Class Meta Key is required!</small>
             </div>
           </div>
         </div>
@@ -158,8 +158,8 @@
           <div class="form-group">
             <label for="jsonApiBaseUrl">JSON API Base URL:</label>
             <input id="jsonApiBaseUrl" [readOnly]="editing" formControlName="jsonApiBaseUrl" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('jsonApiBaseUrl')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('jsonApiBaseUrl')?.hasError('required')">JSON API Base URL is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('jsonApiBaseUrl')?.invalid || myForm.get('jsonApiBaseUrl')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('jsonApiBaseUrl')?.hasError('required') || myForm.get('jsonApiBaseUrl')?.value.trim() === '' ">JSON API Base URL is required!</small>
             </div>
           </div>
         </div>
@@ -168,8 +168,8 @@
           <div class="form-group">
             <label for="ServerDateFormat">Server Date Format:</label>
             <input id="ServerDateFormat" [readOnly]="editing" formControlName="ServerDateFormat" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('ServerDateFormat')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('ServerDateFormat')?.hasError('required')">Server Date Format is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('ServerDateFormat')?.invalid || myForm.get('ServerDateFormat')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('ServerDateFormat')?.hasError('required') || myForm.get('ServerDateFormat')?.value.trim() === ''">Server Date Format is required!</small>
             </div>
           </div>
         </div>
@@ -178,8 +178,8 @@
           <div class="form-group">
             <label for="splitfundingAccountNum">Split Funding Account Number:</label>
             <input id="splitfundingAccountNum" [readOnly]="editing" formControlName="splitfundingAccountNum" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('splitfundingAccountNum')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('splitfundingAccountNum')?.hasError('required')">Split Funding Account Number is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('splitfundingAccountNum')?.invalid || myForm.get('splitfundingAccountNum')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('splitfundingAccountNum')?.hasError('required') || myForm.get('splitfundingAccountNum')?.value.trim() === ''">Split Funding Account Number is required!</small>
             </div>
           </div>
         </div>
@@ -204,8 +204,8 @@
           <div class="form-group">
             <label for="FlavorPPS">Flavor:</label>
             <input id="FlavorPPS" [readOnly]="editing" formControlName="Flavor" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('Flavor')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('Flavor')?.hasError('required')">Flavor is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('Flavor')?.invalid || myForm.get('Flavor')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('Flavor')?.hasError('required') || myForm.get('Flavor')?.value.trim() === ''">Flavor is required!</small>
             </div>
           </div>
         </div>
@@ -214,8 +214,8 @@
           <div class="form-group">
             <label for="secret">Secret:</label>
             <input id="secret" [readOnly]="editing" formControlName="secret" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('secret')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('secret')?.hasError('required')">Secret is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('secret')?.invalid || myForm.get('secret')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('secret')?.hasError('required') || myForm.get('secret')?.value.trim() === ''">Secret is required!</small>
             </div>
           </div>
         </div>
@@ -224,8 +224,8 @@
           <div class="form-group">
             <label for="logLevel">Log Level:</label>
             <input id="logLevel" [readOnly]="editing" formControlName="logLevel" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('logLevel')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('logLevel')?.hasError('required')">Log Level is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('logLevel')?.invalid || myForm.get('logLevel')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('logLevel')?.hasError('required') || myForm.get('logLevel')?.value.trim() === ''">Log Level is required!</small>
             </div>
           </div>
         </div>
@@ -234,8 +234,8 @@
           <div class="form-group">
             <label for="remoteLoggingEnabled">Remote Logging Enabled:</label>
             <input id="remoteLoggingEnabled" [readOnly]="editing" formControlName="remoteLoggingEnabled" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('remoteLoggingEnabled')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('remoteLoggingEnabled')?.hasError('required')">Remote Logging Enabled is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('remoteLoggingEnabled')?.invalid || myForm.get('remoteLoggingEnabled')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('remoteLoggingEnabled')?.hasError('required') || myForm.get('remoteLoggingEnabled')?.value.trim() === ''">Remote Logging Enabled is required!</small>
             </div>
           </div>
         </div>
@@ -244,8 +244,8 @@
           <div class="form-group">
             <label for="password">Password:</label>
             <input id="password" [readOnly]="editing" formControlName="password" class="form-control" type="password" />
-            <div *ngIf="isSubmit && myForm.get('password')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('password')?.hasError('required')">Password is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('password')?.invalid || myForm.get('password')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('password')?.hasError('required') || myForm.get('password')?.value.trim() === ''">Password is required!</small>
             </div>
           </div>
         </div>
@@ -254,8 +254,8 @@
           <div class="form-group">
             <label for="username">Username:</label>
             <input id="username" [readOnly]="editing" formControlName="username" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('username')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('username')?.hasError('required')">Username is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('username')?.invalid || myForm.get('username')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('username')?.hasError('required') || myForm.get('username')?.value.trim() === ''">Username is required!</small>
             </div>
           </div>
         </div>
@@ -264,8 +264,8 @@
           <div class="form-group">
             <label for="gatewayURLPPS">Gateway URL:</label>
             <input id="gatewayURLPPS" [readOnly]="editing" formControlName="gatewayURL" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('gatewayURL')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('gatewayURL')?.hasError('required')">Gateway URL is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('gatewayURL')?.invalid || myForm.get('gatewayURL')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('gatewayURL')?.hasError('required') || myForm.get('gatewayURL')?.value.trim() === ''">Gateway URL is required!</small>
             </div>
           </div>
         </div>
@@ -274,8 +274,8 @@
           <div class="form-group">
             <label for="merchantId">Merchant ID:</label>
             <input id="merchantId" [readOnly]="editing" formControlName="merchantId" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('merchantId')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('merchantId')?.hasError('required')">Merchant ID is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('merchantId')?.invalid || myForm.get('merchantId')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('merchantId')?.hasError('required') || myForm.get('merchantId')?.value.trim() === ''">Merchant ID is required!</small>
             </div>
           </div>
         </div>
@@ -284,8 +284,8 @@
           <div class="form-group">
             <label for="consumerKey">Consumer Key:</label>
             <input id="consumerKey" [readOnly]="editing" formControlName="consumerKey" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('consumerKey')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('consumerKey')?.hasError('required')">Consumer Key is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('consumerKey')?.invalid || myForm.get('consumerKey')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('consumerKey')?.hasError('required') || myForm.get('consumerKey')?.value.trim() === ''">Consumer Key is required!</small>
             </div>
           </div>
         </div>
@@ -294,8 +294,8 @@
           <div class="form-group">
             <label for="consumerSecret">Consumer Secret:</label>
             <input id="consumerSecret" [readOnly]="editing" formControlName="consumerSecret" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('consumerSecret')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('consumerSecret')?.hasError('required')">Consumer Secret is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('consumerSecret')?.invalid || myForm.get('consumerSecret')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('consumerSecret')?.hasError('required') || myForm.get('consumerSecret')?.value.trim() === ''">Consumer Secret is required!</small>
             </div>
           </div>
         </div>
@@ -304,8 +304,8 @@
           <div class="form-group">
             <label for="serverDateFormatPPS">Server Date Format:</label>
             <input id="serverDateFormatPPS" [readOnly]="editing" formControlName="serverDateFormatPPS" class="form-control" />
-            <div *ngIf="isSubmit && myForm.get('serverDateFormatPPS')?.invalid" class="error-message">
-              <small *ngIf="myForm.get('serverDateFormatPPS')?.hasError('required')">Server Date Format is required!</small>
+            <div *ngIf="isSubmit && (myForm.get('serverDateFormatPPS')?.invalid || myForm.get('serverDateFormatPPS')?.value.trim() === '')" class="error-message">
+              <small *ngIf="myForm.get('serverDateFormatPPS')?.hasError('required') || myForm.get('serverDateFormatPPS')?.value.trim() === ''">Server Date Format is required!</small>
             </div>
           </div>
         </div>
