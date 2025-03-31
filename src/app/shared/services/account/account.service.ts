@@ -587,4 +587,28 @@ export class AccountService {
     )
   }
 
+  fetchOperator(page, size, operatorSearch): Observable<any> {
+    if (operatorSearch != '' && operatorSearch != undefined) {
+      return this.apiService.getWithoutModal(`appUser/user?page=${page}&size=${size}&keyword=${operatorSearch}`).pipe(map(
+        operatorResponse => {
+          if (operatorResponse) {
+            return operatorResponse;
+          } else {
+            throw throwError(operatorResponse.error);
+          }
+        },
+      ));
+    } else {
+      return this.apiService.getWithoutModal(`appUser/user?page=${page}&size=${size}`).pipe(map(
+        operatorResponse => {
+          if (operatorResponse) {
+            return operatorResponse;
+          } else {
+            throw throwError(operatorResponse.error);
+          }
+        },
+      ));
+    }
+  }
+
 }

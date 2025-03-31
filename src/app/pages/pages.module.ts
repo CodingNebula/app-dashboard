@@ -36,10 +36,13 @@ import { TemplateDialogComponent } from './template/template-dialog/template-dia
 import { DeleteDialogComponent } from './component/delete-dialog/delete-dialog.component';
 import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
 import { EditautomateComponent } from './component/edit-automate/editautomate/editautomate.component';
+import {OperatorComponent} from "./operator/operator.component";
+import {BrowserModule} from "@angular/platform-browser";
 
 @NgModule({
     imports: [
         CommonModule,
+      // BrowserModule,
         PagesRoutingModule,
         ThemeModule,
         NbMenuModule,
@@ -79,6 +82,7 @@ import { EditautomateComponent } from './component/edit-automate/editautomate/ed
     TemplateDialogComponent,
     DeleteDialogComponent,
     EditautomateComponent,
+    OperatorComponent
   ],
 })
 export class PagesModule {

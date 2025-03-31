@@ -13,6 +13,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/terminal',
     home: true,
   },
+  {
+    title: 'Operator',
+    icon: 'people-outline',
+    link: '/pages/operator',
+    home: true,
+  },
   // {
   //   title: 'Automate',
   //   icon: 'repeat-outline',

@@ -1,0 +1,72 @@
+<ngx-loader *ngIf="!operators"></ngx-loader>
+<div><h6>Operator</h6></div>
+<div class="search">
+  <div class="container-start">
+    <div></div>
+    <div class="details">
+
+      <div class="search">
+        <input style="padding-right: 28px" [(ngModel)]="operatorSearch" type="text" (input)="changeOperator($event)"
+               [value]="operatorSearch" nbInput
+               fullWidth onkeydown="return /[a-z]/i.test(event.key)"
+               (keyup.enter)="eventFunc?searchForOperator($event):''"
+               placeholder="Search by Name" >
+        <!--        <button  (click)="keyword($event)" class="submit-btn" >Submit</button>-->
+        <button [disabled]="operatorSearch.trim()===''"  size="tiny" shape="round" class="filter-button mr-2 submit-btn" (click)="searchForOperator($event,operatorSearch)">Submit
+
+        </button>
+        <i *ngIf="operatorSearch!=''" (click)="keyword($event)">
+          <nb-icon class="action-icon clearBtn" icon="close-circle-outline"></nb-icon>
+        </i>
+      </div>
+
+      <div>Add New Operator</div>
+    </div>
+  </div>
+  <!--  <input style="padding-right: 28px" [(ngModel)]="operatorSearch" type="text" (keyup.enter)="keyword($event)" nbInput-->
+  <!--         fullWidth-->
+  <!--         placeholder="Search by Operator Name">-->
+</div>
+<div class="row" style="margin-top: 10px;" [ngClass]="{ 'deskTable' : mobileView }">
+  <div class="col-md-12 table-data">
+    <div class="row table-operator" *ngIf="operators">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-fixed" *ngIf="operators.length > 0;" id="table">
+            <thead class="table-primary">
+            <tr>
+              <th scope="col" class="col-2 merchant-th">#</th>
+              <th scope="col" class="col-4 time-th">Name</th>
+              <th scope="col" class="col-6 sync-date-th">Last Sync Date</th>
+            </tr>
+            </thead>
+            <tbody class="table-body"  (scroll)="updateScroll($event)" [scrollTop]="scrollTop" >
+            <tr *ngFor="let operator of operators; let i = index">
+              <td class="col-2 merchant-td">{{i + 1}}</td>
+              <td class="col-4 time-td">{{operator.name}}</td>
+<!--              06-12-2023 17:08:02-->
+              <td class="col-6  sync-date-td">{{operator.syncDate | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+            </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="no-data-section" *ngIf="operators&&operators.length===0">
+    <div class="no-data">
+      <div class="row h-100 custom-row">
+        <div class="col-md-12">
+          <div class="text-center">
+            <img src="assets/new-ui/no-data.png" width="80px" alt=""/>
+            <h5>No Data Found</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

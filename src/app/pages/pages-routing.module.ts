@@ -13,6 +13,7 @@ import { TemplateComponent } from './template/template.component';
 import { CapabilitiesComponent } from './component/capabilities/capabilities.component';
 import { InstructionsComponent } from './component/instructions/instructions.component';
 import {AuthGuard} from "../shared/services/guard/auth.guard";
+import {OperatorComponent} from "./operator/operator.component";
 
 const routes: Routes = [{
   path: '',
@@ -20,17 +21,17 @@ const routes: Routes = [{
   children: [
     {
       path: 'application',
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
       component: ApplicationComponent
     },
     {
       path: 'terminal',
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
       component: TestCasesComponent,
     },
     {
       path: 'automate',
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
       component: AutomateComponent,
     },
     {
@@ -40,17 +41,17 @@ const routes: Routes = [{
     },
     {
       path: 'test-reports',
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
       component: TestReportsComponent,
     },
     {
       path:'reports',
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
       component:ReportsComponent
     },
     {
       path:'template',
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
       component: TemplateComponent
     },
     {
@@ -66,6 +67,10 @@ const routes: Routes = [{
       path: 'instructions',
       canActivate: [AuthGuard],
       component: InstructionsComponent
+    },
+    {
+      path: 'operator',
+      component: OperatorComponent
     },
     {
       path: '**',
