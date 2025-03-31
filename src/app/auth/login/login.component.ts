@@ -7,6 +7,7 @@ import { WebsocketService } from '../../shared/services/websocket/websocket.serv
 // import { io, Socket } from "socket.io-client";
 import { environment } from '../../../environments/environment';
 import * as moment from 'moment';
+import { AccountService } from '../../shared/services/account/account.service';
 
 @Component({
   selector: 'ngx-login',
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private webSocketService: WebsocketService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +57,7 @@ export class LoginComponent implements OnInit {
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
     // Check if the form is invalid
-    if (!email || !password || email !== 'user1' || password !== '123') {
+    if (!email || !password) {
       return;
     }
 
@@ -64,7 +66,12 @@ export class LoginComponent implements OnInit {
       email: email,
       password: password
     };
-    this.router.navigateByUrl('pages/terminal');
+
+    localStorage.setItem('token',JSON.stringify(btoa(payload.email + ':' + payload.password)))
+    this.accountService.userLogin(payload).subscribe(res =>{
+      this.router.navigateByUrl('pages/terminal');
+    })
+    
     // Make the POST request to authenticate the user
     // this.http.post<any>(`${environment.api_url}/authenticate`, payload)
       // .subscribe(
