@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AccountService } from '../../shared/services/account/account.service';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
@@ -13,7 +13,7 @@ import { EditautomateComponent } from '../component/edit-automate/editautomate/e
   templateUrl: './automate.component.html',
   styleUrls: ['./automate.component.scss']
 })
-export class AutomateComponent implements OnInit {
+export class AutomateComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('resultContainer') resultContainer: ElementRef;
   public showIndividualEnd = false;
   public startApp: boolean = false;

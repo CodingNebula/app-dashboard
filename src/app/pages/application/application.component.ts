@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef, NbDialogService, NbPopoverDirective } from '@nebular/theme';
 import { NoAppDialogComponent } from '../component/no-app-dialog/no-app-dialog.component';
 import { NavigationEnd, Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss']
 })
-export class ApplicationComponent implements OnInit {
+export class ApplicationComponent implements OnInit, OnDestroy {
   public applicationDataArr: any[] = [];
   public instructionsArr: any[] = [];
   public appCapabilities: any;

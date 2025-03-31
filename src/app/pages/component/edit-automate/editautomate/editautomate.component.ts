@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 
 @Component({
@@ -13,10 +13,6 @@ export class EditautomateComponent {
 
   }
 
-   ngOnInit() {
-      console.log(this.itemsToEdit);
-      
-    }
 
   onSubmit(){
     console.log('Updated items:', this.itemsToEdit);

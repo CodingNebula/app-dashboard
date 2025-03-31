@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../../shared/services/websocket/websocket.service';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -19,7 +19,7 @@ export interface TestCase {
   templateUrl: './test-reports.component.html',
   styleUrls: ['./test-reports.component.scss']
 })
-export class TestReportsComponent implements OnInit {
+export class TestReportsComponent implements OnInit, AfterViewInit {
   @ViewChild('chartElement', { static: false }) chartElement: any;
   private echartsInstance: EChartsInstance | null = null;
 

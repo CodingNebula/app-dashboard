@@ -7,7 +7,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, ValidatorFn, AbstractC
   templateUrl: './instructions-dialog.component.html',
   styleUrls: ['./instructions-dialog.component.scss']
 })
-export class InstructionsDialogComponent {
+export class InstructionsDialogComponent implements OnInit {
   public myForm: FormGroup;
   public selectedItem: '';
   public itemToEdit: any;

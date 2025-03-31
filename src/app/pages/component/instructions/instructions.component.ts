@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { InstructionsDialogComponent } from '../instructions-dialog/instructions-dialog.component';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
@@ -15,7 +15,7 @@ import { DeleteDialogComponent } from "../delete-dialog/delete-dialog.component"
   templateUrl: './instructions.component.html',
   styleUrls: ['./instructions.component.scss']
 })
-export class InstructionsComponent implements OnDestroy, AfterViewInit {
+export class InstructionsComponent implements OnDestroy, AfterViewInit, OnInit {
 
 
   @ViewChild('popover') popover: NbPopoverDirective;

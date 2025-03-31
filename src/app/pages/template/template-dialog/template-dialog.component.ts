@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
@@ -13,7 +13,7 @@ import { EditDeleteService } from '../../../shared/services/edit-delete/edit-del
   templateUrl: './template-dialog.component.html',
   styleUrls: ['./template-dialog.component.scss']
 })
-export class TemplateDialogComponent {
+export class TemplateDialogComponent implements OnInit {
   public testCaseName: FormGroup;
   public instruction: FormGroup;
   public templateForm: FormGroup;

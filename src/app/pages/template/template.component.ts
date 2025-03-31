@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NbDialogService, NbPopoverDirective } from '@nebular/theme';
 import { TemplateDialogComponent } from './template-dialog/template-dialog.component';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { EditDeleteService } from '../../shared/services/edit-delete/edit-delete
   templateUrl: './template.component.html',
   styleUrls: ['./template.component.scss']
 })
-export class TemplateComponent {
+export class TemplateComponent implements OnDestroy, OnInit {
   public testCases: any;
   public templates: any[] = [];
   public testCasesArray: any[] = [];

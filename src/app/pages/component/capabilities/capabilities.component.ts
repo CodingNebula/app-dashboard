@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDataService } from '../../../shared/services/applicationData/application-data.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { platform } from 'os';
   templateUrl: './capabilities.component.html',
   styleUrls: ['./capabilities.component.scss']
 })
-export class CapabilitiesComponent {
+export class CapabilitiesComponent implements OnInit {
   public myForm: FormGroup;
   public showSuccessAlert: boolean = false;
   public selectedItem: '';

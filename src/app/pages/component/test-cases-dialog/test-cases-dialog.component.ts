@@ -214,16 +214,16 @@ export class TestCasesDialogComponent implements OnInit {
   
     const hasEmptyField = Object.values(formValues).some(value => typeof value === 'string' && value.trim() === '');
   
-    if (hasEmptyField) {
+    // if (hasEmptyField) {
   
-      return; 
-    }
+      // return; 
+    // }
 
 
   
-    if (this.myForm.valid) {
+    // if (this.myForm.valid) {
       this.dialogRef.close({ confirmed: true, data: formValues });
-    }
+    // }
   }
   
 

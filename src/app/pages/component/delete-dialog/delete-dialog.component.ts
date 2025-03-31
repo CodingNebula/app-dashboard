@@ -14,10 +14,6 @@ export class DeleteDialogComponent {
   constructor(private ref: NbDialogRef<DeleteDialogComponent>) {
   }
 
-  ngOnInit(): void {
-
-  }
-
   cancel() {
     this.ref.close('cancel');
   }
