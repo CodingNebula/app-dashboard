@@ -20,7 +20,7 @@
         </i>
       </div>
 
-      <div>Add New Operator</div>
+      <button size="tiny" shape="round" class="mr-2 add-btn" (click)="addOperator()">Add Operator</button>
     </div>
   </div>
   <!--  <input style="padding-right: 28px" [(ngModel)]="operatorSearch" type="text" (keyup.enter)="keyword($event)" nbInput-->
@@ -36,16 +36,18 @@
             <thead class="table-primary">
             <tr>
               <th scope="col" class="col-2 merchant-th">#</th>
-              <th scope="col" class="col-4 time-th">Name</th>
-              <th scope="col" class="col-6 sync-date-th">Last Sync Date</th>
+              <th scope="col" class="col-3 time-th">App Name</th>
+              <th scope="col" class="col-3 time-th">User Name</th>
+              <th scope="col" class="col-4 sync-date-th">Date Created</th>
             </tr>
             </thead>
             <tbody class="table-body"  (scroll)="updateScroll($event)" [scrollTop]="scrollTop" >
             <tr *ngFor="let operator of operators; let i = index">
               <td class="col-2 merchant-td">{{i + 1}}</td>
-              <td class="col-4 time-td">{{operator.name}}</td>
+              <td class="col-3 time-td">{{operator.appName}}</td>
+              <td class="col-3 time-td">{{operator.userName}}</td>
 <!--              06-12-2023 17:08:02-->
-              <td class="col-6  sync-date-td">{{operator.syncDate | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+              <td class="col-4 sync-date-td">{{operator.dateCreated | date:'dd-MM-yyyy HH:mm:ss'}}</td>
             </tr>
 
             </tbody>

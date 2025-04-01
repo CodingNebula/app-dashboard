@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import * as momentTz from "moment";
 import {LoadingService} from "../../shared/services/loading/loading.service";
 import {AccountService} from "../../shared/services/account/account.service";
+import {NbDialogRef, NbDialogService} from "@nebular/theme";
+import {OperatorFormComponent} from "./operator-form/operator-form.component";
+import {NoAppDialogComponent} from "../component/no-app-dialog/no-app-dialog.component";
 
 @Component({
   selector: 'ngx-operator',
@@ -20,39 +23,10 @@ export class OperatorComponent {
   public scrollDisable: boolean;
   public timezoneSubscriber: any;
   public pageScrolled: boolean = false
+  private dialogRef: NbDialogRef<OperatorFormComponent>;
 
-  constructor(public accountService: AccountService) {
-    this.operators = [
-      {
-        "name": "James",
-        "syncDate": "2023-12-06T11:38:02.467058+00:00"
-      },
-      {
-        "name": "Thanos",
-        "syncDate": "2023-11-03T10:58:12.066684+00:00"
-      },
-      {
-        "name": "Gardyn",
-        "syncDate": "2023-09-13T21:38:12.000861+00:00"
-      },
-      {
-        "name": "Goober",
-        "syncDate": "2023-09-13T20:21:27.69563+00:00"
-      },
-      {
-        "name": "Kim",
-        "syncDate": "2023-09-13T20:02:36.81442+00:00"
-      },
-      {
-        "name": "Jarvis",
-        "syncDate": "2023-09-13T12:56:09.920066+00:00"
-      },
-      {
-        "name": "Kabuto",
-        "syncDate": "2023-09-12T08:46:46.033952+00:00"
-      }
-    ]
-    console.log('Hello World');
+  constructor(public accountService: AccountService, private dialogService: NbDialogService) {
+
   }
 
   subscribeToTimezoneChange() {
@@ -129,15 +103,16 @@ export class OperatorComponent {
 
 
         if (Object.keys(operators).length > 0) {
+          console.log(operators);
           // let operatorss = this.jsonModificationService.upperCaseToLowerCase(operators);
           // this.loaderService.hide();
           if (!this.operators) {
             this.operators = [];
           }
-          operators.forEach(operator => {
-            operator.syncdate = momentTz(operator.syncdate).format('DD-MM-YYYY HH:mm:ss');
-          });
-          this.operators.push(...operators);
+          // operators.forEach(operator => {
+          //   operator.syncdate = momentTz(operator.syncdate).format('DD-MM-YYYY HH:mm:ss');
+          // });
+          this.operators = operators;
           this.page++;
           this.scrollDisable = false;
         } else {                       // -------------------isht-------------------- //
@@ -207,4 +182,43 @@ export class OperatorComponent {
   //     this.timezoneSubscriber.unsubscribe();
   //   }
   // }
+  addOperator(){
+    const dialogRef = this.dialogService.open(OperatorFormComponent, {
+      hasBackdrop: true,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+    });
+
+    // Get the result (data) when the dialog closes
+    dialogRef.onClose.subscribe((result) => {
+      this.dialogRef = null;
+      if (result) {
+        if (result.confirmed) {
+
+          console.log(result.data);
+              // const appDetails = {
+              //   appName: result.data.application.trim(),
+              //   platform: result.data.platform,
+              //   test_case_results: null,
+              //   extra: {}
+              // }
+
+          this.createOperator(result.data);
+              // this.saveApplicationData(appDetails);
+              // this.applicationDataService.setData('app_details', appDetails);
+            }
+          }
+    });
+  }
+
+  createOperator(data){
+    this.accountService.addNewOperator(data).subscribe((operator) => {
+      console.log(operator);
+      // this.operators.push(operator);
+      if(operator.status === 200 || operator.status === 201){
+      this.fetchOperators();
+
+      }
+    })
+  }
 }

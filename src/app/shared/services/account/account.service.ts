@@ -589,7 +589,7 @@ export class AccountService {
 
   fetchOperator(page, size, operatorSearch): Observable<any> {
     if (operatorSearch != '' && operatorSearch != undefined) {
-      return this.apiService.getWithoutModal(`appUser/user?page=${page}&size=${size}&keyword=${operatorSearch}`).pipe(map(
+      return this.apiService.getWithoutModal(`appUser/user?keyword=${operatorSearch}`).pipe(map(
         operatorResponse => {
           if (operatorResponse) {
             return operatorResponse;
@@ -599,7 +599,7 @@ export class AccountService {
         },
       ));
     } else {
-      return this.apiService.getWithoutModal(`appUser/user?page=${page}&size=${size}`).pipe(map(
+      return this.apiService.getWithoutModal(`appUser/user`).pipe(map(
         operatorResponse => {
           if (operatorResponse) {
             return operatorResponse;
@@ -610,5 +610,27 @@ export class AccountService {
       ));
     }
   }
+
+  addNewOperator(payload){
+    return this.apiService.postWithoutModel('appUser/user',payload).pipe(
+      map(resp => {
+        console.log(resp);
+        if(resp){
+          return resp;
+        }
+        else {
+          throw new Error('Invalid Response');
+        }
+      }),
+      catchError(error => {
+        console.error('Error: ', error);
+        return throwError(() => new Error('Failed. Please try again.'))
+
+      })
+
+    )
+  }
+
+
 
 }

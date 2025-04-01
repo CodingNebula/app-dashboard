@@ -1,0 +1,70 @@
+<nb-card>
+  <nb-card-header>Add Operator</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="myForm"  class="custom-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="appName">App Name<span class="star-mark">*</span>:</label>
+          <input maxlength="50" id="appName" formControlName="appName" class="form-control" />
+          <div *ngIf="(submitted && myForm.get('appName').value.trim().length > 0) || (submitted && myForm.get('appName').invalid)" class="error-message">
+            <small *ngIf="myForm.get('appName').hasError('required') || myForm.get('appName').hasError('noSpaces')">Application name is required!</small>
+          </div>
+        </div>
+      </div>
+<!--      <div class="form-row">-->
+<!--        <div class="form-group">-->
+<!--          <label for="role">Role<span class="star-mark">*</span>:</label>-->
+<!--          <input maxlength="50" id="role" formControlName="role" class="form-control" />-->
+<!--          <div *ngIf="(submitted && myForm.get('role').value.trim().length > 0) || (submitted && myForm.get('role').invalid)" class="error-message">-->
+<!--            <small *ngIf="myForm.get('role').hasError('required') || myForm.get('role').hasError('noSpaces')">Application name is required!</small>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="role">User Name<span class="star-mark">*</span>:</label>
+          <input maxlength="50" id="userName" formControlName="userName" class="form-control" />
+          <div *ngIf="(submitted && myForm.get('userName').value.trim().length > 0) || (submitted && myForm.get('userName').invalid)" class="error-message">
+            <small *ngIf="myForm.get('userName').hasError('required') || myForm.get('userName').hasError('noSpaces')">Application name is required!</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password<span class="star-mark">*</span>:</label>
+          <input maxlength="50" id="password" formControlName="password" class="form-control" />
+          <div *ngIf="(submitted && myForm.get('password').value.trim().length > 0) || (submitted && myForm.get('password').invalid)" class="error-message">
+            <small *ngIf="myForm.get('password').hasError('required') || myForm.get('password').hasError('noSpaces')">Application name is required!</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pin">PIN<span class="star-mark">*</span>:</label>
+          <input maxlength="50" id="pin" formControlName="pin" class="form-control" />
+          <div *ngIf="(submitted && myForm.get('pin').value.trim().length > 0) || (submitted && myForm.get('pin').invalid)" class="error-message">
+            <small *ngIf="myForm.get('pin').hasError('required') || myForm.get('pin').hasError('noSpaces')">Application name is required!</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="secretkey">Secretkey<span class="star-mark">*</span>:</label>
+          <input maxlength="50" id="secretkey" formControlName="secretkey" class="form-control" />
+          <div *ngIf="(submitted && myForm.get('secretkey').value.trim().length > 0) || (submitted && myForm.get('secretkey').invalid)" class="error-message">
+            <small *ngIf="myForm.get('secretkey').hasError('required') || myForm.get('secretkey').hasError('noSpaces')">Application name is required!</small>
+          </div>
+        </div>
+      </div>
+
+
+
+    </form>
+  </nb-card-body>
+  <nb-card-footer class="no-app-footer">
+    <button nbButton (click)="close()" class="close-button">Close</button>
+    <button type="submit" (click)="onSubmit()" class="submit-button">Submit</button>
+  </nb-card-footer>
+</nb-card>
+

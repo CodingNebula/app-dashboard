@@ -38,6 +38,7 @@ import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
 import { EditautomateComponent } from './component/edit-automate/editautomate/editautomate.component';
 import {OperatorComponent} from "./operator/operator.component";
 import {BrowserModule} from "@angular/platform-browser";
+import {OperatorFormComponent} from "./operator/operator-form/operator-form.component";
 
 @NgModule({
     imports: [
@@ -82,7 +83,8 @@ import {BrowserModule} from "@angular/platform-browser";
     TemplateDialogComponent,
     DeleteDialogComponent,
     EditautomateComponent,
-    OperatorComponent
+    OperatorComponent,
+    OperatorFormComponent
   ],
 })
 export class PagesModule {

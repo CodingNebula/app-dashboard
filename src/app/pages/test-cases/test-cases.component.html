@@ -18,8 +18,8 @@
     <div class="table-data-div-container container" *ngIf="applicationDataArr.length > 0 else noResults" >
       <div class="table-data-div" *ngFor="let item of applicationDataArr; let i = index">
         <div class="col-2">{{i + 1}}</div>
-        <div class="col-4 table-data">{{item.Name}}</div>
-        <div class="col-4 table-data" > {{item.TerminalConfiguration.endpoint.provider }}</div>
+        <div class="col-4 table-data">{{item.name}}</div>
+        <div class="col-4 table-data" > {{item.terminalConfiguration.endpoint.provider }}</div>
         <div class="col-2 see-config-data">
           <button class="see-config-btn" (click)="openDialog(item,true)">See Configuration</button>
         </div>

@@ -43,12 +43,16 @@ export class ApiService {
       catchError(ApiService.formatErrors));
   }
 
-  postWithoutModel(endpoint: string, request: any): Observable<any> {
+  postWithoutModel(endpoint: string, body: any): Observable<{ status: number; data: any }> {
     const apiURL = `${environment.api_url}/${endpoint}`;
     const headers = this.setHeaders();
 
-    return this.http.post<any>(apiURL, request, { headers })
+    return this.http.post<any>(apiURL, body, { headers, observe: 'response' })
       .pipe(
+        map(response => ({
+          status: response.status,
+          data: response.body
+        })),
         catchError(error => {
           console.error('Error during HTTP request:', error);
           return throwError(() => new Error('Failed to make request. Please try again.'));

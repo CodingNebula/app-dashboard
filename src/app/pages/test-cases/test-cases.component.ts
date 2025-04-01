@@ -151,14 +151,14 @@ export class TestCasesComponent implements OnInit {
             console.log(itemToEdit)
             this.accountService.updateTerminal(itemToEdit.TerminalId,body).subscribe()
           } else {
-            this.accountService.addTerminal(body).subscribe(res =>{})
+            this.accountService.addTerminal(body).subscribe(res =>{
+              console.log(res);
+              if(res.status === 200 || res.status === 201){
+                this.getTerminalsData();
+              }
+            })
           }
-          
-          setTimeout(()=>{
-            this.getTerminalsData()
-          },1000)
-        
-          
+
         }
       }
 
